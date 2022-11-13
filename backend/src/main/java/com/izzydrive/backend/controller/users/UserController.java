@@ -1,6 +1,7 @@
 package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.converters.UserDTOConverter;
+import com.izzydrive.backend.dto.LoginDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.service.users.UserService;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -43,4 +45,6 @@ public class UserController {
                 .map(value -> new ResponseEntity<>(UserDTOConverter.convertFull(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
+
+
 }
