@@ -1,11 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
+import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['../../components/onboarding-header/onboarding-header.component.scss','./login.component.scss']
+  styleUrls: ['../../components/onboarding-header/onboarding-header.component.scss','./login.component.scss'],
+  providers: [UserSeviceService]
 })
 export class LoginComponent implements OnInit {
 
@@ -16,7 +19,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor() { }
+  constructor(private http: HttpClient, private userService : UserSeviceService) { }
 
   ngOnInit(): void {
   }
@@ -30,7 +33,16 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.loginForm);
+    console.log(this.loginForm.value);
+    this.http
+    .post(
+      "http://localhost:8092/izzydrive/v1/auth/login", 
+      this.loginForm.value
+    )
+    .subscribe(responseData => this.userService.setCurrentUser(
+      {email : responseData["user"].email, token: responseData["token"]}
+      //redirekcija na ulogovanu pocetnu stranicu
+    ))
   }
 
 }

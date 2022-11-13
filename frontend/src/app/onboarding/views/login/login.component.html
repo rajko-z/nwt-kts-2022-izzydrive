@@ -10,10 +10,7 @@
           placeholder="pat@example.com"
           required
           formControlName="email">
-        <!-- <mat-error>{{this.loginForm.controls.email.errors.required && 'Required
-          field!'}}</mat-error>
-        <mat-error>{{this.loginForm.controls.email.errors.email && 'Email
-          required'}}</mat-error> -->
+        <mat-error>Email is required in form 'pat@example.com</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -27,6 +24,7 @@
           [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
+        <mat-error>Password is required</mat-error>
       </mat-form-field>
 
       <div class="button-container">
@@ -52,7 +50,7 @@
       <p>
         You dont have an account? &nbsp;
       </p>
-      <a href="" class="sign_up_link">
+      <a href="/onboard/register" class="sign_up_link">
         Sign up here
       </a>
     </div>
