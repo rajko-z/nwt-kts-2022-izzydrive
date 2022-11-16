@@ -32,7 +32,7 @@ public class AuthenticationController {
     public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginDTO loginDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

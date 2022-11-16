@@ -1,0 +1,37 @@
+$tittle_color: #696F91;
+$dark3: #4C506C;
+$light2: #D9DBF1;
+$light1: #E9EAEF;
+$light5: #858DB5;
+$dark1: #191A23;
+
+.header_container{
+    background-color: $dark1;
+    display: flex;
+    height: 10%;
+    flex-direction: row;
+
+}
+
+.logo{
+    padding: 5px;
+    height: 80%;
+}
+
+.app_name{
+    font-family: "Inter";
+    font-size: x-large;
+    color: white;
+    padding-top: 3%;
+    // transform: translate(-50%, -50%);
+}
+
+.sign_button{
+    color: white;
+    font-size: large;
+    font-family: "Inter";
+    text-decoration: none;
+    float: right;
+    padding-top: 5%;
+    margin-right: 5%;
+}

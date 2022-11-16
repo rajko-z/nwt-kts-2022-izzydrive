@@ -1,0 +1,14 @@
+<div class="header_container">
+        <img src="/assets/dark_logo.png" class="logo">
+        <div style=" flex-grow: 4; flex-shrink: 2;">
+            <p class="app_name">IzzyDrive</p>
+        </div>
+        <div *ngIf="isUserLoggedIn()" style="flex-grow: 1;">
+            <button class="sign_button" mat-fab>Basic</button>
+        </div>
+        <div *ngIf="!isUserLoggedIn()" style="flex-grow: 2;">
+            <a class="sign_button">Sign in</a>
+            <a class="sign_button">Sign up</a>
+        </div>
+        
+</div>

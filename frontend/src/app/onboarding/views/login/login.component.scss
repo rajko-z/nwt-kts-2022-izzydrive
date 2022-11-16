@@ -1,0 +1,36 @@
+$dark3: #4C506C;
+$light2: #D9DBF1;
+$light1: #E9EAEF;
+$light5: #858DB5;
+$tittle_color: #696F91;
+
+.sign_up_link{
+    color: $dark3;
+}
+
+.sign_up_text{
+    display: flex; 
+    flex-direction: row; 
+    align-self: center;
+    margin-top: 10%;
+    font-size: medium;
+}
+
+.sign_up_buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.button{
+    border: solid thin black;
+    width: 100%;
+    color: $tittle_color;
+    border-color: #4C506C;
+    text-align: center;
+    background-color: $light1;
+    border-color:  $light5;
+    font-size: medium;
+}
