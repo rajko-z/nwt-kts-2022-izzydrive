@@ -14,13 +14,13 @@ export class UserSeviceService {
 
   getTokenFromSessionStorage(){
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser.token; 
+    return currentUser ? currentUser.token : null; 
     
   }
 
   getUsernameFromSessionStorage(){
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser.username; 
+    return currentUser ? currentUser.username : null; 
     
   }
 
