@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${easydrive-frontend-url}")
+    @Value("${izzydrive-frontend-url}")
     private String frontendUrl;
 
     @Override
