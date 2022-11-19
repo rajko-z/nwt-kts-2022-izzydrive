@@ -2,6 +2,8 @@
   <div class="form_container">
     <p class="form_tittle">Welcome back</p>
 
+    <p *ngIf="errorMessage" class="error_label">Username or password are invalid.</p>
+
     <form class="input-fields-container" [formGroup]="this.loginForm"
       (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline">
@@ -13,7 +15,7 @@
         <mat-error>Email is required in form 'pat@example.com</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" style="margin-top: 2%">
         <mat-label>Enter your password</mat-label>
         <input matInput
           [type]="hide ? 'password' : 'text'"

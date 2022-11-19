@@ -14,7 +14,6 @@ export class HeaderComponent implements OnInit {
   }
 
   isUserLoggedIn() : boolean{
-    console.log(this.userService.getTokenFromSessionStorage()? true : false)
     return this.userService.getTokenFromSessionStorage()? true : false;
   }
 
