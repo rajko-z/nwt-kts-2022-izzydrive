@@ -13,6 +13,7 @@ import { UserSeviceService } from 'src/app/services/userService/user-sevice.serv
 export class LoginComponent implements OnInit {
 
   hide : boolean = true;
+  errorMessage : boolean = false;
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.email]),
@@ -33,16 +34,25 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.loginForm.value);
     this.http
     .post(
       "http://localhost:8092/izzydrive/v1/auth/login", 
       this.loginForm.value
     )
-    .subscribe(responseData => this.userService.setCurrentUser(
-      {email : responseData["user"].email, token: responseData["token"]}
-      //redirekcija na ulogovanu pocetnu stranicu
-    ))
+    .subscribe({
+
+       next : (responce) => {
+        console.log(responce);
+        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
+        //redirekcija na ulogovanu pocetnu stranicu
+      },
+      error: (error )=> {
+          this.errorMessage = true;
+          console.log(error);
+          
+      }
+    })
   }
+
 
 }

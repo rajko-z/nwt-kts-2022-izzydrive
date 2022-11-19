@@ -8,8 +8,8 @@ export class UserSeviceService {
 
   constructor() { }
 
-  setCurrentUser(userData : {email: string, token: string}){
-    sessionStorage.setItem('currentUser', JSON.stringify({ token: userData.token, username: userData.email }));
+  setCurrentUser(userData : {email: string, token: string, role: string}){
+    sessionStorage.setItem('currentUser', JSON.stringify({ token: userData.token, username: userData.email, role: userData.role }));
   }
 
   getTokenFromSessionStorage(){
@@ -22,6 +22,11 @@ export class UserSeviceService {
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     return currentUser ? currentUser.username : null; 
     
+  }
+
+  getRoleCurrentUser(){
+    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return currentUser ? currentUser.role : null; 
   }
 
   
