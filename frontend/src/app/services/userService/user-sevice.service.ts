@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoginResponse } from 'src/app/model/response/loginResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -31,22 +33,22 @@ export class UserSeviceService {
     return currentUser ? currentUser.role : null; 
   }
 
-  loginWithGoogle(tokenId){
-    return this.http.post(
+  loginWithGoogle(tokenId): Observable<LoginResponse>{
+    return this.http.post<LoginResponse>(
       environment.apiUrl + "auth/login-google", 
       tokenId
     )
   }
 
-  loginWithFacebook(tokenId){
-    return this.http.post(
+  loginWithFacebook(tokenId):Observable<LoginResponse>{
+    return this.http.post<LoginResponse>(
       environment.apiUrl + "auth/login-fb", 
       tokenId
     )
   }
 
-  regularLogin(loginData){
-    return this.http.post(
+  regularLogin(loginData): Observable<LoginResponse>{
+    return this.http.post<LoginResponse>(
       environment.apiUrl + "auth/login",
       loginData      
     )

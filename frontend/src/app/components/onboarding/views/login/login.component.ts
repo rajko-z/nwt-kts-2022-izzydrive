@@ -68,7 +68,6 @@ export class LoginComponent implements OnInit {
   }
 
   async loginWithGoogle(response: CredentialResponse) {
-    debugger;
      this.userService.loginWithGoogle(response.credential)
      .subscribe({
 
@@ -93,6 +92,7 @@ export class LoginComponent implements OnInit {
     .subscribe({
 
         next : (responce) => {
+          console.log(responce)
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
         //redirekcija na ulogovanu pocetnu stranicu
       },

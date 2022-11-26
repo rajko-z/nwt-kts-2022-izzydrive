@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: 'onboard',
     loadChildren: () =>
-      import('./onboarding/onboarding.module').then(m => m.OnboardingModule),
+      import('./components/onboarding/onboarding.module').then(m => m.OnboardingModule),
   },
 ];
 
