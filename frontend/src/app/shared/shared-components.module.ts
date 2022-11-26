@@ -4,6 +4,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Shared1Component } from './components/shared1/shared1.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // If you have any additional modules to be shared add them to the list
 const materialModules = [
@@ -11,6 +13,8 @@ const materialModules = [
   MatFormFieldModule,
   MatIconModule,
   MatButtonModule,
+  MatTooltipModule,
+  BrowserAnimationsModule,
 ];
 
 @NgModule({

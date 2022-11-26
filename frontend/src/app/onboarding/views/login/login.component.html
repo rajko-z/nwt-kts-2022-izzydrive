@@ -31,7 +31,8 @@
 
       <div class="button-container">
         <button mat-button [disabled]="this.loginForm.invalid"
-          class="login_button" type="submit">Log in</button>
+                [ngClass] = "{'disabled_large_btn': this.loginForm.invalid,  'large_button': !this.loginForm.invalid}" 
+                type="submit">Log in</button>
       </div>
 
 
@@ -44,15 +45,20 @@
     </div>
 
     <div class="sign_up_buttons">
-      <button mat-button class="button">Google</button>
-      <button mat-button class="button">Facebook</button>
+      <div id="google_button_div" class="google_btn"></div>
+      <!-- <button mat-button class="button" (click)="loginWithGoogle()">Google</button> -->      
+        <button mat-button class="facebook_button" (click)="loginWithFacebook()">
+          <mat-icon [ngStyle]="{'color':'#5597D5'}" >facebook</mat-icon>
+          Facebook
+        </button>
+      
     </div>
 
     <div class="sign_up_text">
       <p>
         You dont have an account? &nbsp;
       </p>
-      <a href="/onboard/register" class="sign_up_link">
+      <a routerLink="/onboard/register" href="/onboard/register" class="sign_up_link">
         Sign up here
       </a>
     </div>

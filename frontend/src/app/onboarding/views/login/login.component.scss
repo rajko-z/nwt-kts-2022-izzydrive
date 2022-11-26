@@ -2,7 +2,9 @@ $dark3: #4C506C;
 $light2: #D9DBF1;
 $light1: #E9EAEF;
 $light5: #858DB5;
+$light4: #B4BCDF;
 $tittle_color: #696F91;
+$facebook_blue: "#8984FF";
 
 .sign_up_link{
     color: $dark3;
@@ -12,25 +14,25 @@ $tittle_color: #696F91;
     display: flex; 
     flex-direction: row; 
     align-self: center;
-    margin-top: 10%;
+    margin-top: 15%;
     font-size: medium;
 }
 
 .sign_up_buttons{
     display: flex;
     flex-direction: row;
-    gap: 10px;
     width: 100%;
     margin-top: 5%;
+    flex-wrap: wrap;
 }
 
 .button{
     border: solid thin black;
     width: 100%;
-    color: $tittle_color;
+    color: $dark3;
     border-color: #4C506C;
     text-align: center;
-    background-color: $light1;
+    background-color: $light4;
     border-color:  $light5;
     font-size: medium;
 }
@@ -40,3 +42,22 @@ $tittle_color: #696F91;
     font-size: small;
     font-family: "Inter";
 }
+
+.facebook_button{
+    background-color: white;
+    color: $facebook_blue;
+    font-size: medium;
+    font-family: "Inter";
+    border: solid thin $light4;
+    flex-grow: 2;
+}
+
+.facebook_icon{
+    background-color: $facebook_blue;
+    size: 60px;
+}
+
+.google_btn{
+    flex-grow: 0.5;
+}
+

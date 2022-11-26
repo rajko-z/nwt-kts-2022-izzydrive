@@ -1,5 +1,7 @@
 package com.izzydrive.backend.config;
 
+import com.izzydrive.backend.service.security.CustomOAuth2User;
+import com.izzydrive.backend.service.impl.CustomOAuth2UserService;
 import com.izzydrive.backend.service.security.RestAuthenticationEntryPoint;
 import com.izzydrive.backend.service.security.TokenAuthenticationFilter;
 import com.izzydrive.backend.service.users.UserService;
@@ -16,8 +18,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -31,6 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     private final TokenUtils tokenUtils;
+
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
 
     @Bean
     @Override
@@ -67,13 +76,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .anyRequest().authenticated().and()
             .cors().and()
-            .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class);
-
+            .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class)
+            .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauth2UserService)
+                .and()
+                .and();
         http.csrf().disable();
     }
 
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
+        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/auth/login-fb");
         web.ignoring().antMatchers(HttpMethod.GET,  "/","/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }

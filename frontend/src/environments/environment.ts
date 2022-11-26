@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-};
+  apiUrl: "https://localhost:8443/izzydrive/v1/",
+  clientId: '83743871907-93ba97v7t6j53p316sl6js0pgj9hmp51.apps.googleusercontent.com'
 
-
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
