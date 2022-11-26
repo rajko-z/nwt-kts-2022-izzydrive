@@ -1,3 +1,5 @@
+$light1: #E9EAEF;
+
 .holder-container {
     display: flex;
     flex-direction: row;
@@ -54,12 +56,11 @@ $tittle_color: #696F91;
 
 }
 
-.login_button{
+.large_button{
     background-color: #4C506C;
     color: white;
     border-radius: 5px;
     width: 100%;
-    margin-bottom: 10%;
     border: none;
     font-size: medium;
 }
@@ -70,6 +71,7 @@ $tittle_color: #696F91;
     align-items: center;
     font-size: medium;
     width: 100%;
+    margin-top: 10%;
 }
 
 .black-line {
@@ -77,4 +79,12 @@ $tittle_color: #696F91;
     height: 1px;
     border: 0px; 
     background: black;
+}
+
+.disabled_large_btn{
+    background-color: $light1;
+    color: grey;
+    border: solid thin gray;
+    font-size: medium;
+    width: 100%;
 }

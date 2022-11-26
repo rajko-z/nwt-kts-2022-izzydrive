@@ -1,6 +1,6 @@
 package com.izzydrive.backend.service.users.impl;
 
-import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.model.users.MyUser;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.users.UserService;
 import lombok.AllArgsConstructor;
@@ -19,21 +19,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+        Optional<MyUser> user = userRepository.findByEmail(username);
         if (user.isPresent())
             return user.get();
         throw new UsernameNotFoundException("User with username: " + username + " not found");
     }
 
     @Override
-    public List<User> findAll() {
+    public List<MyUser> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<MyUser> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public void processOAuthPostLogin(String username) {
+        Optional<MyUser> existUser = userRepository.findByEmail(username);
+
+    }
 
 }
