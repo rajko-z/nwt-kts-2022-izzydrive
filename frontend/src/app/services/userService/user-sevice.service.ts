@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginResponse } from 'src/app/model/response/loginResponse';
+import { User } from 'src/app/model/user/user';
+import { FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +55,14 @@ export class UserSeviceService {
       loginData      
     )
 
+  }
+
+  registration(newUser){
+    console.log(newUser)
+    return this.http.post(
+      environment.apiUrl + "passengers/registration/",
+      newUser
+    )
   }
 
   
