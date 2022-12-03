@@ -1,4 +1,5 @@
 package com.izzydrive.backend.confirmationToken;
+import com.izzydrive.backend.exception.AlreadySendRegistrationRequestException;
 import com.izzydrive.backend.model.users.MyUser;
 import com.izzydrive.backend.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Optional;
+
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE;
 
 @Service
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
@@ -43,6 +46,12 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         ConfirmationToken verificationToken = new ConfirmationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
-        confirmationTokenRepository.save(verificationToken);
+        try{
+            confirmationTokenRepository.save(verificationToken);
+        }
+        catch(Exception exception) {
+            throw new AlreadySendRegistrationRequestException(AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE);
+        }
+
     }
 }

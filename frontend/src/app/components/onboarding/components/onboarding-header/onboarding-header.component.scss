@@ -1,4 +1,5 @@
 $light1: #E9EAEF;
+$dark4: #333548;
 
 .holder-container {
     display: flex;
@@ -87,4 +88,9 @@ $tittle_color: #696F91;
     border: solid thin gray;
     font-size: medium;
     width: 100%;
+}
+
+.messageTooltip{
+    background-color: $light1;
+    color: $dark4;
 }

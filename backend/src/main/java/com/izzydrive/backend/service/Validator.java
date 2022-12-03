@@ -22,27 +22,35 @@ public class Validator {
 
     }
 
-    public static boolean validateName(String name) throws InvalidNameFormatException {
+    public static boolean validateLastName(String name) throws InvalidLastNameFormatException {
         String regex = "^[a-zA-Z]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(name);
         if(matcher.matches()) return true;
         else{
-            throw new InvalidNameFormatException(INVALID_NAME_FORMAT_MESSAGE);
+            throw new InvalidLastNameFormatException(INVALID_NAME_FORMAT_MESSAGE);
+        }
+    }
 
+    public static boolean validateFirstName(String name) throws InvalidFirstNameFormatException {
+        String regex = "^[a-zA-Z]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(name);
+        if(matcher.matches()) return true;
+        else{
+            throw new InvalidLastNameFormatException(INVALID_NAME_FORMAT_MESSAGE);
         }
     }
 
 
     public static boolean validatePhoneNumber(String phoneNumber) throws InvalidPhoneNumberFormatException {
 //        "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"
-        String regex = "^[1-9]+[0-9]*$";
+        String regex = "^[+][0-9]{12,12}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
         if(matcher.matches()) return true;
         else{
             throw new InvalidPhoneNumberFormatException(INVALID_PHONE_NUMBER_FORMAT_MESSAGE);
-
         }
     }
 

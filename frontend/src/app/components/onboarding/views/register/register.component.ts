@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { ErrorHandlerService } from 'src/app/services/errorHandler/error-handler.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +12,8 @@ import { UserSeviceService } from 'src/app/services/userService/user-sevice.serv
 })
 export class RegisterComponent implements OnInit {
 
-  hide: boolean = true
+  hidePassword: boolean = true;
+  hideRepeatPassword: boolean = true
   //phone_number_regexp: string = "^(\\+\\d{1,2}\\s)?\(?\\d{3}\)?[\\s.-]\\d{3}[\s.-]\\d{4}$";
   name_regexp = "^[a-zA-Z]+$";
 
@@ -26,7 +29,12 @@ export class RegisterComponent implements OnInit {
   });
 
 
-  constructor(private router : Router, private userService: UserSeviceService) {}
+  constructor(private router : Router, 
+              private userService: UserSeviceService, 
+              private errorHandler: ErrorHandlerService,
+              private messageTooltip: MatSnackBar ) {
+
+    }
 
   ngOnInit(): void {}
 
@@ -39,11 +47,29 @@ export class RegisterComponent implements OnInit {
       },
         error: (error )=> {
           
-          console.log(error);
+          this.handleError(error.error);
           
       }
       })
     )
+  }
+
+  handleError(errorData : {statusCode: number, message: string, timestamp: Date}): void{
+    let errorLabel = this.errorHandler.customErrorCode[errorData.statusCode]
+    if(errorLabel !== "other"){
+      this.registerForm.controls[errorLabel].setErrors({'incorrect': true})
+    }
+    else{
+      this.openErrorMessage(errorData.message);
+    }
+  }
+
+  openErrorMessage(message: string): void{
+    this.messageTooltip.open(message, 'Close', {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      panelClass: ['messageTooltip']
+    });
   }
 
   

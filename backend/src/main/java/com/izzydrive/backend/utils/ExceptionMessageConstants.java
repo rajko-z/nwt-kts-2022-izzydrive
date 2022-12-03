@@ -11,5 +11,8 @@ public final class ExceptionMessageConstants {
     public static final String INVALID_NAME_FORMAT_MESSAGE = "Invalid name format. Name only contains string and spaces";
     public static final String INVALID_PHONE_NUMBER_FORMAT_MESSAGE = "Invalid phone number format. Allowed format is '+123456789000'" ;
     public static final String SOMETHING_WENT_WRONG_MESSAGE = "Something went wrong, please try again." ;
+    public static final String MAIL_ERROR_MESSAGE = "There was a problem with sending the email, please try again" ;
+    public static final String USER_ALREADY_EXISTS_MESSAGE = "User with the same email already exits." ;
+    public static final String AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE = "You already send registration request. Look at your email box.";
 
 }
