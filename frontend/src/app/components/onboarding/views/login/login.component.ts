@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit , NgZone } from '@angular/core';
-import {FormControl, FormGroup, NgForm, Validators, FormBuilder} from '@angular/forms';
+import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
 import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
 import {
   SocialAuthService,
   FacebookLoginProvider,
-  SocialUser,
-  GoogleLoginProvider
+  SocialUser
 } from '@abacritt/angularx-social-login';
 import {CredentialResponse, PromptMomentNotification} from 'google-one-tap';
 import { environment } from 'src/environments/environment';
@@ -83,9 +82,7 @@ export class LoginComponent implements OnInit {
   })
   }
 
-  getErrorMessage() {
-
-  }
+ 
 
   onSubmit(){
    this.userService.regularLogin(this.loginForm.value)

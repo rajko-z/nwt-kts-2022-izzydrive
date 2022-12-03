@@ -9,11 +9,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ErrorMessage {
+public class ErrorMessage{
 
     private int statusCode;
 
     private Date timestamp;
 
     private String message;
+
 }

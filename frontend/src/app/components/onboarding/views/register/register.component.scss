@@ -1,3 +1,9 @@
+$dark3: #4C506C;
+$light2: #D9DBF1;
+$light1: #E9EAEF;
+$light5: #858DB5;
+$light4: #B4BCDF;
+
 .horizontal-group {
     display: flex;
     flex-direction: row;
@@ -17,4 +23,9 @@
 .name_field{
     display: inline-block;
     vertical-align: top;
+}
+
+.messageTooltip{
+    background: $light1;
+    color: $dark3;
 }
