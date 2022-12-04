@@ -18,19 +18,19 @@ export class UserSeviceService {
     sessionStorage.setItem('currentUser', JSON.stringify({ token: userData.token, username: userData.email, role: userData.role }));
   }
 
-  getCurrentUserToken(){
+  getCurrentUserToken() : string{
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     return currentUser ? currentUser.token : null; 
     
   }
 
-  getCurrentUserEmail(){
+  getCurrentUserEmail() : string{
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     return currentUser ? currentUser.username : null; 
     
   }
 
-  getRoleCurrentUser(){
+  getRoleCurrentUserRole() : string{
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     return currentUser ? currentUser.role : null; 
   }

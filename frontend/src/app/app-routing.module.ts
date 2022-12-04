@@ -7,6 +7,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/onboarding/onboarding.module').then(m => m.OnboardingModule),
   },
+  {
+    path: 'menu',
+    loadChildren: () =>
+      import('./components/menu/menu.module').then(m => m.MenuModule),
+  },
 ];
 
 @NgModule({
