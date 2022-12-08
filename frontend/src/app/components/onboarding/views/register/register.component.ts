@@ -11,23 +11,10 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['../../components/onboarding-header/onboarding-header.component.scss','./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-
-  hidePassword: boolean = true;
-  hideRepeatPassword: boolean = true
-  //phone_number_regexp: string = "^(\\+\\d{1,2}\\s)?\(?\\d{3}\)?[\\s.-]\\d{3}[\s.-]\\d{4}$";
-  name_regexp = "^[a-zA-Z]+$";
-
-  registerForm = new FormGroup({
-    firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
-    lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    repeatedPassword: new FormControl('',[Validators.required,Validators.minLength(8)]),
-    phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
-                                                          Validators.minLength(13), 
-                                                          Validators.maxLength(13)]),
-  });
-
+  
+  ngOnInit(): void {
+    
+  }
 
   constructor(private router : Router, 
               private userService: UserSeviceService, 
@@ -36,10 +23,9 @@ export class RegisterComponent implements OnInit {
 
     }
 
-  ngOnInit(): void {}
 
-  onSubmit(): void {
-    this.userService.registration(this.registerForm.value).subscribe(
+  onSubmit(registerForm: FormGroup): void {
+    this.userService.registration(registerForm.value).subscribe(
       ({
         next : (responce) => {
           console.log(responce)
@@ -47,17 +33,17 @@ export class RegisterComponent implements OnInit {
       },
         error: (error )=> {
           
-          this.handleError(error.error);
+          this.handleError(error.error, registerForm);
           
       }
       })
     )
   }
 
-  handleError(errorData : {statusCode: number, message: string, timestamp: Date}): void{
+  handleError(errorData : {statusCode: number, message: string, timestamp: Date}, registerForm: FormGroup): void{
     let errorLabel = this.errorHandler.customErrorCode[errorData.statusCode]
     if(errorLabel !== "other"){
-      this.registerForm.controls[errorLabel].setErrors({'incorrect': true})
+      registerForm.controls[errorLabel].setErrors({'incorrect': true})
     }
     else{
       this.openErrorMessage(errorData.message);

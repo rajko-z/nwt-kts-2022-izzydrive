@@ -7,16 +7,21 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MenuModule } from './components/menu/menu.module';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileModule } from './components/profile/profile.module';
+import { SharedComponentsModule } from './components/shared/shared-components.module';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, ProfileComponent],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    MenuModule
+    MenuModule,
+    ProfileModule,
+    SharedComponentsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

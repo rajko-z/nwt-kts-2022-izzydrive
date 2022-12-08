@@ -10,9 +10,9 @@ export class MenuComponent implements OnInit {
 
   isPassenger : boolean =  false; //this.userService.getRoleCurrentUserRole() === "passenger"; DRUGACIJE
 
-  isAdmin: boolean = false;  //this.userService.getRoleCurrentUserRole() === "admin";
+  isAdmin: boolean = true;  //this.userService.getRoleCurrentUserRole() === "admin";
 
-  isDriver: boolean = true; //DODATI MENI ZA VOZACA
+  isDriver: boolean = false; 
 
   constructor(private userService: UserSeviceService) { }
 

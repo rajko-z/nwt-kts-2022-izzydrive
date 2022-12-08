@@ -1,0 +1,99 @@
+@import '../../shared/shared.scss';
+
+.driver-data_form{
+    justify-content: end;
+    width: 40%;
+}
+
+.horizontal-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 1;
+    width: 100%;
+    position: relative;
+    justify-content: space-between;
+}
+
+.item {
+    position: relative;
+    
+}
+
+
+.name_field{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.messageTooltip{
+    background: $light1;
+    color: $dark3;
+}
+
+.input-fields-container {
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+}
+
+mat-step-icon mat-step-icon-state-number{
+    background-color: $light5 !important;
+}
+
+
+::ng-deep .mat-step-header .mat-step-icon-selected {
+    background-color: $light5; 
+ }
+
+.large_button{
+    background-color: #4C506C;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    border: none;
+    font-size: medium;
+}
+
+.disabled_large_btn{
+    background-color: $light1;
+    color: grey;
+    border: solid thin gray;
+    font-size: medium;
+    width: 100%;
+}
+
+.car_type_group{
+    padding-bottom: 5%;
+}
+
+.car_type_item{
+    padding-left: 30px;
+    font-size: 14px;
+    font-family: 'Inter';
+    color: #3B3838;
+    padding-top: 5px;
+}
+
+.car_type_label{
+    padding-bottom: 10px;
+    font-size: 14px;
+    font-family: 'Inter';
+    color: #3B3838;
+}
+
+
+.user_form_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    padding-right: 10%;
+    padding-left: 10%;
+}
+
+.car_accomodation{
+    width: 100%;
+    padding-left: 30px;
+}

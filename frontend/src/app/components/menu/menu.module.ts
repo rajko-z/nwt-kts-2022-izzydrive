@@ -7,6 +7,7 @@ import { PassengerMenuComponent } from './passenger-menu/passenger-menu.componen
 import { MenuComponent } from './menu.component';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { DriverMenuComponent } from './driver-menu/driver-menu.component';
+import { ProfileModule } from '../profile/profile.module';
 
 @NgModule({
   declarations: [PassengerMenuComponent, MenuComponent, AdminMenuComponent, DriverMenuComponent],
@@ -14,7 +15,8 @@ import { DriverMenuComponent } from './driver-menu/driver-menu.component';
     CommonModule,
     MenuRouterModule,
     SharedComponentsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    ProfileModule
   ],
   providers: [],
 })

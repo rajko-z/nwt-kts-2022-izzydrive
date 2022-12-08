@@ -1,13 +1,13 @@
-<app-onboarding-header>
-    <app-base-user-data-form (register)="onSubmit($event)"></app-base-user-data-form>
-    <!-- <div class="form_container">
-        <p class="form_tittle">Join us today :)</p>
+
+    <div class="user_form_container">
+        
+        <p *ngIf="isRegistration" class="form_tittle">Join us today :)</p>
 
         <form class="input-fields-container" [formGroup]="this.registerForm"
             (ngSubmit)="onSubmit()">
 
             <div class="horizontal-group">
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%; min-width: 100px;">
                     <mat-label>First name</mat-label>
                     <input matInput
                         placeholder="John"
@@ -19,7 +19,7 @@
                 </mat-form-field>
 
        
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline" style="width: 49%; min-width: 100px;">
                     <mat-label>Last name</mat-label>
                     <input matInput
                         placeholder="Deer"
@@ -47,7 +47,7 @@
             </mat-form-field>
 
             <div class="horizontal-group">
-                <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%;">
+                <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%; min-width: 100px;">
                     <mat-label>Password</mat-label>
                         <input matInput
                             placeholder="Deer"
@@ -66,7 +66,7 @@
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" style="width: 49%;">
+                <mat-form-field appearance="outline" style="width: 49%; min-width: 100px;">
                     <mat-label>Repeat Password</mat-label>
                         <input matInput
                             placeholder="Deer"
@@ -105,5 +105,4 @@
                 </button>
             </div>
         </form>
-    </div> -->
-</app-onboarding-header>
+    </div>

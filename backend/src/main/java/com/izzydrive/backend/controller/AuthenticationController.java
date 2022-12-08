@@ -53,7 +53,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginDTO loginDTO) {
-        System.out.println(loginDTO);
+
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
