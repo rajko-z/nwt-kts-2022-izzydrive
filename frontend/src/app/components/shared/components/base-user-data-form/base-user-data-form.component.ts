@@ -20,18 +20,21 @@ export class BaseUserDataFormComponent implements OnInit {
     firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
     lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
     email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    repeatedPassword: new FormControl('',[Validators.required,Validators.minLength(8)]),
+    password: new FormControl(''),
+    repeatedPassword: new FormControl(''),
     phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
                                                           Validators.minLength(13), 
                                                           Validators.maxLength(13)]),
   });
 
+
   @Output() register = new EventEmitter<FormGroup>();
 
-
   constructor(private userService: UserSeviceService) {
-
+      if(this.isRegistration){
+        this.registerForm.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
+        this.registerForm.controls.repeatedPassword.setValidators([Validators.required, Validators.minLength(8)]);
+      }
     }
 
   ngOnInit(): void {

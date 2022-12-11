@@ -1,8 +1,5 @@
 
     <div class="user_form_container">
-        
-        <p *ngIf="isRegistration" class="form_tittle">Join us today :)</p>
-
         <form class="input-fields-container" [formGroup]="this.registerForm"
             (ngSubmit)="onSubmit()">
 
@@ -18,7 +15,6 @@
                     <mat-error *ngIf="this.registerForm.controls['firstName'].hasError('incorrect')">Letters and spaces are allowed</mat-error>
                 </mat-form-field>
 
-       
                 <mat-form-field appearance="outline" style="width: 49%; min-width: 100px;">
                     <mat-label>Last name</mat-label>
                     <input matInput
@@ -46,7 +42,7 @@
                
             </mat-form-field>
 
-            <div class="horizontal-group">
+            <div *ngIf="this.isRegistration" class="horizontal-group">
                 <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%; min-width: 100px;">
                     <mat-label>Password</mat-label>
                         <input matInput

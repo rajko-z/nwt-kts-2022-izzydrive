@@ -15,4 +15,7 @@ public final class ExceptionMessageConstants {
     public static final String USER_ALREADY_EXISTS_MESSAGE = "User with the same email already exits." ;
     public static final String AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE = "You already send registration request. Look at your email box.";
 
+    public static final String INVALID_CAR_REGISTRATION = "Invalid registration format. Required: XX-X*(3-5)-XX";
+
 }
+

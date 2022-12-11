@@ -2,13 +2,13 @@ insert into role (name) values ('ROLE_ADMIN');
 insert into role (name) values ('ROLE_DRIVER');
 insert into role (name) values ('ROLE_PASSENGER');
 
+
 insert into adresses (city, latitude, longitude, state, street) values ('Novi Sad', 45.242101, 19.800049, 'Serbia', 'Banijska 32');
 
-insert into images (name) values ('audiA6.png');
 
-insert into cars (car_accommodations, car_type, max_num_of_passengers, model, registration, image_id)
+insert into cars (car_accommodations, car_type, max_num_of_passengers, model, registration)
 values
-('BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-116IX', 1);
+('BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-116IX');
 
 -- password is 123 for all users
 insert into admins (id, activated, blocked, email, first_name, last_name, password, phone_number, address_id, image_id, role_id)

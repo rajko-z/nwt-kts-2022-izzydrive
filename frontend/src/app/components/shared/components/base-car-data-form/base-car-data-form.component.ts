@@ -8,10 +8,10 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 })
 export class BaseCarDataFormComponent implements OnInit {
 
-  carRegistrationPattern: string = "^[a-zA-Z]{2,2}[-][0-9]{3,4}[-][a-zA-Z]{2,2}$";
+  carRegistrationPattern: string = "^[a-zA-Z]{2,2}[-][0-9]{3,5}[-][a-zA-Z]{2,2}$";
   maxPassengersPattern: string = "^[0-9]{1,2}$"
 
-  carAccomodation = this.formBuilder.group({
+  carAccommodation = this.formBuilder.group({
     baby: false,
     food: false,
     pet: false,
@@ -23,7 +23,7 @@ export class BaseCarDataFormComponent implements OnInit {
     model: new FormControl('',[Validators.required]),
     maxPassengers: new FormControl(1, [Validators.required, Validators.pattern(this.maxPassengersPattern)]),
     carType: new FormControl('regular', [Validators.required]),
-    carAccomodation: this.carAccomodation
+    carAccommodation: this.carAccommodation
   });
 
   

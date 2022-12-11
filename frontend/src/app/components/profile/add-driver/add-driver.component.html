@@ -1,11 +1,12 @@
 <mat-horizontal-stepper #stepper class="driver-data_form">
     
-  <mat-step [stepControl]="this.driverForm" errorMessage="Invalid form data" class="stepper">
+  <mat-step [hasError]="!this.isValidDriverForm" errorMessage="Invalid form data" class="stepper">
       <ng-template matStepLabel>Driver data</ng-template>
         <app-base-user-data-form (register)="onFirstStepNext($event, stepper)"></app-base-user-data-form>
     </mat-step>
 
-    <mat-step [stepControl]="this.carForm" errorMessage="Invalid form data">   
+    <mat-step [hasError]="!this.isValidCarForm" errorMessage="Invalid form data">   
+      <ng-template matStepLabel> data</ng-template>
       <app-base-car-data-form (formData)="onSecondStepNext($event, stepper)" [driverForm]="this.driverForm"></app-base-car-data-form>
     </mat-step>
     

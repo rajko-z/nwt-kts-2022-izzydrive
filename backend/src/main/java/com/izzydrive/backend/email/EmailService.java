@@ -38,12 +38,6 @@ public class EmailService implements EmailSender {
 
     @Async
     public void sendConfirmationAsync(String email, String token, String firstName) throws MailException, IOException, MessagingException, TemplateException {
-//        SimpleMailMessage mail = new SimpleMailMessage();
-//        mail.setTo(email);
-//        mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
-//        mail.setSubject("Primer slanja emaila pomoću Spring taska");
-//        String link = "https://localhost:8443/izzydrive/v1/confirmation?token=" + token;
-//        mail.setText("Hello, activate your account on this link: " + link + ".");
 
         String link = "https://localhost:8443/izzydrive/v1/confirmation?token=" + token;
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -65,6 +59,25 @@ public class EmailService implements EmailSender {
         helper.setSubject("Confirm registration");
         javaMailSender.send(message);
 
+
+    }
+
+    @Override
+    public void sendDriverRegistrationMail(String email, String password, String firstName) throws IOException, TemplateException, MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+        Template t = freemarkerConfig.getTemplate("driver-registration-email.ftl");
+
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("password", password);
+        String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+        helper.setTo(email);
+        helper.setText(text, true);
+        helper.setSubject("New driver registration");
+        javaMailSender.send(message);
 
     }
 

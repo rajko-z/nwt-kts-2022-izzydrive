@@ -26,7 +26,8 @@ public class CustomExceptionCode {
             entry(TemplateException.class, new Pair<>(1006, ExceptionMessageConstants.MAIL_ERROR_MESSAGE)),
             entry(IOException.class, new Pair<>(1006, ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE)),
             entry(UserAlreadyExistsException.class, new Pair<>(1006, ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE)),
-            entry(AlreadySendRegistrationRequestException.class, new Pair<>(1006, ExceptionMessageConstants.AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE))
+            entry(AlreadySendRegistrationRequestException.class, new Pair<>(1006, ExceptionMessageConstants.AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE)),
+            entry(InvalidCarRegistrationException.class, new Pair<>(1008, ExceptionMessageConstants.INVALID_CAR_REGISTRATION))
 
     );
 

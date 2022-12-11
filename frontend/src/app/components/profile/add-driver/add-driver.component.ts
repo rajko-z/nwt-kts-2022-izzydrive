@@ -4,6 +4,7 @@ import {StepperSelectionEvent, STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/steppe
 import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import { FloatLabelType } from '@angular/material/form-field';
 import { CarType, getCarType } from 'src/app/model/car/CarType';
+import { DriverService } from 'src/app/services/driver/driver.service';
 
 
 @Component({
@@ -23,36 +24,49 @@ export class AddDriverComponent implements OnInit {
 
   carTypes = CarType;
 
-  driverForm = new FormGroup({
-    firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
-    lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
-                                                          Validators.minLength(13), 
-                                                          Validators.maxLength(13)]),
-  });
+  
+
+  driverForm = new FormGroup({});
   
   carForm = new FormGroup({});
 
+  isValidDriverForm : boolean = false;
+  isValidCarForm : boolean = false;
+
   onFirstStepNext(driverData : FormGroup, stepper: MatStepper){
     this.driverForm = driverData;
+    this.isValidDriverForm = true;
     console.log(this.driverForm);
     stepper.next();
   }
 
   onSecondStepNext(carData: FormGroup, stepper: MatStepper){
     this.carForm = carData;
-    console.log(this.carForm);
-    stepper.next();
+    this.isValidCarForm = true;
+    this.driverForm.addControl("carData" , this.carForm);
+    this.driverService.addDriver(this.driverForm.value).subscribe(
+      ({
+        next : (responce) => {
+          stepper.next();
+          console.log(responce)
+       
+      },
+        error: (error )=> {
+          
+         console.log(error)
+          
+      }
+      })
+    )
   }
  
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private driverService: DriverService  ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-
+    
   }
 }

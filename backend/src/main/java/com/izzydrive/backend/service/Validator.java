@@ -1,6 +1,8 @@
 package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.exception.*;
+import com.izzydrive.backend.model.car.CarType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +66,25 @@ public class Validator {
         else{
             return true;
         }
+    }
+
+    public static boolean validateCarRegistration(String registration){
+        String regex = "^[a-zA-Z]{2,2}[-][0-9]{3,5}[-][a-zA-Z]{2,2}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(registration);
+        if(matcher.matches()) return true;
+        else{
+            throw new InvalidCarRegistrationException(INVALID_CAR_REGISTRATION);
+        }
+    }
+
+    public static boolean validateCarType(String carType){
+        for (CarType type : CarType.values()) {
+            if (type.name().equalsIgnoreCase(carType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

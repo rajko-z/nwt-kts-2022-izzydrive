@@ -13,4 +13,7 @@ public interface UserService extends UserDetailsService {
     Optional<MyUser> findByEmail(String email);
     void processOAuthPostLogin(String username);
 
+    String generatePassword();
+
+
 }
