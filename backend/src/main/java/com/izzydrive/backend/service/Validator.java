@@ -2,7 +2,6 @@ package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.exception.*;
 import com.izzydrive.backend.model.car.CarType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,7 +73,7 @@ public class Validator {
         Matcher matcher = pattern.matcher(registration);
         if(matcher.matches()) return true;
         else{
-            throw new InvalidCarRegistrationException(INVALID_CAR_REGISTRATION);
+            throw new InvalidCarRegistrationException(INVALID_CAR_REGISTRATION_MESSAGE);
         }
     }
 

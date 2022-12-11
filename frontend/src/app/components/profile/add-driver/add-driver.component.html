@@ -1,22 +1,20 @@
-<mat-horizontal-stepper #stepper class="driver-data_form">
+<mat-horizontal-stepper linear  #stepper class="driver-data_form">
     
-  <mat-step [hasError]="!this.isValidDriverForm" errorMessage="Invalid form data" class="stepper">
+  <mat-step [hasError]="!this.isValidDriverForm" errorMessage="Invalid form data" completed="false">
       <ng-template matStepLabel>Driver data</ng-template>
         <app-base-user-data-form (register)="onFirstStepNext($event, stepper)"></app-base-user-data-form>
     </mat-step>
 
-    <mat-step [hasError]="!this.isValidCarForm" errorMessage="Invalid form data">   
+    <mat-step [hasError]="!this.isValidCarForm" errorMessage="Invalid form data" completed="false">   
       <ng-template matStepLabel> data</ng-template>
       <app-base-car-data-form (formData)="onSecondStepNext($event, stepper)" [driverForm]="this.driverForm"></app-base-car-data-form>
     </mat-step>
     
-    <mat-step>
+    <mat-step completed="false">
       <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
+      <p *ngIf="!this.addingFinished" class="done_text">The entered data is being processed</p>
+      <mat-progress-bar *ngIf="!this.addingFinished" mode="indeterminate"></mat-progress-bar>
+      <p *ngIf="this.addingFinished && this.successfullyFinished" class="done_text">Successfully added new driver</p>
     </mat-step>
     
   </mat-horizontal-stepper>

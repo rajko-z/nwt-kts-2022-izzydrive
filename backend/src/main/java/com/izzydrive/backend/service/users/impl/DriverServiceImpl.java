@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users.impl;
 
 import com.izzydrive.backend.dto.NewDriverDTO;
 import com.izzydrive.backend.email.EmailSender;
+import com.izzydrive.backend.exception.UserAlreadyExistsException;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.repository.AddressRepository;
@@ -23,6 +24,9 @@ import org.passay.PasswordGenerator;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Optional;
+
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE;
 
 @Service
 @AllArgsConstructor
@@ -50,22 +54,27 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public void addNewDriver(NewDriverDTO driverDTO) throws TemplateException, MessagingException, IOException {
         if(validateNewDriver(driverDTO)){
+            Optional<Driver> exitingDriver = driverRepository.findByEmail(driverDTO.getEmail());
+            if(!exitingDriver.isPresent()){
+                Car car = carService.createNewCar(driverDTO.getCarData());
+                String password = userService.generatePassword();
+                Driver newDriver = new Driver(driverDTO.getEmail(),
+                        passwordEncoder.encode(password),
+                        driverDTO.getFirstName(),
+                        driverDTO.getLastName(),
+                        driverDTO.getPhoneNumber());
 
-            Car car = carService.createNewCar(driverDTO.getCarData());
-            String password = userService.generatePassword();
-            Driver newDriver = new Driver(driverDTO.getEmail(),
-                    passwordEncoder.encode(password),
-                    driverDTO.getFirstName(),
-                    driverDTO.getLastName(),
-                    driverDTO.getPhoneNumber());
+                newDriver.setRole(roleRepository.findByName("ROLE_DRIVER").get(0));
+                newDriver.setCar(car);
+                Driver savedDriver = driverRepository.save(newDriver);
+                car.setDriver(savedDriver);
+                carService.saveCar(car);
 
-            newDriver.setRole(roleRepository.findByName("ROLE_DRIVER").get(0));
-            newDriver.setCar(car);
-            Driver savedDriver = driverRepository.save(newDriver);
-            car.setDriver(savedDriver);
-            carService.saveCar(car);
-
-            emailSender.sendDriverRegistrationMail(driverDTO.getEmail(), password, driverDTO.getFirstName());
+                emailSender.sendDriverRegistrationMail(driverDTO.getEmail(), password);
+            }
+            else{
+                throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
+            }
         }
     }
 

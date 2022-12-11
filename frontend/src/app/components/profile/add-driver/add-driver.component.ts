@@ -5,6 +5,8 @@ import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import { FloatLabelType } from '@angular/material/form-field';
 import { CarType, getCarType } from 'src/app/model/car/CarType';
 import { DriverService } from 'src/app/services/driver/driver.service';
+import { TmplAstRecursiveVisitor } from '@angular/compiler';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -21,20 +23,18 @@ import { DriverService } from 'src/app/services/driver/driver.service';
 export class AddDriverComponent implements OnInit {
 
   name_regexp = "^[a-zA-Z]+$";
-
-  carTypes = CarType;
-
-  
-
   driverForm = new FormGroup({});
-  
   carForm = new FormGroup({});
 
   isValidDriverForm : boolean = false;
-  isValidCarForm : boolean = false;
+  isValidCarForm : boolean = true;
+
+  addingFinished : boolean = false;
+  successfullyFinished: boolean = false;
 
   onFirstStepNext(driverData : FormGroup, stepper: MatStepper){
     this.driverForm = driverData;
+    stepper.selected.completed = true;
     this.isValidDriverForm = true;
     console.log(this.driverForm);
     stepper.next();
@@ -43,30 +43,36 @@ export class AddDriverComponent implements OnInit {
   onSecondStepNext(carData: FormGroup, stepper: MatStepper){
     this.carForm = carData;
     this.isValidCarForm = true;
+    stepper.next();
+    stepper.selected.completed = true;
     this.driverForm.addControl("carData" , this.carForm);
     this.driverService.addDriver(this.driverForm.value).subscribe(
       ({
         next : (responce) => {
-          stepper.next();
-          console.log(responce)
+          this.addingFinished = true;
+          this.successfullyFinished = true;
        
       },
         error: (error )=> {
-          
-         console.log(error)
-          
+          this.addingFinished = true;
+          this.successfullyFinished = false;
+          this.openErrorMessage(error.error.message);
       }
       })
     )
   }
  
 
-  constructor(private formBuilder: FormBuilder, private driverService: DriverService  ) { }
+  constructor(private formBuilder: FormBuilder, private driverService: DriverService , private messageTooltip: MatSnackBar  ) { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(): void {
-    
+  openErrorMessage(message: string): void{
+    this.messageTooltip.open(message, 'Close', {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      panelClass: ['messageTooltip']
+    });
   }
 }

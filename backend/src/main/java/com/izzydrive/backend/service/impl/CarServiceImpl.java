@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.CarDTO;
+import com.izzydrive.backend.exception.AlreadyExitingCarException;
 import com.izzydrive.backend.model.Image;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.car.CarAccommodation;
@@ -13,6 +14,10 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.ALREADY_EXISTING_CAR_MESSAGE;
+
 @Service
 @AllArgsConstructor
 public class CarServiceImpl implements CarService {
@@ -21,13 +26,19 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
 
     public Car createNewCar(CarDTO carData){
-        Car car = new Car(carData.getRegistration(),
-                        carData.getModel(),
-                        carData.getMaxPassengers(),
-                        getCarType(carData.getCarType()),
-                        getCarAccomodation(carData.getCarAccommodation()));
+        Optional<Car> existingCar = carRepository.findByRegistration(carData.getRegistration());
+        if(!existingCar.isPresent()){
+            Car car = new Car(carData.getRegistration(),
+                    carData.getModel(),
+                    carData.getMaxPassengers(),
+                    getCarType(carData.getCarType()),
+                    getCarAccomodation(carData.getCarAccommodation()));
 
-        return carRepository.save(car);
+            return carRepository.save(car);
+        }
+       else{
+           throw new AlreadyExitingCarException(ALREADY_EXISTING_CAR_MESSAGE);
+        }
 
     }
 

@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/users/**").permitAll()
             .antMatchers("/admins/**").permitAll()
             .antMatchers("/passengers/**").permitAll()
-            .antMatchers("/drivers/**").permitAll()
+            .antMatchers("/drivers/**").hasAnyAuthority("ROLE_DRIVER", "ROLE_ADMIN" )
             .antMatchers("/addresses/**").permitAll()
             .antMatchers("/admin-notes/**").permitAll()
             .antMatchers("/drivings/**").permitAll()

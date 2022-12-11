@@ -8,6 +8,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 // If you have any additional modules to be shared add them to the list
@@ -20,7 +21,8 @@ const materialModules = [
   MatListModule,
   MatStepperModule,
   MatRadioModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatProgressBarModule
 ];
 
 @NgModule({

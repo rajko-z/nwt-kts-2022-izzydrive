@@ -63,7 +63,7 @@ public class EmailService implements EmailSender {
     }
 
     @Override
-    public void sendDriverRegistrationMail(String email, String password, String firstName) throws IOException, TemplateException, MessagingException {
+    public void sendDriverRegistrationMail(String email, String password) throws IOException, TemplateException, MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
