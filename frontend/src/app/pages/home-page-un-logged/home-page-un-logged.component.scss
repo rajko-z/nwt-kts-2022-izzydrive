@@ -1,0 +1,15 @@
+@import "src/style/styles";
+
+.home-page{
+  @include size(100vw, 100vh);
+  display: flex;
+  justify-content: start;
+}
+.right-side-home-page{
+  @include size(40vw, 100vh);
+  margin: 50px 80px;
+  font-size: 15px;
+}
+.left-side-home-page{
+  @include size(60vw, 100vh);
+}

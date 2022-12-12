@@ -1,0 +1,23 @@
+<form class="location-form">
+  <div class="location-fields">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter start location</mat-label>
+      <input matInput
+             placeholder="Branislava Nušića 16"
+             required
+             formControlName="startLocation">
+      <mat-error>Start location is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter end location</mat-label>
+      <input matInput
+             placeholder="Somborska 13"
+             required
+             formControlName="endLocation">
+      <mat-error>End location is required</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="submit-item">
+    <button class="submit-button" type="submit" (click)="onSubmit()">Get a ride</button>
+  </div>
+</form>
