@@ -8,10 +8,11 @@ const routes: Routes = [
       import('./components/onboarding/onboarding.module').then(m => m.OnboardingModule),
   },
   {
-    path: 'menu',
+    path: 'profile',
     loadChildren: () =>
-      import('./components/menu/menu.module').then(m => m.MenuModule),
+      import('./components/profile/profile.module').then(m => m.ProfileModule),
   },
+
 ];
 
 @NgModule({

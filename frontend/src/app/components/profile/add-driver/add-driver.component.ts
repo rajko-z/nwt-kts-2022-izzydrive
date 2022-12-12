@@ -36,7 +36,6 @@ export class AddDriverComponent implements OnInit {
     this.driverForm = driverData;
     stepper.selected.completed = true;
     this.isValidDriverForm = true;
-    console.log(this.driverForm);
     stepper.next();
   }
 
@@ -63,7 +62,7 @@ export class AddDriverComponent implements OnInit {
   }
  
 
-  constructor(private formBuilder: FormBuilder, private driverService: DriverService , private messageTooltip: MatSnackBar  ) { }
+  constructor(private driverService: DriverService , private messageTooltip: MatSnackBar  ) { }
 
   ngOnInit(): void {
   }

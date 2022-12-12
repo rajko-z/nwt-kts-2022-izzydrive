@@ -14,6 +14,10 @@ export class UserSeviceService {
 
   constructor(private http: HttpClient) { }
 
+  isUserLoggedIn(): boolean {
+    return this.getCurrentUserToken() !== null
+  }
+  
   setCurrentUser(userData : {email: string, token: string, role: string}){
     sessionStorage.setItem('currentUser', JSON.stringify({ token: userData.token, username: userData.email, role: userData.role }));
   }

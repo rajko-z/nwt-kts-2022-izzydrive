@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserSeviceService } from './services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
       title = 'NWT-KTS 2022 IZZYDRIVE';
+
+      isUserLoggedIn: boolean = false;
+
+      constructor(private userService: UserSeviceService) {}
+      
+      ngOnInit(): void {
+        this.isUserLoggedIn = this.userService.isUserLoggedIn()
+      }
 }
