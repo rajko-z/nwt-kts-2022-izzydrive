@@ -1,0 +1,18 @@
+@mixin size($width, $height) {
+  height: $height;
+  width: $width;
+}
+
+@mixin setFont($size){
+  font-family: $font;
+  font-size: $size;
+}
+
+@mixin buttonStyle{
+  font-size: 15px;
+  background-color: $dark3;
+  color: $light1;
+  border-radius: 8px;
+
+}
+

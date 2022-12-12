@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
       title = 'NWT-KTS 2022 IZZYDRIVE';
+      // declare var ol: any;
 }
