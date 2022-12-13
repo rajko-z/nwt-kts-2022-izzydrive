@@ -17,7 +17,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class MyUser implements UserDetails {
+public abstract class User implements UserDetails {
 
     @Id
     @SequenceGenerator(name="usersIdGen", sequenceName = "usersIdGen", initialValue = 1, allocationSize = 1)
@@ -64,7 +64,7 @@ public abstract class MyUser implements UserDetails {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
-    public MyUser(String email, String password, String firstName, String lastName, String phoneNumber) {
+    public User(String email, String password, String firstName, String lastName, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;

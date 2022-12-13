@@ -1,14 +1,14 @@
 package com.izzydrive.backend.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ErrorMessage{
 
     private int statusCode;
@@ -17,4 +17,11 @@ public class ErrorMessage{
 
     private String message;
 
+    private int errorField;
+
+    public ErrorMessage(int statusCode, Date timestamp, String message) {
+        this.statusCode = statusCode;
+        this.timestamp = timestamp;
+        this.message = message;
+    }
 }

@@ -24,13 +24,13 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     repeatedPassword: new FormControl('',[Validators.required,Validators.minLength(8)]),
     phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
-                                                          Validators.minLength(13), 
+                                                          Validators.minLength(13),
                                                           Validators.maxLength(13)]),
   });
 
 
-  constructor(private router : Router, 
-              private userService: UserSeviceService, 
+  constructor(private router : Router,
+              private userService: UserSeviceService,
               private errorHandler: ErrorHandlerService,
               private messageTooltip: MatSnackBar ) {
 
@@ -43,19 +43,19 @@ export class RegisterComponent implements OnInit {
       ({
         next : (responce) => {
           console.log(responce)
-       
+
       },
         error: (error )=> {
-          
+
           this.handleError(error.error);
-          
+
       }
       })
     )
   }
 
-  handleError(errorData : {statusCode: number, message: string, timestamp: Date}): void{
-    let errorLabel = this.errorHandler.customErrorCode[errorData.statusCode]
+  handleError(errorData : {statusCode: number, message: string, timestamp: Date, errorField: number}): void{
+    let errorLabel = this.errorHandler.customErrorCode[errorData.errorField]
     if(errorLabel !== "other"){
       this.registerForm.controls[errorLabel].setErrors({'incorrect': true})
     }
@@ -72,5 +72,5 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  
+
 }

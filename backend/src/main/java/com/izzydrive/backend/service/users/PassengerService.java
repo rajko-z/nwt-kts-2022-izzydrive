@@ -9,6 +9,6 @@ import java.io.IOException;
 
 public interface PassengerService {
 
-    public void registerPassenger(NewPassengerDTO newPassengerData) throws InvalidLastNameFormatException, InvalidPasswordFormatException, InvalidRepeatedPasswordException, InvalidPhoneNumberFormatException, InvalidEmailFormatException, MessagingException, TemplateException, IOException;
+    void registerPassenger(NewPassengerDTO newPassengerData);
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Passenger extends MyUser {
+public class Passenger extends User {
 
     @Column(nullable = false)
     private boolean driving;

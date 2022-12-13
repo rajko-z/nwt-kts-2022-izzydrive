@@ -1,6 +1,6 @@
 package com.izzydrive.backend.model;
 
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,8 +26,8 @@ public class Message {
     private LocalDateTime timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MyUser sender;
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MyUser recipient;
+    private User recipient;
 }

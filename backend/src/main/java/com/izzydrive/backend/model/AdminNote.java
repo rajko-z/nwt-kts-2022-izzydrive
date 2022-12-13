@@ -1,6 +1,6 @@
 package com.izzydrive.backend.model;
 
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,5 +26,5 @@ public class AdminNote {
     private LocalDateTime timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MyUser admin;
+    private User admin;
 }

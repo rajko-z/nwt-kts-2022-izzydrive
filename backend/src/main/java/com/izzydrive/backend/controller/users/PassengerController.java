@@ -27,13 +27,9 @@ public class PassengerController {
     private final PassengerService passengerService;
 
     @PostMapping("/registration")
-    public ResponseEntity<Object> registerPassenger(@RequestBody NewPassengerDTO newPassengerData){
-        try {
-            passengerService.registerPassenger(newPassengerData);
-            return ResponseEntity.ok("");
-        } catch (MessagingException | TemplateException| IOException e) {
-            return new ResponseEntity<>(CustomExceptionCode.getErrorMessageFromException(e), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Object> registerPassenger(@RequestBody NewPassengerDTO newPassengerData)  {
+        passengerService.registerPassenger(newPassengerData);
+        return ResponseEntity.ok("");
     }
 
 }

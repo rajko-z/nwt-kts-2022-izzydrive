@@ -1,6 +1,6 @@
 package com.izzydrive.backend.confirmationToken;
-import com.izzydrive.backend.exception.AlreadySendRegistrationRequestException;
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         }
 
         ConfirmationToken verificationToken = verificationTokenOpt.get();
-        MyUser user = verificationToken.getUser();
+        User user = verificationToken.getUser();
         if (user.isEnabled()) {
             throw new Exception("E-Mail has already been verified!");
         }
@@ -42,7 +42,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     }
 
     @Override
-    public void createVerificationToken(MyUser user, String token) {
+    public void createVerificationToken(User user, String token) {
         ConfirmationToken verificationToken = new ConfirmationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
@@ -50,7 +50,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
             confirmationTokenRepository.save(verificationToken);
         }
         catch(Exception exception) {
-            throw new AlreadySendRegistrationRequestException(AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE);
+            throw new BadRequestException(AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE);
         }
 
     }
