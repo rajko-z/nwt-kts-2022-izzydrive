@@ -19,4 +19,8 @@ public class Image {
 
     @Column(name="name", nullable = false, unique = true)
     private String name;
+
+    public Image(String photoName) {
+        this.name = photoName;
+    }
 }

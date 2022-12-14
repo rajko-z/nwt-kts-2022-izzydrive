@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
       next : (responce) => {
         console.log(responce);
-        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
+        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"], id: responce["user"].id})
       //redirekcija na ulogovanu pocetnu stranicu
     },
       error: (error )=> {
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
 
         next : (responce) => {
           console.log(responce)
-        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
+        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"], id: responce["user"].id})
         //redirekcija na ulogovanu pocetnu stranicu
       },
         error: (error )=> {
@@ -108,13 +108,12 @@ export class LoginComponent implements OnInit {
 
           next : (responce) => {
             console.log(responce);
-          this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
+          this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"], id: responce["user"].id})
           //redirekcija na ulogovanu pocetnu stranicu
         },
           error: (error )=> {
             this.errorMessage = true;
-            console.log(error);
-            
+            console.log(error);   
         }
       })
     });

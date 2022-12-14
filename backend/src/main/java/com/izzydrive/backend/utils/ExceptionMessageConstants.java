@@ -17,6 +17,7 @@ public final class ExceptionMessageConstants {
 
     public static final String INVALID_CAR_REGISTRATION_MESSAGE = "Invalid registration format. Required: XX-X*(3-5)-XX";
     public static final String ALREADY_EXISTING_CAR_MESSAGE = "Car with same registration already exists";
+    public static final String USER_DOESNT_EXISTS = "User with that username doesn't exists";
 
 }
 

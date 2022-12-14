@@ -4,9 +4,11 @@ import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.LoginDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.service.ImageService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.TokenUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,11 +50,13 @@ public class AuthenticationController {
 
     private static final String ERROR_INVALID_LOGIN = "Invalid username or password";
 
+    private final ImageService imageService;
+
     @Value("${google.id}")
     private String idClient;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginDTO loginDTO) throws IOException {
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -63,11 +67,12 @@ public class AuthenticationController {
             MyUser myUser = (MyUser) authentication.getPrincipal();
             String jwt = tokenUtils.generateTokenForUsername(myUser.getUsername());
 
-            return new ResponseEntity<>(UserDTOConverter.convertToUserWithToken(myUser,jwt), HttpStatus.OK);
+            return new ResponseEntity<>(UserDTOConverter.convertToUserWithTokenAndImage(myUser, jwt, imageService), HttpStatus.OK);
         }
         catch (BadCredentialsException ex) {
             return new ResponseEntity<>(ERROR_INVALID_LOGIN, HttpStatus.UNAUTHORIZED);
         }
+
     }
 
     @PostMapping("/login-fb")
@@ -81,11 +86,13 @@ public class AuthenticationController {
             Optional<MyUser> myUser = userService.findByEmail(user.getEmail());
             String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
-            return new ResponseEntity<>(UserDTOConverter.convertToUserWithToken(myUser.get(),jwt), HttpStatus.OK);
+            return new ResponseEntity<>(UserDTOConverter.convertToUserWithTokenAndImage(myUser.get(),jwt, imageService), HttpStatus.OK);
 
         }
-        catch (BadCredentialsException ex) {
+        catch (BadCredentialsException e) {
             return new ResponseEntity<>(ERROR_INVALID_LOGIN, HttpStatus.UNAUTHORIZED);
+        }catch (IOException e){
+            return new ResponseEntity<>("file", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -109,7 +116,7 @@ public class AuthenticationController {
             Optional<MyUser> myUser =  userService.findByEmail(payload.getEmail());
             String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
-            return new ResponseEntity<>(UserDTOConverter.convertToUserWithToken(myUser.get(),jwt), HttpStatus.OK);
+            return new ResponseEntity<>(UserDTOConverter.convertToUserWithTokenAndImage(myUser.get(),jwt, imageService), HttpStatus.OK);
 
 
         }

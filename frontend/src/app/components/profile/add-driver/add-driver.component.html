@@ -6,7 +6,7 @@
     </mat-step>
 
     <mat-step [hasError]="!this.isValidCarForm" errorMessage="Invalid form data" completed="false">   
-      <ng-template matStepLabel> data</ng-template>
+      <ng-template matStepLabel>Car data</ng-template>
       <app-base-car-data-form (formData)="onSecondStepNext($event, stepper)" [driverForm]="this.driverForm"></app-base-car-data-form>
     </mat-step>
     
@@ -20,8 +20,6 @@
         <img src="/assets/check.png" class="icon">
         <p class="done_text">Successfully added new driver</p>
       </div>
-      
-      
     </mat-step>
     
   </mat-horizontal-stepper>

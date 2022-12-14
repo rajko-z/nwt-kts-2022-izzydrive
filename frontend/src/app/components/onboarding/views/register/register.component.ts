@@ -13,7 +13,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class RegisterComponent implements OnInit {
   
   ngOnInit(): void {
-    
   }
 
   constructor(private router : Router, 
@@ -29,12 +28,9 @@ export class RegisterComponent implements OnInit {
       ({
         next : (responce) => {
           console.log(responce)
-       
       },
         error: (error )=> {
-          
           this.handleError(error.error, registerForm);
-          
       }
       })
     )
