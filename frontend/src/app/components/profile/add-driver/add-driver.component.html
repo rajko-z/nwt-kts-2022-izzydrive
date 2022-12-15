@@ -1,0 +1,25 @@
+<mat-horizontal-stepper linear  #stepper class="driver-data_form">
+    
+  <mat-step [hasError]="!this.isValidDriverForm" errorMessage="Invalid form data" completed="false">
+      <ng-template matStepLabel>Driver data</ng-template>
+        <app-base-user-data-form (register)="onFirstStepNext($event, stepper)"></app-base-user-data-form>
+    </mat-step>
+
+    <mat-step [hasError]="!this.isValidCarForm" errorMessage="Invalid form data" completed="false">   
+      <ng-template matStepLabel>Car data</ng-template>
+      <app-base-car-data-form (formData)="onSecondStepNext($event, stepper)" [driverForm]="this.driverForm"></app-base-car-data-form>
+    </mat-step>
+    
+    <mat-step completed="false">
+      <ng-template matStepLabel>Done</ng-template>
+      <div *ngIf="!this.addingFinished" class="processing_container">
+        <p class="processing_text">The entered data is being processed</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div *ngIf="this.addingFinished && this.successfullyFinished" class="success_container">
+        <img src="/assets/check.png" class="icon">
+        <p class="done_text">Successfully added new driver</p>
+      </div>
+    </mat-step>
+    
+  </mat-horizontal-stepper>

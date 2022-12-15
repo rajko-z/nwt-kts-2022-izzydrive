@@ -13,4 +13,5 @@ public interface EmailSender {
 
     public void sendConfirmationAsync(String email, String token, String firstName) throws IOException, MessagingException, TemplateException;
 
+    public void sendDriverRegistrationMail(String email, String password) throws IOException, TemplateException, MessagingException;
 }

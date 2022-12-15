@@ -23,7 +23,6 @@ import static com.izzydrive.backend.utils.ExceptionMessageConstants.SOMETHING_WE
 @AllArgsConstructor
 public class PassengerController {
 
-    @Autowired
     private final PassengerService passengerService;
 
     @PostMapping("/registration")

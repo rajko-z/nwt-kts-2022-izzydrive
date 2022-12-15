@@ -1,26 +1,19 @@
+import { CommonModule, JsonPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { Shared1Component } from './components/shared1/shared1.component';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularMaterialModule } from './angular-material.module';
+import { BaseUserDataFormComponent } from './components/base-user-data-form/base-user-data-form.component';
+import { BaseCarDataFormComponent } from './components/base-car-data-form/base-car-data-form.component';
 
-// If you have any additional modules to be shared add them to the list
-const materialModules = [
-  MatInputModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatButtonModule,
-  MatTooltipModule,
-  BrowserAnimationsModule,
-  MatSnackBarModule
-];
+
 
 @NgModule({
-  declarations: [Shared1Component],
-  exports: [Shared1Component],
+  declarations: [BaseUserDataFormComponent, BaseCarDataFormComponent],
+  imports: [AngularMaterialModule,  
+    CommonModule, 
+    JsonPipe, 
+    ReactiveFormsModule, 
+    FormsModule],
+  exports: [BaseUserDataFormComponent, BaseCarDataFormComponent],
 })
 export class SharedComponentsModule{}

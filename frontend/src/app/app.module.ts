@@ -11,21 +11,24 @@ import { HomePageUnLoggedComponent } from './pages/home-page-un-logged/home-page
 import { MapComponent } from './components/map/map.component';
 import { OrderingRideBasicComponent } from './components/ordering-ride-basic/ordering-ride-basic.component';
 import { OrderingRideAdvancedComponent } from './components/ordering-ride-advanced/ordering-ride-advanced.component';
-import {MatInputModule} from "@angular/material/input";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatRadioModule} from "@angular/material/radio";
+import { MenuModule } from './components/menu/menu.module';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileModule } from './components/profile/profile.module';
+import { SharedComponentsModule } from './components/shared/shared-components.module';
+import { AngularMaterialModule } from './components/shared/angular-material.module';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatRadioModule
+    MenuModule,
+    ProfileModule,
+    SharedComponentsModule,
+    AngularMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -2,6 +2,7 @@ package com.izzydrive.backend.model.users;
 
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Image;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class MyUser implements UserDetails {
 
     @Id
@@ -71,6 +73,16 @@ public abstract class MyUser implements UserDetails {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.blocked = false;
+    }
+
+    public MyUser(String email, String password, String firstName, String lastName, String phoneNumber, Image image) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.blocked = false;
+        this.image = image;
     }
 
     //=========================== FOR SECURITY ===========================//

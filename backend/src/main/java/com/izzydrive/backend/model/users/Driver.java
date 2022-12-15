@@ -19,7 +19,6 @@ public class Driver extends MyUser {
 
     @Column(nullable = false)
     private boolean active;
-
     @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;
 

@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit , NgZone } from '@angular/core';
-import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
 import {
   SocialAuthService,
@@ -9,6 +8,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import {CredentialResponse, PromptMomentNotification} from 'google-one-tap';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -30,11 +30,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private formBuilder: FormBuilder, 
-              private http: HttpClient, 
-              private userService : UserSeviceService, 
+  constructor(private userService : UserSeviceService, 
               private socialAuthService: SocialAuthService,
-              private _ngZone: NgZone) { 
+              private _ngZone: NgZone, 
+              private router: Router) { 
 
   }
 
@@ -72,8 +71,8 @@ export class LoginComponent implements OnInit {
 
       next : (responce) => {
         console.log(responce);
-        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
-      //redirekcija na ulogovanu pocetnu stranicu
+        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+        this.router.navigateByUrl('/logged')
     },
       error: (error )=> {
         console.log(error);
@@ -82,16 +81,14 @@ export class LoginComponent implements OnInit {
   })
   }
 
- 
-
   onSubmit(){
    this.userService.regularLogin(this.loginForm.value)
     .subscribe({
 
         next : (responce) => {
           console.log(responce)
-        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
-        //redirekcija na ulogovanu pocetnu stranicu
+        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+        this.router.navigateByUrl('/logged')
       },
         error: (error )=> {
           this.errorMessage = true;
@@ -108,13 +105,12 @@ export class LoginComponent implements OnInit {
 
           next : (responce) => {
             console.log(responce);
-          this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["role"]})
-          //redirekcija na ulogovanu pocetnu stranicu
+          this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+          this.router.navigateByUrl('/logged')
         },
           error: (error )=> {
             this.errorMessage = true;
-            console.log(error);
-            
+            console.log(error);   
         }
       })
     });

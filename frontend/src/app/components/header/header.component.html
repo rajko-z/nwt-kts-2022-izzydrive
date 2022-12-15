@@ -3,8 +3,9 @@
         <div style=" flex-grow: 4; flex-shrink: 2; align-self: center;">
             <p class="app_name">IzzyDrive</p>
         </div>
-        <div *ngIf="isUserLoggedIn()" style="flex-grow: 1;">
-            <button class="profile_button" mat-fab>Basic</button>
+        <div *ngIf="isUserLoggedIn()" style="flex-grow: 1; align-self: center;">
+            <button class="profile_button" mat-fab>
+            </button>
         </div>
         <div *ngIf="!isUserLoggedIn()" style="flex-grow: 2;">
             <a routerLink="/onboard/login" 

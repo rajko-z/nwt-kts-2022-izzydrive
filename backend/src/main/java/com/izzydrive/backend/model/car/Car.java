@@ -33,10 +33,14 @@ public class Car {
 
     @OneToOne(mappedBy = "car", fetch = FetchType.EAGER)
     private Driver driver;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    private Image image;
-
     @Column
     private String carAccommodations; // to escape separate table, e.g. PETS;BABY;FOOD...
+
+    public Car(String registration, String model, int maxNumOfPassengers, CarType carType,  String carAccommodations) {
+        this.registration = registration;
+        this.model = model;
+        this.maxNumOfPassengers = maxNumOfPassengers;
+        this.carType = carType;
+        this.carAccommodations = carAccommodations;
+    }
 }
