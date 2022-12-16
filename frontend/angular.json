@@ -73,7 +73,10 @@
               "browserTarget": "frontend:build:production"
             },
             "development": {
-              "browserTarget": "frontend:build:development"
+              "browserTarget": "frontend:build:development",
+              "sslKey": "src/assets/ssl-certificates/localhost.key",
+              "sslCert": "src/assets/ssl-certificates/localhost.crt",
+              "ssl": true
             }
           },
           "defaultConfiguration": "development"
