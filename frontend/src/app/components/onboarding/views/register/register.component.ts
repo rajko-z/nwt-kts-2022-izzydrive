@@ -12,6 +12,9 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class RegisterComponent implements OnInit {
 
+  ngOnInit(): void {
+  }
+
   hidePassword: boolean = true;
   hideRepeatPassword: boolean = true
   //phone_number_regexp: string = "^(\\+\\d{1,2}\\s)?\(?\\d{3}\)?[\\s.-]\\d{3}[\s.-]\\d{4}$";
@@ -28,7 +31,6 @@ export class RegisterComponent implements OnInit {
                                                           Validators.maxLength(13)]),
   });
 
-
   constructor(private router : Router,
               private userService: UserSeviceService,
               private errorHandler: ErrorHandlerService,
@@ -36,28 +38,23 @@ export class RegisterComponent implements OnInit {
 
     }
 
-  ngOnInit(): void {}
-
-  onSubmit(): void {
-    this.userService.registration(this.registerForm.value).subscribe(
+  onSubmit(registerForm: FormGroup): void {
+    this.userService.registration(registerForm.value).subscribe(
       ({
         next : (responce) => {
           console.log(responce)
-
       },
         error: (error )=> {
-
-          this.handleError(error.error);
-
+          this.handleError(error.error, registerForm);
       }
       })
     )
   }
 
-  handleError(errorData : {statusCode: number, message: string, timestamp: Date, errorField: number}): void{
+  handleError(errorData : {statusCode: number, message: string, timestamp: Date, errorField: number}, registerForm: FormGroup): void{
     let errorLabel = this.errorHandler.customErrorCode[errorData.errorField]
     if(errorLabel !== "other"){
-      this.registerForm.controls[errorLabel].setErrors({'incorrect': true})
+      registerForm.controls[errorLabel].setErrors({'incorrect': true})
     }
     else{
       this.openErrorMessage(errorData.message);
@@ -71,6 +68,4 @@ export class RegisterComponent implements OnInit {
       panelClass: ['messageTooltip']
     });
   }
-
-
 }

@@ -17,6 +17,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/onboarding/onboarding.module').then(m => m.OnboardingModule),
   },
+  {
+    path: 'profile',
+    loadChildren: () =>
+      import('./components/profile/profile.module').then(m => m.ProfileModule),
+  },
+
 ];
 
 @NgModule({

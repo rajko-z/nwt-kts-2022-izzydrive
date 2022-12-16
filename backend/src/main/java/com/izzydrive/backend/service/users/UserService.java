@@ -12,7 +12,10 @@ public interface UserService extends UserDetailsService {
     List<User> findAll();
 
     Optional<User> findByEmail(String email);
-    void processOAuthPostLogin(String username);
+
+    String generatePassword();
+
+    String getProfileImage(Long userId);
 
     void changePassword(NewPasswordDTO newPasswordDTO);
 }

@@ -6,7 +6,4 @@ public class InvalidCredentialsException extends AppException {
         super(message);
     }
 
-    public InvalidCredentialsException(String message, int errorField) {
-        super(message, errorField);
-    }
 }

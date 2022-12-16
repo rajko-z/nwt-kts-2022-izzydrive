@@ -1,0 +1,71 @@
+<div class="menu-container" id="menuDiv">
+    <div class="base_profile_info">
+        <div class="picture_container">
+            <div class="circle">
+                
+            </div>
+        </div>
+        <div class="name_container">
+            <p class="first_name">Petar Petrovic</p>
+            <p class="email">you@example.com</p>
+        </div>
+        <div class="colapse_button">
+            <button mat-icon-button (click)="colapseMenu()">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="profile_options">
+        <mat-selection-list #menuItems [multiple]="false">
+            <div class="menu_item">
+                <mat-icon class="menu_item_icon">perm_identity</mat-icon>
+                <mat-list-option>
+                    View profile
+                </mat-list-option>  
+            </div>
+            <div class="menu_item">
+                <mat-icon class="menu_item_icon">settings</mat-icon>
+                <mat-list-option>
+                    Change profile info
+                </mat-list-option>  
+            </div>
+            <div class="menu_item">
+                <mat-icon class="menu_item_icon">lock</mat-icon>
+                <mat-list-option>
+                    Change password
+                </mat-list-option>  
+            </div>
+            <div *ngIf="isPassenger" class="menu_item">
+                <mat-icon class="menu_item_icon">euro_symbol</mat-icon>
+                <mat-list-option>
+                    Change paying <datalist></datalist>
+                </mat-list-option>  
+            </div>
+            <div class="delimiter"></div>
+            <div *ngIf="isPassenger">
+                <app-passenger-menu></app-passenger-menu>
+            </div>
+            <div *ngIf="isAdmin">
+                <app-admin-menu></app-admin-menu>
+            </div>
+            <div *ngIf="isDriver">
+                <app-driver-menu></app-driver-menu>
+            </div>
+            <div class="menu_item">
+                <mat-icon class="menu_item_icon">exit_to_app</mat-icon>
+                <mat-list-option>
+                    Log out
+                </mat-list-option>  
+            </div>
+            
+          </mat-selection-list>
+    </div>
+</div>
+<div id="collapsedMenu" class="open_menu_button">
+    <button mat-icon-button (click)="openMenu()">
+        <mat-icon>list</mat-icon>
+    </button>
+</div>
+
+

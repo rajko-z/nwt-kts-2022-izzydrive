@@ -1,7 +1,6 @@
 package com.izzydrive.backend.utils;
 
 import com.izzydrive.backend.config.JWTConfig;
-import com.izzydrive.backend.model.users.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,7 +41,6 @@ public class TokenUtils {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
         String username = getUsernameFromToken(token);
         return username != null && userDetails.getUsername().equals(username);
     }

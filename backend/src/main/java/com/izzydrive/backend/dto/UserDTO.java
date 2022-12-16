@@ -19,4 +19,5 @@ public class UserDTO {
     private String role;
     private String imageName;
     private Address address;
+    private String profileImage;
 }

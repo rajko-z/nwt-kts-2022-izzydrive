@@ -1,17 +1,15 @@
 $tittle_color: #696F91;
-$dark3: #4C506C;
-$light2: #D9DBF1;
-$light1: #E9EAEF;
-$light3 :#B4BCDF;
-$light5: #858DB5;
+@import '../shared/shared.scss';
 $dark1: #191A23;
+
+
 
 .header_container{
     background-color: $dark1;
     display: flex;
     height: 10%;
     flex-direction: row;
-
+    min-height: 60px;
 }
 
 .logo{
@@ -38,8 +36,22 @@ $dark1: #191A23;
 
 .profile_button{
     float: right;
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-color: #E9EAEF;
+    margin-right: 15px;
+    align-self: center;
+}
+
+
+.open_menu_button{
+    background-color: $light2;
+    color: $dark3;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;    
+    margin-top: 10px;
+    margin-left: 10px;
+    align-items: center;
 }

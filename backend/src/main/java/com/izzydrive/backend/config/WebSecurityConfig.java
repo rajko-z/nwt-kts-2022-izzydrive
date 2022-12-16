@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/users/**").permitAll()
             .antMatchers("/admins/**").permitAll()
             .antMatchers("/passengers/**").permitAll()
-            .antMatchers("/drivers/**").permitAll()
+            .antMatchers("/drivers/**").hasAnyAuthority("ROLE_DRIVER", "ROLE_ADMIN" )
             .antMatchers("/addresses/**").permitAll()
             .antMatchers("/admin-notes/**").permitAll()
             .antMatchers("/drivings/**").permitAll()
@@ -80,8 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
     }
 
+    @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/auth/login-fb","/passengers/registration");
+        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/auth/login-fb", "auth/login-google","/passengers/registration");
         web.ignoring().antMatchers(HttpMethod.GET,  "/","/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
         web.ignoring().antMatchers(HttpMethod.GET,"/confirmation");

@@ -1,0 +1,104 @@
+
+    <div class="user_form_container">
+        <form class="input-fields-container" [formGroup]="this.registerForm"
+            (ngSubmit)="onSubmit()">
+
+            <div class="horizontal-group">
+                <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%; min-width: 100px;">
+                    <mat-label>First name</mat-label>
+                    <input matInput
+                        placeholder="John"
+                        required
+                        formControlName="firstName">
+                    <mat-error *ngIf="this.registerForm.controls['firstName'].hasError('required')">First name is required</mat-error>
+                    <mat-error *ngIf="this.registerForm.controls['firstName'].hasError('pattern')">Letters and spaces are allowed</mat-error>
+                    <mat-error *ngIf="this.registerForm.controls['firstName'].hasError('incorrect')">Letters and spaces are allowed</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 49%; min-width: 100px;">
+                    <mat-label>Last name</mat-label>
+                    <input matInput
+                        placeholder="Deer"
+                        required
+                        formControlName="lastName">
+                    <mat-error *ngIf="this.registerForm.controls['lastName'].hasError('required')">Last name is required</mat-error>
+                    <mat-error *ngIf="this.registerForm.controls['lastName'].hasError('pattern')">Letters and spaces are allowed</mat-error>
+                    <mat-error *ngIf="this.registerForm.controls['lastName'].hasError('incorrect')">Letters and spaces are allowed</mat-error>
+                </mat-form-field>
+      
+            </div>
+           
+                    
+
+            <mat-form-field appearance="outline" class="form_field">
+                <mat-label>Email</mat-label>
+                <input matInput
+                    placeholder="you@email.com"
+                    required
+                    formControlName="email">
+                <mat-error *ngIf="this.registerForm.controls['email'].hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="this.registerForm.controls['email'].hasError('email')">Required format: you@email.com</mat-error>
+                <mat-error *ngIf="this.registerForm.controls['email'].hasError('incorrect')">Required format: you@email.com</mat-error>
+               
+            </mat-form-field>
+
+            <div *ngIf="this.isRegistration" class="horizontal-group">
+                <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%; min-width: 100px;">
+                    <mat-label>Password</mat-label>
+                        <input matInput
+                            placeholder="Deer"
+                            required
+                            [type]="hidePassword ? 'password' : 'text'"
+                            formControlName="password"
+                             >
+                             <button [disabled]="this.registerForm.controls.password.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hidePassword= !hidePassword"
+                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                           </button>
+                        <mat-error *ngIf="this.registerForm.controls['password'].hasError('required')">Password is required</mat-error>
+                        <mat-error *ngIf="this.registerForm.controls['password'].hasError('minlength')">Minimum number of chareacters is 8</mat-error>
+                        <mat-error *ngIf="this.registerForm.controls['password'].hasError('incorrect')">Minimum number of chareacters is 8</mat-error>
+                        
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" style="width: 49%; min-width: 100px;">
+                    <mat-label>Repeat Password</mat-label>
+                        <input matInput
+                            placeholder="Deer"
+                            required
+                            [type]="hideRepeatPassword ? 'password' : 'text'"
+                            formControlName="repeatedPassword">
+                            <button [disabled]="this.registerForm.controls.password.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hideRepeatPassword= !hideRepeatPassword"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepeatPassword">
+                            <mat-icon>{{hideRepeatPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                          </button>
+                        <mat-error *ngIf="this.registerForm.controls['repeatedPassword'].hasError('required')">Repeat password is required</mat-error>
+                        <mat-error *ngIf="this.registerForm.controls['repeatedPassword'].hasError('minlength')">Minimum number of chareacters is 8</mat-error>
+                        <mat-error *ngIf="this.registerForm.controls['repeatedPassword'].hasError('incorrect')">Repeated password and password doesn't match</mat-error>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field  appearance="outline" class="form_field">
+                <mat-label >Phone Number</mat-label>
+                <input matInput
+                    placeholder="+381601234567"
+                    required
+                    type="password"
+                    formControlName="phoneNumber"
+                    matTooltip="Info about the action"
+                    >
+                <mat-error *ngIf="this.registerForm.controls['phoneNumber'].hasError('required')">Phone number is required</mat-error>
+                <mat-error *ngIf="this.registerForm.controls['phoneNumber'].hasError('pattern')">Required format: +381601234567</mat-error>
+                <mat-error *ngIf="this.registerForm.controls['phoneNumber'].hasError('incorrect')">Required format: +381601234567</mat-error>
+            </mat-form-field>
+
+            <div class="button-container">
+                <button mat-button [disabled]="this.registerForm.invalid"
+                    matTooltip="Info about the action"
+                    [ngClass] = "{'disabled_large_btn': this.registerForm.invalid,  'large_button': !this.registerForm.invalid}"
+                    type="submit">Next
+                </button>
+            </div>
+        </form>
+    </div>

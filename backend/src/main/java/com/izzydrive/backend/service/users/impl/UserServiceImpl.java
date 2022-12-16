@@ -5,23 +5,32 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.users.UserRepository;
-import com.izzydrive.backend.service.Validator;
+import com.izzydrive.backend.service.ImageService;
+import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_DOESNT_EXISTS;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final ImageService imageService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -44,12 +53,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void processOAuthPostLogin(String username) {
-        Optional<User> existUser = userRepository.findByEmail(username);
-
-    }
-
-    @Override
     public void changePassword(NewPasswordDTO newPasswordDTO) {
         User user = userRepository.findByEmail(newPasswordDTO.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(newPasswordDTO.getEmail())));
@@ -63,6 +66,33 @@ public class UserServiceImpl implements UserService {
         if (Validator.validatePassword(newPasswordDTO.getNewPassword())) {
             user.setPassword(passwordEncoder.encode(newPasswordDTO.getNewPassword()));
             userRepository.save(user);
+        }
+    }
+
+    @Override
+    public String generatePassword() {
+        CharacterRule upperCase = new CharacterRule(EnglishCharacterData.UpperCase);
+        CharacterRule numbers = new CharacterRule(EnglishCharacterData.Digit);
+        CharacterRule lowerCase = new CharacterRule(EnglishCharacterData.LowerCase);
+        CharacterRule special = new CharacterRule(EnglishCharacterData.Special);
+
+        List<CharacterRule> rules = new ArrayList<>();
+        rules.add(upperCase);
+        rules.add(lowerCase);
+        rules.add(numbers);
+        rules.add(special);
+
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        return passwordGenerator.generatePassword(10, rules);
+    }
+
+    @Override
+    public String getProfileImage(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return imageService.convertImageToBase64(user.get().getImage());
+        } else {
+            throw new BadRequestException(USER_DOESNT_EXISTS);
         }
     }
 

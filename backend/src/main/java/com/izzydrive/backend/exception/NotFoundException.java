@@ -6,7 +6,4 @@ public class NotFoundException extends AppException {
         super(message);
     }
 
-    public NotFoundException(String message, int errorField) {
-        super(message, errorField);
-    }
 }

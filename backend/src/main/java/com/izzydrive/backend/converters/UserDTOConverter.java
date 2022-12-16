@@ -4,13 +4,13 @@ package com.izzydrive.backend.converters;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.service.ImageService;
 
 public class UserDTOConverter {
 
     private UserDTOConverter() { }
 
-    public static UserDTO convertFull(User user) {
-
+    public static UserDTO convertBase(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -25,10 +25,16 @@ public class UserDTOConverter {
                 .build();
     }
 
-    public static UserWithTokenDTO convertToUserWithToken(User user, String token) {
+    public static UserWithTokenDTO convertToUserWithImageAndToken(User user, String token, ImageService imageService) {
         return UserWithTokenDTO.builder()
-                .user(convertFull(user))
+                .user(convertWithImage(user, imageService))
                 .token(token)
                 .build();
+    }
+
+    public static UserDTO convertWithImage(User user, ImageService imageService) {
+        UserDTO userDTO = convertBase(user);
+        userDTO.setProfileImage(imageService.convertImageToBase64(user.getImage()));
+        return userDTO;
     }
 }

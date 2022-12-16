@@ -1,0 +1,68 @@
+<div class="user_form_container">
+    <form class="input-fields-container" [formGroup]="this.carForm" (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Car data</ng-template>
+          <mat-form-field appearance="outline" >
+              <mat-label>Registration</mat-label>
+              <input matInput
+                  placeholder="XX-XXXX-XX"
+                  required
+                  formControlName="registration">
+              <mat-error *ngIf="this.carForm.controls['registration'].hasError('required')">Registration is required</mat-error>
+              <mat-error *ngIf="this.carForm.controls['registration'].hasError('pattern')">Allowed patterns: XX-XXXX-XX or XX-XXX-XX</mat-error>
+              <!-- <mat-error *ngIf="this.carForm.controls['firstName'].hasError('incorrect')">Letters and spaces are allowed</mat-error> -->
+          </mat-form-field>
+
+        <div class="horizontal-group">
+          <mat-form-field appearance="outline" style="width: 49%; margin-right: 1%;">
+              <mat-label>Car model</mat-label>
+              <input matInput
+                  placeholder="Audi A4"
+                  required
+                  formControlName="model">
+              <mat-error *ngIf="this.carForm.controls['model'].hasError('required')">Car model is required</mat-error>
+              <!-- <mat-error *ngIf="this.carForm.controls['model'].hasError('incorrect')">Letters and spaces are allowed</mat-error> -->
+          </mat-form-field>
+                
+
+         <mat-form-field appearance="outline" style="width: 49%;">
+          <mat-label>Maximum passengers</mat-label>
+          <input matInput
+              placeholder="3"
+              required
+              formControlName="maxPassengers">
+          <mat-error *ngIf="this.carForm.controls['maxPassengers'].hasError('required')">Required</mat-error>
+          <mat-error *ngIf="this.carForm.controls['maxPassengers'].hasError('pattern')">Required number between 0-99</mat-error>
+          <!-- <mat-error *ngIf="this.carForm.controls['maxPassengers'].hasError('incorrect')">Required format: you@email.com</mat-error> -->  
+        </mat-form-field>
+        </div>
+          <div class="car_type_group">
+            <label class="car_type_label">Select car type* </label>
+            <mat-radio-group formControlName="carType" style="display: flex; flex-direction:row">
+              <mat-radio-button value="regular" class="car_type_item">Regular</mat-radio-button>
+              <mat-radio-button value="avarage" class="car_type_item">Avarage</mat-radio-button>
+              <mat-radio-button value="premium" class="car_type_item">Premium</mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="this.carForm.controls['carType'].hasError('required')">Required</mat-error>
+          </div>
+
+          <h4 class="car_accomodation_label">Select car accomodations</h4>
+          <section class="car_accomodation" [formGroup]="this.carAccommodation">
+            <div style="display: flex; flex-direction:row; gap: 55px;">
+              <p><mat-checkbox formControlName="baby">Baby</mat-checkbox></p>
+              <p><mat-checkbox formControlName="pet">Pet</mat-checkbox></p>
+              <p><mat-checkbox formControlName="food">Food</mat-checkbox></p>
+              <p><mat-checkbox formControlName="baggage">Baggage</mat-checkbox></p>
+            </div>
+            
+          </section>
+
+      <div class="button-container">
+        <button mat-button [disabled]="this.carForm.invalid || this.driverForm.invalid"
+            matTooltip="Info about the action"
+            [ngClass] = "{'disabled_large_btn': this.carForm.invalid || this.driverForm.invalid,  'large_button': !this.driverForm.invalid}"
+            type="submit">Next
+        </button>
+    </div>
+    
+    </form>
+  </div>      

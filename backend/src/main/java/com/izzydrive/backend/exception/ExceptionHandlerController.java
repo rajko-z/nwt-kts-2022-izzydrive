@@ -63,4 +63,16 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(ForbiddenAccessException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<ErrorMessage> forbiddenAccessException(ForbiddenAccessException ex) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+    }
+
 }

@@ -10,6 +10,7 @@ import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.exception.InvalidCredentialsException;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.service.AuthenticationService;
+import com.izzydrive.backend.service.ImageService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.TokenUtils;
@@ -39,6 +40,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserService userService;
 
+    private final ImageService imageService;
+
     @Value("${google.id}")
     private String idClient;
 
@@ -52,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             User user = (User) authentication.getPrincipal();
             String jwt = tokenUtils.generateTokenForUsername(user.getUsername());
 
-            return UserDTOConverter.convertToUserWithToken(user, jwt);
+            return UserDTOConverter.convertToUserWithImageAndToken(user, jwt, imageService);
         } catch (BadCredentialsException ex) {
             throw new InvalidCredentialsException(ExceptionMessageConstants.INVALID_LOGIN);
         }
@@ -67,7 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
         String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
-        return UserDTOConverter.convertToUserWithToken(myUser.get(),jwt);
+        return UserDTOConverter.convertToUserWithImageAndToken(myUser.get(), jwt, imageService);
     }
 
     public UserWithTokenDTO createAuthenticationTokenGoogleLogin(String token) {
@@ -89,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             //TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
             String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
-            return UserDTOConverter.convertToUserWithToken(myUser.get(),jwt);
+            return UserDTOConverter.convertToUserWithImageAndToken(myUser.get(), jwt, imageService);
         } catch (IOException ex) {
             throw new InvalidCredentialsException(ExceptionMessageConstants.INVALID_LOGIN);
         }
