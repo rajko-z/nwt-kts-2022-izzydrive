@@ -1,0 +1,71 @@
+<div class="edit-profile-container">
+    <div class="info-container">
+        <div class="fields-container">
+            <h1>Change profile</h1>
+            <form class="input-fields-container" [formGroup]="this.editForm">
+                <div class="horizontal-group">
+                        <mat-form-field appearance="outline" style="flex: 1 1 auto;">
+                            <mat-label>First name</mat-label>
+                            <input matInput
+                                placeholder="pat@example.com"
+                                required
+                                formControlName="firstName">
+                                <mat-error *ngIf="this.editForm.controls['firstName'].hasError('required')">First name is required</mat-error>
+                                <mat-error *ngIf="this.editForm.controls['firstName'].hasError('pattern')">Letters and spaces are allowed</mat-error>
+                                
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
+                            <mat-label>Last name</mat-label>
+                            <input matInput
+                                required
+                                ngModel
+                                formControlName="lastName">
+                                <mat-error *ngIf="this.editForm.controls['lastName'].hasError('required')">Last name is required</mat-error>
+                                <mat-error *ngIf="this.editForm.controls['lastName'].hasError('pattern')">Letters and spaces are allowed</mat-error>
+                                
+                        </mat-form-field>
+                </div>
+                <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
+                    <mat-label>Email</mat-label>
+                    <input matInput
+                        required
+                        ngModel
+                        formControlName="email">
+                    <mat-error *ngIf="this.editForm.controls['email'].hasError('required')">Email is required</mat-error>
+                    <mat-error *ngIf="this.editForm.controls['email'].hasError('email')">Required format: you@email.com</mat-error>
+                
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
+                    <mat-label>Phone number</mat-label>
+                    <input matInput
+                        required
+                        ngModel
+                        formControlName="phoneNumber">
+                    <mat-error *ngIf="this.editForm.controls['phoneNumber'].hasError('required')">Phone number is required</mat-error>
+                    <mat-error *ngIf="this.editForm.controls['phoneNumber'].hasError('pattern')">Required format: +381601234567</mat-error>                    
+                </mat-form-field>
+
+                
+                <div class="button-container">
+                    <button mat-button [disabled]="this.editForm.invalid"
+                        [ngClass]="{'disabled_large_btn':
+                        this.editForm.invalid, 'large_button':
+                        !this.editForm.invalid}"
+                        type="submit">Confirm</button>
+                </div>
+            </form>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: end; height: 10%;">
+            <button class="change_profile_btn" style="padding: 10px">
+                Change profile picture
+            </button>
+            <div style="flex: 1 1 auto; align-self: flex-end;">
+                <img class="img_container" src="https://via.placeholder.com/400">
+            </div>
+        </div>
+        
+    </div>
+</div>

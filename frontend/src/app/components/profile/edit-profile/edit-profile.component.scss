@@ -1,0 +1,53 @@
+@import "src/style/styles";
+
+.edit-profile-container{
+    display: flex; 
+    flex-direction: column; 
+    gap: 50px;
+    padding: 3% 5%; 
+    gap: 20px;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+}
+
+.info-container{
+    display: flex; 
+    flex-direction: row; 
+    gap: 50px
+}
+
+.fields-container{
+    display: flex; 
+    flex: 1 1 auto; 
+    flex-direction: column;
+}
+
+.large_button{
+    background-color: #4C506C;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: medium;
+}
+
+.input-fields-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.img_container{
+    height: 80%;
+    max-height: 420px;
+    object-fit: contain;
+    align-self: flex-end;
+}
+
+.change_profile_btn{
+    @include buttonStyle();
+    width: 40%;
+    align-self: flex-end;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
