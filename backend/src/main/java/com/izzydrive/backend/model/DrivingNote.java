@@ -1,6 +1,6 @@
 package com.izzydrive.backend.model;
 
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,7 +29,7 @@ public class DrivingNote {
     private boolean fromPassenger;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MyUser myUser;
+    private User user;
 
     @OneToOne(mappedBy = "drivingNote", fetch = FetchType.LAZY)
     private Driving driving;

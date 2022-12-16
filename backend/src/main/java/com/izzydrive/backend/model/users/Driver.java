@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Driver extends MyUser {
+public class Driver extends User {
 
     @Column(nullable = false)
     private boolean active;

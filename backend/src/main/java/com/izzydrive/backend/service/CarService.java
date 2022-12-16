@@ -5,6 +5,6 @@ import com.izzydrive.backend.model.car.Car;
 
 public interface CarService {
 
-    public Car createNewCar(CarDTO carData);
-    public void saveCar(Car car);
+    Car createNewCar(CarDTO carData);
+    void saveCar(Car car);
 }

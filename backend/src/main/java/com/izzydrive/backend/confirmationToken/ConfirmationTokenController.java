@@ -1,5 +1,6 @@
 package com.izzydrive.backend.confirmationToken;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,18 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/confirmation")
+@AllArgsConstructor
 public class ConfirmationTokenController {
 
-    @Autowired
-    private ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationTokenService confirmationTokenService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> verify(@RequestParam String token) {
-        try {
-            confirmationTokenService.verify(token);
-            return new ResponseEntity<>("Verified", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
+        confirmationTokenService.verify(token);
+        return new ResponseEntity<>("Verified", HttpStatus.OK);
     }
 }

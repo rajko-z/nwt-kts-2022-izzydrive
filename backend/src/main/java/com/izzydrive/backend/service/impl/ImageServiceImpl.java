@@ -1,8 +1,10 @@
 package com.izzydrive.backend.service.impl;
 
+import com.izzydrive.backend.exception.InternalServerException;
 import com.izzydrive.backend.model.Image;
 import com.izzydrive.backend.repository.ImageRepository;
 import com.izzydrive.backend.service.ImageService;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,24 +29,23 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public Image convertImageToBase64(long id) {
-        return imageRepository.findById(id).get();
-    }
-
-    @Override
     public Stream<Image> getAllPhotos() {
         return null;
     }
 
     @Override
-    public List<Image> convertPhotosFromDTO(List<MultipartFile> photos, String email) throws IOException {
-        List<Image> images = new ArrayList<Image>();
+    public List<Image> convertPhotosFromDTO(List<MultipartFile> photos, String email) {
+        List<Image> images = new ArrayList<>();
         if(photos == null) {
             return images;
         }
-        for (MultipartFile photoData: photos
-        ) {
-            String photoName = savePhotoInFileSystem(photoData.getBytes(), email);
+        for (MultipartFile photoData: photos) {
+            String photoName;
+            try {
+                photoName = savePhotoInFileSystem(photoData.getBytes(), email);
+            } catch (IOException e) {
+                throw new InternalServerException(ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE);
+            }
             Image img = new Image(photoName);
             images.add(img);
             imageRepository.save(img);
@@ -53,32 +54,38 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String savePhotoInFileSystem(byte[] bytes, String ownerEmail) throws IOException {
+    public String savePhotoInFileSystem(byte[] bytes, String ownerEmail) {
         String folder = "./src/main/resources/images/";
         LocalDateTime uniqueTime = LocalDateTime.now();
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
-        String photoName = ownerEmail + "_" + uniqueTime.format(formater) + ".jpg";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+        String photoName = ownerEmail + "_" + uniqueTime.format(formatter) + ".jpg";
         Path path = Paths.get(folder + photoName);
+
         try (FileOutputStream fos = new FileOutputStream(path.toString())) {
             fos.write(bytes);
+        }
+        catch (IOException e) {
+            throw new InternalServerException(ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE);
         }
         return photoName;
     }
 
     @Override
-    public Image convertImageFromBase64(String image, String email) throws IOException {
-
+    public Image convertImageFromBase64(String image, String email) {
         byte[] bytes = DatatypeConverter.parseBase64Binary(image);
         String photoName = savePhotoInFileSystem(bytes, email);
         Image img = new Image(photoName);
         return imageRepository.save(img);
-
     }
 
-    public String convertImageToBase64(Image img) throws IOException {
+    public String convertImageToBase64(Image img) {
         String pathFile =  "./src/main/resources/images/" + img.getName();
-        byte[] bytes = Files.readAllBytes(Paths.get(pathFile));
-        String photoData = Base64.getEncoder().encodeToString(bytes);
-        return photoData;
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(pathFile));
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        catch (IOException e) {
+            throw new InternalServerException(ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE);
+        }
     }
 }

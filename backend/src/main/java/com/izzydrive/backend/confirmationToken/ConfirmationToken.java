@@ -1,6 +1,6 @@
 package com.izzydrive.backend.confirmationToken;
 
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.model.users.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -19,9 +19,9 @@ public class ConfirmationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = MyUser.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = true, name = "my_user_id")
-    private MyUser user;
+    private User user;
 
     private Date expiryDate;
 
@@ -44,11 +44,11 @@ public class ConfirmationToken {
         this.id = id;
     }
 
-    public MyUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(MyUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

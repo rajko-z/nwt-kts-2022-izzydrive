@@ -3,90 +3,66 @@ package com.izzydrive.backend.service.users.impl;
 import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.email.EmailSender;
-import com.izzydrive.backend.exception.*;
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.users.Passenger;
-import com.izzydrive.backend.repository.AddressRepository;
+import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
-import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
-import com.izzydrive.backend.service.Validator;
+import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.PassengerService;
-import freemarker.template.TemplateException;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE;
 
 @Service
 @AllArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
 
-    @Autowired
-    private final PassengerRepository passengerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
-    @Autowired
-    private ConfirmationTokenService confirmationTokenService;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final EmailSender emailSender;
 
-    @Autowired
-    private EmailSender emailSender;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    public void registerPassenger(NewPassengerDTO newPassengerData){
+        validateNewPassengerData(newPassengerData);
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public void registerPassenger(NewPassengerDTO newPassengerData) throws InvalidLastNameFormatException, InvalidPasswordFormatException, InvalidRepeatedPasswordException, InvalidPhoneNumberFormatException, InvalidEmailFormatException, MessagingException, TemplateException, IOException {
-
-        if (validateNewPassengerData(newPassengerData)){
-            Optional<MyUser> user = userRepository.findByEmail(newPassengerData.getEmail());
-            if (!user.isPresent()){
-                Passenger passenger = new Passenger(
-                        newPassengerData.getEmail(),
-                        passwordEncoder.encode(newPassengerData.getPassword()),
-                        newPassengerData.getFirstName(),
-                        newPassengerData.getLastName(),
-                        newPassengerData.getPhoneNumber()
-                );
-                passenger.setBlocked(false);
-                passenger.setActivated(false);
-                passenger.setRole(roleRepository.findByName("ROLE_PASSENGER").get(0));
+        Optional<User> user = userRepository.findByEmail(newPassengerData.getEmail());
+        if (user.isEmpty()){
+            Passenger passenger = new Passenger(
+                    newPassengerData.getEmail(),
+                    passwordEncoder.encode(newPassengerData.getPassword()),
+                    newPassengerData.getFirstName(),
+                    newPassengerData.getLastName(),
+                    newPassengerData.getPhoneNumber()
+            );
+            passenger.setBlocked(false);
+            passenger.setActivated(false);
+            passenger.setRole(roleRepository.findByName("ROLE_PASSENGER").get(0));
 
 
-                String token = UUID.randomUUID().toString();
-                confirmationTokenService.createVerificationToken(passenger, token);
-                emailSender.sendConfirmationAsync(passenger.getEmail(), token, passenger.getFirstName());
-
-            }
-            else{
-                throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
-            }
+            String token = UUID.randomUUID().toString();
+            confirmationTokenService.createVerificationToken(passenger, token);
+            emailSender.sendConfirmationAsync(passenger.getEmail(), token, passenger.getFirstName());
         }
-
+        else{
+            throw new BadRequestException(ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE);
+        }
     }
 
-    private boolean validateNewPassengerData(NewPassengerDTO newPassengerData) throws InvalidEmailFormatException, InvalidPasswordFormatException, InvalidRepeatedPasswordException, InvalidLastNameFormatException, InvalidFirstNameFormatException, InvalidPhoneNumberFormatException {
-        return Validator.validateEmail(newPassengerData.getEmail()) &&
-                Validator.validateMatchingPassword(newPassengerData.getPassword(), newPassengerData.getRepeatedPassword()) &&
-                Validator.validateFirstName(newPassengerData.getFirstName()) &&
-                Validator.validateLastName(newPassengerData.getLastName()) &&
-                Validator.validatePhoneNumber(newPassengerData.getPhoneNumber())
-                ;
-
-
+    private void validateNewPassengerData(NewPassengerDTO newPassengerData)  {
+        Validator.validateEmail(newPassengerData.getEmail());
+        Validator.validateMatchingPassword(newPassengerData.getPassword(), newPassengerData.getRepeatedPassword());
+        Validator.validateFirstName(newPassengerData.getFirstName());
+        Validator.validateLastName(newPassengerData.getLastName());
+        Validator.validatePhoneNumber(newPassengerData.getPhoneNumber());
     }
 }

@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public interface ImageService {
-    Image convertImageToBase64(long id);
     Stream<Image> getAllPhotos();
-    List<Image> convertPhotosFromDTO(List<MultipartFile> photos, String email) throws IOException;
-    String savePhotoInFileSystem(byte[] bytes, String ownerEmail) throws IOException;
-    Image convertImageFromBase64(String img, String email) throws IOException;
-    String convertImageToBase64(Image img) throws IOException;
+    List<Image> convertPhotosFromDTO(List<MultipartFile> photos, String email);
+    String savePhotoInFileSystem(byte[] bytes, String ownerEmail);
+    Image convertImageFromBase64(String img, String email);
+    String convertImageToBase64(Image img);
 }
 

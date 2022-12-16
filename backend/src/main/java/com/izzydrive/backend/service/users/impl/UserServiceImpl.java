@@ -1,29 +1,28 @@
 package com.izzydrive.backend.service.users.impl;
 
-import com.izzydrive.backend.dto.UserDTO;
-import com.izzydrive.backend.dto.UserWithTokenDTO;
+import com.izzydrive.backend.dto.NewPasswordDTO;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.exception.InternalServerException;
-import com.izzydrive.backend.model.users.MyUser;
+import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.ImageService;
+import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.UserService;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.izzydrive.backend.utils.ExceptionMessageConstants.*;
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_DOESNT_EXISTS;
 
 @Service
 @AllArgsConstructor
@@ -31,32 +30,43 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
 
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUser> user = userRepository.findByEmail(username);
+        Optional<User> user = userRepository.findByEmail(username);
         if (user.isPresent())
             return user.get();
         throw new UsernameNotFoundException("User with username: " + username + " not found");
     }
 
     @Override
-    public List<MyUser> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<MyUser> findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public void processOAuthPostLogin(String username) {
-        Optional<MyUser> existUser = userRepository.findByEmail(username);
+    public void changePassword(NewPasswordDTO newPasswordDTO) {
+        User user = userRepository.findByEmail(newPasswordDTO.getEmail())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(newPasswordDTO.getEmail())));
 
+        if (passwordsMatch(newPasswordDTO.getNewPassword(), user.getPassword())) {
+            throw new BadRequestException(ExceptionMessageConstants.NEW_PASSWORD_SAME_AS_PREVIOUS);
+        }
+        if (!passwordsMatch(newPasswordDTO.getCurrentPassword(), user.getPassword())) {
+            throw new BadRequestException(ExceptionMessageConstants.INVALID_CURRENT_PASSWORD);
+        }
+        if (Validator.validatePassword(newPasswordDTO.getNewPassword())) {
+            user.setPassword(passwordEncoder.encode(newPasswordDTO.getNewPassword()));
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -74,21 +84,19 @@ public class UserServiceImpl implements UserService {
 
         PasswordGenerator passwordGenerator = new PasswordGenerator();
         return passwordGenerator.generatePassword(10, rules);
-
     }
 
     @Override
     public String getProfileImage(Long userId) {
-        Optional<MyUser> user = userRepository.findById(userId);
-        if(user.isPresent()){
-            try {
-                return imageService.convertImageToBase64(user.get().getImage());
-            } catch (IOException e) {
-                throw new InternalServerException(SOMETHING_WENT_WRONG_MESSAGE);
-            }
-        }
-        else{
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return imageService.convertImageToBase64(user.get().getImage());
+        } else {
             throw new BadRequestException(USER_DOESNT_EXISTS);
         }
+    }
+
+    private boolean passwordsMatch(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

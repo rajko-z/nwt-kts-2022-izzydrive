@@ -1,17 +1,13 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.CarDTO;
-import com.izzydrive.backend.exception.AlreadyExitingCarException;
-import com.izzydrive.backend.model.Image;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.car.CarAccommodation;
 import com.izzydrive.backend.model.car.CarType;
 import com.izzydrive.backend.repository.CarRepository;
-import com.izzydrive.backend.repository.ImageRepository;
 import com.izzydrive.backend.service.CarService;
 import lombok.AllArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,22 +18,21 @@ import static com.izzydrive.backend.utils.ExceptionMessageConstants.ALREADY_EXIS
 @AllArgsConstructor
 public class CarServiceImpl implements CarService {
 
-    @Autowired
     private final CarRepository carRepository;
 
     public Car createNewCar(CarDTO carData){
         Optional<Car> existingCar = carRepository.findByRegistration(carData.getRegistration());
-        if(!existingCar.isPresent()){
+        if(existingCar.isEmpty()){
             Car car = new Car(carData.getRegistration(),
                     carData.getModel(),
                     carData.getMaxPassengers(),
                     getCarType(carData.getCarType()),
-                    getCarAccomodation(carData.getCarAccommodation()));
+                    getCarAccommodation(carData.getCarAccommodation()));
 
             return carRepository.save(car);
         }
        else{
-           throw new AlreadyExitingCarException(ALREADY_EXISTING_CAR_MESSAGE);
+           throw new BadRequestException(ALREADY_EXISTING_CAR_MESSAGE, 1008);
         }
 
     }
@@ -56,7 +51,7 @@ public class CarServiceImpl implements CarService {
         return CarType.REGULAR;
     }
 
-    private String getCarAccomodation(CarAccommodation accommodation){
+    private String getCarAccommodation(CarAccommodation accommodation){
         String value = "";
         if(accommodation.isBaby()){
             value += "baby ";

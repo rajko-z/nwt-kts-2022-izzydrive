@@ -12,7 +12,7 @@ export class ErrorHandlerService {
     1003: "password",
     1004: "repeatedPassword",
     1005: "phoneNumber",
-    1006: "other",
+    0: "other",
     1007: "firstName"
 }
 

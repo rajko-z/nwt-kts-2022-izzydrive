@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {StepperSelectionEvent, STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-import {MatStepper, MatStepperModule} from '@angular/material/stepper';
-import { FloatLabelType } from '@angular/material/form-field';
-import { CarType, getCarType } from 'src/app/model/car/CarType';
-import { DriverService } from 'src/app/services/driver/driver.service';
-import { TmplAstRecursiveVisitor } from '@angular/compiler';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import {MatStepper} from '@angular/material/stepper';
+import {DriverService} from 'src/app/services/driver/driver.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -50,7 +47,7 @@ export class AddDriverComponent implements OnInit {
         next : (responce) => {
           this.addingFinished = true;
           this.successfullyFinished = true;
-       
+
       },
         error: (error )=> {
           this.addingFinished = true;
@@ -60,7 +57,7 @@ export class AddDriverComponent implements OnInit {
       })
     )
   }
- 
+
 
   constructor(private driverService: DriverService , private messageTooltip: MatSnackBar  ) { }
 
