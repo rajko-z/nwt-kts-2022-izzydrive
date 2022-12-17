@@ -1,0 +1,14 @@
+@import "src/style/styles";
+
+.table-drivers {
+  @include size(100vw, 100vh);
+}
+
+.title{
+  @include size(90vw, auto);
+  @include setFont(26px);
+  margin: 3% 5% 1% 5%;
+  padding: 1%;
+  border-bottom: $dark3 solid 2px;
+  color: $dark3;
+}

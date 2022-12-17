@@ -16,8 +16,9 @@ export class HttpClientService {
     });
     return headers;
   }
-  get(url) {   
+  get(url, params) {
     return this.http.get(url, {
+      params,
       headers: this.createHeader()
     });
   }

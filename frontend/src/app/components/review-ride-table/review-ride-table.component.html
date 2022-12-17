@@ -1,0 +1,50 @@
+<div class="dialog">
+  <div *ngIf="drivings.length === 0">
+    <div>Korisnik nema svoje voznje</div>
+  </div>
+  <div *ngIf="drivings.length > 0">
+    Blalala
+    <table mat-table [dataSource]="drivings" class="table-users">
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let i = index">{{i + 1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="startAddress">
+        <th mat-header-cell *matHeaderCellDef> Start address</th>
+        <td mat-cell *matCellDef="let element"> {{element.startAddress}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="endAddress">
+        <th mat-header-cell *matHeaderCellDef> End address </th>
+        <td mat-cell *matCellDef="let element"> {{element.endAddress}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef> Start time </th>
+        <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef> End time </th>
+        <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="blocked">
+        <th mat-header-cell *matHeaderCellDef> Blocked </th>
+        <td mat-cell *matCellDef="let element">
+          {{"putnici"}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Price </th>
+        <td mat-cell *matCellDef="let element">{{element.price}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
