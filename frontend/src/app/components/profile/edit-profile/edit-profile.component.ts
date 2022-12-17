@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -9,6 +10,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class EditProfileComponent implements OnInit {
 
   name_regexp = "^[a-zA-Z]+$";
+  placeholders = {"firstName": '',
+                  "lastName": '',
+                  "email": '',
+                  "phoneNumber": ''}
 
   editForm: FormGroup = new FormGroup({ firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
   lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
@@ -19,10 +24,26 @@ export class EditProfileComponent implements OnInit {
     
   });
 
-  constructor() { }
+  constructor(private userService : UserSeviceService) { }
 
   ngOnInit(): void {
-    //pozvati metodu za dobavljanje postojecih podataka i postaviti ih u place holdere
+    this.userService.getCurrrentUserDataWithImg().subscribe({
+      next: (response) => {
+        this.setPlaceholders(response);
+      },
+      error: (errorRespoonse) => {
+        console.log(errorRespoonse);
+      }
+    }  
+    )
+  }
+
+  setPlaceholders(userData) : void{
+    this.placeholders.firstName = userData.firstName;
+    this.placeholders.lastName = userData.lastName;
+    this.placeholders.email = userData.email;
+    this.placeholders.phoneNumber = userData.phoneNumber;
+
   }
 
 }

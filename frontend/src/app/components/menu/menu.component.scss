@@ -6,6 +6,8 @@ $light1: #E9EAEF;
 $light5: #858DB5;
 $light4: #B4BCDF;
 
+@import '../../../style/styles.scss';
+
 .menu-container{
     display: flex;
     flex-direction: column;
@@ -84,7 +86,7 @@ $light4: #B4BCDF;
 
 .menu_item_text{
     flex-grow: 8;
-    color: $dark4;
+    color: $dark5;
 }
 
 .delimiter{
@@ -93,13 +95,13 @@ $light4: #B4BCDF;
 
 .material-icons{
     font-size: 20px;
-    color: $dark3;;
+    color: $dark6;;
 }
 
 .mat-list-option{
     font-size: 14px;
     height: 38px !important; 
-    color: $dark4;
+    color: $dark6;
 }
 
 .open_menu_button{

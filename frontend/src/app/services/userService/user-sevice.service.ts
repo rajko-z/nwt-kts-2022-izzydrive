@@ -34,7 +34,7 @@ export class UserSeviceService {
 
   getCurrentUserEmail() : string{
     var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.username : null; 
+    return currentUser ? currentUser.email : null; 
     
   }
 
@@ -98,6 +98,12 @@ export class UserSeviceService {
           return "/assets/404-error.png"
       }
     })
+  }
+
+  getCurrrentUserDataWithImg(){ //:Observable<User>
+    return this.http.get( //<User>
+      environment.apiUrl + "users/" + this.getCurrentUserEmail() + "?image=true", environment.header
+    )
   }
 
   
