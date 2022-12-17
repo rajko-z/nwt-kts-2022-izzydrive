@@ -2,11 +2,13 @@ package com.izzydrive.backend.service.users.impl;
 
 import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
 import com.izzydrive.backend.dto.NewPassengerDTO;
+import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
+import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.PassengerService;
@@ -15,8 +17,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +35,8 @@ public class PassengerServiceImpl implements PassengerService {
     private final EmailSender emailSender;
 
     private final UserRepository userRepository;
+
+    private final PassengerRepository passengerRepository;
 
     public void registerPassenger(NewPassengerDTO newPassengerData){
         validateNewPassengerData(newPassengerData);
@@ -64,5 +70,8 @@ public class PassengerServiceImpl implements PassengerService {
         Validator.validateFirstName(newPassengerData.getFirstName());
         Validator.validateLastName(newPassengerData.getLastName());
         Validator.validatePhoneNumber(newPassengerData.getPhoneNumber());
+    }
+    public List<UserDTO> findAllPassenger() {
+        return passengerRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 }

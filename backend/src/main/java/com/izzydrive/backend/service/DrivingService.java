@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface DrivingService {
     List<DrivingDTO> findAllByDriverId(Long driverId);
+    List<DrivingDTO> findAllByPassengerId(Long passengerId);
 }

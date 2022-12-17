@@ -9,7 +9,11 @@ export class DrivingService {
 
   constructor(private http: HttpClientService) { }
 
-  findAllById(driverId) {
+  findAllByDriverId(driverId) {
     return this.http.get(environment.apiUrl + `drivings/driver/${driverId}`);
+  }
+
+  findAllByPassengerId(passengerId) {
+    return this.http.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
   }
 }

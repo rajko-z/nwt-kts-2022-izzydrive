@@ -6,7 +6,6 @@
       <p class="text-message">The user does not have his own ride!</p></div>
   </div>
   <div *ngIf="drivings?.length > 0">
-    Blalala
     <table mat-table [dataSource]="drivings" class="table-users">
 
       <ng-container matColumnDef="position">
@@ -47,7 +46,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
 </div>

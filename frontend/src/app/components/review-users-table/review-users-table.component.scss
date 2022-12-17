@@ -1,7 +1,8 @@
 @import "src/style/styles";
 
 .table-users {
-  @include size(90vw, 40vh);
+  width: 85vw;
+  min-height: 20vh;
   margin: 2% 5%;
 }
 

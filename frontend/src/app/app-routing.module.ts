@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {HomePageUnLoggedComponent} from "./pages/home-page-un-logged/home-page-un-logged.component";
 import {HomePageLoggedComponent} from "./pages/home-page-logged/home-page-logged.component";
 import {AllDriversPageAdminComponent} from "./pages/all-drivers-page-admin/all-drivers-page-admin.component";
+import {AllPassengersPageAdminComponent} from "./pages/all-passengers-page-admin/all-passengers-page-admin.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path:'drivers',
     component: AllDriversPageAdminComponent
+  },
+  {
+    path:'passengers',
+    component: AllPassengersPageAdminComponent
   },
 
 ];
