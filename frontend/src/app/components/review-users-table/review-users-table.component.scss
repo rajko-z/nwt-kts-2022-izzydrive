@@ -1,0 +1,11 @@
+@import "src/style/styles";
+
+.table-users {
+  @include size(90vw, 40vh);
+  margin: 2% 5%;
+}
+
+.button-rides, .button-notes, .button-blocked{
+  @include buttonStyle();
+  @include size(60%, 50%);
+}

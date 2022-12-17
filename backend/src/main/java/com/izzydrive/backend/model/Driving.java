@@ -59,4 +59,7 @@ public class Driving {
 
     @OneToMany(mappedBy = "currentDriving", fetch = FetchType.LAZY)
     private List<Passenger> passengers = new ArrayList<>();
+
+    @ManyToOne
+    private Route route;
 }

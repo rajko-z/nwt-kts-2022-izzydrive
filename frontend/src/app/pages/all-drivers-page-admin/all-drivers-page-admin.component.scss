@@ -1,0 +1,9 @@
+@import "src/style/styles";
+
+.table-drivers {
+  @include size(100vw, 100vh);
+}
+
+.title{
+  @include setTitleStyle(90vw);
+}
