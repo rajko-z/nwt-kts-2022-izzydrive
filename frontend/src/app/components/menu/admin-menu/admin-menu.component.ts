@@ -16,5 +16,8 @@ export class AdminMenuComponent  {
   routAllDrivers(){
     this.router.navigateByUrl("/drivers")
   }
+  routAllPassengers(){
+    this.router.navigateByUrl("/passengers")
+  }
 
 }

@@ -3,6 +3,9 @@
 .dialog{
   @include size(60vw, 60vh);
 }
+.row{
+
+}
 .title{
   @include setTitleStyle(55vw);
 }

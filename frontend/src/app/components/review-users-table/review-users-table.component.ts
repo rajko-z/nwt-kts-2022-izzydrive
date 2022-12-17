@@ -18,9 +18,8 @@ export class ReviewUsersTableComponent  {
   constructor(public dialog: MatDialog) {}
 
   openDialog(user): void {
-    console.log(user.id);
     this.dialog.open(ReviewRideTableComponent, {
-      data: {id:user.id, name:user.firstName, lastname:user.lastName},
+      data: {id:user.id, name:user.firstName, lastname:user.lastName, role: user.role},
     });
   }
   isBlocked(): void {}

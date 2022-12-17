@@ -27,4 +27,11 @@ public class DrivingController {
         List<DrivingDTO> drivings = drivingService.findAllByDriverId(driverId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("passenger/{passengerId}")
+    public ResponseEntity<List<DrivingDTO>> findAllByPassengerId(@PathVariable Long passengerId){
+        List<DrivingDTO> drivings = drivingService.findAllByPassengerId(passengerId);
+        return new ResponseEntity<>(drivings, HttpStatus.OK);
+    }
 }
