@@ -1,8 +1,11 @@
 <div class="dialog">
-  <div *ngIf="drivings.length === 0">
-    <div>Korisnik nema svoje voznje</div>
+  <div class="title">Review all rides - user: {{data.name}} {{data.lastname}}</div>
+  <div *ngIf="drivings?.length === 0">
+    <div class="notification">
+      <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+      <p class="text-message">The user does not have his own ride!</p></div>
   </div>
-  <div *ngIf="drivings.length > 0">
+  <div *ngIf="drivings?.length > 0">
     Blalala
     <table mat-table [dataSource]="drivings" class="table-users">
 

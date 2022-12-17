@@ -16,9 +16,8 @@ export class ReviewRideTableComponent implements OnInit {
   constructor(private drivingService:DrivingService, @Inject(MAT_DIALOG_DATA) public data) {}
 
   ngOnInit(): void {
-    this.drivingService.findAllById().subscribe((res) => {
+    this.drivingService.findAllById(this.data.id).subscribe((res) => {
       this.drivings = res as Driving[];
-      console.log(this.drivings);
     });
   }
 }

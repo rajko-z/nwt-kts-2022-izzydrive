@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomePageUnLoggedComponent} from "./pages/home-page-un-logged/home-page-un-logged.component";
 import {HomePageLoggedComponent} from "./pages/home-page-logged/home-page-logged.component";
+import {AllDriversPageAdminComponent} from "./pages/all-drivers-page-admin/all-drivers-page-admin.component";
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
     path: 'profile',
     loadChildren: () =>
       import('./components/profile/profile.module').then(m => m.ProfileModule),
+  },
+  {
+    path:'drivers',
+    component: AllDriversPageAdminComponent
   },
 
 ];

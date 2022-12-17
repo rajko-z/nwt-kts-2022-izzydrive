@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {UserSeviceService} from '../userService/user-sevice.service';
 
 @Injectable({
@@ -16,9 +16,8 @@ export class HttpClientService {
     });
     return headers;
   }
-  get(url, params) {
+  get(url) {
     return this.http.get(url, {
-      params,
       headers: this.createHeader()
     });
   }

@@ -19,21 +19,25 @@ import { AngularMaterialModule } from './components/shared/angular-material.modu
 import { AllDriversPageAdminComponent } from './pages/all-drivers-page-admin/all-drivers-page-admin.component';
 import { ReviewUsersTableComponent } from './components/review-users-table/review-users-table.component';
 import { ReviewRideTableComponent } from './components/review-ride-table/review-ride-table.component';
+import {MatTableModule} from "@angular/material/table";
+import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MenuModule,
-    ProfileModule,
-    SharedComponentsModule,
-    AngularMaterialModule
-  ],
-  providers: [],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MenuModule,
+        ProfileModule,
+        SharedComponentsModule,
+        AngularMaterialModule,
+        MatTableModule,
+        MatDialogModule
+    ],
+  providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
