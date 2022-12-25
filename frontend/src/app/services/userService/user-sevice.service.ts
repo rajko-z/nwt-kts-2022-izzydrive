@@ -1,12 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Token } from '@angular/compiler';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginResponse } from 'src/app/model/response/loginResponse';
-import { User } from 'src/app/model/user/user';
-import { FormControl } from '@angular/forms';
-import { HttpClientService } from '../custom-http/http-client.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from 'src/app/model/user/role';
 
@@ -16,49 +12,49 @@ import { Role } from 'src/app/model/user/role';
 export class UserSeviceService {
 
   constructor(private http: HttpClient, private _sanitizer: DomSanitizer) { }
- 
+
 
   isUserLoggedIn(): boolean {
     return this.getCurrentUserToken() !== null
   }
-  
+
   setCurrentUser(userData : {email: string, token: string, role: Role, id: number}){
     sessionStorage.setItem('currentUser', JSON.stringify({email: userData.email, token: userData.token, role: userData.role , id: userData.id}));
   }
 
   getCurrentUserToken() : string{
-    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.token : null; 
-    
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return currentUser ? currentUser.token : null;
+
   }
 
   getCurrentUserEmail() : string{
-    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.username : null; 
-    
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return currentUser ? currentUser.username : null;
+
   }
 
   getRoleCurrentUserRole() : string{
-    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.role : null; 
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return currentUser ? currentUser.role : null;
   }
 
   getCurrentUserId() : number{
-    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.id : null; 
-    
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    return currentUser ? currentUser.id : null;
+
   }
 
   loginWithGoogle(tokenId): Observable<LoginResponse>{
     return this.http.post<LoginResponse>(
-      environment.apiUrl + "auth/login-google", 
+      environment.apiUrl + "auth/login-google",
       tokenId
     )
   }
 
   loginWithFacebook(tokenId):Observable<LoginResponse>{
     return this.http.post<LoginResponse>(
-      environment.apiUrl + "auth/login-fb", 
+      environment.apiUrl + "auth/login-fb",
       tokenId
     )
   }
@@ -66,13 +62,12 @@ export class UserSeviceService {
   regularLogin(loginData): Observable<LoginResponse>{
     return this.http.post<LoginResponse>(
       environment.apiUrl + "auth/login",
-      loginData      
+      loginData
     )
 
   }
 
   registration(newUser){
-    console.log(newUser)
     return this.http.post(
       environment.apiUrl + "passengers/registration/",
       newUser
@@ -80,14 +75,13 @@ export class UserSeviceService {
   }
 
   getProfilePhoto(username: string){
-    return this.http.get<String>(
+    return this.http.get<string>(
       environment.apiUrl + "users/profile-img/" +  username, environment.header
     )
   }
 
   getProfilePhotoCurrentUser(){
     let id: number = this.getCurrentUserId();
-    console.log(environment.header);
     this.http.get(
       environment.apiUrl + `users/profile-img/${id}`, {responseType: 'text'}
     ).subscribe({
@@ -99,6 +93,4 @@ export class UserSeviceService {
       }
     })
   }
-
-  
 }

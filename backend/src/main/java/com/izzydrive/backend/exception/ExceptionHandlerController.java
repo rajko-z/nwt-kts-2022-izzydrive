@@ -57,7 +57,7 @@ public class ExceptionHandlerController {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.UNAUTHORIZED.value(),
                 new Date(),
-                ExceptionMessageConstants.INVALID_LOGIN
+                ex.getMessage()
         );
 
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);

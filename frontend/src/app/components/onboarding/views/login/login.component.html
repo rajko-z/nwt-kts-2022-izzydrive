@@ -2,7 +2,7 @@
   <div class="user_form_container">
     <p class="form_tittle">Welcome back</p>
 
-    <p *ngIf="errorMessage" class="error_label">Username or password are invalid.</p>
+    <p *ngIf="errorMessage" class="error_label">{{errorMessageText}}</p>
 
     <form class="input-fields-container" [formGroup]="this.loginForm"
       (ngSubmit)="onSubmit()">
@@ -31,7 +31,7 @@
 
       <div class="button-container">
         <button mat-button [disabled]="this.loginForm.invalid"
-                [ngClass] = "{'disabled_large_btn': this.loginForm.invalid,  'large_button': !this.loginForm.invalid}" 
+                [ngClass] = "{'disabled_large_btn': this.loginForm.invalid,  'large_button': !this.loginForm.invalid}"
                 type="submit">Log in</button>
       </div>
 
@@ -46,12 +46,12 @@
 
     <div class="sign_up_buttons">
       <div id="google_button_div" class="google_btn"></div>
-      <!-- <button mat-button class="button" (click)="loginWithGoogle()">Google</button> -->      
+      <!-- <button mat-button class="button" (click)="loginWithGoogle()">Google</button> -->
         <button mat-button class="facebook_button" (click)="loginWithFacebook()">
           <mat-icon [ngStyle]="{'color':'#5597D5'}" >facebook</mat-icon>
           Facebook
         </button>
-      
+
     </div>
 
     <div class="sign_up_text">
