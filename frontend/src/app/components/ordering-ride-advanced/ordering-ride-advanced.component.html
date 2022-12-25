@@ -1,4 +1,4 @@
-<form class="location-form">
+<form class="location-form" [formGroup]="this.routeForm">
   <div class="location-fields">
     <mat-form-field appearance="outline">
       <mat-label>Enter start location</mat-label>
@@ -23,59 +23,31 @@
         <i class='fas fa-map-location-dot'></i>
         <p class="description">Intermediate stations</p>
       </div>
-      <p class="explanation">*you can add intermediate stations, order is important</p>
     </div>
-    <button class="plus-button">
+    <button class="plus-button" (click)="openDialogIntermediateStations()">
       <i class='fas fa-plus'></i>
     </button>
-<!--    <div class="input-intermediate-station">-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <mat-label>Enter intermediate stations</mat-label>-->
-<!--        <input matInput-->
-<!--               placeholder="Futoški put 406"-->
-<!--               required-->
-<!--               formControlName="endLocations">-->
-<!--        <mat-error>Intermediate stations is required</mat-error>-->
-<!--      </mat-form-field>-->
-<!--      <button class="plus-button">-->
-<!--        <i class='fas fa-plus'></i>-->
-<!--      </button>-->
-<!--    </div>-->
   </div>
   <div class="other-users">
     <div>
       <div class="other-users-title">
         <i class='fas fa-users'></i>
-        <p class="description">Include other users:</p>
+        <p class="description">Include other users</p>
       </div>
-      <p class="explanation">*you can include other users by their email in this ride, all users start from</p>
     </div>
-    <button class="plus-button">
+    <button class="plus-button" (click)="openDialogOtherUsers()">
       <i class='fas fa-plus'></i>
     </button>
-<!--    <div>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <mat-label>User email</mat-label>-->
-<!--        <input matInput-->
-<!--               placeholder="pat@example.com"-->
-<!--               required-->
-<!--               formControlName="userEmailFriends">-->
-<!--        <mat-error>Email is required</mat-error>-->
-<!--      </mat-form-field>-->
-<!--      <button class="plus-button">-->
-<!--        <i class='fas fa-plus'></i>-->
-<!--      </button>-->
-<!--    </div>-->
   </div>
   <div class="optimal-driving-choose">
     <p class="option-title">You can choose optimal driving by:</p>
     <p class="explanation">*you can choose one option</p>
     <section class="option-optimal-driving">
-      <mat-radio-group>
+      <mat-radio-group formControlName="optimalDriving">
         <mat-radio-button value="travelTime">The shortest travel time</mat-radio-button>
         <mat-radio-button value="distance">The shortest distance</mat-radio-button>
         <mat-radio-button value="cheapest">The cheapest ride</mat-radio-button>
-        <mat-radio-button value="noPreference">No preference</mat-radio-button>
+        <mat-radio-button [checked]="true" value="noPreference">No preference</mat-radio-button>
       </mat-radio-group>
     </section>
   </div>
@@ -83,14 +55,15 @@
     <p class="option-title">Additional options:</p>
     <p class="explanation">*you can choose more options</p>
     <section class="option-additional-options">
-      <mat-checkbox >Baby in car</mat-checkbox>
-      <mat-checkbox >Baggage</mat-checkbox>
-      <mat-checkbox >Allowed pet</mat-checkbox>
-      <mat-checkbox >Allowed food</mat-checkbox>
+      <mat-checkbox formControlName="babyOption">Baby in car</mat-checkbox>
+      <mat-checkbox formControlName="baggageOption">Baggage</mat-checkbox>
+      <mat-checkbox formControlName="petOption">Allowed pet</mat-checkbox>
+      <mat-checkbox formControlName="foodOption">Allowed food</mat-checkbox>
     </section>
   </div>
   <div class="submit-item">
-    <button class="submit-button">Get a ride</button>
+    <button class="submit-button" type="button" (click)="openDialog()">Get</button>
+    <button class="submit-button" type="submit" (click)="onSubmit()">Get a ride</button>
   </div>
 </form>
 

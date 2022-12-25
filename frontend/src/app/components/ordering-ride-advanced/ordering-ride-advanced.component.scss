@@ -32,15 +32,9 @@
   height: 2%;
 }
 
-.explanation {
-  color: $grey_color;
-  font-size: 13px;
-  margin: 0 0 1% 0;
-}
-
 .other-users {
   display: flex;
-  margin-top: 2%;
+  margin-top: 3%;
 
   .other-users-title {
     display: flex;
@@ -55,15 +49,21 @@
 .plus-button {
   height: 30px;
   width: 30px;
-  margin: 3% 22% 3% auto;
+  margin: 0 35% 0 auto;
   background-color: $light1;
   color: $dark3;
   border-radius: 50px;
   border-color: $light5;
 }
 
+.explanation {
+  color: $grey_color;
+  font-size: 13px;
+  margin: 0 0 1% 0;
+}
+
 .optimal-driving-choose, .additional-options-choose {
-  margin-top: 2%;
+  margin-top: 5%;
 
   .mat-radio-group, .option-additional-options {
     display: grid;
@@ -90,13 +90,10 @@
   display: flex;
   justify-content: flex-end;
   height: 5vh;
-  margin: 2% 15% 0 0;
+  margin: 6% 15% 0 0;
 
   .submit-button {
-    font-size: 18px;
-    background-color: $dark3;
-    color: $light1;
-    border-radius: 8px;
+    @include buttonStyle();
     width: 20%;
   }
 }

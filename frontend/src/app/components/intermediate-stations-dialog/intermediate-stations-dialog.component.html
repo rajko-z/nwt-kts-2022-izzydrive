@@ -1,0 +1,25 @@
+<div>
+  <div class="intermediate-station-title">
+    <i class='fas fa-map-location-dot'></i>
+    <h1>Intermediate stations</h1>
+  </div>
+  <p class="explanation">*you can add intermediate stations, order is important</p>
+</div>
+<form>
+  <div class="input-intermediate-station">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter intermediate stations</mat-label>
+      <input matInput
+             placeholder="Futoški put 406"
+             required
+             formControlName="intermediateStation">
+      <mat-error>Intermediate stations is required</mat-error>
+    </mat-form-field>
+    <button class="plus-button" >
+      <i class='fas fa-plus'></i>
+    </button>
+  </div>
+  <div class="submit-item">
+    <button type="submit" class="submit-button" >Done</button>
+  </div>
+</form>

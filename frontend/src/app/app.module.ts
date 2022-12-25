@@ -21,20 +21,25 @@ import { AllDriversPageAdminComponent } from './pages/all-drivers-page-admin/all
 import { ReviewUsersTableComponent } from './components/review-users-table/review-users-table.component';
 import { ReviewRideTableComponent } from './components/review-ride-table/review-ride-table.component';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import { FavoriteRouteDialogComponent } from './components/favorite-route-dialog/favorite-route-dialog.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import { IntermediateStationsDialogComponent } from './components/intermediate-stations-dialog/intermediate-stations-dialog.component';
+import { OtherUsersDialogComponent } from './components/other-users-dialog/other-users-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MenuModule,
-    ProfileModule,
-    SharedComponentsModule,
-    AngularMaterialModule
-  ],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MenuModule,
+        ProfileModule,
+        SharedComponentsModule,
+        AngularMaterialModule,
+        ReactiveFormsModule
+    ],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
 })

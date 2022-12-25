@@ -1,0 +1,51 @@
+@import "src/style/styles";
+
+.plus-button {
+  @include size(30px, 30px);
+  margin: 0 10%;
+  background-color: $light1;
+  color: $dark3;
+  border-radius: 50px;
+  border-color: $light5;
+}
+
+.explanation {
+  color: $grey_color;
+  font-size: 13px;
+  margin: 0 0 1% 0;
+}
+
+.other-users-title {
+  display: flex;
+  justify-content: flex-start;
+
+  h1 {
+    margin-left: 5%;
+  }
+}
+
+.input-other_users{
+  margin-top: 5%;
+}
+
+.fas, .fa-solid {
+  height: 5%;
+  margin-top: 3%;
+}
+
+h1 {
+  margin: 0;
+}
+
+.submit-item {
+  display: flex;
+  justify-content: flex-end;
+  height: 5vh;
+
+  .submit-button {
+    @include buttonStyle();
+    @include size(20%, auto);
+    padding: 2%;
+    margin: 1% 5%;
+  }
+}

@@ -36,4 +36,9 @@ public class Route {
 
     @OneToMany(mappedBy = "route", fetch = FetchType.LAZY)
     private List<Driving> drivings = new ArrayList<>();
+
+    public Route(Address start, Address end){
+        this.start = start;
+        this.end = end;
+    }
 }
