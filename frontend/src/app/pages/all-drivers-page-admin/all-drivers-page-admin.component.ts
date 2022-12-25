@@ -14,6 +14,12 @@ export class AllDriversPageAdminComponent implements OnInit {
   constructor(private driverService: DriverService) { }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+  refresh(){
+    this.loadData();
+  }
+  loadData(){
     this.driverService.findAll().subscribe((res) => {
       this.users = res as User[];
     });

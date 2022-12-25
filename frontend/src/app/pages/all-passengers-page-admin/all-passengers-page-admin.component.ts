@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { PassengerService } from 'src/app/services/passengerService/passenger.service';
+import {Component, OnInit} from '@angular/core';
+import {PassengerService} from 'src/app/services/passengerService/passenger.service';
 import {User} from "../../model/user/user";
 
 @Component({
@@ -9,14 +9,22 @@ import {User} from "../../model/user/user";
 })
 export class AllPassengersPageAdminComponent implements OnInit {
 
-  users : User[];
+  users: User[];
 
-  constructor(private passengerService: PassengerService) { }
+  constructor(private passengerService: PassengerService) {
+  }
 
   ngOnInit(): void {
+    this.loadData()
+  }
+
+  refresh() {
+    this.loadData();
+  }
+
+  loadData() {
     this.passengerService.findAll().subscribe((res) => {
       this.users = res as User[];
     });
   }
-
 }

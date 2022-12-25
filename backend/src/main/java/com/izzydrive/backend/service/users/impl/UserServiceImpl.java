@@ -70,6 +70,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void blockUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            user.get().setBlocked(true);
+            userRepository.save(user.get());
+        }
+    }
+
+    @Override
+    public void unblockUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            user.get().setBlocked(false);
+            userRepository.save(user.get());
+        }
+    }
+
+    @Override
     public String generatePassword() {
         CharacterRule upperCase = new CharacterRule(EnglishCharacterData.UpperCase);
         CharacterRule numbers = new CharacterRule(EnglishCharacterData.Digit);

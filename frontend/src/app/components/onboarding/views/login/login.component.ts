@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
 
   hide : boolean = true;
   errorMessage : boolean = false;
+  errorMessageText: string;
   socialUser!: SocialUser;
   isLoggedin?: boolean = undefined;
 
@@ -30,15 +31,15 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private userService : UserSeviceService, 
+  constructor(private userService : UserSeviceService,
               private socialAuthService: SocialAuthService,
-              private _ngZone: NgZone, 
-              private router: Router) { 
+              private _ngZone: NgZone,
+              private router: Router) {
 
   }
 
   ngOnInit(): void {
-    
+
     window["onGoogleLibraryLoad"] = () => {
       // @ts-ignore
       google.accounts.id.initialize({
@@ -51,12 +52,12 @@ export class LoginComponent implements OnInit {
       google.accounts.id.renderButton(
       // @ts-ignore
       document.getElementById("google_button_div"),
-        { theme: "outline", size: "large"} 
+        { theme: "outline", size: "large"}
       );
       // @ts-ignore
       google.accounts.id.prompt((notification: PromptMomentNotification) => {});
     };
-    
+
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;
       this.isLoggedin = user != null;
@@ -75,8 +76,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/logged')
     },
       error: (error )=> {
-        console.log(error);
-        
+        this.errorMessageText = error["error"]["message"];
     }
   })
   }
@@ -90,10 +90,9 @@ export class LoginComponent implements OnInit {
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
         this.router.navigateByUrl('/logged')
       },
-        error: (error )=> {
+        error: (error)=> {
           this.errorMessage = true;
-          console.log(error);
-          
+          this.errorMessageText = error["error"]["message"];
       }
     })
   }
@@ -110,11 +109,11 @@ export class LoginComponent implements OnInit {
         },
           error: (error )=> {
             this.errorMessage = true;
-            console.log(error);   
+            this.errorMessageText = error["error"]["message"];
         }
       })
     });
-    
+
   }
 
   signOut(): void {

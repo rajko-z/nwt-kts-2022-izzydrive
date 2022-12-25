@@ -1,27 +1,63 @@
-import {Component, Input} from '@angular/core';
-import { User } from 'src/app/model/user/user';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {User} from 'src/app/model/user/user';
 import {MatDialog} from "@angular/material/dialog";
 import {ReviewRideTableComponent} from "../review-ride-table/review-ride-table.component";
+import {HttpClientService} from "../../services/custom-http/http-client.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-review-users-table',
   templateUrl: './review-users-table.component.html',
   styleUrls: ['./review-users-table.component.scss']
 })
-export class ReviewUsersTableComponent  {
+export class ReviewUsersTableComponent {
 
   displayedColumns: string[] = ['position', 'email', 'name', 'lastname', "phone", 'blocked', 'notes', 'rides'];
 
   @Input()
-  users : User[];
+  users: User[];
 
-  constructor(public dialog: MatDialog) {}
+  @Output() dataEvent = new EventEmitter<void>();
 
-  openDialog(user): void {
+  constructor(private userService: HttpClientService, public dialog: MatDialog, public snackBar: MatSnackBar) {
+  }
+
+  openDialog(user: User): void {
     this.dialog.open(ReviewRideTableComponent, {
-      data: {id:user.id, name:user.firstName, lastname:user.lastName, role: user.role},
+      data: {id: user.id, name: user.firstName, lastname: user.lastName, role: user.role},
     });
   }
-  isBlocked(): void {}
 
+  isBlocked(id: string, blocked: boolean): void {
+    if (!blocked) {
+      this.blockUser(id);
+    } else {
+      this.unblockUser(id);
+    }
+  }
+
+  blockUser(id: string): void {
+    this.userService.blockUser(id).subscribe({
+      next: res => this.emitResponse(res),
+      error: error => this.snackBar.open(error.text, "ERROR", {
+        duration: 2000,
+      })
+    });
+  }
+
+  unblockUser(id: string): void {
+    this.userService.unblockUser(id).subscribe({
+        next: res => this.emitResponse(res),
+        error: error => this.snackBar.open(error.text, "ERROR", {
+          duration: 2000,
+        })
+      }
+    );
+  }
+  emitResponse(response:string):void{
+    this.dataEvent.emit();
+    this.snackBar.open(response, "OK", {
+      duration: 2000,
+    });
+  }
 }

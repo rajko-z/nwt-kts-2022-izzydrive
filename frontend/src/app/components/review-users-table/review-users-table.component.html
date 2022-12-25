@@ -28,7 +28,7 @@
   <ng-container matColumnDef="blocked">
     <th mat-header-cell *matHeaderCellDef> Blocked </th>
     <td mat-cell *matCellDef="let element">
-      <button (click)="isBlocked()" class="button-blocked">{{element.blocked ? 'unblock' : 'block'}}</button>
+      <button (click)="isBlocked(element.id, element.blocked)" class="button-blocked">{{element.blocked ? 'unblock' : 'block'}}</button>
     </td>
   </ng-container>
 

@@ -8,11 +8,15 @@
 
 .mat-form-field {
   width: 25vw;
+  height: 2%;
+}
+.mat-form-field-appearance-outline .mat-form-field-wrapper{
+  margin: 0;
 }
 
 .intermediate-station {
   display: flex;
-  margin-top: 5%;
+  margin-top: 2%;
 
   .intermediate-station-title {
     display: flex;
@@ -31,12 +35,12 @@
 .explanation {
   color: $grey_color;
   font-size: 13px;
-  margin: 0 0 3% 0;
+  margin: 0 0 1% 0;
 }
 
 .other-users {
   display: flex;
-  margin-top: 5%;
+  margin-top: 2%;
 
   .other-users-title {
     display: flex;
@@ -59,7 +63,7 @@
 }
 
 .optimal-driving-choose, .additional-options-choose {
-  margin-top: 6%;
+  margin-top: 2%;
 
   .mat-radio-group, .option-additional-options {
     display: grid;
@@ -73,8 +77,8 @@
   }
 
   .option-optimal-driving, .option-additional-options {
-    margin-top: 2%;
-    margin-bottom: 3%;
+    margin-top: 1%;
+    margin-bottom: 2%;
   }
 }
 
@@ -86,7 +90,7 @@
   display: flex;
   justify-content: flex-end;
   height: 5vh;
-  margin: 10% 15% 0 0;
+  margin: 2% 15% 0 0;
 
   .submit-button {
     font-size: 18px;

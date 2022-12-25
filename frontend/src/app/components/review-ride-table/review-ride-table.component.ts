@@ -17,13 +17,11 @@ export class ReviewRideTableComponent implements OnInit {
   constructor(private drivingService:DrivingService, @Inject(MAT_DIALOG_DATA) public data) {}
 
   ngOnInit(): void {
-    console.log(this.data?.role);
     if(this.data?.role === Role.ROLE_DRIVER){
       this.drivingService.findAllByDriverId(this.data.id).subscribe((res) => {
         this.drivings = res as Driving[];
       });
     }else if(this.data?.role === Role.ROLE_PASSENGER){
-      console.log("da");
       this.drivingService.findAllByPassengerId(this.data.id).subscribe((res) => {
         this.drivings = res as Driving[];
       });
