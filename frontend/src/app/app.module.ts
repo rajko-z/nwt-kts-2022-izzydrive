@@ -16,9 +16,14 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileModule } from './components/profile/profile.module';
 import { SharedComponentsModule } from './components/shared/shared-components.module';
 import { AngularMaterialModule } from './components/shared/angular-material.module';
+import { AllPassengersPageAdminComponent } from './pages/all-passengers-page-admin/all-passengers-page-admin.component';
+import { AllDriversPageAdminComponent } from './pages/all-drivers-page-admin/all-drivers-page-admin.component';
+import { ReviewUsersTableComponent } from './components/review-users-table/review-users-table.component';
+import { ReviewRideTableComponent } from './components/review-ride-table/review-ride-table.component';
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 @NgModule({
-  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -30,7 +35,7 @@ import { AngularMaterialModule } from './components/shared/angular-material.modu
     SharedComponentsModule,
     AngularMaterialModule
   ],
-  providers: [],
+    providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

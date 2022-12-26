@@ -9,6 +9,8 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTableModule} from "@angular/material/table";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 // If you have any additional modules to be shared add them to the list
@@ -23,6 +25,8 @@ const materialModules = [
   MatRadioModule,
   MatCheckboxModule,
   MatProgressBarModule,
+  MatTableModule,
+  MatDialogModule
 ];
 
 @NgModule({

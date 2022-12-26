@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,18 @@ import { Router } from '@angular/router';
   templateUrl: './admin-menu.component.html',
   styleUrls: ['./admin-menu.component.scss', '../menu.component.scss']
 })
-export class AdminMenuComponent implements OnInit {
+export class AdminMenuComponent  {
 
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
-
   routAddDriver(){
     this.router.navigateByUrl("/profile/add-driver")
+  }
+  routAllDrivers(){
+    this.router.navigateByUrl("/drivers")
+  }
+  routAllPassengers(){
+    this.router.navigateByUrl("/passengers")
   }
 
 }

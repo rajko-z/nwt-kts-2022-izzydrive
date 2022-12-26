@@ -1,10 +1,12 @@
 package com.izzydrive.backend.service.users.impl;
 
 import com.izzydrive.backend.dto.NewDriverDTO;
+import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
 import com.izzydrive.backend.service.CarService;
@@ -16,7 +18,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -68,5 +73,10 @@ public class DriverServiceImpl implements DriverService {
         Validator.validateEmail(driverDTO.getEmail());
         Validator.validateCarRegistration(driverDTO.getCarData().getRegistration());
         Validator.validateCarType(driverDTO.getCarData().getCarType());
+    }
+
+    public List<UserDTO> findAllDrivers(){
+        return driverRepository.findAll().stream().sorted(Comparator.comparing(User::getId))
+                .map(UserDTO::new).collect(Collectors.toList());
     }
 }

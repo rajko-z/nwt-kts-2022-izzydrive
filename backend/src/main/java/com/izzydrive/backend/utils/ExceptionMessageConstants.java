@@ -22,6 +22,7 @@ public final class ExceptionMessageConstants {
     public static final String EMAIL_HAS_ALREADY_BEEN_VERIFIED = "E-Mail has already been verified!";
     public static final String VERIFICATION_TOKEN_HAS_EXPIRED = "Your verification token has expired!";
     public static final String INVALID_CAR_TYPE_MESSAGE = "Invalid car type";
+    public static final String USER_IS_BLOCK_MESSAGE = "The user has been blocked by the administrator!";
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
     }

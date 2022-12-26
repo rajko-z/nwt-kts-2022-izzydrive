@@ -53,6 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             User user = (User) authentication.getPrincipal();
+            checkIfUserBlocked(user);
             String jwt = tokenUtils.generateTokenForUsername(user.getUsername());
 
             return UserDTOConverter.convertToUserWithImageAndToken(user, jwt, imageService);
@@ -67,6 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         org.springframework.social.facebook.api.User user = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class,data);
 
         Optional<User> myUser = userService.findByEmail(user.getEmail());
+        myUser.ifPresent(this::checkIfUserBlocked);
         // TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
         String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
@@ -89,6 +91,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
             Optional<User> myUser =  userService.findByEmail(payload.getEmail());
+            myUser.ifPresent(this::checkIfUserBlocked);
             //TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
             String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
 
@@ -96,5 +99,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (IOException ex) {
             throw new InvalidCredentialsException(ExceptionMessageConstants.INVALID_LOGIN);
         }
+    }
+
+    private void checkIfUserBlocked(User user){
+        if(user.isBlocked())
+            throw new InvalidCredentialsException(ExceptionMessageConstants.USER_IS_BLOCK_MESSAGE);
     }
 }

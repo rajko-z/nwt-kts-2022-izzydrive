@@ -18,4 +18,8 @@ public interface UserService extends UserDetailsService {
     String getProfileImage(Long userId);
 
     void changePassword(NewPasswordDTO newPasswordDTO);
+
+    void blockUser(Long id);
+
+    void unblockUser(Long id);
 }

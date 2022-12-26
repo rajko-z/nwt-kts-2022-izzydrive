@@ -3,7 +3,9 @@ package com.izzydrive.backend.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,4 +33,7 @@ public class Route {
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))
     private Set<Address> intermediateStations = new HashSet<>();
+
+    @OneToMany(mappedBy = "route", fetch = FetchType.LAZY)
+    private List<Driving> drivings = new ArrayList<>();
 }

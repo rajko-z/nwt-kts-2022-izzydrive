@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClientService } from '../custom-http/http-client.service';
@@ -15,5 +14,9 @@ export class DriverService {
       environment.apiUrl + "drivers/add",
       driverData
     )
+  }
+
+  findAll() {
+    return this.http.get(environment.apiUrl + "drivers");
   }
 }

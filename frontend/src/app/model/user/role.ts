@@ -1,8 +1,8 @@
 export enum Role{
-    ROLE_ADMIN,
-    ROLE_DRIVER,
-    ROLE_PASSENGER
-    
+    ROLE_ADMIN = 'ROLE_ADMIN',
+    ROLE_DRIVER = 'ROLE_DRIVER',
+    ROLE_PASSENGER = 'ROLE_PASSENGER'
+
 }
 
 export const getRole = {

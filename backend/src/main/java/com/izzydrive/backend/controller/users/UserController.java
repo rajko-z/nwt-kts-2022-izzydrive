@@ -55,4 +55,18 @@ public class UserController {
         userService.changePassword(newPasswordDTO);
         return new ResponseEntity<>("Password successfully changed", HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("block/{id}")
+    public ResponseEntity<String> blockUser(@PathVariable Long id){
+        userService.blockUser(id);
+        return new ResponseEntity<>("The user has been successfully blocked", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("unblock/{id}")
+    public ResponseEntity<String> unblockUser(@PathVariable Long id){
+        userService.unblockUser(id);
+        return new ResponseEntity<>("The user has been successfully unblocked", HttpStatus.OK);
+    }
 }
