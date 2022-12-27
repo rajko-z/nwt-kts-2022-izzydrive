@@ -1,0 +1,37 @@
+@import "src/style/styles";
+
+p {
+  margin: 0;
+}
+
+.driving-detail {
+  margin: 1% 5%;
+}
+
+.location-info, .passenger-info, .time, .price {
+  @include setFont(15px);
+  margin-bottom: 2%;
+}
+
+.bold-style {
+  font-weight: bold;
+  margin-right: 1%;
+}
+
+.passenger {
+  margin-left: 3%;
+}
+
+.options {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 2% 1% 2%;
+
+  .active-button {
+    @include buttonStyle();
+    @include size(13%, auto);
+    padding: 1%;
+    margin: 0 2%;
+  }
+}
+

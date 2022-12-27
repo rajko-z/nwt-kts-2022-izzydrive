@@ -25,9 +25,14 @@ import { FavoriteRouteDialogComponent } from './components/favorite-route-dialog
 import {ReactiveFormsModule} from "@angular/forms";
 import { IntermediateStationsDialogComponent } from './components/intermediate-stations-dialog/intermediate-stations-dialog.component';
 import { OtherUsersDialogComponent } from './components/other-users-dialog/other-users-dialog.component';
+import { HomePageDriverComponent } from './pages/home-page-driver/home-page-driver.component';
+import { DisplayDrivingComponent } from './components/display-driving/display-driving.component';
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
+import {environment} from "../environments/environment";
 
 @NgModule({
-  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent],
     imports: [
         CommonModule,
         BrowserModule,
@@ -38,7 +43,9 @@ import { OtherUsersDialogComponent } from './components/other-users-dialog/other
         ProfileModule,
         SharedComponentsModule,
         AngularMaterialModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireMessagingModule,
     ],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
