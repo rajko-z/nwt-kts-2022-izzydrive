@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "izzydrive-29e02": {
+      "hosting": {
+        "frontend": [
+          "izzydrive-29e02"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "izzydrive-29e02"
+  }
+}
