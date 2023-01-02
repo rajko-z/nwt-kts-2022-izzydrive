@@ -19,10 +19,12 @@ export class OrderingRideBasicComponent implements OnInit {
     endLocation: new FormControl('')
   }) //ne znam da li ce ovde trebati neka provera
 
-  constructor(public dialog: MatDialog, private msg: AngularFireMessaging, private http: HttpClient,  public snackBar: MatSnackBar) {
+  constructor(public dialog: MatDialog, private msg: AngularFireMessaging, private http: HttpClient, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+
+    //proba za notifikacije
     this.msg.messages.subscribe((message: any) => {
       console.log('Foreground message: ' + message)
     }) //lisen for message

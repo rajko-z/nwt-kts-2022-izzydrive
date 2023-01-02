@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Driving} from "../../model/driving/driving";
 import {Address} from "../../model/address/address";
 
@@ -9,13 +9,14 @@ import {Address} from "../../model/address/address";
 })
 export class HomePageDriverComponent implements OnInit {
 
-  currentDriving:Driving;
-  futureDriving:Driving;
+  currentDriving: Driving;
+  futureDriving: Driving;
   start: Address;
   end: Address;
   status: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.status = true;
@@ -23,31 +24,33 @@ export class HomePageDriverComponent implements OnInit {
     this.start = {
       state: "Srbija",
       city: "Novi Sad",
-      street : "Branislava Nusica 16"
+      street: "Branislava Nusica 16"
     }
     // @ts-ignore
     this.end = {
       state: "Srbija",
       city: "Novi Sad",
-      street : "Somborska 13"
+      street: "Somborska 13"
     }
     // @ts-ignore
     this.currentDriving = {
-      id : 1,
-      price :  320,
+      id: 1,
+      price: 320,
       startDate: new Date(),
       passengers: ["Nika Nikic"],
       start: this.start,
-      end: this.end
+      end: this.end,
+      intermediateStations: ["Futoska 100", "Banijska 32"]
     }
     // @ts-ignore
     this.futureDriving = {
-      id : 2,
-      price :  320,
+      id: 2,
+      price: 320,
       startDate: new Date(),
       passengers: ["Nika Nikic", "Milojko Maric"],
       start: this.start,
-      end: this.end
+      end: this.end,
+      intermediateStations: []
     }
   }
 

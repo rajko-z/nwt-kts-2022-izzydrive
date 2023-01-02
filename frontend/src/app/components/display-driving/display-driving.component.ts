@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Driving} from "../../model/driving/driving";
+import {MatDialog} from "@angular/material/dialog";
+import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
 
 @Component({
   selector: 'app-display-driving',
@@ -9,14 +11,15 @@ import {Driving} from "../../model/driving/driving";
 export class DisplayDrivingComponent implements OnInit {
 
   @Input()
-  time:string;
+  time: string;
 
   @Input()
-  driving:Driving;
-  formatStartDate:string;
+  driving: Driving;
+  formatStartDate: string;
 
 
-  constructor() { }
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     let startDate = this.driving.startDate;
@@ -24,7 +27,7 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   cancelDriving() {
-
+    this.dialog.open(ExplanationDialogComponent, {data: this.driving.id});
   }
 
   endDriving() {

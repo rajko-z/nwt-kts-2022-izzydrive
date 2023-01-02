@@ -4,8 +4,22 @@ p {
   margin: 0;
 }
 
+.fas, .fa-solid {
+  @include size(10px, 10px);
+  color: $dark3;
+}
+
 .driving-detail {
+  @include size(100%, 23vh);
+  @include setFont(16px);
+  overflow-y: auto;
+  font-weight: initial;
+  color: $dark3;
   margin: 1% 5%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .location-info, .passenger-info, .time, .price {
@@ -15,11 +29,11 @@ p {
 
 .bold-style {
   font-weight: bold;
-  margin-right: 1%;
+  margin: 0 4%;
 }
 
 .passenger {
-  margin-left: 3%;
+  margin-left: 10%;
 }
 
 .options {

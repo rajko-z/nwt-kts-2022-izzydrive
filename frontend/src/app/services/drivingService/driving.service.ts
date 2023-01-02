@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClientService} from "../custom-http/http-client.service";
 import {environment} from "../../../environments/environment";
 
@@ -7,7 +7,8 @@ import {environment} from "../../../environments/environment";
 })
 export class DrivingService {
 
-  constructor(private http: HttpClientService) { }
+  constructor(private http: HttpClientService) {
+  }
 
   findAllByDriverId(driverId) {
     return this.http.get(environment.apiUrl + `drivings/driver/${driverId}`);
@@ -15,5 +16,9 @@ export class DrivingService {
 
   findAllByPassengerId(passengerId) {
     return this.http.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
+  }
+
+  rejectDriving(drivingId, explanation) {
+    return this.http.post(environment.apiUrl + `drivings/reject/${drivingId}`, explanation);
   }
 }

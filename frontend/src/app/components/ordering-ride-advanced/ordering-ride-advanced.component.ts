@@ -1,47 +1,54 @@
-import { Component } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
-import {
-  IntermediateStationsDialogComponent
-} from "../intermediate-stations-dialog/intermediate-stations-dialog.component";
-import {OtherUsersDialogComponent} from "../other-users-dialog/other-users-dialog.component";
-import {FavoriteRouteDialogComponent} from "../favorite-route-dialog/favorite-route-dialog.component";
+import {Component, OnInit} from '@angular/core';
+import {FormGroup} from "@angular/forms";
+import {MatStepper} from "@angular/material/stepper";
+import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
 
 @Component({
   selector: 'app-ordering-ride-advanced',
   templateUrl: './ordering-ride-advanced.component.html',
-  styleUrls: ['./ordering-ride-advanced.component.scss']
+  styleUrls: ['./ordering-ride-advanced.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    },
+  ],
 })
-export class OrderingRideAdvancedComponent {
+export class OrderingRideAdvancedComponent implements OnInit {
 
-  routeForm = new FormGroup({
-    startLocation: new FormControl(''),
-    endLocation: new FormControl(''),
-    optimalDriving: new FormControl(''),
-    babyOption: new FormControl(false),
-    baggageOption: new FormControl(false),
-    petOption: new FormControl(false),
-    foodOption: new FormControl(false),
-  })
+  rideForm = new FormGroup({});
+  paymentForm = new FormGroup({});
 
-  constructor(public dialog: MatDialog) { }
+  isValidRideForm: boolean = false;
+  isValidPaymentForm: boolean = true;
 
-  onSubmit(){
-    console.log("Submit");
-    console.log(this.routeForm);
+  addingFinished: boolean = false;
+  successfullyFinished: boolean = false;
+
+  constructor() {
   }
 
-  openDialogIntermediateStations() {
-    this.dialog.open(IntermediateStationsDialogComponent);
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
-  openDialogOtherUsers() {
-    this.dialog.open(OtherUsersDialogComponent);
+  onFirstStepNext(driverData: FormGroup, stepper: MatStepper) {
+    this.rideForm = driverData;
+    this.isValidRideForm = true;
+    stepper.selected.completed = true;
+    stepper.next();
   }
 
-  openDialog(){
-    this.dialog.open(FavoriteRouteDialogComponent, {
-      data: { startLocation: this.routeForm.value.startLocation, endLocation: this.routeForm.value.endLocation},
-    });
+  onSecondStepNext(stepper: MatStepper) {
+    stepper.next();
+    stepper.selected.completed = true;
   }
+
+  onThirdStepNext(paymentData: FormGroup, stepper: MatStepper) {
+    this.paymentForm = paymentData;
+    this.isValidPaymentForm = true;
+    stepper.selected.completed = true;
+    stepper.next();
+  }
+
 }
