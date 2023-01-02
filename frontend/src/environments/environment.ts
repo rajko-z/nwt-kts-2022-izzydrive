@@ -13,6 +13,14 @@ export const environment = {
       'Content-Type': 'application/json',
        'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
+  },
+  firebaseConfig : {
+    apiKey: "AIzaSyBqqqb6lb6RROvNXPz2Ei3muSp2x8mtf4Q",
+    authDomain: "izzydrive-29e02.firebaseapp.com",
+    projectId: "izzydrive-29e02",
+    storageBucket: "izzydrive-29e02.appspot.com",
+    messagingSenderId: "669448010022",
+    appId: "1:669448010022:web:53294fe0cf5d12be8469e7"
   }
 }
 

@@ -75,6 +75,7 @@ public class DriverServiceImpl implements DriverService {
         Validator.validateCarType(driverDTO.getCarData().getCarType());
     }
 
+    @Override
     public List<UserDTO> findAllDrivers(){
         return driverRepository.findAll().stream().sorted(Comparator.comparing(User::getId))
                 .map(UserDTO::new).collect(Collectors.toList());

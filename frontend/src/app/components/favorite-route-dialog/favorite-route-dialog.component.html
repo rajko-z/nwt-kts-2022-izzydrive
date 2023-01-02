@@ -1,0 +1,10 @@
+<div>
+  <h1 class="title">Do you want to mark this route as a favorite?</h1>
+  <div>
+    <p class="route">Route: {{this.data.startLocation}} - {{this.data.endLocation}}</p>
+  </div>
+  <div class="options">
+    <button class="option-yes" (click)="saveFavoriteRoute()">Yes</button>
+    <button class="option-no" (click)="closeDialog()">No</button>
+  </div>
+</div>

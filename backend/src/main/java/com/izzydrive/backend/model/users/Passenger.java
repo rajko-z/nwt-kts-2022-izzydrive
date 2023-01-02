@@ -23,7 +23,7 @@ public class Passenger extends User {
     @ManyToOne(fetch = FetchType.LAZY)
     private Driving currentDriving;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="favourite_routes",
             joinColumns = @JoinColumn(name="passenger_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"))

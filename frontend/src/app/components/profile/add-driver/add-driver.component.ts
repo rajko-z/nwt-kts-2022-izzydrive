@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {MatStepper} from '@angular/material/stepper';
-import {DriverService} from 'src/app/services/driver/driver.service';
+import {DriverService} from 'src/app/services/driverService/driver.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 

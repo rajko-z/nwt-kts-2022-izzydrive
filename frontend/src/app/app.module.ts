@@ -21,20 +21,37 @@ import { AllDriversPageAdminComponent } from './pages/all-drivers-page-admin/all
 import { ReviewUsersTableComponent } from './components/review-users-table/review-users-table.component';
 import { ReviewRideTableComponent } from './components/review-ride-table/review-ride-table.component';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import { FavoriteRouteDialogComponent } from './components/favorite-route-dialog/favorite-route-dialog.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import { IntermediateStationsDialogComponent } from './components/intermediate-stations-dialog/intermediate-stations-dialog.component';
+import { OtherUsersDialogComponent } from './components/other-users-dialog/other-users-dialog.component';
+import { HomePageDriverComponent } from './pages/home-page-driver/home-page-driver.component';
+import { DisplayDrivingComponent } from './components/display-driving/display-driving.component';
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
+import {environment} from "../environments/environment";
+import { RideDataFormComponent } from './components/ordering-ride-advanced/ride-data-form/ride-data-form.component';
+import { RideDataTableComponent } from './components/ordering-ride-advanced/ride-data-table/ride-data-table.component';
+import { PaymentFormComponent } from './components/ordering-ride-advanced/payment-form/payment-form.component';
+import { OverviewOrderingRideComponent } from './components/ordering-ride-advanced/overview-ordering-ride/overview-ordering-ride.component';
+import { ExplanationDialogComponent } from './components/explanation-dialog/explanation-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MenuModule,
-    ProfileModule,
-    SharedComponentsModule,
-    AngularMaterialModule
-  ],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent, RideDataFormComponent, RideDataTableComponent, PaymentFormComponent, OverviewOrderingRideComponent, ExplanationDialogComponent],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MenuModule,
+        ProfileModule,
+        SharedComponentsModule,
+        AngularMaterialModule,
+        ReactiveFormsModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireMessagingModule,
+    ],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
 })
