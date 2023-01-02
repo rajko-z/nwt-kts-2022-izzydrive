@@ -1,0 +1,73 @@
+<div class="ride-summary">
+  <div class="first-line">
+    <div class="destination-info">
+      <div class="location">
+        <em class="fa-solid fa-location-dot"></em>
+        <p class="location-title">Branislava Nusica 16</p>
+        <!--      pocetna lokacija - treba dinamciki-->
+      </div>
+      <div class="location">
+        <em class="fa-solid fa-location-dot"></em>
+        <p class="location-title">Somborska 13</p>
+        <!--      krajnja lokacija - treba dinamciki-->
+      </div>
+      <div class="intermediate-station">
+        <em class='fas fa-map-location-dot'></em>
+        <p class="intermediate-title">Intermediate station: <span>Futoski put 100, Banijska 32</span></p>
+        <!--      for petlja koja ce prolaziti kroz dobarvljene medju stanice-->
+      </div>
+      <div class="other-users">
+        <em class='fas fa-users'></em>
+        <p class="users-title">Other passengers: <span>Mika Micic, Milojko Radovanovic</span></p>
+        <!--      for petlja koja ce prolaziti kroz dobarvljene korisnisnike tj dodate putnike-->
+      </div>
+    </div>
+    <div class="time-info">
+      <p class="minutes">13min</p>
+    </div>
+  </div>
+  <div class="second-line">
+    <div class="driver-info">
+      <div class="tooltip">
+        <img src="assets/car.png" alt="car" class="driver-img">
+        <span class="tooltiptext">premium</span>
+        <!--        ovde treba u odnosu na tip da se postavi tooltip kao i drugacija slika autica-->
+      </div>
+      <p class="driver-title">Driver: <span class="driver">Petar Peric</span></p>
+    </div>
+    <div class="additional-options-info">
+      <!--      ukoliko neki od dodatnih opcija nije ispunjen treba postaviti hidden -->
+      <div class="tooltip">
+        <img src="assets/koferi.png" alt="baggage" class="additional-option">
+        <span class="tooltiptext">Baggage</span>
+      </div>
+      <div class="tooltip">
+        <img src="assets/zivotinje.png" alt="pet" class="additional-option">
+        <span class="tooltiptext">Pet</span>
+      </div>
+      <div class="tooltip">
+        <img src="assets/hrana.png" alt="food" class="additional-option">
+        <span class="tooltiptext">Food</span>
+      </div>
+      <div class="tooltip">
+        <img src="assets/beba.png" alt="baby" class="additional-option">
+        <span class="tooltiptext">Baby</span>
+      </div>
+    </div>
+  </div>
+  <div class="third-line">
+    <div class="payment-info">
+      <div> info o placanju i ceni</div>
+      <div class="price-info">
+        <em class="fa-solid fa-tags"></em>
+        <p class="price-title">Price: <span class="price">320 ?v </span></p>
+      </div>
+    </div>
+    <div class="done">
+      <img src="assets/done.png" alt="done">
+    </div>
+  </div>
+</div>
+<div class="submit-item">
+  <button class="submit-button" type="submit" (click)="onSubmit()">Done</button>
+</div>

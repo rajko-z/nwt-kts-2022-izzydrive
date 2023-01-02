@@ -1,0 +1,46 @@
+<div class="driving-detail">
+  <div class="location-info">
+    <div>
+      <em class="fa-solid fa-location-dot"></em>
+      <span class="bold-style">Start location: </span>
+      {{driving.start.street}}
+    </div>
+    <div *ngIf="driving.intermediateStations.length > 0">
+      <div *ngFor="let station of driving.intermediateStations">
+        <em class='fas fa-map-location-dot'></em>
+        <span class="bold-style">Station:</span>
+        {{station}}
+      </div>
+    </div>
+    <div>
+      <em class="fa-solid fa-location-dot"></em>
+      <span class="bold-style">End location: </span>
+      {{driving.end.street}}
+    </div>
+  </div>
+  <div class="passenger-info">
+    <em class='fas fa-users'></em>
+    <span class="bold-style">Passengers: </span>
+    <p *ngFor="let passenger of driving.passengers;">
+      <span class="passenger">- {{passenger}}</span>
+    </p>
+  </div>
+  <div class="time">
+    <em class="fa-solid fa-clock"></em>
+    <span class="bold-style">Driving time: </span> {{formatStartDate}}
+  </div>
+  <div class="price">
+    <em class="fa-solid fa-tags"></em>
+    <span class="bold-style">Price: </span> {{driving.price}} ?valuta?
+  </div>
+</div>
+<div *ngIf="time === 'start'" class="options">
+  <button class="active-button" (click)="startDriving()">Start</button>
+  <button class="active-button" (click)="cancelDriving()">Cancel</button>
+</div>
+<div *ngIf="time === 'current'" class="options">
+  <button class="active-button" (click)="endDriving()">Finish</button>
+</div>
+<div *ngIf="time === 'next'" class="options">
+  <button class="active-button" (click)="cancelDriving()">Cancel</button>
+</div>

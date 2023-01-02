@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from "../../model/user/user";
-import {DriverService} from "../../services/driver/driver.service";
+import {DriverService} from "../../services/driverService/driver.service";
 
 @Component({
   selector: 'app-all-drivers-page-admin',

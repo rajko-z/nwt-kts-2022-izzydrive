@@ -31,4 +31,11 @@ public class Address {
 
     @Column(nullable = false)
     private double latitude;
+
+    //mozda treba da se doda longituda i latituda
+    public Address(String street){
+        this.street = street;
+        this.city = "Novi Sad";
+        this.state = "Srbija";
+    }
 }
