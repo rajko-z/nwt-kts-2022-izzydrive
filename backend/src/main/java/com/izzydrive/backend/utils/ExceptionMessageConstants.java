@@ -23,8 +23,13 @@ public final class ExceptionMessageConstants {
     public static final String VERIFICATION_TOKEN_HAS_EXPIRED = "Your verification token has expired!";
     public static final String INVALID_CAR_TYPE_MESSAGE = "Invalid car type";
     public static final String USER_IS_BLOCK_MESSAGE = "The user has been blocked by the administrator!";
+    public static final String LOCATION_OUTSIDE_OF_NOVI_SAD = "Currently only city of Novi Sad is supported";
+
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
+    }
+    public static String placeForGeoCodeDoesNotExist(double lon, double lat) {
+        return String.format("Error geocode, can't locate place with lon:%s;lat:%s", lon, lat);
     }
 }
 
