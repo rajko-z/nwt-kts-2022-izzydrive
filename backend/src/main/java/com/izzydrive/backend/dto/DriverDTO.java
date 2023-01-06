@@ -1,15 +1,13 @@
 package com.izzydrive.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class NewDriverDTO {
+@Builder
+public class DriverDTO {
     private String firstName;
     private String lastName;
     private String email;

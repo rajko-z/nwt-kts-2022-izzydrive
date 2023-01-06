@@ -1,8 +1,10 @@
-package com.izzydrive.backend.service.maps;
+package com.izzydrive.backend.service.maps.impl;
 
 import com.izzydrive.backend.config.MapConfig;
 import com.izzydrive.backend.dto.AddressOnMapDTO;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.service.maps.OSMScraper;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +54,7 @@ public class MapServiceImpl {
         return address;
     }
 
-    public boolean addressBelongsToBoundingBoxOfNS(AddressOnMapDTO addressOnMapDTO) {
+    private boolean addressBelongsToBoundingBoxOfNS(AddressOnMapDTO addressOnMapDTO) {
         double lat = addressOnMapDTO.getLatitude();
         double lon = addressOnMapDTO.getLongitude();
 
@@ -60,5 +62,9 @@ public class MapServiceImpl {
                lat <= mapConfig.getUpperRightLat() &&
                lon >= mapConfig.getBottomLeftLon() &&
                lon <= mapConfig.getUpperRightLon();
+    }
+
+    public List<CalculatedRouteDTO> getCalculatedRoutesFromTwoCoords(AddressOnMapDTO point1, AddressOnMapDTO point2) {
+        return this.osmScraper.getCalculatedRoutesFromTwoPoints(point1, point2);
     }
 }
