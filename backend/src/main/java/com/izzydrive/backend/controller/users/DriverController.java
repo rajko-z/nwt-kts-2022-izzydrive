@@ -1,7 +1,8 @@
 package com.izzydrive.backend.controller.users;
 
-import com.izzydrive.backend.dto.NewDriverDTO;
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.service.users.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class DriverController {
 
     @PostMapping("add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Object> addNewDriver(@RequestBody NewDriverDTO driverDTO){
+    public ResponseEntity<Object> addNewDriver(@RequestBody DriverDTO driverDTO){
         driverService.addNewDriver(driverDTO);
         return ResponseEntity.ok("");
     }
@@ -34,5 +35,11 @@ public class DriverController {
     public ResponseEntity<List<UserDTO>> findAllDrivers() {
         List<UserDTO> drivers = driverService.findAllDrivers();
         return new ResponseEntity<>(drivers, HttpStatus.OK);
+    }
+
+    @GetMapping("/current-locations")
+    public ResponseEntity<List<DriverLocationDTO>> findAllActiveDriversLocation() {
+        List<DriverLocationDTO> locations = driverService.findAllActiveDriversLocation();
+        return new ResponseEntity<>(locations, HttpStatus.OK);
     }
 }

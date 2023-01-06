@@ -4,6 +4,7 @@ import com.izzydrive.backend.config.MapConfig;
 import com.izzydrive.backend.dto.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.maps.OSMScraper;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class MapServiceImpl {
+public class MapServiceImpl implements MapService {
 
     private final OSMScraper osmScraper;
 

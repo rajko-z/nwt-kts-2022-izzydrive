@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ReviewRideTableComponent} from "../review-ride-table/review-ride-table.component";
-import {MatDialog} from "@angular/material/dialog";
-import {FormControl, FormGroup} from "@angular/forms";
-import {FavoriteRouteDialogComponent} from "../favorite-route-dialog/favorite-route-dialog.component";
-import {AngularFireMessaging} from '@angular/fire/compat/messaging';
-import {HttpClient} from "@angular/common/http";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {FormGroup} from "@angular/forms";
+import {MatStepper} from "@angular/material/stepper";
+import {DrivingOption} from "../../model/driving/drivingOption";
 
 @Component({
   selector: 'app-ordering-ride-basic',
@@ -14,44 +10,27 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class OrderingRideBasicComponent implements OnInit {
 
-  routeForm = new FormGroup({
-    startLocation: new FormControl(''),
-    endLocation: new FormControl('')
-  }) //ne znam da li ce ovde trebati neka provera
+  rideForm = new FormGroup({});
 
-  constructor(public dialog: MatDialog, private msg: AngularFireMessaging, private http: HttpClient, public snackBar: MatSnackBar) {
+  drivingOptions: DrivingOption[];
+
+  isValidRideForm: boolean = false;
+
+  constructor() {
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
-  ngOnInit() {
-
-    //proba za notifikacije
-    this.msg.messages.subscribe((message: any) => {
-      console.log('Foreground message: ' + message)
-    }) //lisen for message
-    this.msg.requestToken.subscribe(token => {
-      //upload token to server
-
-      console.log(token);
-      this.http.post('https://localhost:8443/izzydrive/v1/messages/send-notification', {
-        target: token,
-      }).subscribe((res) =>
-        console.log(res)
-      );
-
-      this.http.post('https://localhost:8443/izzydrive/v1/messages/send-notification', {
-        subscriber: token
-      }).subscribe(() => {
-      });
-
-    }, error => {
-
-      console.log(error);
-
-    });
-
+  onFirstStepNext(drivingOptions: DrivingOption[], stepper: MatStepper) {
+    this.drivingOptions = drivingOptions;
+    this.isValidRideForm = true;
+    stepper.selected.completed = true;
+    stepper.next();
   }
 
-  onSubmit() {
+  onSecondStepNext(stepper: MatStepper) {
+    stepper.next();
+    stepper.selected.completed = true;
   }
-
 }

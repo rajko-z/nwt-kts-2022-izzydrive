@@ -2,9 +2,7 @@ package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.CarDTO;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.model.car.Car;
-import com.izzydrive.backend.model.car.CarAccommodation;
-import com.izzydrive.backend.model.car.CarType;
+import com.izzydrive.backend.model.car.*;
 import com.izzydrive.backend.repository.CarRepository;
 import com.izzydrive.backend.service.CarService;
 import lombok.AllArgsConstructor;
@@ -27,7 +25,7 @@ public class CarServiceImpl implements CarService {
                     carData.getModel(),
                     carData.getMaxPassengers(),
                     getCarType(carData.getCarType()),
-                    getCarAccommodation(carData.getCarAccommodation()));
+                    getCarAccommodationString(carData.getCarAccommodation()));
 
             return carRepository.save(car);
         }
@@ -42,6 +40,42 @@ public class CarServiceImpl implements CarService {
         carRepository.save(car);
     }
 
+    @Override
+    public CarAccommodation getCarAccommodationFromString(String accommodation) {
+        String[] tokens = accommodation.split(";");
+        CarAccommodation carAccommodation = new CarAccommodation();
+
+        for (String token : tokens) {
+            if (token.equals(CarAccommodationEnum.BABY.name())) {
+                carAccommodation.setBaby(true);
+            } else if (token.equals(CarAccommodationEnum.PET.name())) {
+                carAccommodation.setPet(true);
+            } else if (token.equals(CarAccommodationEnum.BAGGAGE.name())) {
+                carAccommodation.setBaggage(true);
+            } else if (token.equals(CarAccommodationEnum.FOOD.name())) {
+                carAccommodation.setFood(true);
+            }
+        }
+        return carAccommodation;
+    }
+
+    @Override
+    public double calculatePrice(Car car, double distance) {
+        int km = (int)distance / 1000;
+        if (km == 0) {
+            km = 1;
+        }
+        switch (car.getCarType()) {
+            case REGULAR:
+                return 120 * km * CarPrices.REGULAR;
+            case AVERAGE:
+                return 120 * km * CarPrices.AVERAGE;
+            case PREMIUM:
+                return 120 * km * CarPrices.PREMIUM;
+        }
+        return 1;
+    }
+
     private CarType getCarType(String carType){
         for (CarType type : CarType.values()) {
             if (type.name().equalsIgnoreCase(carType)) {
@@ -51,22 +85,23 @@ public class CarServiceImpl implements CarService {
         return CarType.REGULAR;
     }
 
-    private String getCarAccommodation(CarAccommodation accommodation){
-        String value = "";
+    private String getCarAccommodationString(CarAccommodation accommodation){
+        StringBuilder sb = new StringBuilder();
+
         if(accommodation.isBaby()){
-            value += "baby ";
+            sb.append(CarAccommodationEnum.BABY.name()).append(";");
         }
         if(accommodation.isPet()){
-            value += "pet ";
+            sb.append(CarAccommodationEnum.PET.name()).append(";");
         }
         if(accommodation.isFood()){
-            value += "food ";
+            sb.append(CarAccommodationEnum.FOOD.name()).append(";");
         }
         if(accommodation.isBaggage()){
-            value += "bagge ";
+            sb.append(CarAccommodationEnum.BAGGAGE.name());
         }
 
-        return value;
+        return sb.toString();
     }
 
 }

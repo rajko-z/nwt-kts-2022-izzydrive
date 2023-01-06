@@ -1,130 +1,36 @@
 <div class="ride-area">
-  <div class="ride-info">
+  <div class="ride-info" *ngFor="let option of drivingOptions"
+       (click)="showOptionOnMap(option)"
+        [ngClass]="{ 'selected-ride-info': option === selectedOption }">
     <div class="other-info">
       <div class="driver-info">
         <img src="assets/car.png" alt="car" class="driver-img">
-        <p class="driver-title">Driver: <span class="driver">Petar Peric</span></p>
+        <p class="driver-title">Driver: <span class="driver">{{option.driver.firstName}} {{option.driver.lastName}}</span></p>
       </div>
       <div class="price-info">
-        <p class="price-title">Price: <span class="price">320 ?v</span></p>
+        <p class="price-title">Price: <span class="price">{{option.price}} $</span></p>
       </div>
       <div class="additional-options-info">
-        <div class="tooltip">
+        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baggage">
           <img src="assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">Baggage</span>
+          <span class="tooltiptext">baggage</span>
         </div>
-        <div class="tooltip">
+        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.pet">
           <img src="assets/zivotinje.png" alt="pet" class="additional-option">
-          <span class="tooltiptext">Pet</span>
+          <span class="tooltiptext">pets</span>
         </div>
-        <div class="tooltip">
+        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.food">
           <img src="assets/hrana.png" alt="food" class="additional-option">
-          <span class="tooltiptext">Food</span>
+          <span class="tooltiptext">food</span>
         </div>
-        <div class="tooltip">
+        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baby">
           <img src="assets/beba.png" alt="baby" class="additional-option">
-          <span class="tooltiptext">Baby</span>
+          <span class="tooltiptext">baby</span>
         </div>
       </div>
     </div>
     <div class="time-info">
-      <p class="minutes">13min</p>
-    </div>
-  </div>
-  <div class="ride-info">
-    <div class="other-info">
-      <div class="driver-info">
-        <img src="assets/car.png" alt="car">
-        <p class="driver-title">Driver: <span class="driver">Petar Peric</span></p>
-      </div>
-      <div class="price-info">
-        <p class="price-title">Price: <span class="price">300 ?v</span></p>
-      </div>
-      <div class="additional-options-info">
-        <div class="tooltip">
-          <img src="assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">Baggage</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/zivotinje.png" alt="pet" class="additional-option hidden">
-          <span class="tooltiptext">Pet</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/hrana.png" alt="food" class="additional-option">
-          <span class="tooltiptext">Food</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/beba.png" alt="baby" class="additional-option">
-          <span class="tooltiptext">Baby</span>
-        </div>
-      </div>
-    </div>
-    <div class="time-info">
-      <p class="minutes">19min</p>
-    </div>
-  </div>
-  <div class="ride-info">
-    <div class="other-info">
-      <div class="driver-info">
-        <img src="assets/car.png" alt="car">
-        <p class="driver-title">Driver: <span class="driver">Petar Peric</span></p>
-      </div>
-      <div class="price-info">
-        <p class="price-title">Price: <span class="price">300 ?v</span></p>
-      </div>
-      <div class="additional-options-info">
-        <div class="tooltip">
-          <img src="assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">Baggage</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/zivotinje.png" alt="pet" class="additional-option hidden">
-          <span class="tooltiptext">Pet</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/hrana.png" alt="food" class="additional-option hidden">
-          <span class="tooltiptext">Food</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/beba.png" alt="baby" class="additional-option">
-          <span class="tooltiptext">Baby</span>
-        </div>
-      </div>
-    </div>
-    <div class="time-info">
-      <p class="minutes">19min</p>
-    </div>
-  </div>
-  <div class="ride-info">
-    <div class="other-info">
-      <div class="driver-info">
-        <img src="assets/car.png" alt="car">
-        <p class="driver-title">Driver: <span class="driver">Petar Peric</span></p>
-      </div>
-      <div class="price-info">
-        <p class="price-title">Price: <span class="price">400 ?v</span></p>
-      </div>
-      <div class="additional-options-info">
-        <div class="tooltip">
-          <img src="assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">Baggage</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/zivotinje.png" alt="pet" class="additional-option hidden">
-          <span class="tooltiptext">Pet</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/hrana.png" alt="food" class="additional-option hidden">
-          <span class="tooltiptext">Food</span>
-        </div>
-        <div class="tooltip">
-          <img src="assets/beba.png" alt="baby" class="additional-option hidden">
-          <span class="tooltiptext">Baby</span>
-        </div>
-      </div>
-    </div>
-    <div class="time-info">
-      <p class="minutes">5min</p>
+      <p class="minutes">{{option.timeForWaiting}}min</p>
     </div>
   </div>
 </div>

@@ -32,6 +32,9 @@ public class Address {
     @Column(nullable = false)
     private double latitude;
 
+    @Column
+    private String name;
+
     //mozda treba da se doda longituda i latituda
     public Address(String street){
         this.street = street;

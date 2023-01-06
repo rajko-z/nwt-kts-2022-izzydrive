@@ -19,6 +19,13 @@ public class Driver extends User {
 
     @Column(nullable = false)
     private boolean active;
+
+    @Column
+    private double lat;
+
+    @Column
+    private double lon;
+
     @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;
 

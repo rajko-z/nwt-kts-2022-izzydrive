@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "@asymmetrik/ngx-leaflet": "^14.0.1",
     "@types/google-one-tap": "^1.2.2",
     "firebase": "^9.6.3",
     "leaflet": "^1.9.3",

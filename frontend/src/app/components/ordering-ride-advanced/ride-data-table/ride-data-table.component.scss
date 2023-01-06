@@ -9,6 +9,10 @@
   }
 }
 
+.selected-ride-info {
+  background-color: $light2;
+}
+
 .ride-info {
   @include size(95%, 20vh);
   margin: 2%;
@@ -16,6 +20,8 @@
   border-radius: 5px;
   display: flex;
   justify-content: center;
+  position: relative;
+  transition: box-shadow 0.3s ease-in-out;
 
   .other-info {
     @include size(80%, 20vh);
@@ -82,6 +88,11 @@
       border-radius: 50px;
     }
   }
+}
+
+.ride-info:hover {
+  top: -5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
 }
 
 .submit-item {
