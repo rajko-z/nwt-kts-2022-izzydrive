@@ -98,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/driving-finder/simple/**",
                         "/drivers/current-locations",
                         "/confirmation",
+                        "/working-intervals/get-minutes/**",
                         "/**/*.css",
                         "/**/*.js");
     }

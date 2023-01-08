@@ -13,4 +13,10 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("select d from Driver d left join fetch d.currentDriving c left join fetch c.route r where d.active = true")
     List<Driver> findAllActiveDrivers();
+
+    @Query("select d from Driver d left join fetch d.workingIntervals w where d.email = ?1")
+    Optional<Driver> findByEmailWithWorkingIntervals(String email);
+
+    @Query("select d from Driver d left join fetch d.currentDriving cd left join fetch d.nextDriving nd left join fetch d.reservedFromClientDriving rd where d.email = ?1")
+    Optional<Driver> findByEmailWithAllDrivings(String email);
 }

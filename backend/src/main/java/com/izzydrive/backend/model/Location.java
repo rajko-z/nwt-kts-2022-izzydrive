@@ -3,25 +3,23 @@ package com.izzydrive.backend.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name="working_intervals")
+@Table(name="locations")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class WorkingInterval {
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalDateTime startTime;
+    @Column
+    private double latitude;
 
     @Column
-    private LocalDateTime endTime;
-
+    private double longitude;
 }

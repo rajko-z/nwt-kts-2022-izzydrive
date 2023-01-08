@@ -29,7 +29,7 @@ public class Driver extends User {
     @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;
 
-    @OneToOne(mappedBy = "driver", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Driving currentDriving;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -41,7 +41,7 @@ public class Driver extends User {
     @OneToOne(fetch = FetchType.EAGER)
     private Car car;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="driver_id")
     private List<WorkingInterval> workingIntervals;
 

@@ -48,6 +48,12 @@ public class Driving {
     @Enumerated(EnumType.STRING)
     private DrivingState drivingState;
 
+    @Column
+    private double duration;
+
+    @Column
+    private double distance;
+
     @OneToMany(mappedBy = "driving", fetch = FetchType.LAZY)
     private List<Evaluation> evaluation = new ArrayList<>();
 
@@ -62,4 +68,7 @@ public class Driving {
 
     @ManyToOne
     private Route route;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Location> locations;
 }

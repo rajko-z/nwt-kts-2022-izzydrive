@@ -95,4 +95,19 @@ public class DriverServiceImpl implements DriverService {
                 .map(d -> new DriverLocationDTO(d.getEmail(), d.getDriverStatus(), new LocationDTO(d.getLon(), d.getLat())))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Optional<Driver> findByEmailWithWorkingIntervals(String email) {
+        return this.driverRepository.findByEmailWithWorkingIntervals(email);
+    }
+
+    @Override
+    public void save(Driver driver) {
+        this.driverRepository.save(driver);
+    }
+
+    @Override
+    public Optional<Driver> findByEmailWithAllDrivings(String email) {
+        return this.driverRepository.findByEmailWithAllDrivings(email);
+    }
 }
