@@ -6,10 +6,12 @@ $light1: #E9EAEF;
 $light5: #858DB5;
 $light4: #B4BCDF;
 
+
+@import '../../../style/styles.scss';
 .menu-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; 
   font-family: 'Inter';
   border-right: solid thin $light5;
   min-width: 230px;
@@ -21,6 +23,8 @@ $light4: #B4BCDF;
   background-color: $dark4;
   max-width: 15%;
 }
+
+
 
 @keyframes fadeInAnimation {
   0% {
@@ -96,6 +100,7 @@ $light4: #B4BCDF;
   color: $light2;
 }
 
+
 .delimiter {
   border-top: solid thin $light4;
 }
@@ -105,10 +110,10 @@ $light4: #B4BCDF;
   color: $light5;
 }
 
-.mat-list-option {
-  font-size: 14px;
-  height: 38px !important;
-  color: $light2;
+.mat-list-option{
+    font-size: 14px;
+    height: 38px !important; 
+    color: $light2;
 }
 
 .open_menu_button {
@@ -124,3 +129,4 @@ $light4: #B4BCDF;
   z-index: 5;
   position: relative;
 }
+

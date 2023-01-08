@@ -21,7 +21,11 @@ export const environment = {
     storageBucket: "izzydrive-29e02.appspot.com",
     messagingSenderId: "669448010022",
     appId: "1:669448010022:web:53294fe0cf5d12be8469e7"
-  }
+  },
+  maxImageSize: 20971520,
+  maxImageHeight: 15200,
+  maxImageWidth: 25600,
+
 }
 
 /*

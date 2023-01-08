@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { getRole, Role } from 'src/app/model/user/role';
 import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
 
@@ -13,10 +14,18 @@ export class MenuComponent implements OnInit {
   isAdmin: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_ADMIN
   isDriver: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_DRIVER
 
-  constructor(private userService: UserSeviceService) { }
+  email: string = this.userService.getCurrentUserEmail();
+  name: string = '';
+
+  constructor(private userService: UserSeviceService, private router: Router) { }
 
   ngOnInit(): void {
-   
+    this.colapseMenu();
+    this.userService.getCurrentUserName().subscribe({
+      next: (result) => {
+        this.name = result.firstName + " " + result.lastName;
+      }
+    })
   }
 
   colapseMenu(){
@@ -31,6 +40,10 @@ export class MenuComponent implements OnInit {
     menuContainer.style.display = "flex";
     const openMenuButton = document.getElementById('collapsedMenu') as HTMLInputElement;
     openMenuButton.style.display = "none";
+  }
+
+  onChangeProfile(){
+    this.router.navigateByUrl("/profile/edit-profile")
   }
 
 }

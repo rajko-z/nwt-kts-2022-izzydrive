@@ -21,8 +21,6 @@ public class UserDTO {
     private String role;
     private String imageName;
     private Address address;
-    private String profileImage;
-
     public UserDTO(Driver driver){
         this.id = driver.getId();
         this.email = driver.getEmail();
@@ -33,7 +31,7 @@ public class UserDTO {
         this.role = driver.getRole().getName();
     }
 
-    public UserDTO(Passenger passenger){
+    public UserDTO(Passenger passenger) {
         this.id = passenger.getId();
         this.email = passenger.getEmail();
         this.firstName = passenger.getFirstName();
@@ -43,3 +41,4 @@ public class UserDTO {
         this.role = passenger.getRole().getName();
     }
 }
+

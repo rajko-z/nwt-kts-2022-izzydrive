@@ -69,4 +69,10 @@ public class UserController {
         userService.unblockUser(id);
         return new ResponseEntity<>("The user has been successfully unblocked", HttpStatus.OK);
     }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER', 'ROLE_PASSENGER')")
+    @PutMapping("/change-info")
+    public ResponseEntity<UserDTO> changeBasicUserInfo(@RequestBody UserDTO userDTO){
+        return ResponseEntity.ok(userService.changeUserInfo(userDTO));
+    }
+
 }

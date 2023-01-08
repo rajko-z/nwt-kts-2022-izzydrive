@@ -5,17 +5,18 @@ import { AngularMaterialModule } from '../shared/angular-material.module';
 import { ProfileRouterModule } from './profile.router';
 import { AddDriverComponent } from './add-driver/add-driver.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 @NgModule({
-  declarations: [AddDriverComponent],
+  declarations: [AddDriverComponent, EditProfileComponent],
   imports: [
     CommonModule,
     SharedComponentsModule,
     AngularMaterialModule,
     ProfileRouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
 })
