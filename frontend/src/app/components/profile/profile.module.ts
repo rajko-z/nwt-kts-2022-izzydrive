@@ -16,7 +16,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     AngularMaterialModule,
     ProfileRouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
 })

@@ -1,7 +1,9 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.exception.InternalServerException;
+import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Image;
+import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.ImageRepository;
 import com.izzydrive.backend.service.ImageService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -20,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -57,8 +60,7 @@ public class ImageServiceImpl implements ImageService {
     public String savePhotoInFileSystem(byte[] bytes, String ownerEmail) {
         String folder = "./src/main/resources/images/";
         LocalDateTime uniqueTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
-        String photoName = ownerEmail + "_" + uniqueTime.format(formatter) + ".jpg";
+        String photoName = ownerEmail + ".jpg";
         Path path = Paths.get(folder + photoName);
 
         try (FileOutputStream fos = new FileOutputStream(path.toString())) {
@@ -71,11 +73,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image convertImageFromBase64(String image, String email) {
+    public void convertImageFromBase64(String image, String email) {
         byte[] bytes = DatatypeConverter.parseBase64Binary(image);
         String photoName = savePhotoInFileSystem(bytes, email);
-        Image img = new Image(photoName);
-        return imageRepository.save(img);
     }
 
     public String convertImageToBase64(Image img) {
@@ -87,5 +87,11 @@ public class ImageServiceImpl implements ImageService {
         catch (IOException e) {
             throw new InternalServerException(ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE);
         }
+    }
+
+    @Override
+    public void deleteImageByName(String imageName) {
+        Optional<Image> image = imageRepository.findByName(imageName);
+        image.ifPresent(imageRepository::delete);
     }
 }

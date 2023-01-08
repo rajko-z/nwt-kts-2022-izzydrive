@@ -1,14 +1,19 @@
 @import "src/style/styles";
 
+input[type='file'] {
+    color: transparent;
+  }
+
 .edit-profile-container{
     display: flex; 
     flex-direction: column; 
     gap: 50px;
     padding: 3% 5%; 
     gap: 20px;
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 2%;
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+   
 }
 
 .info-container{
@@ -45,9 +50,34 @@
 }
 
 .change_profile_btn{
+    visibility:hidden;
+    width: 0%;
+}
+.change-img-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
     @include buttonStyle();
-    width: 40%;
-    align-self: flex-end;
-    margin-bottom: 20px;
     font-size: 12px;
+    padding-left: 15px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 200px;
+    align-items: center;
+}
+
+.change-img-icon{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+.profile-img-container{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: end;
+    height: 10%;
+    align-items: end;
+    gap: 20px;
 }

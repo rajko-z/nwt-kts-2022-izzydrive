@@ -13,7 +13,10 @@ export const environment = {
       'Content-Type': 'application/json',
        'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
-  }
+  },
+  maxImageSize: 20971520,
+  maxImageHeight: 15200,
+  maxImageWidth: 25600
 }
 
 /*

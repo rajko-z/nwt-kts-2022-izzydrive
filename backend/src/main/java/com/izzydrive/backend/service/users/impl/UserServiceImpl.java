@@ -1,8 +1,11 @@
 package com.izzydrive.backend.service.users.impl;
 
+import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.Image;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.ImageService;
@@ -70,6 +73,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO changeUserInfo(UserDTO userDTO) {
+        User user = userRepository.findByEmail(userDTO.getEmail())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(userDTO.getEmail())));
+
+        if (validateNewUserData(userDTO)){
+            user.setEmail(userDTO.getEmail());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+
+            if(userDTO.getImageName() != null){
+                imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
+            }
+            userRepository.save(user);
+            return UserDTOConverter.convertBase(user);
+        }
+        return null;
+    }
+
+    @Override
     public String generatePassword() {
         CharacterRule upperCase = new CharacterRule(EnglishCharacterData.UpperCase);
         CharacterRule numbers = new CharacterRule(EnglishCharacterData.Digit);
@@ -98,5 +121,12 @@ public class UserServiceImpl implements UserService {
 
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    private boolean validateNewUserData(UserDTO userDTO){
+       return Validator.validateEmail(userDTO.getEmail()) &&
+                Validator.validateFirstName(userDTO.getFirstName()) &&
+                Validator.validateLastName(userDTO.getLastName()) &&
+                Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
 }

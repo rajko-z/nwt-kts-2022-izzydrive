@@ -19,5 +19,13 @@ public class UserDTO {
     private String role;
     private String imageName;
     private Address address;
-    private String profileImage;
+
+    public UserDTO(String email, String firstName, String lastName, String phoneNumber, String profileImage){
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.imageName = profileImage;
+    }
 }
+

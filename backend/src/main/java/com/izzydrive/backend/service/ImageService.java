@@ -11,7 +11,8 @@ public interface ImageService {
     Stream<Image> getAllPhotos();
     List<Image> convertPhotosFromDTO(List<MultipartFile> photos, String email);
     String savePhotoInFileSystem(byte[] bytes, String ownerEmail);
-    Image convertImageFromBase64(String img, String email);
+    void convertImageFromBase64(String img, String email);
     String convertImageToBase64(Image img);
+    void deleteImageByName(String imageName);
 }
 

@@ -9,11 +9,14 @@ import { UserSeviceService } from './services/userService/user-sevice.service';
 export class AppComponent {
       title = 'NWT-KTS 2022 IZZYDRIVE';
 
-      isUserLoggedIn: boolean = false;
+      // isUserLoggedIn: boolean = false;
 
       constructor(private userService: UserSeviceService) {}
       
       ngOnInit(): void {
-        this.isUserLoggedIn = this.userService.isUserLoggedIn()
+      }
+
+      isUserLoggedIn() : boolean {
+          return this.userService.isUserLoggedIn();
       }
 }

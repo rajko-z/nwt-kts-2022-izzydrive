@@ -1,7 +1,7 @@
 <div class="full-height">
     <app-header></app-header>
     <div style="display: flex; flex-direction: row;">
-        <app-menu *ngIf="isUserLoggedIn" style="flex: 1 1 auto"></app-menu>
+        <app-menu *ngIf="isUserLoggedIn()" style="flex: 1 1 auto"></app-menu>
         <div style="flex: 10 1 auto;">
             <router-outlet></router-outlet>
         </div>

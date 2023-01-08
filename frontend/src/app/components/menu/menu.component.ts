@@ -14,10 +14,18 @@ export class MenuComponent implements OnInit {
   isAdmin: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_ADMIN
   isDriver: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_DRIVER
 
+  email: string = this.userService.getCurrentUserEmail();
+  name: string = '';
+
   constructor(private userService: UserSeviceService, private router: Router) { }
 
   ngOnInit(): void {
-   
+    this.colapseMenu();
+    this.userService.getCurrentUserName().subscribe({
+      next: (result) => {
+        this.name = result.firstName + " " + result.lastName;
+      }
+    })
   }
 
   colapseMenu(){

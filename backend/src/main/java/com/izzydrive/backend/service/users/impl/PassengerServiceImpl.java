@@ -6,6 +6,7 @@ import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.repository.AddressRepository;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.utils.Validator;
@@ -23,6 +24,8 @@ import java.util.UUID;
 public class PassengerServiceImpl implements PassengerService {
 
     private final PasswordEncoder passwordEncoder;
+
+    private final AddressRepository addressRepository;
 
     private final ConfirmationTokenService confirmationTokenService;
 

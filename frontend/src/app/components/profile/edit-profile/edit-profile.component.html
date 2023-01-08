@@ -2,12 +2,11 @@
     <div class="info-container">
         <div class="fields-container">
             <h1>Change profile</h1>
-            <form class="input-fields-container" [formGroup]="this.editForm">
+            <form class="input-fields-container" [formGroup]="this.editForm" (ngSubmit)="onSubmit()">
                 <div class="horizontal-group">
                         <mat-form-field appearance="outline" style="flex: 1 1 auto;">
                             <mat-label>First name</mat-label>
                             <input matInput
-                                [value]="this.placeholders.firstName"
                                 formControlName="firstName">
                                 <mat-error *ngIf="this.editForm.controls['firstName'].hasError('required')">First name is required</mat-error>
                                 <mat-error *ngIf="this.editForm.controls['firstName'].hasError('pattern')">Letters and spaces are allowed</mat-error>
@@ -18,7 +17,6 @@
                         <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
                             <mat-label>Last name</mat-label>
                             <input matInput
-                                [value]="this.placeholders.lastName"
                                 ngModel
                                 formControlName="lastName">
                                 <mat-error *ngIf="this.editForm.controls['lastName'].hasError('required')">Last name is required</mat-error>
@@ -29,7 +27,6 @@
                 <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
                     <mat-label>Email</mat-label>
                     <input matInput
-                        [value]="this.placeholders.email"
                         ngModel
                         formControlName="email">
                     <mat-error *ngIf="this.editForm.controls['email'].hasError('required')">Email is required</mat-error>
@@ -40,7 +37,6 @@
                 <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
                     <mat-label>Phone number</mat-label>
                     <input matInput
-                        [value]="this.placeholders.phoneNumber"
                         ngModel
                         formControlName="phoneNumber">
                     <mat-error *ngIf="this.editForm.controls['phoneNumber'].hasError('required')">Phone number is required</mat-error>
@@ -57,12 +53,14 @@
                 </div>
             </form>
         </div>
-        <div style="display: flex; flex-direction: column; justify-content: end; height: 10%;">
-            <button class="change_profile_btn" style="padding: 10px">
-                Change profile picture
-            </button>
+        <div class="profile-img-container">
+            <div class="change-img-button-container">
+                <label for="files">Change profile photo</label>
+                <img class="change-img-icon" src="/assets/upload.png" />
+                <input id="files" class="change_profile_btn" type="file" (change)="fileChangeEvent($event)"/>
+            </div>
             <div style="flex: 1 1 auto; align-self: flex-end;">
-                <img class="img_container" src="https://via.placeholder.com/400">
+                <img class="img_container" [src]="this.profileImage">
             </div>
         </div>
         

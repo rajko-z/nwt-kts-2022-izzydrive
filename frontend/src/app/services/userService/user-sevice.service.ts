@@ -17,6 +17,13 @@ export class UserSeviceService {
 
   constructor(private http: HttpClient, private _sanitizer: DomSanitizer) { }
  
+  createHeader(){
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+       'Authorization': "Bearer "+ this.getCurrentUserToken()
+    });
+    return headers;
+  }
 
   isUserLoggedIn(): boolean {
     return this.getCurrentUserToken() !== null
@@ -100,10 +107,23 @@ export class UserSeviceService {
     })
   }
 
-  getCurrrentUserDataWithImg(){ //:Observable<User>
-    return this.http.get( //<User>
+  getCurrrentUserDataWithImg(): Observable<User>{ //:Observable<User>
+    return this.http.get<User>( //<User>
       environment.apiUrl + "users/" + this.getCurrentUserEmail() + "?image=true", environment.header
     )
+  }
+
+  getCurrentUserName(): Observable<User>{
+    return this.http.get<User>( 
+      environment.apiUrl + "users/" + this.getCurrentUserEmail())
+  }
+
+  changeUserData(user: User){
+    return this.http.put(
+      environment.apiUrl + "users/change-info", user, {
+        headers: this.createHeader()
+      }
+    );
   }
 
   

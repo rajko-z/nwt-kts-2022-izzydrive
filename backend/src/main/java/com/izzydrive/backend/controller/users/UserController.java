@@ -55,4 +55,11 @@ public class UserController {
         userService.changePassword(newPasswordDTO);
         return new ResponseEntity<>("Password successfully changed", HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER', 'ROLE_PASSENGER')")
+    @PutMapping("/change-info")
+    public ResponseEntity<UserDTO> changeBasicUserInfo(@RequestBody UserDTO userDTO){
+        return ResponseEntity.ok(userService.changeUserInfo(userDTO));
+    }
+
 }

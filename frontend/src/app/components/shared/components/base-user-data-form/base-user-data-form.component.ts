@@ -22,9 +22,7 @@ export class BaseUserDataFormComponent implements OnInit {
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl(''),
     repeatedPassword: new FormControl(''),
-    phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
-                                                          Validators.minLength(13), 
-                                                          Validators.maxLength(13)]),
+    phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]{11,12}$")]),
   });
 
 
