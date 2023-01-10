@@ -1,12 +1,12 @@
-package com.izzydrive.backend.dto;
+package com.izzydrive.backend.dto.driving;
 
+import com.izzydrive.backend.dto.AddressDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

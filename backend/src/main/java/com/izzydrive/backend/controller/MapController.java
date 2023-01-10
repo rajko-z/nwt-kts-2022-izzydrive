@@ -1,6 +1,6 @@
 package com.izzydrive.backend.controller;
 
-import com.izzydrive.backend.dto.AddressOnMapDTO;
+import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.DriverService;
@@ -34,18 +34,5 @@ public class MapController {
     public ResponseEntity<AddressOnMapDTO> findAddressByCoords(@RequestParam Double lat, @RequestParam Double lon) {
         AddressOnMapDTO address = mapService.getAddressOnMapFromCoords(lat, lon);
         return new ResponseEntity<>(address, HttpStatus.OK);
-    }
-
-    @GetMapping("/routes-from-two-points")
-    public ResponseEntity<List<CalculatedRouteDTO>> findRoutesFromTwoCoords(@RequestParam Double latP1,
-                                                                            @RequestParam Double lonP1,
-                                                                            @RequestParam Double latP2,
-                                                                            @RequestParam Double lonP2) {
-        List<CalculatedRouteDTO> calculatedRoutes =
-                mapService.getCalculatedRoutesFromTwoCoords(
-                        new AddressOnMapDTO(lonP1, latP1),
-                        new AddressOnMapDTO(lonP2, latP2)
-                );
-        return new ResponseEntity<>(calculatedRoutes, HttpStatus.OK);
     }
 }

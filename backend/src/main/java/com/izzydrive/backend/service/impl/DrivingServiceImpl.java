@@ -1,6 +1,6 @@
 package com.izzydrive.backend.service.impl;
 
-import com.izzydrive.backend.dto.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.service.DrivingService;

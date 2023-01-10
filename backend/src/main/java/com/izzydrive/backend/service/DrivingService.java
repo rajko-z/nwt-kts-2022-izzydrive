@@ -1,6 +1,6 @@
 package com.izzydrive.backend.service;
 
-import com.izzydrive.backend.dto.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
 
 import java.util.List;
 

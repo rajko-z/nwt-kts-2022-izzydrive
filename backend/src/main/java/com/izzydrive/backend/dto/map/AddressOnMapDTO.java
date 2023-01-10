@@ -1,4 +1,4 @@
-package com.izzydrive.backend.dto;
+package com.izzydrive.backend.dto.map;
 
 import lombok.*;
 

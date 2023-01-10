@@ -1,5 +1,6 @@
-package com.izzydrive.backend.dto;
+package com.izzydrive.backend.dto.driving;
 
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import lombok.AllArgsConstructor;

@@ -69,6 +69,7 @@ public class Driving {
     @ManyToOne
     private Route route;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Location> locations;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="driving_id")
+    private List<Location> locations = new ArrayList<>();
 }

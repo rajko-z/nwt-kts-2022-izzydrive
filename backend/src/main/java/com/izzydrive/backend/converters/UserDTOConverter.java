@@ -34,7 +34,9 @@ public class UserDTOConverter {
 
     public static UserDTO convertWithImage(User user, ImageService imageService) {
         UserDTO userDTO = convertBase(user);
-        userDTO.setProfileImage(imageService.convertImageToBase64(user.getImage()));
+        if (user.getImage() != null) {
+            userDTO.setProfileImage(imageService.convertImageToBase64(user.getImage()));
+        }
         return userDTO;
     }
 }

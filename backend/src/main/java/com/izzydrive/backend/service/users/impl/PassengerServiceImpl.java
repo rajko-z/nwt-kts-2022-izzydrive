@@ -76,4 +76,9 @@ public class PassengerServiceImpl implements PassengerService {
     public List<UserDTO> findAllPassenger() {
         return passengerRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
+
+    @Override
+    public Optional<Passenger> findByEmailWithCurrentDriving(String email) {
+        return passengerRepository.findByEmailWithCurrentDriving(email);
+    }
 }

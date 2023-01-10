@@ -1,6 +1,6 @@
 package com.izzydrive.backend.controller;
 
-import com.izzydrive.backend.dto.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.service.DrivingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

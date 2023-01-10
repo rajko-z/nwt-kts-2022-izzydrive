@@ -1,16 +1,17 @@
 package com.izzydrive.backend.controller;
 
-import com.izzydrive.backend.dto.AddressOnMapDTO;
-import com.izzydrive.backend.dto.DrivingOptionDTO;
-import com.izzydrive.backend.service.impl.DrivingFinderServiceImpl;
+import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
+import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
+import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.service.DrivingFinderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -18,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DrivingFinderController {
 
-    private final DrivingFinderServiceImpl drivingFinderService;
+    private final DrivingFinderService drivingFinderService;
 
     @GetMapping("/simple/{latP1}/{lonP1}/{latP2}/{lonP2}")
     public ResponseEntity<List<DrivingOptionDTO>> findSimpleDrivings(@PathVariable double latP1,
@@ -29,5 +30,11 @@ public class DrivingFinderController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping("/advanced")
+    public ResponseEntity<List<DrivingOptionDTO>> findAdvancedDrivings(@RequestBody @Valid DrivingFinderRequestDTO request) {
+        List<DrivingOptionDTO> retVal = drivingFinderService.getAdvancedDrivingOptions(request);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
 
 }
