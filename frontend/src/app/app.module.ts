@@ -35,6 +35,10 @@ import { RideDataTableComponent } from './components/ordering-ride-advanced/ride
 import { PaymentFormComponent } from './components/ordering-ride-advanced/payment-form/payment-form.component';
 import { OverviewOrderingRideComponent } from './components/ordering-ride-advanced/overview-ordering-ride/overview-ordering-ride.component';
 import { ExplanationDialogComponent } from './components/explanation-dialog/explanation-dialog.component';
+import { MessageBoxComponent } from './components/chat/components/message-box/message-box.component';
+import { SentBoxComponent } from './components/chat/components/sent-box/sent-box.component';
+import { ChatBoxComponent } from './components/chat/view/chat-box/chat-box.component';
+import { ChatModule } from './components/chat/chat.module';
 
 @NgModule({
   declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent, RideDataFormComponent, RideDataTableComponent, PaymentFormComponent, OverviewOrderingRideComponent, ExplanationDialogComponent],
@@ -46,12 +50,14 @@ import { ExplanationDialogComponent } from './components/explanation-dialog/expl
         HttpClientModule,
         MenuModule,
         ProfileModule,
+        ChatModule,
         SharedComponentsModule,
         AngularMaterialModule,
         ReactiveFormsModule,
         AngularFireModule.initializeApp(environment.firebaseConfig),
         AngularFireMessagingModule,
     ],
+    exports: [],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],
 })

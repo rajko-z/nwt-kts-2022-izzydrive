@@ -15,7 +15,9 @@ import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.TokenUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,7 @@ import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
@@ -34,6 +37,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+    @Autowired
     private final TokenUtils tokenUtils;
 
     private final AuthenticationManager authenticationManager;
@@ -42,9 +46,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final ImageService imageService;
 
+    @Autowired
+    private SimpMessagingTemplate template;
+
     @Value("${google.id}")
     private String idClient;
 
+    @Transactional
     public UserWithTokenDTO createAuthenticationToken(LoginDTO loginDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -55,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             User user = (User) authentication.getPrincipal();
             checkIfUserBlocked(user);
             String jwt = tokenUtils.generateTokenForUsername(user.getUsername());
-
+            template.convertAndSend("/channel/login", user);
             return UserDTOConverter.convertToUserWithImageAndToken(user, jwt, imageService);
         } catch (BadCredentialsException ex) {
             throw new InvalidCredentialsException(ExceptionMessageConstants.INVALID_LOGIN);
@@ -71,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         myUser.ifPresent(this::checkIfUserBlocked);
         // TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
         String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
-
+        template.convertAndSend("/channel/login", myUser.get());
         return UserDTOConverter.convertToUserWithImageAndToken(myUser.get(), jwt, imageService);
     }
 
@@ -94,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             myUser.ifPresent(this::checkIfUserBlocked);
             //TODO Da li ce uvek postojati myUser.get(), mozda i ovde da se baci InvalidCredentialsException
             String jwt = tokenUtils.generateTokenForUsername(myUser.get().getUsername());
-
+            template.convertAndSend("/channel/login", myUser.get());
             return UserDTOConverter.convertToUserWithImageAndToken(myUser.get(), jwt, imageService);
         } catch (IOException ex) {
             throw new InvalidCredentialsException(ExceptionMessageConstants.INVALID_LOGIN);

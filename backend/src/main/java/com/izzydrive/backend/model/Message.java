@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name="messages")
@@ -20,7 +21,7 @@ public class Message {
     private Long id;
 
     @Column(nullable = false, length = 2048)
-    private String text;
+    private String tring;
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
@@ -30,4 +31,10 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User recipient;
+
+    @Column(name = "channel")
+    private String channel;
+
+    @Column(name = "read_date")
+    private LocalDateTime readDate;
 }
