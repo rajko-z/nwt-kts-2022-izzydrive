@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from "@angular/material/dialog";
+import {FormControl, FormGroup} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-ordering-ride-basic',
@@ -7,14 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderingRideBasicComponent implements OnInit {
 
-  constructor() { }
+  routeForm = new FormGroup({
+    startLocation: new FormControl(''),
+    endLocation: new FormControl('')
+  })
+  message;
 
-  ngOnInit(): void {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar) {
   }
 
-  onSubmit(){
-    console.log("Submit");
+  ngOnInit() {}
 
+  onSubmit() {
   }
 
 }

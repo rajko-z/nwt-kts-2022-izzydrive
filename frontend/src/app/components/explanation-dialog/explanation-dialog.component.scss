@@ -1,0 +1,28 @@
+@import "src/style/styles";
+
+.explanation {
+  @include size(35vw, 30vh);
+}
+
+.title {
+  @include setTitleStyle(90%);
+  @include setFont(25px);
+  font-weight: bold;
+}
+
+.explanation-text {
+  @include size(31vw, 15vh);
+  margin: 3% 5% 1% 5%;
+}
+
+.submit-item {
+  display: flex;
+  justify-content: flex-end;
+  height: 5vh;
+  margin: 1% 0 0 0;
+
+  .submit-button {
+    @include buttonStyle();
+    width: 20%;
+  }
+}

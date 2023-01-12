@@ -13,7 +13,7 @@ export const environment = {
       'Content-Type': 'application/json',
        'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
-  }
+  },
 }
 
 /*

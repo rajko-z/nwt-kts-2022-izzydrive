@@ -31,4 +31,10 @@ public class Address {
 
     @Column(nullable = false)
     private double latitude;
+
+    public Address(String street){
+        this.street = street;
+        this.city = "Novi Sad";
+        this.state = "Srbija";
+    }
 }

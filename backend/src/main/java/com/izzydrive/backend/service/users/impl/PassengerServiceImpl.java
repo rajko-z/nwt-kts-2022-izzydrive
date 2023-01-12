@@ -71,6 +71,8 @@ public class PassengerServiceImpl implements PassengerService {
         Validator.validateLastName(newPassengerData.getLastName());
         Validator.validatePhoneNumber(newPassengerData.getPhoneNumber());
     }
+
+    @Override
     public List<UserDTO> findAllPassenger() {
         return passengerRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }

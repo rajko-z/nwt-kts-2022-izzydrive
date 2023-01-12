@@ -1,0 +1,9 @@
+<div class="explanation">
+  <form [formGroup]="this.explanationForm">
+    <h2 class="title">Enter an explanation for the ride reject</h2>
+    <textarea class="explanation-text" formControlName="explanation"></textarea>
+    <div class="submit-item">
+      <button class="submit-button" type="submit" (click)="onSubmit()">Send</button>
+    </div>
+  </form>
+</div>

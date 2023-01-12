@@ -30,8 +30,7 @@ export class UserSeviceService {
 
   getCurrentUserEmail() : string{
     const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    return currentUser ? currentUser.username : null;
-
+    return currentUser ? currentUser.email : null;
   }
 
   getRoleCurrentUserRole() : string{

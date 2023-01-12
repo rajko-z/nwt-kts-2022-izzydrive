@@ -88,7 +88,8 @@ export class LoginComponent implements OnInit {
         next : (responce) => {
           console.log(responce)
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
-        this.router.navigateByUrl('/logged')
+        this.router.navigateByUrl('/driver')
+        //   this.router.navigateByUrl('/logged')
       },
         error: (error)=> {
           this.errorMessage = true;
