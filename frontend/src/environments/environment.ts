@@ -14,6 +14,18 @@ export const environment = {
        'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
   },
+  
+  firebaseConfig : {
+    apiKey: "AIzaSyAKK1keZb45wDnBvvsR5l6wk201kIZa1sE",
+    authDomain: "izzydrive-368421.firebaseapp.com",
+    projectId: "izzydrive-368421",
+    storageBucket: "izzydrive-368421.appspot.com",
+    messagingSenderId: "83743871907",
+    appId: "1:83743871907:web:7e0f485634423a89aac016",
+    measurementId: "G-F2L4CREP99",
+    databaseURL: "https://izzydrive-368421-default-rtdb.europe-west1.firebasedatabase.app"
+  },
+
   maxImageSize: 20971520,
   maxImageHeight: 15200,
   maxImageWidth: 25600,

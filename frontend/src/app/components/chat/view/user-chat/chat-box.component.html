@@ -1,0 +1,20 @@
+
+<div class="chat-box-container">
+    <div class="header">
+        <button >
+            <img src="/assets/cross.png" class="close"/>
+        </button>
+    </div>
+    <div class="container" #scroll [scrollTop]="scroll.scrollHeight">
+        <div class="messages-container" *ngFor="let mess of this.messages">
+            <app-message-box [message]="mess"></app-message-box>
+        </div>
+    </div>
+    
+    <div class="typing-container">
+        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channel"></app-sent-box>
+    </div>
+</div>
+
+
+

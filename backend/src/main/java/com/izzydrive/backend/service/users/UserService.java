@@ -25,4 +25,5 @@ public interface UserService extends UserDetailsService {
     void unblockUser(Long id);
     UserDTO changeUserInfo(UserDTO userDTO);
 
+    User disconnectFromChat(String email);
 }

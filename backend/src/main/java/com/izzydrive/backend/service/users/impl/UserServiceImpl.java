@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
         if (user.isPresent())
@@ -46,11 +48,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -135,6 +139,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User disconnectFromChat(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        user.get().setConnected(false);
+        return userRepository.save(user.get());
+    }
+
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
@@ -145,4 +160,6 @@ public class UserServiceImpl implements UserService {
                 Validator.validateLastName(userDTO.getLastName()) &&
                 Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
+
+
 }

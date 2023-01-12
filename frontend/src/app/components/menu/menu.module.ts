@@ -14,7 +14,7 @@ import { ProfileModule } from '../profile/profile.module';
     CommonModule,
     SharedComponentsModule,
     AngularMaterialModule,
-    ProfileModule
+    ProfileModule,
   ],
   providers: [],
   exports: [MenuComponent]

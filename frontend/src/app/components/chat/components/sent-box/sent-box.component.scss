@@ -1,0 +1,24 @@
+@import "../../../../../style/styles.scss";
+
+.send-box-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.type-box-xontainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.type-message{
+    flex-grow: 10;
+    border-radius: 10px;
+    border-color: $light4;
+    color: $dark1;
+    font-size: 12px;
+}
+
+.send-button{
+    flex-grow: 1;
+}
+

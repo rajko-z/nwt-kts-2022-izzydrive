@@ -8,6 +8,7 @@ $light4: #B4BCDF;
 
 
 @import '../../../style/styles.scss';
+
 .menu-container {
   display: flex;
   flex-direction: column;
@@ -23,8 +24,6 @@ $light4: #B4BCDF;
   background-color: $dark4;
   max-width: 15%;
 }
-
-
 
 @keyframes fadeInAnimation {
   0% {

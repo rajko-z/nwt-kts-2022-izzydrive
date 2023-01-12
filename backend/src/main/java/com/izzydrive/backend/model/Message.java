@@ -30,4 +30,10 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User recipient;
+
+    @Column(name = "channel")
+    private String channel;
+
+    @Column(name = "read_date")
+    private LocalDateTime readDate;
 }
