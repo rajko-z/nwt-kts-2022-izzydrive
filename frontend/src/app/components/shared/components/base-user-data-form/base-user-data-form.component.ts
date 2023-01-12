@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { Role } from 'src/app/model/user/role';
 
 @Component({
@@ -23,14 +23,14 @@ export class BaseUserDataFormComponent implements OnInit {
     password: new FormControl(''),
     repeatedPassword: new FormControl(''),
     phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]*$"),
-                                                          Validators.minLength(13), 
+                                                          Validators.minLength(13),
                                                           Validators.maxLength(13)]),
   });
 
 
   @Output() register = new EventEmitter<FormGroup>();
 
-  constructor(private userService: UserSeviceService) {
+  constructor(private userService: UserService) {
       if(this.isRegistration){
         this.registerForm.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
         this.registerForm.controls.repeatedPassword.setValidators([Validators.required, Validators.minLength(8)]);
@@ -38,7 +38,7 @@ export class BaseUserDataFormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+
   }
 
 

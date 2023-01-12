@@ -9,8 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomePageLoggedComponent } from './pages/home-page-logged/home-page-logged.component';
 import { HomePageUnLoggedComponent } from './pages/home-page-un-logged/home-page-un-logged.component';
 import { MapComponent } from './components/map/map.component';
-import { OrderingRideBasicComponent } from './components/ordering-ride-basic/ordering-ride-basic.component';
-import { OrderingRideAdvancedComponent } from './components/ordering-ride-advanced/ordering-ride-advanced.component';
+import { OrderingRideBasicComponent } from './components/ordering-ride/basic/ordering-ride-basic.component';
+import { OrderingRideAdvancedComponent } from './components/ordering-ride/advanced/ordering-ride-advanced.component';
 import { MenuModule } from './components/menu/menu.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileModule } from './components/profile/profile.module';
@@ -30,20 +30,22 @@ import { DisplayDrivingComponent } from './components/display-driving/display-dr
 import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
-import { RideDataFormComponent } from './components/ordering-ride-advanced/ride-data-form/ride-data-form.component';
-import { RideDataTableComponent } from './components/ordering-ride-advanced/ride-data-table/ride-data-table.component';
-import { PaymentFormComponent } from './components/ordering-ride-advanced/payment-form/payment-form.component';
-import { OverviewOrderingRideComponent } from './components/ordering-ride-advanced/overview-ordering-ride/overview-ordering-ride.component';
+import { RideDataFormComponent } from './components/ordering-ride/advanced/ride-data-form/ride-data-form.component';
+import { RideDataTableComponent } from './components/ordering-ride/shared/ride-data-table/ride-data-table.component';
+import { OverviewOrderingRideComponent } from './components/ordering-ride/advanced/overview-ordering-ride/overview-ordering-ride.component';
 import { ExplanationDialogComponent } from './components/explanation-dialog/explanation-dialog.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {
   RideDataBasicFormComponent
-} from "./components/ordering-ride-basic/ride-data-basic-form/ride-data-basic-form.component";
+} from "./components/ordering-ride/basic/ride-data-basic-form/ride-data-basic-form.component";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { SearchPlaceComponent } from './components/ordering-ride/shared/search-place/search-place.component';
+import {MatExpansionModule} from "@angular/material/expansion";
+import { PaymentPageComponent } from './pages/payment-page/payment-page.component';
 
 @NgModule({
-  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent, RideDataFormComponent, RideDataTableComponent, PaymentFormComponent, OverviewOrderingRideComponent, ExplanationDialogComponent, RideDataBasicFormComponent],
+  declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent, RideDataFormComponent, RideDataTableComponent, OverviewOrderingRideComponent, ExplanationDialogComponent, RideDataBasicFormComponent, SearchPlaceComponent, PaymentPageComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -59,7 +61,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     AngularFireMessagingModule,
     LeafletModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
   bootstrap: [AppComponent],

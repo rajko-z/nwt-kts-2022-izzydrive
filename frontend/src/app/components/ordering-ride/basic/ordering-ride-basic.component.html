@@ -1,0 +1,19 @@
+<mat-horizontal-stepper linear #stepper class="ordering-ride-form">
+  <mat-step completed="false">
+    <ng-template matStepLabel>Ride data</ng-template>
+    <app-ride-data-basic-form
+      (fetchedDrivingOptionsEvent)="onFirstStepNext($event, stepper)"
+    ></app-ride-data-basic-form>
+  </mat-step>
+
+  <mat-step completed="false">
+    <ng-template matStepLabel>Choose ride</ng-template>
+    <app-ride-data-table (selectedOptionEvent)="onSecondStepNext($event, stepper)" [drivingOptions]="drivingOptions"></app-ride-data-table>
+  </mat-step>
+
+  <mat-step completed="false">
+    <ng-template matStepLabel>Overview</ng-template>
+    You are one step away. Please sign up or login if you already have an account.
+  </mat-step>
+
+</mat-horizontal-stepper>

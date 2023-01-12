@@ -6,6 +6,7 @@ import {MarkerType} from "../../model/map/markerType";
 import {DrawnRoute} from "../../model/map/drawnRoute";
 import {DriverLocation} from "../../model/driver/driverLocation";
 import {
+  createMarkerOptionForIntermediateStation,
   createMarkerOptionsForCar,
   markerOptionsEnd,
   markerOptionsStart
@@ -31,6 +32,9 @@ export class MapComponent implements OnInit {
   mainGroup: LayerGroup[] = [];
   startMarkerLayer: LayerGroup;
   endMarkerLayer: LayerGroup;
+  firstIntermediateLayer: LayerGroup;
+  secondIntermediateLayer: LayerGroup;
+  thirdIntermediateLayer: LayerGroup;
   driverLocationsLayer: LayerGroup;
 
   currentTrackingDriverEmail: string = null;
@@ -112,22 +116,52 @@ export class MapComponent implements OnInit {
       markerPoint.addTo(this.startMarkerLayer);
       this.mainGroup = [...this.mainGroup, this.startMarkerLayer];
     }
-    else {
+    else if (place.markerType === MarkerType.END) {
       this.endMarkerLayer = new LayerGroup()
       let markerPoint = marker([place.latitude, place.longitude], markerOptionsEnd);
       markerPoint.addTo(this.endMarkerLayer);
       this.mainGroup = [...this.mainGroup, this.endMarkerLayer];
     }
-  }
-
-  private removePlaceFromMap(place: PlaceOnMap) {
-    if (place.markerType == MarkerType.START) {
-      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.startMarkerLayer);
-      delete this.startMarkerLayer;
-    } else {
-      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.endMarkerLayer);
-      delete this.endMarkerLayer;
+    else if (place.markerType === MarkerType.FIRST_INTERMEDIATE) {
+      this.firstIntermediateLayer = new LayerGroup();
+      let markerPoint = marker([place.latitude, place.longitude], createMarkerOptionForIntermediateStation(place.markerType));
+      markerPoint.addTo(this.firstIntermediateLayer);
+      this.mainGroup = [...this.mainGroup, this.firstIntermediateLayer];
+    }
+    else if (place.markerType === MarkerType.SECOND_INTERMEDIATE) {
+      this.secondIntermediateLayer = new LayerGroup();
+      let markerPoint = marker([place.latitude, place.longitude], createMarkerOptionForIntermediateStation(place.markerType));
+      markerPoint.addTo(this.secondIntermediateLayer);
+      this.mainGroup = [...this.mainGroup, this.secondIntermediateLayer];
+    }
+    else if (place.markerType === MarkerType.THIRD_INTERMEDIATE) {
+      this.thirdIntermediateLayer = new LayerGroup();
+      let markerPoint = marker([place.latitude, place.longitude], createMarkerOptionForIntermediateStation(place.markerType));
+      markerPoint.addTo(this.thirdIntermediateLayer);
+      this.mainGroup = [...this.mainGroup, this.thirdIntermediateLayer];
     }
   }
 
+  private removePlaceFromMap(place: PlaceOnMap) {
+    if (place.markerType === MarkerType.START) {
+      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.startMarkerLayer);
+      delete this.startMarkerLayer;
+    }
+    else if (place.markerType === MarkerType.END) {
+      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.endMarkerLayer);
+      delete this.endMarkerLayer;
+    }
+    else if (place.markerType === MarkerType.FIRST_INTERMEDIATE) {
+      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.firstIntermediateLayer);
+      delete this.firstIntermediateLayer;
+    }
+    else if (place.markerType === MarkerType.SECOND_INTERMEDIATE) {
+      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.secondIntermediateLayer);
+      delete this.secondIntermediateLayer;
+    }
+    else if (place.markerType === MarkerType.THIRD_INTERMEDIATE) {
+      this.mainGroup = this.mainGroup.filter((lg: LayerGroup) => lg !== this.thirdIntermediateLayer);
+      delete this.thirdIntermediateLayer;
+    }
+  }
 }

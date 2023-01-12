@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {UserSeviceService} from '../userService/user-sevice.service';
-import {environment} from "../../../environments/environment";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {UserService} from '../userService/user-sevice.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpClientService {
 
-  constructor(private http: HttpClient, private userService: UserSeviceService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   public createHeader(){
     let headers = new HttpHeaders({
@@ -29,16 +28,29 @@ export class HttpClientService {
     });
   }
 
-  //ovo treba premestiti -konsultovati se sa natasom
-  blockUser(id) {
-    return this.http.get(environment.apiUrl + `users/block/${id}`, {
-      headers: this.createHeader(),responseType: 'text'
+  postT<Type>(url, data) {
+    return this.http.post<Type>(url, data , {
+      headers: this.createHeader(),
     });
   }
-  unblockUser(id) {
-    return this.http.get(environment.apiUrl + `users/unblock/${id}`, {
-      headers: this.createHeader(),responseType: 'text'
-    });
 
+  getT<Type>(url) {
+    return this.http.get<Type>(url, {
+      headers: this.createHeader()
+    });
+  }
+
+  getWithText(url) {
+    return this.http.get(url, {
+      headers: this.createHeader(),
+      responseType: 'text'
+    });
+  }
+
+  postWithText(url, data) {
+    return this.http.post(url, data, {
+      headers: this.createHeader(),
+      responseType: 'text'
+    });
   }
 }

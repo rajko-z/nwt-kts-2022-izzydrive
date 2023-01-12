@@ -9,3 +9,10 @@ export const getCarType = {
     "AVARAGE": CarType.AVARAGE,
     "PREMIUM": CarType.PREMIUM
 }
+
+export enum CarTypeOption {
+  NO_PREFERENCE,
+  REGULAR,
+  AVERAGE,
+  PREMIUM
+}

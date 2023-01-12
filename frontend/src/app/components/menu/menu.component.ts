@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { getRole, Role } from 'src/app/model/user/role';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,10 +13,10 @@ export class MenuComponent implements OnInit {
   isAdmin: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_ADMIN
   isDriver: boolean = getRole[this.userService.getRoleCurrentUserRole()] === Role.ROLE_DRIVER
 
-  constructor(private userService: UserSeviceService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-   
+
   }
 
   colapseMenu(){

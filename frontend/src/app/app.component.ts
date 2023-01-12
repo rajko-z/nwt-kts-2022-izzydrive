@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserSeviceService } from './services/userService/user-sevice.service';
+import { UserService } from './services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +11,8 @@ export class AppComponent {
 
       isUserLoggedIn: boolean = false;
 
-      constructor(private userService: UserSeviceService) {}
-      
+      constructor(private userService: UserService) {}
+
       ngOnInit(): void {
         this.isUserLoggedIn = this.userService.isUserLoggedIn()
       }

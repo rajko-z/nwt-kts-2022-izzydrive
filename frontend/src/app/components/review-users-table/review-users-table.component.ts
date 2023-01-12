@@ -2,8 +2,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {User} from 'src/app/model/user/user';
 import {MatDialog} from "@angular/material/dialog";
 import {ReviewRideTableComponent} from "../review-ride-table/review-ride-table.component";
-import {HttpClientService} from "../../services/custom-http/http-client.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
 
 @Component({
   selector: 'app-review-users-table',
@@ -19,7 +19,7 @@ export class ReviewUsersTableComponent {
 
   @Output() dataEvent = new EventEmitter<void>();
 
-  constructor(private userService: HttpClientService, public dialog: MatDialog, public snackBar: MatSnackBar) {
+  constructor(private loggedUserService: LoggedUserService, public dialog: MatDialog, public snackBar: MatSnackBar) {
   }
 
   openDialog(user: User): void {
@@ -37,7 +37,7 @@ export class ReviewUsersTableComponent {
   }
 
   blockUser(id: string): void {
-    this.userService.blockUser(id).subscribe({
+    this.loggedUserService.blockUser(id).subscribe({
       next: res => this.emitResponse(res),
       error: error => this.snackBar.open(error.text, "ERROR", {
         duration: 2000,
@@ -46,7 +46,7 @@ export class ReviewUsersTableComponent {
   }
 
   unblockUser(id: string): void {
-    this.userService.unblockUser(id).subscribe({
+    this.loggedUserService.unblockUser(id).subscribe({
         next: res => this.emitResponse(res),
         error: error => this.snackBar.open(error.text, "ERROR", {
           duration: 2000,

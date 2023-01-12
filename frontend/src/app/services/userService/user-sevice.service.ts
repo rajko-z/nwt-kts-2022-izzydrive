@@ -1,17 +1,21 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { LoginResponse } from 'src/app/model/response/loginResponse';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Role } from 'src/app/model/user/role';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {LoginResponse} from 'src/app/model/response/loginResponse';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Role} from 'src/app/model/user/role';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserSeviceService {
+export class UserService {
 
-  constructor(private http: HttpClient, private _sanitizer: DomSanitizer) { }
+  constructor(
+    private http: HttpClient,
+    private _sanitizer: DomSanitizer,
+  )
+  { }
 
 
   isUserLoggedIn(): boolean {

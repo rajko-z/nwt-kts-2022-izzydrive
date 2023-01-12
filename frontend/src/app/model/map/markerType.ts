@@ -1,4 +1,7 @@
 export enum MarkerType {
   START,
-  END
+  END,
+  FIRST_INTERMEDIATE,
+  SECOND_INTERMEDIATE,
+  THIRD_INTERMEDIATE
 }

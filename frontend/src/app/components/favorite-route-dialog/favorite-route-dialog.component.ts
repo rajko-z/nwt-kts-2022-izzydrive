@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {RouteService} from "../../services/routeService/route.service";
-import {UserSeviceService} from "../../services/userService/user-sevice.service";
+import {UserService} from "../../services/userService/user-sevice.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -11,7 +11,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class FavoriteRouteDialogComponent {
 
-  constructor(private routeService: RouteService, private userService: UserSeviceService,
+  constructor(private routeService: RouteService, private userService: UserService,
               @Inject(MAT_DIALOG_DATA) public data, private dialogRef: MatDialogRef<FavoriteRouteDialogComponent>,
                 public snackBar: MatSnackBar) {}
 

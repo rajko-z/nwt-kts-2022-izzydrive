@@ -1,0 +1,115 @@
+<form class="location-form" [formGroup]="this.routeForm">
+  <div class="location-fields">
+    <app-search-place
+      [alreadySelectedPlaces]="selectedLocations"
+      [typeOfPlace]="'start'"
+      (placeSelectedEvent)="startPlaceSelected($event)"
+      (placeRemovedEvent)="startPlaceDeleted()">
+    </app-search-place>
+    <app-search-place
+      [alreadySelectedPlaces]="selectedLocations"
+      [typeOfPlace]="'end'"
+      (placeSelectedEvent)="endPlaceSelected($event)"
+      (placeRemovedEvent)="endPlaceDeleted()">
+    </app-search-place>
+
+    <mat-expansion-panel
+      class="intermediate-stations-container"
+      (opened)="intermediatePanelOpened = true"
+      (closed)="intermediatePanelOpened = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="intermediate-station-title">
+            <em class='fas fa-map-location-dot'></em>
+            &nbsp;
+            <span>Intermediate locations</span>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p class="explanation">*you can add up to 3 intermediate locations</p>
+      <ol>
+        <li>
+          <app-search-place
+            [alreadySelectedPlaces]="selectedLocations"
+            [typeOfPlace]="'first intermediate'"
+            [isPlaceRequired]="false"
+            (placeSelectedEvent)="firstIntermediatePlaceSelected($event)"
+            (placeRemovedEvent)="firstIntermediatePlaceDeleted()">
+          </app-search-place>
+        </li>
+        <li>
+          <app-search-place
+            [alreadySelectedPlaces]="selectedLocations"
+            [typeOfPlace]="'second intermediate'"
+            [isPlaceRequired]="false"
+            (placeSelectedEvent)="secondIntermediatePlaceSelected($event)"
+            (placeRemovedEvent)="secondIntermediatePlaceDeleted()">
+          </app-search-place>
+        </li>
+        <li>
+          <app-search-place
+            [alreadySelectedPlaces]="selectedLocations"
+            [typeOfPlace]="'third intermediate'"
+            [isPlaceRequired]="false"
+            (placeSelectedEvent)="thirdIntermediatePlaceSelected($event)"
+            (placeRemovedEvent)="thirdIntermediatePlaceDeleted()">
+          </app-search-place>
+        </li>
+      </ol>
+      <div class="optimal-driving-choose">
+        <p class="option-title">You can put these stations in:</p>
+        <p class="explanation">*you can choose one option</p>
+        <section class="option-optimal-driving">
+          <mat-radio-group formControlName="stationsOrder">
+            <mat-radio-button [checked]="true" value="inorder">Order specified above</mat-radio-button>
+            <mat-radio-button value="system">Let the system calculate optimal order</mat-radio-button>
+          </mat-radio-group>
+        </section>
+      </div>
+    </mat-expansion-panel>
+  </div>
+
+  <div class="other-users">
+    <div>
+      <div class="other-users-title">
+        <em class='fas fa-users'></em>
+        <p class="description">Include other users</p>
+      </div>
+    </div>
+    <button class="plus-button" (click)="openDialogOtherUsers()">
+      <em class='fas fa-plus'></em>
+    </button>
+  </div>
+  <div class="optimal-driving-choose">
+    <p class="option-title">You can choose optimal driving by:</p>
+    <p class="explanation">*you can choose one option</p>
+    <section class="option-optimal-driving">
+      <mat-radio-group formControlName="optimalDriving">
+        <mat-radio-button [checked]="true" value="noPreference">No preference</mat-radio-button>
+        <mat-radio-button value="cheapest">The cheapest ride</mat-radio-button>
+        <mat-radio-button value="travelTime">The shortest travel time</mat-radio-button>
+      </mat-radio-group>
+    </section>
+  </div>
+  <div class="additional-options-choose">
+    <p class="option-title">Additional options:</p>
+    <p class="explanation">*you can choose more options</p>
+    <section class="option-additional-options">
+      <mat-checkbox formControlName="babyOption">Baby in car</mat-checkbox>
+      <mat-checkbox formControlName="baggageOption">Baggage</mat-checkbox>
+      <mat-checkbox formControlName="petOption">Allowed pet</mat-checkbox>
+      <mat-checkbox formControlName="foodOption">Allowed food</mat-checkbox>
+    </section>
+  </div>
+  <div class="submit-item">
+    <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onSubmit($event)">
+      Get a ride
+    </button>
+    <span [hidden]="apiLoading===false">
+      <span><strong>Finding routes...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="40"></mat-spinner>
+      </button>
+    </span>
+  </div>
+</form>

@@ -1,6 +1,6 @@
 import { Component, OnInit , NgZone } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 import {
   SocialAuthService,
   FacebookLoginProvider,
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['../../components/onboarding-header/onboarding-header.component.scss','./login.component.scss'],
-  providers: [UserSeviceService]
+  providers: [UserService]
 })
 export class LoginComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private userService : UserSeviceService,
+  constructor(private userService : UserService,
               private socialAuthService: SocialAuthService,
               private _ngZone: NgZone,
               private router: Router) {

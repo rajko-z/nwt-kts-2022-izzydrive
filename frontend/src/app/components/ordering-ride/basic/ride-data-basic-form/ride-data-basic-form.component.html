@@ -1,0 +1,27 @@
+<form class="location-form">
+  <div class="location-fields">
+    <app-search-place
+      [alreadySelectedPlaces]="selectedLocations"
+      [typeOfPlace]="'start'"
+      (placeSelectedEvent)="startPlaceSelected($event)"
+      (placeRemovedEvent)="startPlaceDeleted()">
+    </app-search-place>
+    <app-search-place
+      [alreadySelectedPlaces]="selectedLocations"
+      [typeOfPlace]="'end'"
+      (placeSelectedEvent)="endPlaceSelected($event)"
+      (placeRemovedEvent)="endPlaceDeleted()">
+    </app-search-place>
+  </div>
+  <div class="submit-item">
+    <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onSubmit($event)">
+      Get a ride
+    </button>
+    <span [hidden]="apiLoading===false">
+      <span><strong>Finding routes...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="40"></mat-spinner>
+      </button>
+    </span>
+  </div>
+</form>

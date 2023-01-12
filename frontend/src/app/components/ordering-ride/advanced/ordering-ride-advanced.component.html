@@ -1,0 +1,23 @@
+<mat-horizontal-stepper linear #stepper class="ordering-ride-form">
+  <mat-step completed="false">
+    <ng-template matStepLabel>Ride data</ng-template>
+    <app-ride-data-form
+      (fetchedDrivingOptionsEvent)="onFirstStepNext($event, stepper)"
+      (drivingFinderRequestEvent)="saveDrivingFinderRequest($event)"
+    ></app-ride-data-form>
+  </mat-step>
+
+  <mat-step completed="false">
+    <ng-template matStepLabel>Choose ride</ng-template>
+    <app-ride-data-table (selectedOptionEvent)="onSecondStepNext($event, stepper)" [drivingOptions]="drivingOptions"></app-ride-data-table>
+  </mat-step>
+
+  <mat-step completed="false">
+    <ng-template matStepLabel>Overview</ng-template>
+    <app-overview-ordering-ride
+      [drivingFinderRequest]="drivingFinderRequest"
+      [selectedOption]="selectedOption">
+    </app-overview-ordering-ride>
+  </mat-step>
+
+</mat-horizontal-stepper>

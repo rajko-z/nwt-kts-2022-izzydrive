@@ -1,0 +1,23 @@
+<div>
+  <span *ngIf="isPlaceSelected">
+    <button class="plus-button" (click)="deletePlaceClick()">
+      <em class='fas fa-minus'></em>
+    </button>
+  </span>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter {{typeOfPlace}} location</mat-label>
+    <input #inputField
+           matInput
+           placeholder="Branislava Nušića 16"
+           [required]="isPlaceRequired"
+           [formControl]="placeFormControl"
+           [matAutocomplete]="startAuto">
+    <mat-autocomplete #startAuto="matAutocomplete">
+      <mat-option *ngFor="let option of placeOptions$ | async" [value]="option.name"
+                  (onSelectionChange)="placeSelectedClick(option)">
+        {{option.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error>Please select valid {{typeOfPlace}} location</mat-error>
+  </mat-form-field>
+</div>
