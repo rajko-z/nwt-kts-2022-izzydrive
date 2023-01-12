@@ -1,4 +1,8 @@
 {
+  "projects": {
+    "default": "izzydrive-368421",
+    "izzydrive": "izzydrive-368421"
+  },
   "targets": {
     "izzydrive-29e02": {
       "hosting": {
@@ -6,9 +10,27 @@
           "izzydrive-29e02"
         ]
       }
+    },
+    "izzydrive-368421": {
+      "hosting": {
+        "target": "frontend",
+        "app": [
+          "frontend"
+        ],
+        "frontend": [
+          "izzydrive"
+        ]
+      },
+      "database": {
+        "main": [
+          "channels",
+          "channelusers",
+          "izzydrive-368421.appspot.com",
+          "messages"
+        ],
+        "rules": "database.main.rules"
+      }
     }
   },
-  "projects": {
-    "default": "izzydrive-29e02"
-  }
+  "etags": {}
 }

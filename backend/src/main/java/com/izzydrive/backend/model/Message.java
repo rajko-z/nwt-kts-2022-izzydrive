@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name="messages")
@@ -21,7 +20,7 @@ public class Message {
     private Long id;
 
     @Column(nullable = false, length = 2048)
-    private String tring;
+    private String text;
 
     @Column(nullable = false)
     private LocalDateTime timestamp;

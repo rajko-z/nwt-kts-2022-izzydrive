@@ -1,10 +1,16 @@
 <div class="send-box-container">
-    <div class="type-box-xontainer">
-        <input type="text" class="type-message" #typedMessage>
-        <button (click)="sendMessage(typedMessage.value)">
-            <img src="assets/send2.png" class=".send-button">
-        </button>
-    </div>
+        <form class="type-box-xontainer" [formGroup]="chatForm" (ngSubmit)="onFormSubmit()">
+            <mat-form-field class="message-form-field">
+              <input matInput placeholder="Enter message here" formControlName="text"
+                      [errorStateMatcher]="matcher">
+              <mat-error>
+                <span *ngIf="!chatForm.get('text').valid && chatForm.get('text').touched">Enter your message</span>
+              </mat-error>
+              <button type="submit" [disabled]="!chatForm.valid" mat-button matSuffix mat-icon-button aria-label="Send">
+                <mat-icon>send</mat-icon>
+              </button>
+            </mat-form-field>
+          </form>
     <div class="bottom-line">
 
     </div>

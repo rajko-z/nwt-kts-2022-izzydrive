@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HomePageLoggedComponent } from './pages/home-page-logged/home-page-logged.component';
@@ -37,8 +37,9 @@ import { OverviewOrderingRideComponent } from './components/ordering-ride-advanc
 import { ExplanationDialogComponent } from './components/explanation-dialog/explanation-dialog.component';
 import { MessageBoxComponent } from './components/chat/components/message-box/message-box.component';
 import { SentBoxComponent } from './components/chat/components/sent-box/sent-box.component';
-import { ChatBoxComponent } from './components/chat/view/chat-box/chat-box.component';
+import { ChatBoxComponent } from './components/chat/view/user-chat/chat-box.component';
 import { ChatModule } from './components/chat/chat.module';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 
 @NgModule({
   declarations: [AppComponent, ProfileComponent, HeaderComponent, HomePageLoggedComponent, HomePageUnLoggedComponent, MapComponent, OrderingRideBasicComponent, OrderingRideAdvancedComponent, AllDriversPageAdminComponent, ReviewUsersTableComponent, ReviewRideTableComponent, AllPassengersPageAdminComponent, FavoriteRouteDialogComponent, IntermediateStationsDialogComponent, OtherUsersDialogComponent, HomePageDriverComponent, DisplayDrivingComponent, RideDataFormComponent, RideDataTableComponent, PaymentFormComponent, OverviewOrderingRideComponent, ExplanationDialogComponent],
@@ -56,9 +57,17 @@ import { ChatModule } from './components/chat/chat.module';
         ReactiveFormsModule,
         AngularFireModule.initializeApp(environment.firebaseConfig),
         AngularFireMessagingModule,
+        DatePipe
     ],
     exports: [],
-    providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
+    providers: [{ provide: MAT_DIALOG_DATA, useValue: {} },,
+      {
+        provide: RxStompService,
+        useFactory: rxStompServiceFactory,
+        deps: [InjectableRxStompConfig]
+      },
+      DatePipe
+     ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,3 +1,4 @@
+
 <div class="chat-box-container">
     <div class="header">
         <button >
@@ -9,8 +10,11 @@
             <app-message-box [message]="mess"></app-message-box>
         </div>
     </div>
-   
+    
     <div class="typing-container">
-        <app-sent-box (messageEmiter)="setMessage($event)"></app-sent-box>
+        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channel"></app-sent-box>
     </div>
 </div>
+
+
+

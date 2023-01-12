@@ -20,4 +20,8 @@ export class AdminMenuComponent  {
     this.router.navigateByUrl("/passengers")
   }
 
+  routSupportChat(){
+    this.router.navigateByUrl("/admin-chat")
+  }
+
 }
