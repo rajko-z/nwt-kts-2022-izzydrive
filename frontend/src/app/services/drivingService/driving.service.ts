@@ -18,7 +18,7 @@ export class DrivingService {
     return this.http.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
   }
 
-  rejectDriving(drivingId, explanation) {
-    return this.http.post(environment.apiUrl + `drivings/reject/${drivingId}`, explanation);
+  rejectDriving(explanation) {
+    return this.http.post(environment.apiUrl + `driving-notes/reject`, explanation);
   }
 }

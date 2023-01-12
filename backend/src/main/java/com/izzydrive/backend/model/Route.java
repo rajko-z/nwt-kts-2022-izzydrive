@@ -34,9 +34,6 @@ public class Route {
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))
     private Set<Address> intermediateStations = new HashSet<>();
 
-//    @OneToMany(mappedBy = "route", fetch = FetchType.LAZY)
-//    private List<Driving> drivings = new ArrayList<>();
-
     public Route(Address start, Address end){
         this.start = start;
         this.end = end;

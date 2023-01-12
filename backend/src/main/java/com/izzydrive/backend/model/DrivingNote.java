@@ -1,5 +1,6 @@
 package com.izzydrive.backend.model;
 
+import com.izzydrive.backend.dto.DrivingNoteDTO;
 import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
@@ -33,4 +34,12 @@ public class DrivingNote {
 
     @OneToOne(mappedBy = "drivingNote", fetch = FetchType.LAZY)
     private Driving driving;
+
+    public DrivingNote(DrivingNoteDTO drivingNoteDTO, User user, Driving driving){
+        this.text = drivingNoteDTO.getText();
+        this.timestamp =  drivingNoteDTO.getTimestamp();
+        this.fromPassenger = drivingNoteDTO.isFromPassenger();
+        this.user = user;
+        this.driving = driving;
+    }
 }
