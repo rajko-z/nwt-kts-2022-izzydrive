@@ -9,27 +9,24 @@ import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.car.CarAccommodation;
 import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.DriverStatus;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.CarService;
+import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingFinderService;
-import com.izzydrive.backend.service.WorkingIntervalService;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
-import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
+import com.izzydrive.backend.utils.Helper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -43,12 +40,14 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
     private final PassengerService passengerService;
 
-    private final WorkingIntervalService workingIntervalService;
+    private final DriverLockerService driverLockerService;
 
     @Override
-    public List<DrivingOptionDTO> getSimpleDrivingOptions(AddressOnMapDTO startLocation, AddressOnMapDTO endLocation) {
+    public List<DrivingOptionDTO> getSimpleDrivingOptions(List<AddressOnMapDTO> locations) {
+        validateAllLocationsForSimpleRequest(locations);
+
         List<DrivingOptionDTO> options = getAllDrivingOptions(
-                Arrays.asList(startLocation, endLocation),
+                locations,
                 OptimalDrivingType.NO_PREFERENCE,
                 IntermediateStationsOrderType.IN_ORDER
         );
@@ -62,8 +61,7 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
     @Override
     public List<DrivingOptionDTO> getAdvancedDrivingOptions(DrivingFinderRequestDTO request) {
-        validateLinkedPassengers(request.getLinkedPassengersEmails());
-        validateAllLocationsFromDrivingFinderRequest(request);
+        validateDrivingFinderRequest(request);
 
         List<DrivingOptionDTO> options = getAllDrivingOptions(
                 getAllPointsFromDrivingFinderRequest(request),
@@ -109,9 +107,10 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         List<DrivingOptionDTO> options = new ArrayList<>();
 
         for (Driver driver : getAllPossibleDriversForDriving()) {
-            CalculatedRouteDTO fromDriverToStart = getCalculatedRouteFromDriverToStart(driver, startLocation);
+            CalculatedRouteDTO fromDriverToStart =
+                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
 
-            if (driverWillNotOutworkAndWillBeOnTimeForFutureDriving(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {
+            if (driverService.driverWillNotOutworkAndWillBeOnTimeForFutureDriving(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {
                 feelOptions(options, fromDriverToStart, fromStartToEndRoutes, driver);
             }
         }
@@ -127,94 +126,13 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
                     DriverDTOConverter.convertBasicWithCar(driver,carService),
                     new LocationDTO(driver.getLon(),driver.getLat()),
-                    getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
+                    Helper.getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
                     carService.calculatePrice(driver.getCar(),route.getDistance()),
                     fromDriverToStart,
                     route
             );
             options.add(drivingOptionDTO);
         }
-    }
-
-    private int getDurationInMinutesFromSeconds(double duration) {
-        return (int)Math.ceil(duration / 60);
-    }
-
-    private boolean driverWillNotOutworkAndWillBeOnTimeForFutureDriving(CalculatedRouteDTO fromDriverToStart,
-                                                                        List<CalculatedRouteDTO> fromStartToEnd,
-                                                                        Driver driver,
-                                                                        AddressOnMapDTO endLocation)
-    {
-        return driverWillNotOutwork(fromDriverToStart, fromStartToEnd, driver, endLocation) &&
-               driverWillBeOnTimeForFutureDrivings(fromDriverToStart, fromStartToEnd, driver, endLocation);
-    }
-
-
-    private boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
-                                         List<CalculatedRouteDTO> fromStartToEnd,
-                                         Driver driver,
-                                         AddressOnMapDTO endLocation)
-    {
-        int maxAllowed = Constants.MAX_WORKING_MINUTES;
-        long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
-
-        if (minWorked >= maxAllowed) {
-            return false;
-        }
-
-        minWorked += getDurationInMinutesFromSeconds(fromDriverToStart.getDuration());
-        if (minWorked >= maxAllowed) {
-            return false;
-        }
-
-        minWorked += getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration());
-        if (minWorked > maxAllowed) {
-            return false;
-        }
-
-        if (driver.getReservedFromClientDriving() == null) {
-            return true;
-        }
-
-
-        minWorked += getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
-        if (minWorked >= maxAllowed) {
-            return false;
-        }
-
-        minWorked += getDurationInMinutesFromSeconds(driver.getReservedFromClientDriving().getDuration());
-        return minWorked <= maxAllowed;
-    }
-
-    private boolean driverWillBeOnTimeForFutureDrivings(CalculatedRouteDTO fromDriverToStart,
-                                                        List<CalculatedRouteDTO> fromStartToEnd,
-                                                        Driver driver,
-                                                        AddressOnMapDTO endLocation)
-    {
-        if (driver.getReservedFromClientDriving() == null) {
-            return true;
-        }
-
-        int totalTimeNeededToGetToStartOfFutureDriving =
-                getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) +
-                getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration()) +
-                getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
-
-        LocalDateTime estimatedArrival = LocalDateTime.now().plusMinutes(totalTimeNeededToGetToStartOfFutureDriving);
-        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate();
-
-        if (estimatedArrival.isAfter(startTime)) {
-            return false;
-        }
-
-        return ChronoUnit.MINUTES.between(estimatedArrival, startTime) >= Constants.MIN_MINUTES_BEFORE_START_OF_RESERVED_DRIVING;
-    }
-
-    private CalculatedRouteDTO getRouteFromEndLocationToStartOfFutureDriving(AddressOnMapDTO endOfCurrentAddress, Driver driver) {
-        Address tmp = driver.getReservedFromClientDriving().getRoute().getStart();
-        AddressOnMapDTO startFutureLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
-
-        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(endOfCurrentAddress, startFutureLocation)).get(0);
     }
 
     private List<AddressOnMapDTO> getAllPointsFromDrivingFinderRequest(DrivingFinderRequestDTO request) {
@@ -226,11 +144,18 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
     }
 
     private List<Driver> getAllPossibleDriversForDriving() {
-        return driverService
-                .findAllActiveDrivers()
-                .stream()
-                .filter(d -> !d.getDriverStatus().equals(DriverStatus.RESERVED))
-                .collect(Collectors.toList());
+        List<Driver> retVal = new ArrayList<>();
+
+        for (Driver d : driverService.findAllActiveDrivers()) {
+            if (d.getDriverStatus().equals(DriverStatus.RESERVED)) {
+                continue;
+            }
+            Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(d.getEmail());
+            if (driverLocker.isEmpty() || driverLocker.get().getPassengerEmail() == null) {
+                retVal.add(d);
+            }
+        }
+        return retVal;
     }
 
     private List<CalculatedRouteDTO> getCalculatedRoutesFromStartToEnd(List<AddressOnMapDTO> points,
@@ -243,19 +168,12 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         return mapService.getCalculatedRoutesFromPoints(points);
     }
 
-    private CalculatedRouteDTO getCalculatedRouteFromDriverToStart(Driver driver, AddressOnMapDTO startLocation) {
-        if (driver.getCurrentDriving() != null) {
-            CalculatedRouteDTO getEstimatedRouteLeft = this.driverService.getEstimatedRouteLeftFromCurrentDriving(driver.getEmail());
-
-            Address tmp = driver.getCurrentDriving().getRoute().getEnd();
-            AddressOnMapDTO currDrivingEndLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
-            CalculatedRouteDTO getRouteFromCurrDrivingEndToStart = mapService
-                    .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, startLocation)).get(0);
-
-            return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, getRouteFromCurrDrivingEndToStart));
+    private void validateAllLocationsForSimpleRequest(List<AddressOnMapDTO> locations) {
+        if (locations == null || locations.size() != 2) {
+            throw new BadRequestException(ExceptionMessageConstants.ERROR_START_AND_END_LOCATION);
         }
-        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
-        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
+        validateAllLocationsBelongsToNS(locations);
+        validateAllLocationsForUniqueness(locations);
     }
 
     private void validateAllLocationsFromDrivingFinderRequest(DrivingFinderRequestDTO request) {
@@ -295,8 +213,14 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         }
     }
 
-    private void validateLinkedPassengers(Set<String> linkedPassengers) {
-        String currPassengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+    private void checkIfAnyPassengerAlreadyHasRide(Set<String> linkedPassengers, String initiator) {
+        Optional<Passenger> currPass = this.passengerService.findByEmailWithCurrentDriving(initiator);
+        if (currPass.isEmpty()) {
+            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator));
+        }
+        if (currPass.get().getCurrentDriving() != null) {
+            throw new BadRequestException(ExceptionMessageConstants.YOU_ALREADY_HAVE_CURRENT_DRIVING);
+        }
 
         for (String passengerEmail: linkedPassengers) {
             Optional<Passenger> passenger = this.passengerService.findByEmailWithCurrentDriving(passengerEmail);
@@ -306,9 +230,27 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
             if (passenger.get().getCurrentDriving() != null) {
                 throw new BadRequestException(ExceptionMessageConstants.cantLinkPassengerThatAlreadyHasCurrentDriving(passengerEmail));
             }
-            if (currPassengerEmail.equals(passengerEmail)) {
+            if (passengerEmail.equals(initiator)) {
                 throw new BadRequestException(ExceptionMessageConstants.YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE);
             }
         }
+    }
+
+    private void validatePassengers(DrivingFinderRequestDTO request) {
+        String currPassengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Set<String> linkedPassengers = request.getLinkedPassengersEmails();
+        if (linkedPassengers.size() > 3) {
+            throw new BadRequestException(ExceptionMessageConstants.MAX_NUMBER_OF_LINKED_PASSENGERS);
+        }
+
+        checkIfAnyPassengerAlreadyHasRide(linkedPassengers, currPassengerEmail);
+    }
+
+
+    @Override
+    public void validateDrivingFinderRequest(DrivingFinderRequestDTO request) {
+        validatePassengers(request);
+        validateAllLocationsFromDrivingFinderRequest(request);
     }
 }

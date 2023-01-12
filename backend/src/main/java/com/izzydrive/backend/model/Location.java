@@ -22,4 +22,13 @@ public class Location {
 
     @Column
     private double longitude;
+
+    @Column
+    private boolean forDrive;
+
+    public Location(double latitude, double longitude, boolean forDrive) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.forDrive = forDrive;
+    }
 }

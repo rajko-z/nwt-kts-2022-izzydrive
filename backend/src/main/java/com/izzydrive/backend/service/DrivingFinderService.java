@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface DrivingFinderService {
 
-    List<DrivingOptionDTO> getSimpleDrivingOptions(AddressOnMapDTO startLocation, AddressOnMapDTO endLocation);
+    List<DrivingOptionDTO> getSimpleDrivingOptions(List<AddressOnMapDTO> addresses);
 
     List<DrivingOptionDTO> getAdvancedDrivingOptions(DrivingFinderRequestDTO request);
+
+    void validateDrivingFinderRequest(DrivingFinderRequestDTO request);
 }

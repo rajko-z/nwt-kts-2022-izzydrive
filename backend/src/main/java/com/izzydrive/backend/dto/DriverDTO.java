@@ -1,5 +1,6 @@
 package com.izzydrive.backend.dto;
 
+import com.izzydrive.backend.model.users.DriverStatus;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,5 +13,6 @@ public class DriverDTO {
     private String lastName;
     private String email;
     private String phoneNumber;
+    private DriverStatus driverStatus;
     private CarDTO carData;
 }

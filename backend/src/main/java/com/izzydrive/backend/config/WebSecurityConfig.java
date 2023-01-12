@@ -64,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/driving-notes/**").permitAll()
             .antMatchers("/evaluations/**").permitAll()
             .antMatchers("/images/**").permitAll()
-//            .antMatchers("/messages/**").permitAll()
             .antMatchers("/routes/**").permitAll()
             .antMatchers("/working-intervals/**").permitAll()
 
@@ -87,6 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/login-fb",
                         "auth/login-google",
                         "/passengers/registration",
+                        "/driving/finder/simple",
                         "/messages/send-notification");
 
         web.ignoring().antMatchers(HttpMethod.GET,
@@ -95,7 +95,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "favicon.ico",
                         "/**/*.html",
                         "/maps/**",
-                        "/driving-finder/simple/**",
                         "/drivers/current-locations",
                         "/confirmation",
                         "/working-intervals/get-minutes/**",

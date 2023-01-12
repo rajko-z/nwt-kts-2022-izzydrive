@@ -3,11 +3,10 @@ package com.izzydrive.backend.service.impl;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.WorkingInterval;
 import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.repository.WorkingIntervalRepository;
 import com.izzydrive.backend.service.WorkingIntervalService;
 import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class WorkingIntervalServiceImpl implements WorkingIntervalService {
 
-    private final WorkingIntervalRepository workingIntervalRepository;
 
     private final DriverService driverService;
+
+    public WorkingIntervalServiceImpl(@Lazy DriverService driverService) {
+        this.driverService = driverService;
+    }
 
     @Override
     public Long getNumberOfMinutesDriverHasWorkedInLast24Hours(String driverEmail) {

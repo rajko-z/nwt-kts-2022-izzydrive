@@ -1,16 +1,22 @@
 package com.izzydrive.backend.controller;
 
+import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
+import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
+import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
+import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.service.DrivingFinderService;
 import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.ProcessDrivingRequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -19,6 +25,10 @@ import java.util.List;
 public class DrivingController {
 
     private final DrivingService drivingService;
+
+    private final DrivingFinderService drivingFinderService;
+
+    private final ProcessDrivingRequestService processDrivingRequestService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("driver/{driverId}")
@@ -32,5 +42,25 @@ public class DrivingController {
     public ResponseEntity<List<DrivingDTO>> findAllByPassengerId(@PathVariable Long passengerId){
         List<DrivingDTO> drivings = drivingService.findAllByPassengerId(passengerId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
+    }
+
+    @PostMapping("/finder/simple")
+    public ResponseEntity<List<DrivingOptionDTO>> findSimpleDrivings(@RequestBody @Valid List<AddressOnMapDTO> addresses) {
+        List<DrivingOptionDTO> retVal = drivingFinderService.getSimpleDrivingOptions(addresses);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping("finder/advanced")
+    public ResponseEntity<List<DrivingOptionDTO>> findAdvancedDrivings(@RequestBody @Valid DrivingFinderRequestDTO request) {
+        List<DrivingOptionDTO> retVal = drivingFinderService.getAdvancedDrivingOptions(request);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping(value = "/process")
+    public ResponseEntity<TextResponse> processDrivingRequest(@RequestBody DrivingRequestDTO request) {
+        this.processDrivingRequestService.process(request);
+        return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
     }
 }

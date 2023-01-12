@@ -41,4 +41,10 @@ public class Address {
         this.city = "Novi Sad";
         this.state = "Srbija";
     }
+
+    public Address(double longitude, double latitude, String name) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+    }
 }

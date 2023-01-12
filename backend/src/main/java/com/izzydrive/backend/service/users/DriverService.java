@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.model.users.Driver;
@@ -24,5 +25,11 @@ public interface DriverService {
 
     Optional<Driver> findByEmailWithAllDrivings(String email);
 
+    Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email);
+
+    CalculatedRouteDTO getCalculatedRouteFromDriverToStart(String driverEmail, AddressOnMapDTO startLocation);
+
     CalculatedRouteDTO getEstimatedRouteLeftFromCurrentDriving(String driverEmail);
+
+    boolean driverWillNotOutworkAndWillBeOnTimeForFutureDriving(CalculatedRouteDTO fromDriverToStart, List<CalculatedRouteDTO> fromStartToEndRoutes, Driver driver, AddressOnMapDTO endLocation);
 }

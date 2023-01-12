@@ -28,8 +28,12 @@ public final class ExceptionMessageConstants {
     public static final String YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE = "You can't link yourself for ride";
     public static final String INVALID_LOCATIONS_UNIQUENESS = "Provided locations don't have unique coordinates and names";
     public static final String ERROR_HAPPENED_WHILE_CALCULATING_ROUTES = "Error geocode while calculating routes";
-
     public static final String ERROR_SIZE_OF_INTERMEDIATE_LOCATIONS = "Currently only up to 3 intermediate locations are supported";
+    public static final String DRIVER_NO_LONGER_AVAILABLE = "Sorry, but driver you chosen is no longer available. Please go back and choose another one, or try again later";
+    public static final String YOU_ALREADY_HAVE_CURRENT_DRIVING = "You already have a ride, wait for the ride to finish and you can order another one";
+    public static final String YOU_DON_NOT_HAVING_DRIVING_FOR_PAYMENT = "You do not have driving for payment";
+    public static final String MAX_NUMBER_OF_LINKED_PASSENGERS = "You can add up to 3 linked passengers";
+    public static final String ERROR_START_AND_END_LOCATION = "You have to provide one start and one end location";
 
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);

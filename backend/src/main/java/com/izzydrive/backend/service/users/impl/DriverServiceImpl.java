@@ -18,17 +18,23 @@ import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
 import com.izzydrive.backend.service.CarService;
+import com.izzydrive.backend.service.WorkingIntervalService;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.UserService;
+import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds;
 
 @Service
 @AllArgsConstructor
@@ -47,6 +53,8 @@ public class DriverServiceImpl implements DriverService {
     private final EmailSender emailSender;
 
     private final MapService mapService;
+
+    private final WorkingIntervalService workingIntervalService;
 
     @Override
     public void addNewDriver(DriverDTO driverDTO) {
@@ -119,6 +127,32 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email) {
+        return this.driverRepository.findByEmailWithCurrentDrivingAndLocations(email);
+    }
+
+    @Override
+    public CalculatedRouteDTO getCalculatedRouteFromDriverToStart(String driverEmail, AddressOnMapDTO startLocation) {
+        Optional<Driver> driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail);
+        if (driver.isEmpty()) {
+            throw new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail));
+        }
+
+        if (driver.get().getCurrentDriving() != null) {
+            CalculatedRouteDTO getEstimatedRouteLeft = this.getEstimatedRouteLeftFromCurrentDriving(driverEmail);
+
+            Address tmp = driver.get().getCurrentDriving().getRoute().getEnd();
+            AddressOnMapDTO currDrivingEndLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
+            CalculatedRouteDTO getRouteFromCurrDrivingEndToStart = mapService
+                    .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, startLocation)).get(0);
+
+            return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, getRouteFromCurrDrivingEndToStart));
+        }
+        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.get().getLon(), driver.get().getLat());
+        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
+    }
+
+    @Override
     public CalculatedRouteDTO getEstimatedRouteLeftFromCurrentDriving(String driverEmail) {
         Optional<Driver> driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail);
         if (driver.isEmpty()) {
@@ -139,6 +173,83 @@ public class DriverServiceImpl implements DriverService {
         }
 
         return new CalculatedRouteDTO(new ArrayList<>(), 0, 0);
+    }
+
+    @Override
+    public boolean driverWillNotOutworkAndWillBeOnTimeForFutureDriving(CalculatedRouteDTO fromDriverToStart,
+                                                                        List<CalculatedRouteDTO> fromStartToEnd,
+                                                                        Driver driver,
+                                                                        AddressOnMapDTO endLocation)
+    {
+        return driverWillNotOutwork(fromDriverToStart, fromStartToEnd, driver, endLocation) &&
+                driverWillBeOnTimeForFutureDrivings(fromDriverToStart, fromStartToEnd, driver, endLocation);
+    }
+
+
+    private boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
+                                         List<CalculatedRouteDTO> fromStartToEnd,
+                                         Driver driver,
+                                         AddressOnMapDTO endLocation)
+    {
+        int maxAllowed = Constants.MAX_WORKING_MINUTES;
+        long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
+
+        if (minWorked >= maxAllowed) {
+            return false;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(fromDriverToStart.getDuration());
+        if (minWorked >= maxAllowed) {
+            return false;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration());
+        if (minWorked > maxAllowed) {
+            return false;
+        }
+
+        if (driver.getReservedFromClientDriving() == null) {
+            return true;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
+        if (minWorked >= maxAllowed) {
+            return false;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(driver.getReservedFromClientDriving().getDuration());
+        return minWorked <= maxAllowed;
+    }
+
+    private boolean driverWillBeOnTimeForFutureDrivings(CalculatedRouteDTO fromDriverToStart,
+                                                        List<CalculatedRouteDTO> fromStartToEnd,
+                                                        Driver driver,
+                                                        AddressOnMapDTO endLocation)
+    {
+        if (driver.getReservedFromClientDriving() == null) {
+            return true;
+        }
+
+        int totalTimeNeededToGetToStartOfFutureDriving =
+                getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) +
+                        getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration()) +
+                        getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
+
+        LocalDateTime estimatedArrival = LocalDateTime.now().plusMinutes(totalTimeNeededToGetToStartOfFutureDriving);
+        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate();
+
+        if (estimatedArrival.isAfter(startTime)) {
+            return false;
+        }
+
+        return ChronoUnit.MINUTES.between(estimatedArrival, startTime) >= Constants.MIN_MINUTES_BEFORE_START_OF_RESERVED_DRIVING;
+    }
+
+    private CalculatedRouteDTO getRouteFromEndLocationToStartOfFutureDriving(AddressOnMapDTO endOfCurrentAddress, Driver driver) {
+        Address tmp = driver.getReservedFromClientDriving().getRoute().getStart();
+        AddressOnMapDTO startFutureLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
+
+        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(endOfCurrentAddress, startFutureLocation)).get(0);
     }
 
     private CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartYet(Driver driver) {

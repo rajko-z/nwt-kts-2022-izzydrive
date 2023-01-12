@@ -15,6 +15,7 @@ public class DriverDTOConverter {
                 .phoneNumber(driver.getPhoneNumber())
                 .firstName(driver.getFirstName())
                 .lastName(driver.getLastName())
+                .driverStatus(driver.getDriverStatus())
                 .carData(CarDTO.builder()
                             .carType(driver.getCar().getCarType().name())
                             .carAccommodation(carService.getCarAccommodationFromString(driver.getCar().getCarAccommodations()))
