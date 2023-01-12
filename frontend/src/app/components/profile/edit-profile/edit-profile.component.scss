@@ -1,0 +1,83 @@
+@import "src/style/styles";
+
+input[type='file'] {
+    color: transparent;
+  }
+
+.edit-profile-container{
+    display: flex; 
+    flex-direction: column; 
+    gap: 50px;
+    padding: 3% 5%; 
+    gap: 20px;
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+   
+}
+
+.info-container{
+    display: flex; 
+    flex-direction: row; 
+    gap: 50px
+}
+
+.fields-container{
+    display: flex; 
+    flex: 1 1 auto; 
+    flex-direction: column;
+}
+
+.large_button{
+    background-color: #4C506C;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: medium;
+}
+
+.input-fields-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.img_container{
+    height: 80%;
+    max-height: 420px;
+    object-fit: contain;
+    align-self: flex-end;
+}
+
+.change_profile_btn{
+    visibility:hidden;
+    width: 0%;
+}
+.change-img-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    @include buttonStyle();
+    font-size: 12px;
+    padding-left: 15px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 200px;
+    align-items: center;
+}
+
+.change-img-icon{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+.profile-img-container{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: end;
+    height: 10%;
+    align-items: end;
+    gap: 20px;
+}

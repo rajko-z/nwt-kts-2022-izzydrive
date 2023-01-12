@@ -14,15 +14,18 @@ import {NotificationM} from "./model/notifications/notification";
 export class AppComponent {
   title = 'NWT-KTS 2022 IZZYDRIVE';
 
-  isUserLoggedIn: boolean = false;
+  // isUserLoggedIn: boolean = false;
   private stompClient: any;
 
-  constructor(private userService: UserSeviceService,  public snackBar: MatSnackBar) {
+  constructor(private userService: UserSeviceService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
-    this.isUserLoggedIn = this.userService.isUserLoggedIn()
+  }
+
+  isUserLoggedIn(): boolean {
+    return this.userService.isUserLoggedIn();
   }
 
   initializeWebSocketConnection() {
@@ -34,11 +37,13 @@ export class AppComponent {
       that.openGlobalSocket();
     });
   }
+
   openGlobalSocket() {
     this.stompClient.subscribe('/notification/init', (message: { body: string }) => {
       let notification: NotificationM = JSON.parse(message.body);
-      if(notification.userEmail === this.userService.getCurrentUserEmail()){
+      if (notification.userEmail === this.userService.getCurrentUserEmail()) {
         this.snackBar.open(notification.message, "OK");
+
       }
     });
   }

@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginResponse } from 'src/app/model/response/loginResponse';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from 'src/app/model/user/role';
+import { User } from 'src/app/model/user/user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,14 @@ import { Role } from 'src/app/model/user/role';
 export class UserSeviceService {
 
   constructor(private http: HttpClient, private _sanitizer: DomSanitizer) { }
+
+  createHeader(){
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+       'Authorization': "Bearer "+ this.getCurrentUserToken()
+    });
+    return headers;
+  }
 
 
   isUserLoggedIn(): boolean {
@@ -92,4 +101,24 @@ export class UserSeviceService {
       }
     })
   }
+
+  getCurrrentUserDataWithImg(): Observable<User>{ //:Observable<User>
+    return this.http.get<User>( //<User>
+      environment.apiUrl + "users/" + this.getCurrentUserEmail() + "?image=true", environment.header
+    )
+  }
+
+  getCurrentUserName(): Observable<User>{
+    return this.http.get<User>(
+      environment.apiUrl + "users/" + this.getCurrentUserEmail())
+  }
+
+  changeUserData(user: User){
+    return this.http.put(
+      environment.apiUrl + "users/change-info", user, {
+        headers: this.createHeader()
+      }
+    );
+  }
+
 }

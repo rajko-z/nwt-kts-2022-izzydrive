@@ -9,6 +9,7 @@ import {
 import {CredentialResponse, PromptMomentNotification} from 'google-one-tap';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-login',
@@ -33,8 +34,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private userService : UserSeviceService,
               private socialAuthService: SocialAuthService,
-              private _ngZone: NgZone,
-              private router: Router) {
+              private _ngZone: NgZone, 
+              private router: Router,
+              private responseMessage: ResponseMessageService) { 
 
   }
 
@@ -76,7 +78,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/logged')
     },
       error: (error )=> {
-        this.errorMessageText = error["error"]["message"];
+          this.responseMessage.openErrorMessage(error.error.message);
     }
   })
   }
@@ -91,9 +93,8 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/driver')
         //   this.router.navigateByUrl('/logged')
       },
-        error: (error)=> {
-          this.errorMessage = true;
-          this.errorMessageText = error["error"]["message"];
+        error: (error )=> {
+          this.responseMessage.openErrorMessage(error.error.message);
       }
     })
   }
@@ -109,8 +110,8 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/logged')
         },
           error: (error )=> {
-            this.errorMessage = true;
-            this.errorMessageText = error["error"]["message"];
+            this.responseMessage.openErrorMessage(error.error.message);   
+
         }
       })
     });
