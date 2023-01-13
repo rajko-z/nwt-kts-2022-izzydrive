@@ -1,9 +1,4 @@
 <div>
-  <span *ngIf="isPlaceSelected">
-    <button class="plus-button" (click)="deletePlaceClick()">
-      <em class='fas fa-minus'></em>
-    </button>
-  </span>
   <mat-form-field appearance="outline">
     <mat-label>Enter {{typeOfPlace}} location</mat-label>
     <input #inputField
@@ -20,4 +15,9 @@
     </mat-autocomplete>
     <mat-error>Please select valid {{typeOfPlace}} location</mat-error>
   </mat-form-field>
+  <span *ngIf="isPlaceSelected">
+    <button class="plus-button" (click)="deletePlaceClick()">
+      <em class='fas fa-minus'></em>
+    </button>
+  </span>
 </div>

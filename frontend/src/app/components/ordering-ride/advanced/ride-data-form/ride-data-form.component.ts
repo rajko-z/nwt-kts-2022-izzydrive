@@ -45,6 +45,9 @@ export class RideDataFormComponent {
     baggageOption: new FormControl(false),
     petOption: new FormControl(false),
     foodOption: new FormControl(false),
+    userEmailFriendsFirst: new FormControl(''),
+    userEmailFriendsSecond: new FormControl(''),
+    userEmailFriendsThird: new FormControl('')
   })
 
   constructor(
@@ -106,10 +109,15 @@ export class RideDataFormComponent {
 
   private getLinkedPassengers(): string[] {
     let linkedPassengers: string[] = [];
+    linkedPassengers.push(this.routeForm.value.userEmailFriendsFirst);
+    linkedPassengers.push(this.routeForm.value.userEmailFriendsSecond);
+    linkedPassengers.push(this.routeForm.value.userEmailFriendsThird);
     // TODO:: just for testing here
     //linkedPassengers.push('natasha.lakovic@gmail.com');
     return linkedPassengers;
   }
+
+
 
   private getIntermediateStations(): PlaceOnMap[] {
     let intermediateStations: PlaceOnMap[] = [];
@@ -221,6 +229,24 @@ export class RideDataFormComponent {
     this.mapService.removePlaceFromMap(this.thirdIntermediatePlace);
     this.selectedLocations = this.selectedLocations.filter(l => l != this.thirdIntermediatePlace);
     this.thirdIntermediatePlace = null;
+  }
+
+  public deleteFirstUserClick(){
+    this.routeForm.patchValue({
+      userEmailFriendsFirst: ''
+    });
+  }
+
+  public deleteSecondUserClick(){
+    this.routeForm.patchValue({
+      userEmailFriendsSecond: ''
+    });
+  }
+
+  public deleteThirdUserClick(){
+    this.routeForm.patchValue({
+      userEmailFriendsThird: ''
+    });
   }
 
   openDialogOtherUsers() {

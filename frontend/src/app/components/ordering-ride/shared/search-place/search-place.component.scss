@@ -2,5 +2,21 @@
 @import "src/app/components/shared/shared";
 
 .mat-form-field {
-  @include size(30vw, auto);
+  @include size(25vw, auto);
 }
+
+.plus-button {
+  height: 25px;
+  width: 25px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  background-color: $light1;
+  color: $dark3;
+  border-radius: 50px;
+  border-color: $light5;
+}
+
+.fas, .fa-solid {
+  height: 2%;
+}
+

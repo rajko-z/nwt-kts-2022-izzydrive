@@ -21,7 +21,6 @@ public class DrivingNoteController {
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @PostMapping("reject")
     public ResponseEntity<String> rejectDriving(@RequestBody DrivingNoteDTO drivingNoteDTO) {
-        System.out.println(drivingNoteDTO.getText());
         drivingNoteService.rejectDriving(drivingNoteDTO);
         return new ResponseEntity<>("Successfully denied driving", HttpStatus.OK);
     }
