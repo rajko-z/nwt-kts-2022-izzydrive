@@ -4,7 +4,7 @@ import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Valida
 import { ErrorStateMatcher } from '@angular/material/core';
 import firebase from 'firebase/compat/app'
 import { DatePipe } from '@angular/common';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -44,8 +44,8 @@ export class SentBoxComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   constructor(private router: Router,
-            private userService :UserSeviceService,
-              private route: ActivatedRoute,    
+            private userService :UserService,
+              private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               public datepipe: DatePipe) {
                 this.currentUserEmail = this.userService.getCurrentUserEmail()

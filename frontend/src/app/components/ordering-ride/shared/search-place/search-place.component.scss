@@ -1,0 +1,6 @@
+@import "src/style/styles";
+@import "src/app/components/shared/shared";
+
+.mat-form-field {
+  @include size(30vw, auto);
+}

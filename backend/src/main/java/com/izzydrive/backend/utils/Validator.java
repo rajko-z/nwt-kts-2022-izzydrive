@@ -47,8 +47,7 @@ public class Validator {
 
 
     public static boolean validatePhoneNumber(String phoneNumber){
-//        "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"
-        String regex = "^[+][0-9]{12,12}$";
+        String regex = "^[+][0-9]{11,12}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
         if(matcher.matches()) return true;

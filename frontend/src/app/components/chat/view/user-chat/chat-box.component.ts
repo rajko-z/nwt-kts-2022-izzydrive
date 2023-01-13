@@ -1,6 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Message } from 'src/app/model/message/message';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 import firebase from 'firebase/compat/app'
 
 export const snapshotToArray = (snapshot: any) => { //ovo izdvojiti
@@ -22,7 +22,7 @@ export const snapshotToArray = (snapshot: any) => { //ovo izdvojiti
 })
 export class ChatBoxComponent implements OnInit {
 
-  constructor( private userService: UserSeviceService) { }
+  constructor( private userService: UserService) { }
 
   messageText: string;
   messages : Message[] = [];

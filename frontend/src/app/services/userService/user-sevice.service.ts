@@ -10,9 +10,13 @@ import { User } from 'src/app/model/user/user';
 @Injectable({
   providedIn: 'root'
 })
-export class UserSeviceService {
+export class UserService {
 
-  constructor(private http: HttpClient, private _sanitizer: DomSanitizer) { }
+  constructor(
+    private http: HttpClient,
+    private _sanitizer: DomSanitizer,
+  )
+  { }
 
   createHeader(){
     let headers = new HttpHeaders({

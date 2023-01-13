@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
-import { Role } from 'src/app/model/user/role';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-base-user-data-form',
@@ -28,7 +27,7 @@ export class BaseUserDataFormComponent implements OnInit {
 
   @Output() register = new EventEmitter<FormGroup>();
 
-  constructor(private userService: UserSeviceService) {
+  constructor(private userService: UserService) {
       if(this.isRegistration){
         this.registerForm.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
         this.registerForm.controls.repeatedPassword.setValidators([Validators.required, Validators.minLength(8)]);
@@ -36,7 +35,7 @@ export class BaseUserDataFormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+
   }
 
 

@@ -21,6 +21,7 @@ public class WorkingInterval {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime endTime;
+
 }

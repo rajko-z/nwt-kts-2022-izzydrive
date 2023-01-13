@@ -1,0 +1,7 @@
+export enum MarkerType {
+  START,
+  END,
+  FIRST_INTERMEDIATE,
+  SECOND_INTERMEDIATE,
+  THIRD_INTERMEDIATE
+}

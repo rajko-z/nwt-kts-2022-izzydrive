@@ -1,6 +1,7 @@
 package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.dto.NewPassengerDTO;
+import com.izzydrive.backend.dto.PaymentStatusDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.service.users.PassengerService;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,4 @@ public class PassengerController {
 
         return new ResponseEntity<>(drivers, HttpStatus.OK);
     }
-
 }

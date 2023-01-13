@@ -23,8 +23,36 @@ public final class ExceptionMessageConstants {
     public static final String VERIFICATION_TOKEN_HAS_EXPIRED = "Your verification token has expired!";
     public static final String INVALID_CAR_TYPE_MESSAGE = "Invalid car type";
     public static final String USER_IS_BLOCK_MESSAGE = "The user has been blocked by the administrator!";
+    public static final String LOCATION_OUTSIDE_OF_NOVI_SAD = "Currently only city of Novi Sad is supported";
+    public static final String CANT_CHANGE_DS_TO_INACTIVE_CAUSE_DRIVINGS_EXISTS = "Can't change your status to inactive because there are still active drivings.";
+    public static final String YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE = "You can't link yourself for ride";
+    public static final String INVALID_LOCATIONS_UNIQUENESS = "Provided locations don't have unique coordinates and names";
+    public static final String ERROR_HAPPENED_WHILE_CALCULATING_ROUTES = "Error geocode while calculating routes";
+    public static final String ERROR_SIZE_OF_INTERMEDIATE_LOCATIONS = "Currently only up to 3 intermediate locations are supported";
+    public static final String DRIVER_NO_LONGER_AVAILABLE = "Sorry, but driver you chosen is no longer available. Please go back and choose another one, or try again later";
+    public static final String YOU_ALREADY_HAVE_CURRENT_DRIVING = "You already have a ride, wait for the ride to finish and you can order another one";
+    public static final String YOU_DON_NOT_HAVING_DRIVING_FOR_PAYMENT = "You do not have driving for payment";
+    public static final String MAX_NUMBER_OF_LINKED_PASSENGERS = "You can add up to 3 linked passengers";
+    public static final String ERROR_START_AND_END_LOCATION = "You have to provide one start and one end location";
+
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
+    }
+
+    public static String cantLinkPassengerThatAlreadyHasCurrentDriving(String email) {
+        return String.format("Can't link passenger with email: %s because he already has current driving or he is waiting for one", email);
+    }
+
+    public static String cantChangeDSToInactiveBecauseFutureDrivingIsStartingSoon(Long minutes) {
+        return String.format("Can't change your status to inactive because you have reserved ride that starts in %s minutes", minutes);
+    }
+
+    public static String placeForGeoCodeDoesNotExist(double lon, double lat) {
+        return String.format("Error geocode, can't locate place with lon:%s;lat:%s", lon, lat);
+    }
+
+    public static String cantLocatePlaceForText(String text) {
+        return String.format("Error geocode, can't locate place for text: %s", text);
     }
 }
 

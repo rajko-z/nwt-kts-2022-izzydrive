@@ -5,6 +5,7 @@ import {HomePageLoggedComponent} from "./pages/home-page-logged/home-page-logged
 import {AllDriversPageAdminComponent} from "./pages/all-drivers-page-admin/all-drivers-page-admin.component";
 import {AllPassengersPageAdminComponent} from "./pages/all-passengers-page-admin/all-passengers-page-admin.component";
 import {HomePageDriverComponent} from "./pages/home-page-driver/home-page-driver.component";
+import {PaymentPageComponent} from "./pages/payment-page/payment-page.component";
 
 const routes: Routes = [
   {
@@ -37,7 +38,10 @@ const routes: Routes = [
     path:'driver',
     component: HomePageDriverComponent
   },
-
+  {
+    path: 'payment',
+    component: PaymentPageComponent
+  }
 ];
 
 @NgModule({

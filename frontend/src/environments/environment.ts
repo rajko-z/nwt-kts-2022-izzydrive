@@ -14,7 +14,7 @@ export const environment = {
        'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
   },
-  
+
   firebaseConfig : {
     apiKey: "AIzaSyAKK1keZb45wDnBvvsR5l6wk201kIZa1sE",
     authDomain: "izzydrive-368421.firebaseapp.com",

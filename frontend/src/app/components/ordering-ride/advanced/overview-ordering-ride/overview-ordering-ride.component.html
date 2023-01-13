@@ -1,0 +1,63 @@
+<div class="ride-summary" *ngIf="selectedOption !== undefined && drivingFinderRequest !== undefined">
+  <div class="first-line">
+    <div class="destination-info">
+      <div class="location">
+        <em class="fa-solid fa-location-dot"></em>
+        <p class="location-title">{{drivingFinderRequest.startLocation.name}}</p>
+      </div>
+      <div class="location">
+        <em class="fa-solid fa-location-dot"></em>
+        <p class="location-title">{{drivingFinderRequest.endLocation.name}}</p>
+      </div>
+      <div class="intermediate-station" *ngFor="let station of drivingFinderRequest.intermediateLocations">
+        <em class='fas fa-map-location-dot'></em>
+        <p class="intermediate-title">Intermediate station: <span>{{station.name}}</span></p>
+      </div>
+      <div class="other-users" *ngFor="let pass of drivingFinderRequest.linkedPassengersEmails">
+        <em class='fas fa-users'></em>
+        <p class="users-title">Other passengers: <span>{{pass}}</span></p>
+      </div>
+    </div>
+    <div class="time-info">
+      <p class="minutes">{{selectedOption.timeForWaiting}}min</p>
+    </div>
+  </div>
+  <div class="second-line">
+    <div class="driver-info">
+      <div class="tooltip">
+        <img src="../../../../../assets/car.png" alt="car" class="driver-img">
+        <span class="tooltiptext">{{selectedOption.driver.carData.carType}}</span>
+      </div>
+      <p class="driver-title">Driver: <span class="driver">{{selectedOption.driver.firstName}} {{selectedOption.driver.lastName}}</span></p>
+    </div>
+    <div class="additional-options-info">
+      <div class="tooltip" *ngIf="selectedOption.driver.carData.carAccommodation.baggage">
+        <img src="../../../../../assets/koferi.png" alt="baggage" class="additional-option">
+        <span class="tooltiptext">Baggage</span>
+      </div>
+      <div class="tooltip" *ngIf="selectedOption.driver.carData.carAccommodation.pet">
+        <img src="../../../../../assets/zivotinje.png" alt="pet" class="additional-option">
+        <span class="tooltiptext">Pet</span>
+      </div>
+      <div class="tooltip" *ngIf="selectedOption.driver.carData.carAccommodation.food">
+        <img src="../../../../../assets/hrana.png" alt="food" class="additional-option">
+        <span class="tooltiptext">Food</span>
+      </div>
+      <div class="tooltip" *ngIf="selectedOption.driver.carData.carAccommodation.baby">
+        <img src="../../../../../assets/beba.png" alt="baby" class="additional-option">
+        <span class="tooltiptext">Baby</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="submit-item">
+  <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onSubmit()">
+    Payment
+  </button>
+  <span [hidden]="apiLoading===false">
+      <span><strong>Finding routes...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="40"></mat-spinner>
+      </button>
+    </span>
+</div>

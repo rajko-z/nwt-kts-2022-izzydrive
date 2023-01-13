@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { UserSeviceService } from '../../services/userService/user-sevice.service';
-import { Router } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { MatIcon } from '@angular/material/icon';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../services/userService/user-sevice.service';
+import {Router} from '@angular/router';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -12,13 +11,13 @@ import { MatIcon } from '@angular/material/icon';
 export class HeaderComponent implements OnInit {
 
   profilePhotoPath : SafeResourceUrl = '/assets/dark_logo.png'; //IZMENITI DA BUDE PRAVA SLIKA
-  constructor(private userService : UserSeviceService, private router: Router, private _sanitizer: DomSanitizer) { 
-      
+  constructor(private userService : UserService, private router: Router, private _sanitizer: DomSanitizer) {
+
   }
 
   ngOnInit(): void {
    }
-  
+
 
   isUserLoggedIn() : boolean{
     return this.userService.getCurrentUserToken()? true : false;

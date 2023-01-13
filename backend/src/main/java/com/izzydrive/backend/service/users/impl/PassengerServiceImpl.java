@@ -5,6 +5,7 @@ import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.AddressRepository;
@@ -15,6 +16,7 @@ import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +80,25 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public List<UserDTO> findAllPassenger() {
         return passengerRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Passenger> findByEmailWithCurrentDriving(String email) {
+        return passengerRepository.findByEmailWithCurrentDriving(email);
+    }
+
+    @Override
+    public Passenger getCurrentlyLoggedPassenger() {
+        String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Passenger> passenger = this.findByEmailWithCurrentDriving(passengerEmail);
+        if (passenger.isEmpty()) {
+            throw new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail));
+        }
+        return passenger.get();
+    }
+
+    @Override
+    public void save(Passenger passenger) {
+        this.passengerRepository.save(passenger);
     }
 }

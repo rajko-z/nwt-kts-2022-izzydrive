@@ -13,6 +13,15 @@ public class CarAccommodation {
         this.baby = baby;
     }
 
+    public int returnNumOfSimilarGoods(CarAccommodation other) {
+        int num = 0;
+        num = (this.food && other.food) ? num + 1 : num;
+        num = (this.pet && other.pet) ? num + 1 : num;
+        num = (this.baggage && other.baggage) ? num + 1 : num;
+        num = (this.baby && other.baby) ? num + 1 : num;
+        return num;
+    }
+
     public CarAccommodation(){
 
     }

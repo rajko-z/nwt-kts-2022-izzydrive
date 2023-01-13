@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ErrorHandlerService } from 'src/app/services/errorHandler/error-handler.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
   });
 
   constructor(private router : Router,
-              private userService: UserSeviceService,
+              private userService: UserService,
               private errorHandler: ErrorHandlerService,
               private messageTooltip: MatSnackBar ) {
 

@@ -1,15 +1,13 @@
 package com.izzydrive.backend.dto;
 
 import com.izzydrive.backend.model.car.CarAccommodation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CarDTO {
     private String registration;
     private String model;

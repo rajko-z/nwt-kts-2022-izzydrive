@@ -82,9 +82,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/auth/login-fb", "auth/login-google","/passengers/registration","/messages/send-notification");
-        web.ignoring().antMatchers(HttpMethod.GET,  "/","/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
-                "/**/*.css", "/**/*.js", "/socket/**");
-        web.ignoring().antMatchers(HttpMethod.GET,"/confirmation");
+        web.ignoring().antMatchers(HttpMethod.POST,
+                        "/auth/login",
+                        "/auth/login-fb",
+                        "/auth/login-google",
+                        "/passengers/registration",
+                        "/driving/finder/simple");
+
+        web.ignoring().antMatchers(HttpMethod.GET,
+                    "/","/webjars/**",
+                        "/*.html",
+                        "favicon.ico",
+                        "/**/*.html",
+                        "/maps/**",
+                        "/drivers/current-locations",
+                        "/confirmation",
+                        "/working-intervals/get-minutes/**",
+                        "/socket/**",
+                        "/**/*.css",
+                        "/**/*.js");
     }
 }

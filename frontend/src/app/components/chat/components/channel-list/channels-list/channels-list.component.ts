@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 export const snapshotToArray = (snapshot: any) => {
   const returnArr = [];
@@ -30,7 +30,7 @@ export class ChannelsListComponent implements OnInit {
   isLoadingResults = true;
   @Output() chatMessagesEmiter = new EventEmitter<any[]>(); //dodati tip Message
 
-  constructor(private route: ActivatedRoute, private router: Router, public datepipe: DatePipe, private userSeervice: UserSeviceService) {
+  constructor(private route: ActivatedRoute, private router: Router, public datepipe: DatePipe, private userSeervice: UserService) {
     this.currentUserEmail = this.userSeervice.getCurrentUserEmail();
     firebase.database().ref('channels/').on('value', resp => {
       this.channels = [];

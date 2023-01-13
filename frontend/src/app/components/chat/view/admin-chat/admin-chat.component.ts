@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/app/model/message/message';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-admin-chat',
@@ -10,7 +10,7 @@ import { UserSeviceService } from 'src/app/services/userService/user-sevice.serv
 export class AdminChatComponent implements OnInit {
 
   constructor(
-    private userService: UserSeviceService) { }
+    private userService: UserService) { }
 
   messageText: string;
   messages : Message[] = [];

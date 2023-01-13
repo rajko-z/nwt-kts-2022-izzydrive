@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { UserSeviceService } from 'src/app/services/userService/user-sevice.service';
+import { UserService } from 'src/app/services/userService/user-sevice.service';
 import * as _ from 'lodash';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/model/user/user';
@@ -21,15 +21,15 @@ export class EditProfileComponent implements OnInit {
   isImageChanged: boolean = false;
   imageBase64: string;
 
-  editForm: FormGroup = new FormGroup({ 
+  editForm: FormGroup = new FormGroup({
             firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
             lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
             email: new FormControl('',[Validators.email, Validators.required]),
             phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]{11,12}$")]),
   });
 
-  constructor(private userService : UserSeviceService, 
-              private sanitizer: DomSanitizer, 
+  constructor(private userService : UserService,
+              private sanitizer: DomSanitizer,
               private router : Router,
               private responseMessage: ResponseMessageService) {
 
@@ -43,7 +43,7 @@ export class EditProfileComponent implements OnInit {
       error: (errorRespoonse) => {
         this.responseMessage.openErrorMessage(errorRespoonse);
       }
-    }  
+    }
     )
   }
 
@@ -105,7 +105,7 @@ export class EditProfileComponent implements OnInit {
 
   onSubmit() : void{
     let user : User = this.editForm.value;
-    user.imageName = this.isImageChanged? this.imageBase64.substring(22, ) : null; 
+    user.imageName = this.isImageChanged? this.imageBase64.substring(22, ) : null;
     console.log(user);
     this.userService.changeUserData(user).subscribe({
       next : (response) => {

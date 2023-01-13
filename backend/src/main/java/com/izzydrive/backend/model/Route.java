@@ -4,9 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -22,17 +20,17 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Address start;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Address end;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="intermediate_stations",
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))
-    private Set<Address> intermediateStations = new HashSet<>();
+    private List<Address> intermediateStations = new ArrayList<>();
 
     public Route(Address start, Address end){
         this.start = start;

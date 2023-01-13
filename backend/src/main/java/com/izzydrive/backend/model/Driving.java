@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -25,6 +26,9 @@ public class Driving {
     private double price;
 
     @Column
+    private LocalDateTime creationDate;
+
+    @Column
     private LocalDateTime startDate;
 
     @Column
@@ -40,13 +44,16 @@ public class Driving {
     private boolean rejected;
 
     @Column
-    private String drivingApprovalIds;
-
-    @Column
     private String paymentApprovalIds;
 
     @Enumerated(EnumType.STRING)
     private DrivingState drivingState;
+
+    @Column
+    private double duration;
+
+    @Column
+    private double distance;
 
     @OneToMany(mappedBy = "driving", fetch = FetchType.LAZY)
     private List<Evaluation> evaluation = new ArrayList<>();
@@ -60,6 +67,18 @@ public class Driving {
     @OneToMany(mappedBy = "currentDriving", fetch = FetchType.LAZY)
     private List<Passenger> passengers = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Route route;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="driving_id")
+    private List<Location> locations = new ArrayList<>();
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public List<Location> getLocationsForDriverToStart() {
+        return locations.stream().filter(l -> !l.isForDrive()).collect(Collectors.toList());
+    }
 }
