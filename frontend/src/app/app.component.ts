@@ -26,6 +26,8 @@ import {environment} from "../environments/environment";
 export class AppComponent {
   title = 'NWT-KTS 2022 IZZYDRIVE';
 
+  
+
   // isUserLoggedIn: boolean = false;
   private stompClient: any;
 

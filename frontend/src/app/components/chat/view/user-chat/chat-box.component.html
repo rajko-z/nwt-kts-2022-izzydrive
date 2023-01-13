@@ -1,11 +1,11 @@
 
-<div class="chat-box-container">
+<div class="chat-box-container" *ngIf="!isCollapsed">
     <div class="header">
-        <button >
+        <button class="close-btn" (click)="onCLose()">
             <img src="/assets/cross.png" class="close"/>
         </button>
     </div>
-    <div class="container" #scroll [scrollTop]="scroll.scrollHeight">
+    <div class="container">
         <div class="messages-container" *ngFor="let mess of this.messages">
             <app-message-box [message]="mess"></app-message-box>
         </div>
@@ -15,6 +15,10 @@
         <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channel"></app-sent-box>
     </div>
 </div>
-
+<div *ngIf="isCollapsed" class="open_chat_shorcut">
+    <button mat-icon-button (click)="initChat()">
+        <mat-icon>chat_bubble_outline</mat-icon>
+    </button>
+</div>
 
 

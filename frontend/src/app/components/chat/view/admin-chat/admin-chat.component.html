@@ -1,14 +1,14 @@
 <div class="admin-chat-container">
-    <app-channels-list (chatMessagesEmiter)="loadMessages($event)" ></app-channels-list>
+    <app-channels-list (chatMessagesEmiter)="loadMessages($event)" [newMessage]="this.message"></app-channels-list>
     <div class="chat-box-container">
         <div class="header">
-            <button >
+            <button class="close-btn" (click)="onCLose()">
                 <img src="/assets/cross.png" class="close"/>
             </button>
         </div>
-        <div class="container" #scroll [scrollTop]="scroll.scrollHeight">
+        <div class="container">
             <div class="messages-container" *ngFor="let mess of this.messages">
-                <app-message-box [message]="mess.text"></app-message-box>
+                <app-message-box [message]="mess"></app-message-box>
             </div>
         </div>
     

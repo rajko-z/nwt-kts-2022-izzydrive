@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/app/model/message/message';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
+import firebase from 'firebase/compat/app'
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-chat',
@@ -9,55 +12,37 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 })
 export class AdminChatComponent implements OnInit {
 
-  constructor(
-    private userService: UserService) { }
+  constructor( private userService: UserService, 
+    private chatService : ChatService,
+    private router : Router) { }
 
-  messageText: string;
+  message :string;
   messages : Message[] = [];
   channel: string;
+  newMessage : undefined
 
-  //(messageEmiter)="setMessage($event)"
-
-  setMessage(message: string){
-    this.messageText = message
-    // let newMessage : Message = new Message("user1", message, new Date());
-    // this.messageText = message;
-    // this.messages.push(newMessage);
-    // if (message) {
-    //   this.stompService.publish({
-    //     destination: '/app/messages', body:
-    //       JSON.stringify({
-    //         'channel': this.channel,
-    //         'sender':  this.userService.getCurrentUserEmail(),
-    //         'text': message
-    //       })
-    //   });
-    //   this.messageText = '';
-    // }
+  setMessage(message: any){
+    this.message = message;
   }
 
   loadMessages(messages : any[]){
     this.messages = messages;
-    this.channel = messages["channel"];
+    this.channel = messages[0]["channel"];
+    
   }
 
   ngOnInit(): void {
-    // this.messages.push(new Message("user1", "text text", new Date()));
-    // this.messages.push(new Message("user2", "text text  bla bla ", new Date()));
-    // this.messages.push(new Message("user2", "text text  bla aaaaa ", new Date()));
-    // console.log(this.messages)
-    // this.channelService.getChannel().subscribe(channel => {
-    //   this.channel = channel;
-    //   this.filterMessages();
-    // });
-
-    // this.messageService.getMessages().subscribe(messages => {
-    //   this.filterMessages();
-    // });
+    console.log("tuuuuuu")
   }
-//   filterMessages() {
-//     this.messages = this.messageService.filterMessages(this.channel);
-// ;
-//   }
 
+  onCLose(){
+    firebase.database().ref('channels/').on('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
+      let channels = this.chatService.snapshotToArray(response);
+      channels.forEach((c: any) => {
+        firebase.database().ref('channels/' + c.key).update({open_by_admin:'false'})
+       });  
+    })
+    this.router.navigateByUrl('/logged');
+    console.log("dsadsafaf")
+  }
 }

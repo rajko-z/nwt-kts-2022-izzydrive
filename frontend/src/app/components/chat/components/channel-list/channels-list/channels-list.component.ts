@@ -1,21 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 import { UserService } from 'src/app/services/userService/user-sevice.service';
-
-export const snapshotToArray = (snapshot: any) => {
-  const returnArr = [];
-
-  snapshot.forEach((childSnapshot: any) => {
-      const item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      returnArr.push(item);
-  });
-
-  return returnArr;
-};
+import { ChatService } from 'src/app/services/chat/chat.service';
 
 @Component({
   selector: 'app-channels-list',
@@ -24,56 +13,71 @@ export const snapshotToArray = (snapshot: any) => {
 })
 export class ChannelsListComponent implements OnInit {
 
-  currentUserEmail = '';
   displayedColumns: string[] = ['channel-id', 'channel-name'];
   channels = [];
   isLoadingResults = true;
+  previusChat : string = undefined;
   @Output() chatMessagesEmiter = new EventEmitter<any[]>(); //dodati tip Message
 
-  constructor(private route: ActivatedRoute, private router: Router, public datepipe: DatePipe, private userSeervice: UserService) {
-    this.currentUserEmail = this.userSeervice.getCurrentUserEmail();
-    firebase.database().ref('channels/').on('value', resp => {
-      this.channels = [];
-      this.channels = snapshotToArray(resp);
-      this.isLoadingResults = false;
-    }); }
+  @Input() newMessage : any;
+  
+  constructor(  public datepipe: DatePipe, private userService: UserService, private chatService : ChatService) {
+    }
 
   ngOnInit(): void {
-  }
-
-  enterChatRoom(channel_id: string) {
-    // const chat = { channel: '', sender: '', text: '', timeStamp: '', read: '' };
-    // chat.channel = channel_id;
-    // chat.sender = this.currentUserEmail;
-    // chat.timeStamp = this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss');
-    // chat.text = `${this.currentUserEmail} enter the room`;
-    // chat.type = 'join';
-    // const newMessage = firebase.database().ref('chats/').push();
-    // newMessage.set(chat);
-
-    firebase.database().ref('messages/').orderByChild('channel').equalTo(channel_id).on('value', (response : any) => {
-      let messages = snapshotToArray(response);
-      this.chatMessagesEmiter.emit(messages)
+    console.log("dsfdsfr")
+    this.chatService.firebaseChannels.on('value', resp => {
+      this.channels = this.chatService.snapshotToArray(resp);
+      console.log( this.channels)
+      this.isLoadingResults = false;
+    }); 
+    this.channels.forEach((channel) => {
+      this.getUnreadMessages(channel);
     })
-
-    // firebase.database().ref('channelusers/').orderByChild('channel-id').equalTo(channel_id).on('value', (resp: any) => {
-    //   let roomuser = [];
-    //   roomuser = snapshotToArray(resp);
-    //   const user = roomuser.find(x => x.nickname === this.currentUserEmail);
-    //   if (user !== undefined) {
-    //     const userRef = firebase.database().ref('roomusers/' + user.key);
-    //     userRef.update({status: 'online'});
-    //   } else {
-    //     const newroomuser = { roomname: '', nickname: '', status: '' };
-    //     newroomuser.roomname = channel-id;
-    //     newroomuser.nickname = this.currentUserEmail;
-    //     newroomuser.status = 'online';
-    //     const newRoomUser = firebase.database().ref('roomusers/').push();
-    //     newRoomUser.set(newroomuser);
-    //   }
-    // });
-
-    //this.router.navigate(['/admin-chat', channel_id]);
   }
 
+  async enterChatRoom(channel_id: string) {
+
+    this.userService.getUserData(channel_id).subscribe({
+      next: (response)=>{
+        let userId = response.id;
+        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin:'true'})//niej dobro, trenutni id je adminov i ne udje u dobar chet
+
+        this.chatService.firebaseMessages.orderByChild('channel').equalTo(channel_id).on('value', (response : any) => {
+          console.log(this.chatService.snapshotToArray(response))
+          let messages = this.chatService.snapshotToArray(response);
+          messages.forEach((mess) => { //kad se chat otvori sve poruku postaju procitane
+            this.chatService.firebaseMessages.child(mess.key).update({read:'true'})
+          });;
+          this.chatMessagesEmiter.emit(messages);
+        })
+    
+        if(this.previusChat && this.previusChat !== channel_id){
+          this.chatService.setOpenChatByAdmin(false, this.previusChat)
+    
+        }
+        this.previusChat = channel_id;
+        console.log("SSSSSSS")
+
+      },
+      error: (response) =>{
+        console.log(response.error.error);
+      }
+    })
+    
+  }
+
+  counter = 0
+
+  getUnreadMessages(channel : any){
+    firebase.database().ref('messages/').orderByChild('channel').equalTo(channel.id).on('value', (response : any) => {
+      let messages = this.chatService.snapshotToArray(response);
+
+      messages.forEach((mess) => { //kad se chat otvori sve poruku postaju procitane
+        if(!mess.read && mess.sender !== this.userService.getCurrentUserEmail()) {
+          this.counter += 1;
+        }
+      })
+    })
+  }
 }

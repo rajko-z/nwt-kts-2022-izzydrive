@@ -112,7 +112,7 @@ export class UserService {
     )
   }
 
-  getCurrentUserName(): Observable<User>{
+  getCurrentUserData(): Observable<User>{
     return this.http.get<User>(
       environment.apiUrl + "users/" + this.getCurrentUserEmail())
   }
@@ -123,6 +123,11 @@ export class UserService {
         headers: this.createHeader()
       }
     );
+  }
+
+  getUserData(email : string): Observable<User>{
+    return this.http.get<User>(
+      environment.apiUrl + "users/" + email)
   }
 
 }

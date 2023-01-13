@@ -5,26 +5,9 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import firebase from 'firebase/compat/app'
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
+import { Role } from 'src/app/model/user/role';
+import { ChatService } from 'src/app/services/chat/chat.service';
 
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
-
-export const snapshotToArray = (snapshot: any) => { //ovo izdvojiti
-  const returnArr = [];
-
-  snapshot.forEach((childSnapshot: any) => {
-      const item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      returnArr.push(item);
-  });
-
-  return returnArr;
-};
 
 @Component({
   selector: 'app-sent-box',
@@ -41,52 +24,56 @@ export class SentBoxComponent implements OnInit {
   text = '';
   users = [];
   messages = [];
-  matcher = new MyErrorStateMatcher();
 
   constructor(private router: Router,
             private userService :UserService,
-              private route: ActivatedRoute,
+              private route: ActivatedRoute,    
               private formBuilder: FormBuilder,
-              public datepipe: DatePipe) {
-                this.currentUserEmail = this.userService.getCurrentUserEmail()
-                 //nije u urlu treba slati kao input
-                // firebase.database().ref('chats/').on('value', resp => {
-                //   this.messages = [];
-                //   this.messages = snapshotToArray(resp);
-                //   setTimeout(() => this.scrolltop = this.chatcontent.nativeElement.scrollHeight, 500);
-                // });
-                // firebase.database().ref('roomusers/').orderByChild('roomname').equalTo(this.roomname).on('value', (resp2: any) => {
-                //   const roomusers = snapshotToArray(resp2);
-                //   this.users = roomusers.filter(x => x.status === 'online');
-                // });
+              public datepipe: DatePipe,
+              private chatService: ChatService) {
+                this.currentUserEmail = this.userService.getCurrentUserEmail();
               }
 
-  @Output() messageEmiter = new EventEmitter<string>();
+  @Output() messageEmiter = new EventEmitter<any>();
 
   ngOnInit(): void {
     this.chatForm = this.formBuilder.group({
-      'text': new FormControl('', [Validators.required])
+      'text': new FormControl('', [])
     })
   }
-  // sendMessage(message : string){
-  //   this.messageEmiter.emit(message);
-  // }
 
   onFormSubmit() {
     this.text = this.chatForm.controls['text'].value;
-    this.messageEmiter.emit(this.text);
-    let chat = {channel : this.channel,
+    let mess = {channel : this.channel,
                 sender : this.userService.getCurrentUserEmail(),
                 timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
                 text: this.text,
                 read: false
     }
+    this.markMessageAsReadIfChatOpen(mess);
+    console.log(mess);
+    this.messageEmiter.emit(mess);
     const newMessage = firebase.database().ref('messages/').push();
-    newMessage.set(chat);
+    newMessage.set(mess);
     this.chatForm = this.formBuilder.group({
-      'text' : ['', Validators.required]
+      'text' : ['']
     });
   }
 
+  markMessageAsReadIfChatOpen(message : any){
+    let channelId = message.channel;
+    firebase.database().ref('channels/').orderByChild('id').equalTo(channelId).on('value', (response : any) => {
+      let channels = this.chatService.snapshotToArray(response);
+      channels.forEach((channel) => {
+        if(this.userService.getRoleCurrentUserRole() == Role.ROLE_ADMIN && channel.open_by_user){
+          message.read = true;
+        }
+        else if (channel.open_by_admin){
+          message.read = true; //PONOVO
+        }
+      })
+    })
+
+  }
 
 }

@@ -3,11 +3,14 @@
 .send-box-container{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .type-box-xontainer{
     display: flex;
     flex-direction: row;
+    width: 90%;
+    margin-left: 5%;
 }
 
 .type-message{
