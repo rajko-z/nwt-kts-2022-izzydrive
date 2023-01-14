@@ -4,39 +4,38 @@
     display: flex;
     flex-direction: column;;
     min-width: 250px;
-    background-color: $light2;
+    background-color: $dark6;
     height: 100%;
-    opacity: 0.9
+    opacity: 0.9;
+    padding: 10px;
 }
 
 .prevois-chat{
     display: flex;
     flex-direction: column;
     padding: 10px;
-    min-height: 50px;
-    border:none;
-    border-bottom: solid 1px $light4;
+    height: 55px;
+    border: none;
+    border-bottom: solid 1px #B4BCDF;
     background: transparent;
-    font-size: 14px;
-    color: $dark1;
-}
-
-.prevois-chat-bold{
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    min-height: 50px;
-    border:none;
-    border-bottom: solid 1px $light4;
-    background: transparent;
-    font-size: 14px;
-    color: $dark1;
-    font-weight: bold;
+    font-size: 15px;
+    border-radius: 40px;
+    background: #E9EAEF;
+    color: #191A23;
+    margin-top: 10px;
+    justify-content: center;
 }
 
 .user-name{
-    font-size: 14px;
-    color: $dark1;
+    font-size: 17px;
+    color: #191A23;
+    justify-self: center;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 5px;
+    justify-content: flex-start;
+    display: flex;
+    padding-left: 5px;
 }
 
 .last-message-date{
@@ -50,7 +49,52 @@
 }
 
 .user-name-bold{
-    font-size: 14px;
-    color: $dark1;
+    font-size: 17px;
+    color: #191A23;
+    justify-self: center;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 5px;
+    justify-content: flex-start;
+    display: flex;
+    padding-left: 5px;
     font-weight: bold;
+}
+
+.header{
+    height: 70px;
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: white
+}
+
+.button_content{
+    display: flex; flex-direction: row; height: 55px
+}
+
+.person_img{
+    width: 35px; height: 35px; margin-top: 5px;
+}
+.text{
+    display: flex;
+    width: 160px;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.email{
+    font-size: 12px; 
+    padding-top: 5px; 
+    font-weight: lighter;  
+    color: #696F91;
+    justify-content: flex-start;
+    display: flex;
+    padding-left: 5px; 
+}
+
+.new_message-signal{
+    width: 20px;
+    height: 20px;
 }

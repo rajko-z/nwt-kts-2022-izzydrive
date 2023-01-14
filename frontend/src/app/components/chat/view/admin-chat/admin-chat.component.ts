@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Message } from 'src/app/model/message/message';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import firebase from 'firebase/compat/app'
@@ -12,9 +12,8 @@ import { Router } from '@angular/router';
 })
 export class AdminChatComponent implements OnInit {
 
-  constructor( private userService: UserService, 
-    private chatService : ChatService,
-    private router : Router) { }
+  @ViewChildren('chatcontent') chatcontent: QueryList<any>;
+  @ViewChild('chat_container') chat_container: ElementRef;
 
   message :string;
   messages : Message[] = [];
@@ -22,6 +21,24 @@ export class AdminChatComponent implements OnInit {
   newMessage : undefined
   channels = []
 
+  
+  constructor( private userService: UserService, 
+    private chatService : ChatService,
+    private router : Router) { 
+
+    }
+
+  ngAfterViewInit() {
+    this.scrollToBottom();
+    this.chatcontent.changes.subscribe(this.scrollToBottom);
+  }
+
+  scrollToBottom = () => {
+    try {
+      this.chat_container.nativeElement.scrollTop = this.chat_container.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+  
   setMessage(message: any){
     this.message = message;
     this.messages.push(message);

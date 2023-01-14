@@ -6,8 +6,8 @@
                 <img src="/assets/cross.png" class="close"/>
             </button>
         </div>
-        <div class="container">
-            <div class="messages-container" *ngFor="let mess of this.messages">
+        <div class="container" #chat_container>
+            <div #chatcontent class="messages-container" *ngFor="let mess of this.messages">
                 <app-message-box [message]="mess"></app-message-box>
             </div>
         </div>

@@ -130,4 +130,17 @@ export class UserService {
       environment.apiUrl + "users/" + email)
   }
 
+  getUserFirstAndLastName(email:string) : string {
+    this.http.get<User>(
+      environment.apiUrl + "users/" + this.getCurrentUserEmail()).subscribe({
+        next : (response) => {
+            return response.firstName + " " + response.lastName
+        },
+        error : (error) => {
+            console.log(error.error.message);
+        }
+      })       
+    return "";
+  }
+
 }

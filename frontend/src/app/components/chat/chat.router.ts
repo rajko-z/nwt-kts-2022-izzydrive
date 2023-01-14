@@ -4,10 +4,7 @@ import { AdminChatComponent } from './view/admin-chat/admin-chat.component';
 import { ChatBoxComponent } from './view/user-chat/chat-box.component';
 
 const routes: Routes = [
-  {
-    path: 'support-chat',
-    component: ChatBoxComponent
-  },
+
   {
     path: 'admin-chat',
     component: AdminChatComponent

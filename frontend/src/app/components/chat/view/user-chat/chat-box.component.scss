@@ -3,19 +3,20 @@
 .chat-box-container{
     display: flex;
     flex-direction: column;
-    width: 280px;
-    height: 380px;
+    width: 300px;
+    height: 400px;
     position: fixed; 
     right: 20px;
     bottom: 10px;
     border-radius: 10px;
-    border: solid 1px $light4;
+    border: solid 1px $light2;
+    box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
 }
 
 .header{
     width: 280px;
     height: 30px;
-    border-bottom: solid 1px $light2;
 }
 
 .close{
@@ -25,15 +26,11 @@
 }
 
 .close-btn{
-    background:transparent; border:none; float: right; padding: 5px;
-}
-
-.messages-container{
-    height: 50px;
-    min-height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    background:transparent; 
+    border:none; 
+    float: right; 
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .typing-container{
@@ -48,17 +45,25 @@
 .container{
     display: flex; 
     flex-direction: column; 
+    height: 280px;
     max-height: 280px; 
     min-height: 280px; 
-    overflow: auto;
-    justify-content: flex-end;
-    border-bottom: solid 1px $light2;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    overflow-y: auto;
+    padding: 10px;
 }
 
+.message-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 10px;
+    margin-bottom: 3px;
+    padding: 4px;
+}
+
+
 .open_chat_shorcut{
-    background-color: $light2;
+    background-color: $dark6;
     color: $dark3;
     width: 60px;
     height: 60px;
@@ -78,3 +83,7 @@
 ::ng-deep .mat-tooltip {
     font-size: 15px !important;
   }
+
+::-webkit-scrollbar{
+    display: none;
+}

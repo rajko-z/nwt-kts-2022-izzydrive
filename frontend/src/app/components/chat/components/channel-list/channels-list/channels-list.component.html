@@ -1,12 +1,21 @@
 <div class="prevois-chat-container">
-    <div style="height: 43px; padding-top:15px; padding-left: 5px; font-size: 16px; font-weight: 500;">
+    <div class="header">
         Chats
     </div>
-   
-        <button [ngClass]="{'prevois-chat-bold': channel.unread_messages_by_admin,  'prevois-chat': !channel.unread_messages_by_admin}" *ngFor="let channel of this.channels" (click)="enterChatRoom(channel)">
-            <p >
-                {{channel.id}}
-            </p>
-        </button>
-  
+    <button class="prevois-chat" *ngFor="let channel of this.channels" (click)="enterChatRoom(channel)">
+        <div class="button_content">
+            <img src="/assets/people.png" class="person_img"/>
+            <div style="display: flex; flex-direction: row;">
+                <div class="text">
+                    <div [ngClass]="{'user-name-bold': channel.unread_messages_by_admin,  'user-name': !channel.unread_messages_by_admin}" >
+                            {{channel.name}}
+                    </div>
+                    <div cclass="email">
+                            {{channel.id}}
+                    </div>
+                </div>
+                    <img src="/assets/chat-nottification.png" class="new_message-signal" *ngIf="channel.unread_messages_by_admin"/>
+            </div>
+        </div>
+    </button>
 </div>

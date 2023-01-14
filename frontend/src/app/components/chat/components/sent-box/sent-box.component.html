@@ -3,7 +3,7 @@
             <mat-form-field style="width:100%">
               <input matInput placeholder="Enter message here" formControlName="text" class="type-box-xontainer">
               <button (click)="onFormSubmit()" [disabled]="chatForm.controls['text'].value === ''" mat-button matSuffix mat-icon-button aria-label="Send">
-                <mat-icon>send</mat-icon>
+                <img class="send-button-icon" src="/assets/send2.png">
               </button>
             </mat-form-field>
           </form>

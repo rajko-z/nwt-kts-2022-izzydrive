@@ -17,13 +17,12 @@ export class ChannelsListComponent implements OnInit {
   channels = [];
   isLoadingResults = true;
   previusChat : string = undefined;
-  @Output() chatMessagesEmiter = new EventEmitter<any>(); 
-
+  @Output() chatMessagesEmiter = new EventEmitter<any>();
   @Input() newMessage : any;
 
-  //@Input() channels : any[];
-  
-  constructor(  public datepipe: DatePipe, private userService: UserService, private chatService : ChatService) {
+  constructor(public datepipe: DatePipe, 
+              private userService: UserService, 
+              private chatService : ChatService) {
     }
 
   initChannels(): void {
@@ -35,22 +34,15 @@ export class ChannelsListComponent implements OnInit {
   }
   ngOnInit(): void {
     this,this.initChannels();
-    // this.chatService.firebaseChannels.on('child_changed', resp => {
-    //   this.channels = this.chatService.snapshotToArray(resp);
-    //   console.log(this.channels)
-    // });
   }
 
   enterChatRoom(channel: any) {
-    //this.initChannels();
     this.chatService.closeAllAdminChat();
     this.userService.getUserData(channel.id).subscribe({
       next: (response)=>{
         let userId = response.id;
-        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin: true, unread_messages_by_admin: false})//niej dobro, trenutni id je adminov i ne udje u dobar chet
- 
+        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin: true, unread_messages_by_admin: false})
         this.chatMessagesEmiter.emit(channel);
-        // })
         this.previusChat = userId.toString();
 
       },

@@ -8,6 +8,7 @@ import {NotificationM} from "./model/notifications/notification";
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
+import { Role } from './model/user/role';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,6 +42,10 @@ export class AppComponent {
 
   isUserLoggedIn(): boolean {
     return this.userService.isUserLoggedIn();
+  }
+
+  isAdminLoggedIn(): boolean {
+    return this.userService.getRoleCurrentUserRole() == Role.ROLE_ADMIN.toString();
   }
 
   initializeWebSocketConnection() {

@@ -4,20 +4,18 @@ export class Message{
     text: string;
     timeStamp: Date;
     channel?: string;
-    readDate?: Date;
-    isSender?: boolean;
+    channel_key?: string;
 
     constructor(sender: string,
         text: string,
         timeStamp: Date,
-        isSender?: boolean,
-        channel?: string,
-        readDate?: Date,
-        ){
-            this.sender = sender;
-            this.text = text;
-            this.timeStamp = timeStamp;
-            
-
-    }
+        channel_key?: string,
+        channel?: string){
+        
+        this.sender = sender;
+        this.text = text;
+        this.timeStamp = timeStamp;
+        this.channel_key = channel_key;
+        this.channel = channel
+        }
 }
