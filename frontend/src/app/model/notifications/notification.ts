@@ -6,4 +6,5 @@ export class NotificationM {
   intermediateLocations?: string[];
   duration?: number;
   price?: number;
+  drivingId?: number;
 }

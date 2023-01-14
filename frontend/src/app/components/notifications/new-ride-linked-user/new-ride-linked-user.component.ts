@@ -17,9 +17,7 @@ export class NewRideLinkedUserComponent implements OnInit {
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data,
               private router: Router,
               private drivingService: DrivingService) {
-    console.log(data)
     this.minute = new Date(data.message.duration * 1000).toISOString().slice(14, 19);
-    console.log(this.minute);
   }
 
   ngOnInit(): void {
@@ -31,7 +29,7 @@ export class NewRideLinkedUserComponent implements OnInit {
   }
 
   cancelRideClick() {
-    this.drivingService.rejectDrivingLinkedPassenger().subscribe((res) => {
+    this.drivingService.rejectDrivingLinkedPassenger(this.data.message.drivingId).subscribe((res) => {
       console.log(res);
     });
     this.data.preClose();

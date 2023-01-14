@@ -65,9 +65,9 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping(value = "/reject-linked-user")
-    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
-        this.drivingService.rejectDrivingLinkedUser();
+    @GetMapping(value = "/reject-linked-user/{drivingId}")
+    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(@PathVariable Long drivingId){
+        this.drivingService.rejectDrivingLinkedUser(drivingId);
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 

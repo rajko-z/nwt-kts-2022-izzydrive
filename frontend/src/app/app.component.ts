@@ -11,6 +11,9 @@ import {environment} from "../environments/environment";
 import {
   NewRideLinkedUserComponent
 } from "./components/notifications/new-ride-linked-user/new-ride-linked-user.component";
+import {
+  DeniedRideLinkedUserComponent
+} from "./components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -76,7 +79,22 @@ export class AppComponent {
           });
         }
       }
-    )
-    ;
+    );
+    this.stompClient.subscribe('/notification/cancelRide', (message: { body: string }) => {
+        let notification: NotificationM = JSON.parse(message.body);
+        if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+          this.snackBar.openFromComponent(DeniedRideLinkedUserComponent, {
+            data: {
+              message: notification,
+              preClose: () => {
+                this.snackBar.dismiss()
+              }
+            },
+            verticalPosition: 'bottom',
+            horizontalPosition: 'right',
+          });
+        }
+      }
+    );
   }
 }

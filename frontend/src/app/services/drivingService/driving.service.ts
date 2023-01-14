@@ -42,11 +42,11 @@ export class DrivingService {
     return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process', payload);
   }
 
-  rejectDrivingLinkedPassenger() {
-    return this.httpClientService.get(environment.apiUrl + `drivings/reject-linked-user`);
+  rejectDrivingLinkedPassenger(drivingId:number) {
+    return this.httpClientService.get(environment.apiUrl + `drivings/reject-linked-user/${drivingId}`);
   }
 
-  findById(id:string){
+  findById(id:number){
     return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
   }
 }

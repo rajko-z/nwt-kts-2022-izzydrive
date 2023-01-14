@@ -15,6 +15,7 @@ public class NotificationDTO {
     private String userEmail;
     @NotBlank
     private String message;
+    private Long drivingId;
     private String startLocation;
     private String endLocation;
     private List<String> intermediateLocations;

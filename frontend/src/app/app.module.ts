@@ -51,6 +51,7 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import { NewRideLinkedUserComponent } from './components/notifications/new-ride-linked-user/new-ride-linked-user.component';
+import { DeniedRideLinkedUserComponent } from './components/notifications/denied-ride-linked-user/denied-ride-linked-user.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { NewRideLinkedUserComponent } from './components/notifications/new-ride-
                  RideDataBasicFormComponent,
                  SearchPlaceComponent,
                  PaymentPageComponent,
-                 NewRideLinkedUserComponent],
+                 NewRideLinkedUserComponent,
+                 DeniedRideLinkedUserComponent],
 
     imports: [
         CommonModule,

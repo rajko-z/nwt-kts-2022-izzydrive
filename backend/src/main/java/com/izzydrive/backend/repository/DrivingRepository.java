@@ -14,4 +14,7 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
 
     @Query("SELECT d FROM Driving d LEFT JOIN Passenger p ON p.id = ?1 LEFT JOIN Route r ON d.route.id = r.id WHERE ?1 IN (SELECT p.id FROM d.passengers as p) ORDER BY d.startDate")
     List<Driving> findAllByPassengerId(Long passengerId);
+
+    @Query("SELECT d FROM Driving d LEFT JOIN FETCH d.passengers p LEFT JOIN FETCH d.driver dr WHERE d.id = ?1")
+    Optional<Driving> findById(Long drivingId);
 }
