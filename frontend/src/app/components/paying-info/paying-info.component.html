@@ -1,0 +1,43 @@
+<div>
+  <div class="container" [formGroup]="this.form">
+    <div>
+      <img class="ethImg" src="../../../assets/eth.png" alt="missing"/>
+    </div>
+
+    <div class="helpIconContainer">
+      <em class="fa fa-question-circle helpIcon"
+          matTooltip="ETH Address is your balance account, it is the only thing other people needs to know when they want to send ethers to you"></em>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>ETH Address</mat-label>
+      <input matInput
+             required
+             type="text"
+             formControlName="address"
+      >
+      <mat-error>Address field is required</mat-error>
+    </mat-form-field>
+
+    <div class="helpIconContainer">
+      <em class="fa fa-question-circle helpIcon"
+          matTooltip="Private key is like your password, it is used to identify that you are the owner of ethers on ETH balance account. Note that only one secret can match with your address"></em>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Secret key</mat-label>
+      <textarea matInput
+             required
+             placeholder="SECRET KEY"
+             [class.blur]="hideSecretKey"
+             formControlName="secretKey"></textarea>
+      <button [disabled]="this.form.controls.secretKey.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hideSecretKey = !hideSecretKey"
+              [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideSecretKey">
+        <mat-icon>{{hideSecretKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div class="submit-item">
+    <button class="submit-button" type="submit" (click)="onSubmit()">
+      Save
+    </button>
+  </div>
+</div>

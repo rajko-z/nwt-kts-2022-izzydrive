@@ -53,4 +53,16 @@ export class HttpClientService {
       responseType: 'text'
     });
   }
+
+  put(url, data) {
+    return this.http.put(url, data, {
+      headers: this.createHeader()
+    });
+  }
+
+  putT<Type>(url, data) {
+    return this.http.put<Type>(url, data , {
+      headers: this.createHeader(),
+    });
+  }
 }

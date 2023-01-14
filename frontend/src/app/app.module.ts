@@ -51,6 +51,8 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { PayingInfoComponent } from './components/paying-info/paying-info.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
@@ -78,28 +80,30 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
                  RideDataBasicFormComponent,
                  SearchPlaceComponent,
                  PaymentPageComponent,
-                 ChangePasswordComponent],
+                 ChangePasswordComponent,
+                 PayingInfoComponent],
 
-    imports: [
-        CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        HttpClientModule,
-        MenuModule,
-        ProfileModule,
-        ChatModule,
-        SharedComponentsModule,
-        AngularMaterialModule,
-        ReactiveFormsModule,
-        DatePipe,
-        LeafletModule,
-        MatAutocompleteModule,
-        MatProgressSpinnerModule,
-        MatExpansionModule,
-        AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireMessagingModule,
-    ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    MenuModule,
+    ProfileModule,
+    ChatModule,
+    SharedComponentsModule,
+    AngularMaterialModule,
+    ReactiveFormsModule,
+    DatePipe,
+    LeafletModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireMessagingModule,
+    MatTooltipModule,
+  ],
     exports: [],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} },
       {

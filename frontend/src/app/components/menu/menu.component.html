@@ -38,7 +38,7 @@
             </div>
             <div *ngIf="isPassenger" class="menu_item">
                 <mat-icon class="menu_item_icon">euro_symbol</mat-icon>
-                <mat-list-option>
+                <mat-list-option (click)="openPayingInfoDialog()">
                     Change paying <datalist></datalist>
                 </mat-list-option>
             </div>

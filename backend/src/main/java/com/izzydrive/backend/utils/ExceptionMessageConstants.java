@@ -34,6 +34,9 @@ public final class ExceptionMessageConstants {
     public static final String YOU_DON_NOT_HAVING_DRIVING_FOR_PAYMENT = "You do not have driving for payment";
     public static final String MAX_NUMBER_OF_LINKED_PASSENGERS = "You can add up to 3 linked passengers";
     public static final String ERROR_START_AND_END_LOCATION = "You have to provide one start and one end location";
+    public static final String ERROR_INVALID_ETH_ADDRESS = "ETH address is not valid";
+    public static final String ERROR_INVALID_SECRET_KEY = "Secret key is not valid";
+    public static final String ERROR_ETH_ADDRESS_DOES_NOT_MATCH_SECRET_KEY = "ETH address and private key does not match";
 
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
