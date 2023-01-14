@@ -20,26 +20,30 @@ export class AdminChatComponent implements OnInit {
   messages : Message[] = [];
   channel: string;
   newMessage : undefined
+  channels = []
 
   setMessage(message: any){
     this.message = message;
+    this.messages.push(message);
+    //this.initChannels();
   }
 
-  loadMessages(messages : any[]){
-    this.messages = messages;
-    this.channel = messages[0]["channel"];
-    
-  }
+  loadMessages(channel : any){ 
+    this.channel = channel.id;
+    this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channel).on('value', (response : any) => {
+        this.messages = this.chatService.snapshotToArray(response);
+    })
+    }
 
   ngOnInit(): void {
-    console.log("tuuuuuu")
+   
   }
 
   onCLose(){
-    firebase.database().ref('channels/').on('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
+    firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
       let channels = this.chatService.snapshotToArray(response);
       channels.forEach((c: any) => {
-        firebase.database().ref('channels/' + c.key).update({open_by_admin:'false'})
+        firebase.database().ref('channels/' + c.key).update({open_by_admin:false})
        });  
     })
     this.router.navigateByUrl('/logged');

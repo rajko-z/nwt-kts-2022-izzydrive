@@ -15,7 +15,6 @@ export class MessageBoxComponent implements OnInit {
   isSenderMessage: boolean;
 
   ngOnInit(): void {
-    console.log(this.message)
     let currentUser : string = this.userService.getCurrentUserEmail();
     this.isSenderMessage = this.message.sender === currentUser;
   }

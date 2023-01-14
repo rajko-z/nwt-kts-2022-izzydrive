@@ -16,13 +16,14 @@ export class ChatBoxComponent implements OnInit {
   scrolltop: number = null
 
   constructor( private userService: UserService, 
-    private chatService : ChatService,
-    private router : Router) { }
+    private chatService : ChatService,) { }
 
   messageText: string;
   messages : Message[] = [];
   channel: string;
   isCollapsed: boolean = false;
+  unreaMessages : boolean = false;
+  tooltipText : string = "Support chat"
 
   setMessage(message: string){
   }
@@ -35,27 +36,36 @@ export class ChatBoxComponent implements OnInit {
       id : this.channel,
       name: "",
       open_by_user: true,
-      open_by_admin: false
+      open_by_admin: false,
+      unread_messages_by_user: false,
+      unread_messages_by_admin: false,
     }
     firebase.database().ref("channels/").child(key.toString()).set(newChannel);
 
-    firebase.database().ref('channels/' + key).update({open_by_user:'true'})
+    firebase.database().ref('channels/' + key).update({open_by_user:true, unread_messages_by_user: false})
 
     firebase.database().ref('messages/').orderByChild('channel').equalTo(this.channel).on('value', (response : any) => {
-      let messages = this.chatService.snapshotToArray(response);
-      messages.forEach((mess) => {
-        firebase.database().ref('messages/' + mess.key).update({read:'true'}) //svaka poruka u chatu postaje procitana
-        this.messages.push(mess);
-      })
+      this.messages = this.chatService.snapshotToArray(response);
+    }) 
+    firebase.database().ref('channels/').orderByChild('id').equalTo(this.channel).on('value', (response : any) => {
+      let channel = this.chatService.snapshotToArray(response);
+      console.log(channel);
+      this.unreaMessages = channel[0].unread_messages_by_user;
+      this.tooltipText = this.unreaMessages ? "New message from support" : "Support chat";
     })
   }
 
   ngOnInit(): void {
     this.initChat();
+  
   }
 
   onCLose(){
     this.isCollapsed = true;
-    this.chatService.firebaseChannels.child(this.userService.getCurrentUserId().toString()).update({open_by_user:'false'})
+    this.chatService.firebaseChannels.child(this.userService.getCurrentUserId().toString()).update({open_by_user:false})
+  }
+
+  isUnread(){
+    return this.unreaMessages;
   }
 }

@@ -2,13 +2,11 @@
     <div style="height: 43px; padding-top:15px; padding-left: 5px; font-size: 16px; font-weight: 500;">
         Chats
     </div>
-    <button class="prevois-chat" *ngFor="let channel of this.channels" (click)="enterChatRoom(channel.id)">
-        <p class="user-name">
-            {{channel.id}}
-        </p>
-        <p *ngIf="counter > 0">
-            "dfsdswe"
-        </p>
-        
-    </button>
+   
+        <button [ngClass]="{'prevois-chat-bold': channel.unread_messages_by_admin,  'prevois-chat': !channel.unread_messages_by_admin}" *ngFor="let channel of this.channels" (click)="enterChatRoom(channel)">
+            <p >
+                {{channel.id}}
+            </p>
+        </button>
+  
 </div>

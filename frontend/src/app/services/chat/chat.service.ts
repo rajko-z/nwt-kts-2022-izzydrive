@@ -22,17 +22,8 @@ export class ChatService {
     return returnArr;
   };
 
-  setOpenChatByAdmin(open:boolean, channelId : any):void{
-    this.firebaseChannels.orderByChild('id').equalTo(channelId).on('value', (response : any) => {
-      let channels = this.snapshotToArray(response);
-      channels.forEach((channel: any) => {
-        this.firebaseChannels.child(channel.key).update({open_by_admin: open});
-       });  
-    })
-  }
-
   setOpenChatByuser(open:boolean, channelId : any):void{
-    this.firebaseChannels.orderByChild('id').equalTo(channelId).on('value', (response : any) => {
+    this.firebaseChannels.orderByChild('id').equalTo(channelId).once('value', (response : any) => {
       let channels = this.snapshotToArray(response);
       channels.forEach((channel: any) => {
         this.firebaseChannels.child(channel.key).update({open_by_user: open})
@@ -41,10 +32,10 @@ export class ChatService {
   }
 
   closeAllAdminChat(){
-    this.firebaseChannels.on('value', (response : any) => {
+    this.firebaseChannels.once('value', (response : any) => {
       let channels = this.snapshotToArray(response);
       channels.forEach((channel: any) => {
-        this.firebaseChannels.child(channel.key).update({open_by_admin: 'false'})
+        this.firebaseChannels.child(channel.key).update({open_by_admin: false})
        });  
     })
   }

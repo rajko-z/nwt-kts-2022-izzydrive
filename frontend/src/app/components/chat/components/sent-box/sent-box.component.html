@@ -1,8 +1,8 @@
 <div class="send-box-container">
-        <form  class="type-box-xontainer" [formGroup]="chatForm" (ngSubmit)="onFormSubmit()">
+        <form  class="type-box-xontainer" [formGroup]="chatForm">
             <mat-form-field style="width:100%">
               <input matInput placeholder="Enter message here" formControlName="text" class="type-box-xontainer">
-              <button type="submit" [disabled]="chatForm.controls['text'].value === ''" mat-button matSuffix mat-icon-button aria-label="Send">
+              <button (click)="onFormSubmit()" [disabled]="chatForm.controls['text'].value === ''" mat-button matSuffix mat-icon-button aria-label="Send">
                 <mat-icon>send</mat-icon>
               </button>
             </mat-form-field>

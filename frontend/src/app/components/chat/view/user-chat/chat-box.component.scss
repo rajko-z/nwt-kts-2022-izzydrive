@@ -60,14 +60,21 @@
 .open_chat_shorcut{
     background-color: $light2;
     color: $dark3;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    bottom: 10px;
-    right: 10px;
+    bottom: 15px;
+    right: 15px;
     align-items: center;
     cursor: pointer;
-    z-index: 5;
     position: fixed;
+    justify-content: center;
+    display: flex;
+}
+.new-message-icon{
+    width:40px
 }
 
+::ng-deep .mat-tooltip {
+    font-size: 15px !important;
+  }

@@ -17,47 +17,41 @@ export class ChannelsListComponent implements OnInit {
   channels = [];
   isLoadingResults = true;
   previusChat : string = undefined;
-  @Output() chatMessagesEmiter = new EventEmitter<any[]>(); //dodati tip Message
+  @Output() chatMessagesEmiter = new EventEmitter<any>(); 
 
   @Input() newMessage : any;
+
+  //@Input() channels : any[];
   
   constructor(  public datepipe: DatePipe, private userService: UserService, private chatService : ChatService) {
     }
 
-  ngOnInit(): void {
-    console.log("dsfdsfr")
+  initChannels(): void {
     this.chatService.firebaseChannels.on('value', resp => {
       this.channels = this.chatService.snapshotToArray(resp);
-      console.log( this.channels)
-      this.isLoadingResults = false;
-    }); 
-    this.channels.forEach((channel) => {
-      this.getUnreadMessages(channel);
-    })
+      console.log(this.channels)
+    });
+    
+  }
+  ngOnInit(): void {
+    this,this.initChannels();
+    // this.chatService.firebaseChannels.on('child_changed', resp => {
+    //   this.channels = this.chatService.snapshotToArray(resp);
+    //   console.log(this.channels)
+    // });
   }
 
-  async enterChatRoom(channel_id: string) {
-
-    this.userService.getUserData(channel_id).subscribe({
+  enterChatRoom(channel: any) {
+    //this.initChannels();
+    this.chatService.closeAllAdminChat();
+    this.userService.getUserData(channel.id).subscribe({
       next: (response)=>{
         let userId = response.id;
-        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin:'true'})//niej dobro, trenutni id je adminov i ne udje u dobar chet
-
-        this.chatService.firebaseMessages.orderByChild('channel').equalTo(channel_id).on('value', (response : any) => {
-          console.log(this.chatService.snapshotToArray(response))
-          let messages = this.chatService.snapshotToArray(response);
-          messages.forEach((mess) => { //kad se chat otvori sve poruku postaju procitane
-            this.chatService.firebaseMessages.child(mess.key).update({read:'true'})
-          });;
-          this.chatMessagesEmiter.emit(messages);
-        })
-    
-        if(this.previusChat && this.previusChat !== channel_id){
-          this.chatService.setOpenChatByAdmin(false, this.previusChat)
-    
-        }
-        this.previusChat = channel_id;
-        console.log("SSSSSSS")
+        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin: true, unread_messages_by_admin: false})//niej dobro, trenutni id je adminov i ne udje u dobar chet
+ 
+        this.chatMessagesEmiter.emit(channel);
+        // })
+        this.previusChat = userId.toString();
 
       },
       error: (response) =>{
@@ -65,19 +59,5 @@ export class ChannelsListComponent implements OnInit {
       }
     })
     
-  }
-
-  counter = 0
-
-  getUnreadMessages(channel : any){
-    firebase.database().ref('messages/').orderByChild('channel').equalTo(channel.id).on('value', (response : any) => {
-      let messages = this.chatService.snapshotToArray(response);
-
-      messages.forEach((mess) => { //kad se chat otvori sve poruku postaju procitane
-        if(!mess.read && mess.sender !== this.userService.getCurrentUserEmail()) {
-          this.counter += 1;
-        }
-      })
-    })
   }
 }

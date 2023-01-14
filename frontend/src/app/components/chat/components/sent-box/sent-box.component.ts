@@ -48,10 +48,10 @@ export class SentBoxComponent implements OnInit {
                 sender : this.userService.getCurrentUserEmail(),
                 timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
                 text: this.text,
-                read: false
+                cahnnel_key : this.userService.getCurrentUserId().toString()
+                
     }
     this.markMessageAsReadIfChatOpen(mess);
-    console.log(mess);
     this.messageEmiter.emit(mess);
     const newMessage = firebase.database().ref('messages/').push();
     newMessage.set(mess);
@@ -61,18 +61,33 @@ export class SentBoxComponent implements OnInit {
   }
 
   markMessageAsReadIfChatOpen(message : any){
-    let channelId = message.channel;
-    firebase.database().ref('channels/').orderByChild('id').equalTo(channelId).on('value', (response : any) => {
+    firebase.database().ref('channels/').orderByChild('id').equalTo(message.channel).once('value', (response : any) => {
       let channels = this.chatService.snapshotToArray(response);
       channels.forEach((channel) => {
-        if(this.userService.getRoleCurrentUserRole() == Role.ROLE_ADMIN && channel.open_by_user){
-          message.read = true;
-        }
-        else if (channel.open_by_admin){
-          message.read = true; //PONOVO
-        }
+      if(this.userService.getRoleCurrentUserRole() == "ROLE_ADMIN"){ 
+            console.log("admin");//ovde obeleziti channel da ima neprocitane poruke
+            if (channel.open_by_user) {
+              //message.read = true;
+              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_user: false})
+            }
+            else{
+              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_user: true})
+            }
+          }
+          else {
+            if (channel.open_by_admin){
+              //message.read = true; 
+              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_admin: false})
+            }
+            else{
+              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_admin: true})
+            }
+          
+      }
       })
-    })
+    }
+    )
+    
 
   }
 

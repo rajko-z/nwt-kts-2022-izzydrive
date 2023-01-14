@@ -10,6 +10,7 @@ import { MessageBoxComponent } from './components/message-box/message-box.compon
 import { SentBoxComponent } from './components/sent-box/sent-box.component';
 import { AdminChatComponent } from './view/admin-chat/admin-chat.component';
 import { ChannelsListComponent } from './components/channel-list/channels-list/channels-list.component';
+import { MatSelectionList } from '@angular/material/list';
 
 @NgModule({
   declarations: [MessageBoxComponent, SentBoxComponent, ChatBoxComponent, AdminChatComponent, ChannelsListComponent],
@@ -21,6 +22,6 @@ import { ChannelsListComponent } from './components/channel-list/channels-list/c
             SharedComponentsModule,
             ChatRouterModule],
   exports: [ChatBoxComponent],
-  providers: []
+  providers: [MatSelectionList]
 })
 export class ChatModule {}
