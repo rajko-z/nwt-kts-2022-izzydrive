@@ -14,4 +14,7 @@ public interface DrivingService {
     boolean passengerApprovedToPayDriving(Driving driving, String passengerEmail);
 
     boolean drivingExpiredForPayment(Driving driving);
+
+    void rejectDrivingLinkedUser();
+    DrivingDTO findById(Long id);
 }

@@ -8,6 +8,9 @@ import {NotificationM} from "./model/notifications/notification";
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
+import {
+  NewRideLinkedUserComponent
+} from "./components/notifications/new-ride-linked-user/new-ride-linked-user.component";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -50,13 +53,30 @@ export class AppComponent {
       that.openGlobalSocket();
     });
   }
+
   openGlobalSocket() {
     this.stompClient.subscribe('/notification/init', (message: { body: string }) => {
       let notification: NotificationM = JSON.parse(message.body);
       if (notification.userEmail === this.userService.getCurrentUserEmail()) {
         this.snackBar.open(notification.message, "OK");
       }
-
     });
+    this.stompClient.subscribe('/notification/newRide', (message: { body: string }) => {
+        let notification: NotificationM = JSON.parse(message.body);
+        if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+          this.snackBar.openFromComponent(NewRideLinkedUserComponent, {
+            data: {
+              message: notification,
+              preClose: () => {
+                this.snackBar.dismiss()
+              }
+            },
+            verticalPosition: 'bottom',
+            horizontalPosition: 'right',
+          });
+        }
+      }
+    )
+    ;
   }
 }

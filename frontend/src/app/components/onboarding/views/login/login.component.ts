@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private userService : UserService,
               private socialAuthService: SocialAuthService,
-              private _ngZone: NgZone, 
+              private _ngZone: NgZone,
               private router: Router,
-              private responseMessage: ResponseMessageService) { 
+              private responseMessage: ResponseMessageService) {
 
   }
 
@@ -90,8 +90,8 @@ export class LoginComponent implements OnInit {
         next : (responce) => {
           console.log(responce)
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
-        this.router.navigateByUrl('/driver')
-        //   this.router.navigateByUrl('/logged')
+        // this.router.navigateByUrl('/driver')
+          this.router.navigateByUrl('/logged')
       },
         error: (error )=> {
           this.responseMessage.openErrorMessage(error.error.message);
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/logged')
         },
           error: (error )=> {
-            this.responseMessage.openErrorMessage(error.error.message);   
+            this.responseMessage.openErrorMessage(error.error.message);
 
         }
       })

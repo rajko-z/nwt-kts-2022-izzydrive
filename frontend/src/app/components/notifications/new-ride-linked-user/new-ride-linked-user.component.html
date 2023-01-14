@@ -1,0 +1,29 @@
+<div>
+  <div class="title">
+    <p>{{data.message.message}}</p>
+    <div class="location">
+      <em class="fa-solid fa-location-dot"></em>
+      <p class="location-title">Start location: {{data.message.startLocation}}</p>
+    </div>
+    <div class="location">
+      <em class="fa-solid fa-location-dot"></em>
+      <p class="location-title">End location: {{data.message.endLocation}}</p>
+    </div>
+    <div class="intermediate-station" *ngFor="let station of data.message.intermediateLocations">
+      <em class='fas fa-map-location-dot'></em>
+      <p class="intermediate-title">Intermediate station: <span>{{station}}</span></p>
+    </div>
+    <div class="price-info">
+      <em class="fa-solid fa-tags"></em>
+      <p class="price-title">Price: {{data.message.price}} $</p>
+    </div>
+    <div class="time-info">
+      <em class="fa-solid fa-clock"></em>
+      <p class="time-title">Driving duration: {{this.minute}} min</p>
+    </div>
+  </div>
+  <div class="button">
+    <button type="submit" class="submit-button" (click)="openPaymentPageClick()">Pay</button>
+    <button type="submit" class="submit-button" (click)="cancelRideClick()">Cancel</button>
+  </div>
+</div>

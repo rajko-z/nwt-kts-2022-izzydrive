@@ -63,4 +63,18 @@ public class DrivingController {
         this.processDrivingRequestService.process(request);
         return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @GetMapping(value = "/reject-linked-user")
+    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
+        this.drivingService.rejectDrivingLinkedUser();
+        return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @GetMapping("/{id}")
+    public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id){
+        DrivingDTO driving = drivingService.findById(id);
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
 }

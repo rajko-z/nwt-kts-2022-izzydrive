@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {OtherUsersDialogComponent} from "../../../other-users-dialog/other-users-dialog.component";
 import {PlaceOnMap} from "../../../../model/map/placeOnMap";
@@ -16,6 +16,9 @@ import {CarAccommodation} from "../../../../model/car/carAccommodation";
 import {DrivingFinderRequest} from "../../../../model/driving/drivingFinderRequest.";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
+import {UserService} from "../../../../services/userService/user-sevice.service";
+import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
+import {User} from "../../../../model/user/user";
 
 @Component({
   selector: 'app-ride-data-form',
@@ -38,6 +41,8 @@ export class RideDataFormComponent {
   @Output() fetchedDrivingOptionsEvent = new EventEmitter<DrivingOption[]>()
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
+  users: User [];
+
   routeForm = new FormGroup({
     optimalDriving: new FormControl(''),
     stationsOrder: new FormControl(''),
@@ -45,9 +50,9 @@ export class RideDataFormComponent {
     baggageOption: new FormControl(false),
     petOption: new FormControl(false),
     foodOption: new FormControl(false),
-    userEmailFriendsFirst: new FormControl(''),
-    userEmailFriendsSecond: new FormControl(''),
-    userEmailFriendsThird: new FormControl('')
+    userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
+    userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
+    userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()])
   })
 
   constructor(
@@ -57,7 +62,13 @@ export class RideDataFormComponent {
     private mapService: MapService,
     private drivingService: DrivingService,
     private messageTooltip: MatSnackBar,
-    private searchPlaceComponentService: SearchPlaceComponentService) {
+    private searchPlaceComponentService: SearchPlaceComponentService,
+    private userService: UserService,
+    private loggedUserService: LoggedUserService
+  ) {
+    this.loggedUserService.getAllUsers().subscribe((res) => {
+      this.users = res as User[];
+    });
   }
 
   onSubmit(event) {
@@ -87,7 +98,7 @@ export class RideDataFormComponent {
       );
   }
 
-  openErrorMessage(message: string): void{
+  openErrorMessage(message: string): void {
     this.messageTooltip.open(message, 'Close', {
       horizontalPosition: "center",
       verticalPosition: "top",
@@ -95,7 +106,7 @@ export class RideDataFormComponent {
     });
   }
 
-  private createDrivingFinderRequest() : DrivingFinderRequest {
+  private createDrivingFinderRequest(): DrivingFinderRequest {
     let drivingFinderRequest = new DrivingFinderRequest();
     drivingFinderRequest.startLocation = this.startPlace;
     drivingFinderRequest.endLocation = this.endPlace;
@@ -107,16 +118,37 @@ export class RideDataFormComponent {
     return drivingFinderRequest;
   }
 
-  private getLinkedPassengers(): string[] {
-    let linkedPassengers: string[] = [];
-    linkedPassengers.push(this.routeForm.value.userEmailFriendsFirst);
-    linkedPassengers.push(this.routeForm.value.userEmailFriendsSecond);
-    linkedPassengers.push(this.routeForm.value.userEmailFriendsThird);
-    // TODO:: just for testing here
-    //linkedPassengers.push('natasha.lakovic@gmail.com');
-    return linkedPassengers;
+  checkEmailWithCurrentUser(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value === this.userService.getCurrentUserEmail()) {
+        return {'email': true};
+      }
+      return null;
+    };
   }
 
+  checkUserHasAccount(): ValidatorFn {
+    return ((control: AbstractControl): { [key: string]: boolean } | null => {
+      if(control.value === ''){
+        return null;
+      }
+      return this.users?.find((user) => control.value === user.email) ? null : {'email': true};
+    })
+  }
+
+  private getLinkedPassengers(): string[] {
+    let linkedPassengers: string[] = [];
+    if(this.routeForm.value.userEmailFriendsFirst != ''){
+      linkedPassengers.push(this.routeForm.value.userEmailFriendsFirst);
+    }
+    if(this.routeForm.value.userEmailFriendsSecond != ''){
+      linkedPassengers.push(this.routeForm.value.userEmailFriendsSecond);
+    }
+    if(this.routeForm.value.userEmailFriendsThird != ''){
+      linkedPassengers.push(this.routeForm.value.userEmailFriendsThird);
+    }
+    return linkedPassengers;
+  }
 
 
   private getIntermediateStations(): PlaceOnMap[] {
@@ -133,7 +165,7 @@ export class RideDataFormComponent {
     return intermediateStations;
   }
 
-  private allFieldsValid() : boolean {
+  private allFieldsValid(): boolean {
     if (this.startPlace == null || this.endPlace == null) {
       this.searchPlaceComponentService.sendLocationFieldErrorSignal();
       return false;
@@ -160,10 +192,10 @@ export class RideDataFormComponent {
   }
 
   private getCarAccommodation(): CarAccommodation {
-    let babyOption   : boolean = this.routeForm.controls.babyOption.value;
-    let foodOption   : boolean = this.routeForm.controls.foodOption.value;
+    let babyOption: boolean = this.routeForm.controls.babyOption.value;
+    let foodOption: boolean = this.routeForm.controls.foodOption.value;
     let baggageOption: boolean = this.routeForm.controls.baggageOption.value;
-    let petOption    : boolean = this.routeForm.controls.petOption.value;
+    let petOption: boolean = this.routeForm.controls.petOption.value;
     return new CarAccommodation(foodOption, petOption, baggageOption, babyOption);
   }
 
@@ -173,6 +205,7 @@ export class RideDataFormComponent {
     this.mapService.addPlaceOnMap(place);
     this.selectedLocations.push(this.startPlace);
   }
+
   public startPlaceDeleted() {
     this.mapService.removePlaceFromMap(this.startPlace);
     this.selectedLocations = this.selectedLocations.filter(l => l != this.startPlace);
@@ -231,19 +264,19 @@ export class RideDataFormComponent {
     this.thirdIntermediatePlace = null;
   }
 
-  public deleteFirstUserClick(){
+  public deleteFirstUserClick() {
     this.routeForm.patchValue({
       userEmailFriendsFirst: ''
     });
   }
 
-  public deleteSecondUserClick(){
+  public deleteSecondUserClick() {
     this.routeForm.patchValue({
       userEmailFriendsSecond: ''
     });
   }
 
-  public deleteThirdUserClick(){
+  public deleteThirdUserClick() {
     this.routeForm.patchValue({
       userEmailFriendsThird: ''
     });

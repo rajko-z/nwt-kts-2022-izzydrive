@@ -50,6 +50,7 @@ import {AngularFireModule} from "@angular/fire/compat";
 
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
+import { NewRideLinkedUserComponent } from './components/notifications/new-ride-linked-user/new-ride-linked-user.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import {environment} from "../environments/environment";
                  ExplanationDialogComponent,
                  RideDataBasicFormComponent,
                  SearchPlaceComponent,
-                 PaymentPageComponent],
+                 PaymentPageComponent,
+                 NewRideLinkedUserComponent],
 
     imports: [
         CommonModule,

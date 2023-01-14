@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.DriverDTO;
+import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
@@ -19,6 +20,7 @@ import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
     private final AddressService addressService;
 
     private final DrivingService drivingService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Transactional
     public void process(DrivingRequestDTO request) {
@@ -59,7 +62,23 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
         lockDriverIfPossible(driver,passenger);
 
-        makeAndSaveDrivingFromRequest(request, driver, passenger, fromDriverToStart);
+        Driving driving = makeAndSaveDrivingFromRequest(request, driver, passenger, fromDriverToStart);
+
+        //send notification
+        for(String linkedPassenger: request.getDrivingFinderRequest().getLinkedPassengersEmails()){
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("You have been added to a new ride");
+            notificationDTO.setDuration(driving.getDuration());
+            notificationDTO.setPrice(driving.getPrice());
+            notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
+            notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+            for(Address intermediateStation : driving.getRoute().getIntermediateStations()){
+                notificationDTO.getIntermediateLocations().add(intermediateStation.getName());
+            }
+            notificationDTO.setUserEmail(linkedPassenger);
+            this.simpMessagingTemplate.convertAndSend("/notification/newRide", notificationDTO);
+        }
+
     }
 
     private void lockDriverIfPossible(Driver driver, Passenger passenger) {
@@ -81,7 +100,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         }
     }
 
-    private void makeAndSaveDrivingFromRequest(DrivingRequestDTO request,
+    private Driving makeAndSaveDrivingFromRequest(DrivingRequestDTO request,
                                                Driver driver,
                                                Passenger passenger,
                                                CalculatedRouteDTO fromDriverToStart) {
@@ -107,6 +126,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, passenger, driving);
         updateDriverDrivings(driver, driving);
+        return driving;
     }
     private void updatePassengersCurrentDriving(List<Passenger> linkedPassengers, Passenger initiator, Driving driving) {
         initiator.setCurrentDriving(driving);

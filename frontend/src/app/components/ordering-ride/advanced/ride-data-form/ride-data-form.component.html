@@ -84,7 +84,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <p class="explanation">*you can include other users by their email in this ride,</p>
-      <p class="explanation">all users start from first location</p>
+      <p class="explanation">all users start from first location and user must has account</p>
       <ol>
         <li>
           <mat-form-field appearance="outline">
@@ -92,6 +92,7 @@
             <input matInput
                    placeholder="pat@example.com"
                    formControlName="userEmailFriendsFirst">
+            <mat-error>Invalid email</mat-error>
           </mat-form-field>
           <button class="plus-button" (click)="deleteFirstUserClick()">
             <em class='fas fa-minus'></em>
@@ -99,10 +100,11 @@
         </li>
         <li>
           <mat-form-field appearance="outline">
-            <mat-label>Enter first user</mat-label>
+            <mat-label>Enter second user</mat-label>
             <input matInput
                    placeholder="pat@example.com"
-                   formControlName="userEmailFriendsFirst">
+                   formControlName="userEmailFriendsSecond">
+            <mat-error>Invalid email</mat-error>
           </mat-form-field>
           <button class="plus-button" (click)="deleteSecondUserClick()">
             <em class='fas fa-minus'></em>
@@ -114,6 +116,7 @@
             <input matInput
                    placeholder="pat@example.com"
                    formControlName="userEmailFriendsThird">
+            <mat-error>Invalid email</mat-error>
           </mat-form-field>
           <button class="plus-button" (click)="deleteThirdUserClick()">
             <em class='fas fa-minus'></em>

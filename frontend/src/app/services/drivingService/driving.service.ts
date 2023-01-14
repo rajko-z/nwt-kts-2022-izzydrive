@@ -15,7 +15,7 @@ import {TextResponse} from "../../model/response/textresponse";
 export class DrivingService {
 
   constructor(private httpClientService: HttpClientService,
-              private http: HttpClient,) {
+              private http: HttpClient) {
   }
 
   findAllByDriverId(driverId) {
@@ -33,11 +33,20 @@ export class DrivingService {
   getSimpleDrivingOptions(payload: PlaceOnMap[]): Observable<DrivingOption[]> {
     return this.http.post<DrivingOption[]>(environment.apiUrl + 'drivings/finder/simple', payload);
   }
+
   getAdvancedDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]> {
     return this.httpClientService.postT<DrivingOption[]>(environment.apiUrl + 'drivings/finder/advanced', payload);
   }
 
   processDrivingRequest(payload: DrivingRequest) {
     return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process', payload);
+  }
+
+  rejectDrivingLinkedPassenger() {
+    return this.httpClientService.get(environment.apiUrl + `drivings/reject-linked-user`);
+  }
+
+  findById(id:string){
+    return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
   }
 }
