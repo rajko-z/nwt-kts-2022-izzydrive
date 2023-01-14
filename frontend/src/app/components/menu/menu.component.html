@@ -2,7 +2,7 @@
     <div class="base_profile_info">
         <div class="picture_container">
             <div class="circle">
-                
+
             </div>
         </div>
         <div class="name_container">
@@ -22,25 +22,25 @@
                 <mat-icon class="menu_item_icon">perm_identity</mat-icon>
                 <mat-list-option>
                     View profile
-                </mat-list-option>  
+                </mat-list-option>
             </div>
             <div class="menu_item">
                 <mat-icon class="menu_item_icon">settings</mat-icon>
                 <mat-list-option (click)="onChangeProfile()">
                     Change profile info
-                </mat-list-option>  
+                </mat-list-option>
             </div>
             <div class="menu_item">
                 <mat-icon class="menu_item_icon">lock</mat-icon>
-                <mat-list-option>
-                    Change password
-                </mat-list-option>  
+                <mat-list-option (click)="openChangePasswordDialog()">
+                  Change password
+                </mat-list-option>
             </div>
             <div *ngIf="isPassenger" class="menu_item">
                 <mat-icon class="menu_item_icon">euro_symbol</mat-icon>
                 <mat-list-option>
                     Change paying <datalist></datalist>
-                </mat-list-option>  
+                </mat-list-option>
             </div>
             <div class="delimiter"></div>
             <div *ngIf="isPassenger">
@@ -56,9 +56,9 @@
                 <mat-icon class="menu_item_icon">exit_to_app</mat-icon>
                 <mat-list-option>
                     Log out
-                </mat-list-option>  
+                </mat-list-option>
             </div>
-            
+
           </mat-selection-list>
     </div>
 </div>

@@ -2,6 +2,7 @@ package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.User;
@@ -51,9 +52,9 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER', 'ROLE_PASSENGER')")
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody @Valid NewPasswordDTO newPasswordDTO) {
+    public ResponseEntity<TextResponse> changePassword(@RequestBody @Valid NewPasswordDTO newPasswordDTO) {
         userService.changePassword(newPasswordDTO);
-        return new ResponseEntity<>("Password successfully changed", HttpStatus.OK);
+        return new ResponseEntity<>(new TextResponse("Password successfully changed"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")

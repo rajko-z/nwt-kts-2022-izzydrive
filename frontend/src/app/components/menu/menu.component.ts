@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { getRole, Role } from 'src/app/model/user/role';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
+import {MatDialog} from "@angular/material/dialog";
+import {ChangePasswordComponent} from "../change-password/change-password.component";
 
 @Component({
   selector: 'app-menu',
@@ -17,7 +19,7 @@ export class MenuComponent implements OnInit {
   email: string = this.userService.getCurrentUserEmail();
   name: string = '';
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private matDialog: MatDialog) { }
 
   ngOnInit(): void {
     this.colapseMenu();
@@ -46,4 +48,7 @@ export class MenuComponent implements OnInit {
     this.router.navigateByUrl("/profile/edit-profile")
   }
 
+  openChangePasswordDialog() {
+    this.matDialog.open(ChangePasswordComponent);
+  }
 }

@@ -50,6 +50,7 @@ import {AngularFireModule} from "@angular/fire/compat";
 
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import {environment} from "../environments/environment";
                  ExplanationDialogComponent,
                  RideDataBasicFormComponent,
                  SearchPlaceComponent,
-                 PaymentPageComponent],
+                 PaymentPageComponent,
+                 ChangePasswordComponent],
 
     imports: [
         CommonModule,
