@@ -45,13 +45,16 @@ import {
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {SearchPlaceComponent} from './components/ordering-ride/shared/search-place/search-place.component';
 import {MatExpansionModule} from "@angular/material/expansion";
-import {PaymentPageComponent} from './pages/payment-page/payment-page.component';
-import {AngularFireModule} from "@angular/fire/compat";
 
-import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
-import {environment} from "../environments/environment";
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import {
+  NewRideLinkedUserComponent
+} from './components/notifications/new-ride-linked-user/new-ride-linked-user.component';
+import {
+  DeniedRideLinkedUserComponent
+} from './components/notifications/denied-ride-linked-user/denied-ride-linked-user.component';
+import firebase from 'firebase/compat/app';
 
+firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent,
@@ -78,7 +81,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
                  RideDataBasicFormComponent,
                  SearchPlaceComponent,
                  PaymentPageComponent,
-                 ChangePasswordComponent],
+                 ChangePasswordComponent,
+                 NewRideLinkedUserComponent,
+                 DeniedRideLinkedUserComponent],
 
     imports: [
         CommonModule,

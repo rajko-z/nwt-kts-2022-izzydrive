@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
 
     List<User> findAll();
+    List<UserDTO> findAllDTO();
 
     Optional<User> findByEmail(String email);
 

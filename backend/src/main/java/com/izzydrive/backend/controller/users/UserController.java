@@ -17,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,6 +30,12 @@ public class UserController {
     private final UserService userService;
 
     private final ImageService imageService;
+
+    @GetMapping()
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<UserDTO> users = userService.findAllDTO();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
     // if you want to get user with image, call it like /{email}?image=true
     // default value is set to false, so it will return user without image

@@ -1,0 +1,16 @@
+<div>
+  <div class="title">
+    <p>{{data.message.message}}</p>
+    <div class="location">
+      <em class="fa-solid fa-location-dot"></em>
+      <p class="location-title">Start location: {{data.message.startLocation}}</p>
+    </div>
+    <div class="location">
+      <em class="fa-solid fa-location-dot"></em>
+      <p class="location-title">End location: {{data.message.endLocation}}</p>
+    </div>
+  </div>
+  <div class="button">
+    <button type="submit" class="submit-button" (click)="okClick()">Ok</button>
+  </div>
+</div>

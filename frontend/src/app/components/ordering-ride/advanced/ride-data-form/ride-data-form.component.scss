@@ -1,5 +1,14 @@
 @import "src/style/styles";
 
+.scroll {
+  @include size(100%, 70vh);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none; //for display scroll
+  }
+}
+
 .location-fields {
   display: flex;
   justify-content: flex-start;
@@ -7,25 +16,19 @@
 }
 
 .mat-form-field {
-  width: 30vw;
-  height: 2%;
+  @include size(25vw, auto);
 }
 
 .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0;
 }
 
-.intermediate-station {
+.intermediate-station-title {
   display: flex;
-  margin-top: 2%;
+  justify-content: flex-start;
 
-  .intermediate-station-title {
-    display: flex;
-    justify-content: flex-start;
-
-    .description {
-      margin-left: 10px;
-    }
+  .description {
+    margin-left: 10px;
   }
 }
 
@@ -33,24 +36,20 @@
   height: 2%;
 }
 
-.other-users {
+.other-users-title {
   display: flex;
-  margin-top: 3%;
+  justify-content: flex-start;
 
-  .other-users-title {
-    display: flex;
-    justify-content: flex-start;
-
-    .description {
-      margin-left: 10px;
-    }
+  .description {
+    margin-left: 10px;
   }
 }
 
 .plus-button {
   height: 25px;
   width: 25px;
-  margin: 0 20% 0 auto;
+  margin-left: 5px;
+  margin-bottom: 5px;
   background-color: $light1;
   color: $dark3;
   border-radius: 50px;
@@ -101,4 +100,9 @@
 
 .intermediate-stations-container {
   width: 33vw;
+}
+
+.other-users-container {
+  width: 33vw;
+  margin-top: 10px;
 }

@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.DriverDTO;
+import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
@@ -19,6 +20,7 @@ import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,8 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
     private final DrivingService drivingService;
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
     @Transactional
     public void process(DrivingRequestDTO request) {
         drivingFinderService.validateDrivingFinderRequest(request.getDrivingFinderRequest());
@@ -55,11 +59,32 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         CalculatedRouteDTO fromDriverToStart =
                 driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), request.getDrivingFinderRequest().getStartLocation());
 
-        checkIfDriverIsStillAvailable(request,driver,fromDriverToStart);
+        checkIfDriverIsStillAvailable(request, driver, fromDriverToStart);
 
-        lockDriverIfPossible(driver,passenger);
+        lockDriverIfPossible(driver, passenger);
 
-        makeAndSaveDrivingFromRequest(request, driver, passenger, fromDriverToStart);
+        Driving driving = makeAndSaveDrivingFromRequest(request, driver, passenger, fromDriverToStart);
+
+        sendNotificationLinkedPassengers(request, driving);
+    }
+
+    private void sendNotificationLinkedPassengers(DrivingRequestDTO request, Driving driving) {
+        for (String linkedPassenger : request.getDrivingFinderRequest().getLinkedPassengersEmails()) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("You have been added to a new ride");
+            notificationDTO.setDrivingId(driving.getId());
+            notificationDTO.setDuration(driving.getDuration());
+            notificationDTO.setPrice(driving.getPrice());
+            notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
+            notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+            List<String> intermediateStationDTO =new ArrayList<>();
+            for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
+                intermediateStationDTO.add(intermediateStation.getName());
+            }
+            notificationDTO.setIntermediateLocations(intermediateStationDTO);
+            notificationDTO.setUserEmail(linkedPassenger);
+            this.simpMessagingTemplate.convertAndSend("/notification/newRide", notificationDTO);
+        }
     }
 
     private void lockDriverIfPossible(Driver driver, Passenger passenger) {
@@ -68,11 +93,9 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             if (driverLocker.isEmpty()) {
                 DriverLocker lock = new DriverLocker(driver.getEmail(), passenger.getEmail(), 1);
                 this.driverLockerService.save(lock);
-            }
-            else if (driverLocker.get().getPassengerEmail() != null) {
+            } else if (driverLocker.get().getPassengerEmail() != null) {
                 throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
-            }
-            else {
+            } else {
                 driverLocker.get().setPassengerEmail(passenger.getEmail());
                 driverLockerService.save(driverLocker.get());
             }
@@ -81,10 +104,10 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         }
     }
 
-    private void makeAndSaveDrivingFromRequest(DrivingRequestDTO request,
-                                               Driver driver,
-                                               Passenger passenger,
-                                               CalculatedRouteDTO fromDriverToStart) {
+    private Driving makeAndSaveDrivingFromRequest(DrivingRequestDTO request,
+                                                  Driver driver,
+                                                  Passenger passenger,
+                                                  CalculatedRouteDTO fromDriverToStart) {
 
         DrivingOptionDTO option = request.getDrivingOption();
         List<Passenger> passengers = new ArrayList<>(List.of(passenger));
@@ -106,8 +129,9 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, passenger, driving);
-        updateDriverDrivings(driver, driving);
+        return driving;
     }
+
     private void updatePassengersCurrentDriving(List<Passenger> linkedPassengers, Passenger initiator, Driving driving) {
         initiator.setCurrentDriving(driving);
         passengerService.save(initiator);
@@ -117,16 +141,16 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         }
     }
 
-    private void updateDriverDrivings(Driver driver, Driving driving) {
-        if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
-            driver.setDriverStatus(DriverStatus.TAKEN);
-            driver.setCurrentDriving(driving);
-        } else {
-            driver.setDriverStatus(DriverStatus.RESERVED);
-            driver.setNextDriving(driving);
-        }
-        driverService.save(driver);
-    }
+//    private void updateDriverDrivings(Driver driver, Driving driving) {
+//        if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
+//            driver.setDriverStatus(DriverStatus.TAKEN);
+//            driver.setCurrentDriving(driving);
+//        } else {
+//            driver.setDriverStatus(DriverStatus.RESERVED);
+//            driver.setNextDriving(driving);
+//        }
+//        driverService.save(driver);
+//    }
 
     private List<Location> getLocationsNeededForDriving(CalculatedRouteDTO fromDriverToStart, CalculatedRouteDTO fromStartToEnd) {
         List<Location> locations = new ArrayList<>();
@@ -160,6 +184,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         Optional<Address> retVal = addressService.getAddressByName(address.getName());
         return retVal.orElseGet(() -> new Address(address.getLongitude(), address.getLatitude(), address.getName()));
     }
+
     private List<Address> getListOfAddressesFromAddressesOnMap(List<AddressOnMapDTO> addresses) {
         List<Address> retVal = new ArrayList<>();
         for (AddressOnMapDTO a : addresses) {
@@ -228,8 +253,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         DriverStatus currStat = driver.getDriverStatus();
 
         if ((currStat.equals(DriverStatus.TAKEN) || currStat.equals(DriverStatus.ACTIVE)) &&
-                driverIsNoLongerActiveOnCurrentDriving(driver, locations))
-        {
+                driverIsNoLongerActiveOnCurrentDriving(driver, locations)) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
     }

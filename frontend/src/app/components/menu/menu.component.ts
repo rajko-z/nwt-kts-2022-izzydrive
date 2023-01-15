@@ -23,7 +23,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.colapseMenu();
-    this.userService.getCurrentUserName().subscribe({
+    this.userService.getCurrentUserData().subscribe({
       next: (result) => {
         this.name = result.firstName + " " + result.lastName;
       }
