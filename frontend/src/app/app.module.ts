@@ -52,7 +52,9 @@ import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import { NewRideLinkedUserComponent } from './components/notifications/new-ride-linked-user/new-ride-linked-user.component';
 import { DeniedRideLinkedUserComponent } from './components/notifications/denied-ride-linked-user/denied-ride-linked-user.component';
+import firebase from 'firebase/compat/app';
 
+firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent,

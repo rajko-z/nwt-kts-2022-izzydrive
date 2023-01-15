@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Message } from 'src/app/model/message/message';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
+import firebase from 'firebase/compat/app'
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { Router } from '@angular/router';
+import { Channel } from 'src/app/model/channel/channel';
 
 @Component({
   selector: 'app-admin-chat',
@@ -9,55 +13,56 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 })
 export class AdminChatComponent implements OnInit {
 
-  constructor(
-    private userService: UserService) { }
+  @ViewChildren('chatcontent') chatcontent: QueryList<any>;
+  @ViewChild('chat_container') chat_container: ElementRef;
 
-  messageText: string;
+  message : Message;
   messages : Message[] = [];
-  channel: string;
+  channelId: string;
+  channels: Channel[]= []
+  isChatOpen : boolean = false;
+  
+  constructor(  private chatService : ChatService,
+                private router : Router) { 
 
-  //(messageEmiter)="setMessage($event)"
+    }
 
-  setMessage(message: string){
-    this.messageText = message
-    // let newMessage : Message = new Message("user1", message, new Date());
-    // this.messageText = message;
-    // this.messages.push(newMessage);
-    // if (message) {
-    //   this.stompService.publish({
-    //     destination: '/app/messages', body:
-    //       JSON.stringify({
-    //         'channel': this.channel,
-    //         'sender':  this.userService.getCurrentUserEmail(),
-    //         'text': message
-    //       })
-    //   });
-    //   this.messageText = '';
-    // }
+  ngAfterViewInit() {
+    this.scrollToBottom();
+    this.chatcontent.changes.subscribe(this.scrollToBottom);
   }
 
-  loadMessages(messages : any[]){
-    this.messages = messages;
-    this.channel = messages["channel"];
+  scrollToBottom = () => {
+    try {
+      this.chat_container.nativeElement.scrollTop = this.chat_container.nativeElement.scrollHeight;
+    } catch (err) {}
   }
+
+  setMessage(message: Message){
+    this.message = message;
+    //this.messages.push(message);
+  }
+
+  loadMessages(channel : any){ 
+    this.channelId = channel.id;
+    this.isChatOpen = true;
+    this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channelId).on('value', (response : any) => {
+        this.messages = this.chatService.snapshotToArray(response);
+    })
+    }
 
   ngOnInit(): void {
-    // this.messages.push(new Message("user1", "text text", new Date()));
-    // this.messages.push(new Message("user2", "text text  bla bla ", new Date()));
-    // this.messages.push(new Message("user2", "text text  bla aaaaa ", new Date()));
-    // console.log(this.messages)
-    // this.channelService.getChannel().subscribe(channel => {
-    //   this.channel = channel;
-    //   this.filterMessages();
-    // });
-
-    // this.messageService.getMessages().subscribe(messages => {
-    //   this.filterMessages();
-    // });
   }
-//   filterMessages() {
-//     this.messages = this.messageService.filterMessages(this.channel);
-// ;
-//   }
 
+  onCLose(){
+    this.isChatOpen = false;
+    this.chatService.closeAllAdminChat();
+    // firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
+    //   let channels = this.chatService.snapshotToArray(response);
+    //   channels.forEach((c: any) => {
+    //     firebase.database().ref('channels/' + c.key).update({open_by_admin:false})
+    //    });  
+    // })
+    this.router.navigateByUrl('/logged');
+  }
 }

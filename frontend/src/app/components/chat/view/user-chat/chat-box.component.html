@@ -1,20 +1,27 @@
 
-<div class="chat-box-container">
+<div class="chat-box-container" *ngIf="!isCollapsed">
     <div class="header">
-        <button >
+        <button class="close-btn" (click)="onCLose()">
             <img src="/assets/cross.png" class="close"/>
         </button>
     </div>
-    <div class="container" #scroll [scrollTop]="scroll.scrollHeight">
-        <div class="messages-container" *ngFor="let mess of this.messages">
+    <div class="container" #chat_container>
+        <div #chatcontent class="message-container" *ngFor="let mess of this.messages">
             <app-message-box [message]="mess"></app-message-box>
         </div>
     </div>
     
     <div class="typing-container">
-        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channel"></app-sent-box>
+        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channelId"></app-sent-box>
     </div>
 </div>
-
+<div *ngIf="isCollapsed" class="open_chat_shorcut">
+    <button mat-icon-button (click)="openChat()"
+            #tooltip="matTooltip"
+          matTooltip={{this.tooltipText}}>
+          <img *ngIf="!this.isUnread()" src="/assets/user-chat.png" class="new-message-icon"/>
+        <img *ngIf="this.isUnread()" src="/assets/user-new-message.png" class="new-message-icon"/>
+    </button>
+</div>
 
 
