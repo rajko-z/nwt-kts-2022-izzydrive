@@ -16,6 +16,7 @@ export class ChannelsListComponent implements OnInit {
 
   displayedColumns: string[] = ['channel-id', 'channel-name'];
   channels : Channel[] = [];
+  channel_ids : string[] = [];
   isLoadingResults = true;
   previusChat : string = undefined;
   @Output() chatMessagesEmiter = new EventEmitter<Channel>();
@@ -40,7 +41,7 @@ export class ChannelsListComponent implements OnInit {
     this.userService.getUserData(channel.id).subscribe({
       next: (response)=>{
         let userId = response.id;
-        this.chatService.firebaseChannels.child(userId.toString()).update({open_by_admin: true, unread_messages_by_admin: false})
+        this.chatService.updateChatOpenningForAdminByChatKey(userId.toString(), {open_by_admin: true, unread_messages_by_admin: false})        
         this.chatMessagesEmiter.emit(channel);
         this.previusChat = userId.toString();
 

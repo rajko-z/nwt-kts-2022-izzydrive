@@ -45,27 +45,23 @@ export class ChatBoxComponent implements OnInit {
   }
 
   initChat(){
-    this.channelId = this.userService.getCurrentUserEmail(); 
+    
     this.userService.getCurrentUserData().subscribe({
       next : (response) => {
                                
-        let key = this.userService.getCurrentUserId();
-        let newChannel : Channel = new Channel(this.channelId, response.firstName + " " + response.lastName, false, false, false, false);
+        let key = this.userService.getCurrentUserId().toString();
+        let newChannel : Channel = new Channel(this.channelId, response.firstName + " " + response.lastName, false, false, false, false, key);
 
-        firebase.database().ref("channels/").child(key.toString()).set(newChannel);
+        this.chatService.firebaseChannels.child(key).set(newChannel);
     
-        firebase.database().ref('channels/' + key).update({open_by_user:true, unread_messages_by_user: false})
+        this.chatService.updateChatOpenningForUserByChatKey(key,{open_by_user:true, unread_messages_by_user: false} )
+         //firebase.database().ref('channels/' + key).update({open_by_user:true, unread_messages_by_user: false})
     
-        firebase.database().ref('messages/').orderByChild('channel').equalTo(this.channelId).on('value', (response : any) => {
+        this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channelId).on('value', (response : any) => {
           this.messages = this.chatService.snapshotToArray(response);
         }) 
-        firebase.database().ref('channels/').orderByChild('id').equalTo(this.channelId).on('value', (response : any) => {
-          let channel = this.chatService.snapshotToArray(response);
-          this.unreaMessages = channel[0].unread_messages_by_user;
-          console.log(this.unreaMessages)
-          this.tooltipText = this.unreaMessages ? "New message from support" : "Support chat";
-        })
-    
+       
+        
       }, error: (error) => {
         console.log(error.error.message);
       }
@@ -73,7 +69,13 @@ export class ChatBoxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.initChat();
+    this.channelId = this.userService.getCurrentUserEmail(); 
+    this.chatService.firebaseChannels.orderByChild('id').equalTo(this.channelId).on('value', (response : any) => {
+      let channel = this.chatService.snapshotToArray(response);
+      this.unreaMessages = channel[0].unread_messages_by_user;
+      console.log(this.unreaMessages)
+      this.tooltipText = this.unreaMessages ? "New message from support" : "Support chat";
+    })
   }
 
   onCLose(){

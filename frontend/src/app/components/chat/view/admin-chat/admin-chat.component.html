@@ -2,6 +2,9 @@
     <app-channels-list (chatMessagesEmiter)="loadMessages($event)" ></app-channels-list>
     <div class="chat-box-container">
         <div class="header">
+            <div class="opened-chat-email">
+                {{channelId}}
+            </div>
             <button class="close-btn" (click)="onCLose()">
                 <img src="/assets/cross.png" class="close"/>
             </button>
@@ -13,7 +16,7 @@
         </div>
     
         <div class="typing-container" *ngIf="isChatOpen">
-            <app-sent-box (messageEmiter)="setMessage($event)" [channel]="channel"></app-sent-box>
+            <app-sent-box (messageEmiter)="setMessage($event)" [channel]="channelId"></app-sent-box>
         </div>
     </div>
 </div>

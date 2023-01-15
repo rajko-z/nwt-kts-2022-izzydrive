@@ -45,18 +45,11 @@ export class SentBoxComponent implements OnInit {
     this.userService.getCurrentUserData().subscribe({
       next: (user) => {
         let mess : Message = new Message(this.userService.getCurrentUserEmail(),
-        this.text, 
-        this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
-        user.id.toString(),
-        this.channel)
-        //   {channel : ,
-        //             sender : ,
-        //             timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
-        //             text: this.text,
-        //             cahnnel_key : 
-                    
-        // }
-        this.markMessageAsReadIfChatOpen(mess);
+                                          this.text, 
+                                          this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
+                                          user.id.toString(),
+                                          this.channel)
+        this.chatService.markChannelAsRead(mess);
         
         const newMessage = firebase.database().ref('messages/').push();
         newMessage.set(mess);
@@ -67,34 +60,6 @@ export class SentBoxComponent implements OnInit {
       }
     })
    
-  }
-
-  markMessageAsReadIfChatOpen(message : Message): void{
-    firebase.database().ref('channels/').orderByChild('id').equalTo(message.channel).once('value', (response : any) => {
-      let channels = this.chatService.snapshotToArray(response);
-      console.log(channels)
-      channels.forEach((channel) => {
-      if(this.userService.getRoleCurrentUserRole() == "ROLE_ADMIN"){ 
-            if (channel.open_by_user) {
-              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_user: false})
-            }
-            else{
-              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_user: true})
-            }
-          }
-          else {
-            if (channel.open_by_admin){
-              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_admin: false})
-            }
-            else{
-              this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_admin: true})
-            }
-          
-      }
-      })
-    }
-    )
-
   }
 
 }

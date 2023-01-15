@@ -40,7 +40,7 @@ export class AdminChatComponent implements OnInit {
 
   setMessage(message: Message){
     this.message = message;
-    this.messages.push(message);
+    //this.messages.push(message);
   }
 
   loadMessages(channel : any){ 
@@ -52,21 +52,17 @@ export class AdminChatComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    firebase.database().ref('messages/').on('child_added', (response : any) => {
-      //this.messages = this.chatService.snapshotToArray(response);
-      console.log(response)
-    }) 
   }
 
   onCLose(){
     this.isChatOpen = false;
-    firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
-      let channels = this.chatService.snapshotToArray(response);
-      channels.forEach((c: any) => {
-        firebase.database().ref('channels/' + c.key).update({open_by_admin:false})
-       });  
-    })
+    this.chatService.closeAllAdminChat();
+    // firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
+    //   let channels = this.chatService.snapshotToArray(response);
+    //   channels.forEach((c: any) => {
+    //     firebase.database().ref('channels/' + c.key).update({open_by_admin:false})
+    //    });  
+    // })
     this.router.navigateByUrl('/logged');
-    console.log("dsadsafaf")
   }
 }

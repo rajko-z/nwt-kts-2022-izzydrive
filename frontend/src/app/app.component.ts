@@ -10,6 +10,8 @@ import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
 import { Role } from './model/user/role';
 import { ChatService } from './services/chat/chat.service';
+import { Message } from './model/message/message';
+import { Channel } from './model/channel/channel';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,16 +41,13 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    firebase.initializeApp(environment.firebaseConfig);
+    //firebase.initializeApp(environment.firebaseConfig);
     this.initializeWebSocketConnection();
     this.listenForMessages();
   }
 
   listenForMessages() {
-    firebase.database().ref('messages/').on('child_added', (response : any) => {
-      console.log(this.chatService.snapshotToArray(response))
-      this.snackBar.open("You have new message", "OK");
-    }) 
+     this.chatService.listenForNewMessages();
   }
 
   isUserLoggedIn(): boolean {

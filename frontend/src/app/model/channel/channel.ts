@@ -7,7 +7,7 @@ export class Channel{
     open_by_user: boolean;
     unread_messages_by_admin : boolean;
     unread_messages_by_user : boolean;
-    isEmpty : boolean;
+    key: string
 
     constructor(id: string,
         name: string,
@@ -15,14 +15,14 @@ export class Channel{
         open_by_user: boolean,
         unread_messages_by_admin : boolean,
         unread_messages_by_user : boolean,
-        isEmpty? : boolean){
+        key? :string){
             this.id = id;
             this.name = name;
             this.open_by_admin = open_by_admin;
             this.open_by_user = open_by_user;
             this.unread_messages_by_admin = unread_messages_by_admin;
             this.unread_messages_by_user = unread_messages_by_user;
-            this.isEmpty = isEmpty ? isEmpty : false
+            this.key = key;
         }
 
 }

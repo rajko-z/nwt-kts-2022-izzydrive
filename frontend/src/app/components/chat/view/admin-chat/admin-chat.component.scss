@@ -11,7 +11,9 @@
 
 
 .header{
-     flex-grow: 0.2;
+     margin-bottom: 15px;
+     display: flex;
+     flex-direction: row;
 }
 
 .close{
@@ -65,4 +67,11 @@
 
 ::-webkit-scrollbar{
     display: none;
+}
+
+.opened-chat-email{
+    padding-left: 10px;
+    padding-top: 10px;
+    color: $dark3;
+    flex-grow: 10;
 }

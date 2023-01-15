@@ -19,8 +19,8 @@
     <button mat-icon-button (click)="openChat()"
             #tooltip="matTooltip"
           matTooltip={{this.tooltipText}}>
-          <img *ngIf="!this.isUnread()" src="/assets/comments.png" class="new-message-icon"/>
-        <img *ngIf="this.isUnread()" src="/assets/comments-new.png" class="new-message-icon"/>
+          <img *ngIf="!this.isUnread()" src="/assets/user-chat.png" class="new-message-icon"/>
+        <img *ngIf="this.isUnread()" src="/assets/user-new-message.png" class="new-message-icon"/>
     </button>
 </div>
 

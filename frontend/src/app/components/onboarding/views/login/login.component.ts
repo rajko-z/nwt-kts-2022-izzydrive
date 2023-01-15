@@ -10,6 +10,8 @@ import {CredentialResponse, PromptMomentNotification} from 'google-one-tap';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { Role } from 'src/app/model/user/role';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +38,8 @@ export class LoginComponent implements OnInit {
               private socialAuthService: SocialAuthService,
               private _ngZone: NgZone, 
               private router: Router,
-              private responseMessage: ResponseMessageService) { 
+              private responseMessage: ResponseMessageService,
+              private chatService : ChatService) { 
 
   }
 
@@ -75,6 +78,9 @@ export class LoginComponent implements OnInit {
       next : (responce) => {
         console.log(responce);
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+        if (responce["user"].role === Role.ROLE_ADMIN.toString()){
+          this.chatService.checkNewMessagesForAdmin();
+        }
         this.router.navigateByUrl('/logged')
     },
       error: (error )=> {
@@ -90,6 +96,10 @@ export class LoginComponent implements OnInit {
         next : (responce) => {
           console.log(responce)
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+        if (responce["user"].role === Role.ROLE_ADMIN.toString()){
+          console.log("eee")
+          this.chatService.checkNewMessagesForAdmin();
+        }
         this.router.navigateByUrl('/driver')
         //   this.router.navigateByUrl('/logged')
       },
@@ -107,6 +117,9 @@ export class LoginComponent implements OnInit {
           next : (responce) => {
             console.log(responce);
           this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
+          if (responce["user"].role === Role.ROLE_ADMIN.toString()){
+            this.chatService.checkNewMessagesForAdmin();
+          }
           this.router.navigateByUrl('/logged')
         },
           error: (error )=> {
