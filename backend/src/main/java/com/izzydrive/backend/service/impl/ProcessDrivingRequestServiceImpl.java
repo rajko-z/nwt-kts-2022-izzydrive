@@ -77,9 +77,11 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             notificationDTO.setPrice(driving.getPrice());
             notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
             notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+            List<String> intermediateStationDTO =new ArrayList<>();
             for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
-                notificationDTO.getIntermediateLocations().add(intermediateStation.getName());
+                intermediateStationDTO.add(intermediateStation.getName());
             }
+            notificationDTO.setIntermediateLocations(intermediateStationDTO);
             notificationDTO.setUserEmail(linkedPassenger);
             this.simpMessagingTemplate.convertAndSend("/notification/newRide", notificationDTO);
         }
