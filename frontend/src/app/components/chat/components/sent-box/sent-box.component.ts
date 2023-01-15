@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { Role } from 'src/app/model/user/role';
 import { ChatService } from 'src/app/services/chat/chat.service';
+import { Message } from 'src/app/model/message/message';
 
 
 @Component({
@@ -22,19 +23,16 @@ export class SentBoxComponent implements OnInit {
 
   @Input() channel : string;
   text = '';
-  users = [];
-  messages = [];
+  // messages : Message[] = [];
 
-  constructor(private router: Router,
-            private userService :UserService,
-              private route: ActivatedRoute,    
+  constructor(private userService :UserService,
               private formBuilder: FormBuilder,
               public datepipe: DatePipe,
               private chatService: ChatService) {
                 this.currentUserEmail = this.userService.getCurrentUserEmail();
               }
 
-  @Output() messageEmiter = new EventEmitter<any>();
+  @Output() messageEmiter = new EventEmitter<Message>();
 
   ngOnInit(): void {
     this.chatForm = this.formBuilder.group({
@@ -44,30 +42,40 @@ export class SentBoxComponent implements OnInit {
 
   onFormSubmit() {
     this.text = this.chatForm.controls['text'].value;
-    let mess = {channel : this.channel,
-                sender : this.userService.getCurrentUserEmail(),
-                timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
-                text: this.text,
-                cahnnel_key : this.userService.getCurrentUserId().toString()
-                
-    }
-    this.markMessageAsReadIfChatOpen(mess);
-    this.messageEmiter.emit(mess);
-    const newMessage = firebase.database().ref('messages/').push();
-    newMessage.set(mess);
-    this.chatForm = this.formBuilder.group({
-      'text' : ['']
-    });
+    this.userService.getCurrentUserData().subscribe({
+      next: (user) => {
+        let mess : Message = new Message(this.userService.getCurrentUserEmail(),
+        this.text, 
+        this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
+        user.id.toString(),
+        this.channel)
+        //   {channel : ,
+        //             sender : ,
+        //             timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
+        //             text: this.text,
+        //             cahnnel_key : 
+                    
+        // }
+        this.markMessageAsReadIfChatOpen(mess);
+        
+        const newMessage = firebase.database().ref('messages/').push();
+        newMessage.set(mess);
+        this.messageEmiter.emit(mess);
+        this.chatForm = this.formBuilder.group({
+          'text' : ['']
+        });
+      }
+    })
+   
   }
 
-  markMessageAsReadIfChatOpen(message : any){
+  markMessageAsReadIfChatOpen(message : Message): void{
     firebase.database().ref('channels/').orderByChild('id').equalTo(message.channel).once('value', (response : any) => {
       let channels = this.chatService.snapshotToArray(response);
+      console.log(channels)
       channels.forEach((channel) => {
       if(this.userService.getRoleCurrentUserRole() == "ROLE_ADMIN"){ 
-            console.log("admin");//ovde obeleziti channel da ima neprocitane poruke
             if (channel.open_by_user) {
-              //message.read = true;
               this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_user: false})
             }
             else{
@@ -76,7 +84,6 @@ export class SentBoxComponent implements OnInit {
           }
           else {
             if (channel.open_by_admin){
-              //message.read = true; 
               this.chatService.firebaseChannels.child(channel.key).update({unread_messages_by_admin: false})
             }
             else{
@@ -87,7 +94,6 @@ export class SentBoxComponent implements OnInit {
       })
     }
     )
-    
 
   }
 

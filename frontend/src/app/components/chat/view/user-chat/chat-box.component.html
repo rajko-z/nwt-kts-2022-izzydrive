@@ -12,7 +12,7 @@
     </div>
     
     <div class="typing-container">
-        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channel"></app-sent-box>
+        <app-sent-box (messageEmiter)="setMessage($event)" [channel]="this.channelId"></app-sent-box>
     </div>
 </div>
 <div *ngIf="isCollapsed" class="open_chat_shorcut">
@@ -20,7 +20,7 @@
             #tooltip="matTooltip"
           matTooltip={{this.tooltipText}}>
           <img *ngIf="!this.isUnread()" src="/assets/comments.png" class="new-message-icon"/>
-        <img *ngIf="this.isUnread()" src="/assets/new-message.png" class="new-message-icon"/>
+        <img *ngIf="this.isUnread()" src="/assets/comments-new.png" class="new-message-icon"/>
     </button>
 </div>
 

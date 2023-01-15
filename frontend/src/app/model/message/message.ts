@@ -2,13 +2,13 @@ export class Message{
 
     sender: string;
     text: string;
-    timeStamp: Date;
+    timeStamp: string;
     channel?: string;
     channel_key?: string;
 
     constructor(sender: string,
         text: string,
-        timeStamp: Date,
+        timeStamp: string,
         channel_key?: string,
         channel?: string){
         

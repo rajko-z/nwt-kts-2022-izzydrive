@@ -12,7 +12,7 @@
             </div>
         </div>
     
-        <div class="typing-container">
+        <div class="typing-container" *ngIf="isChatOpen">
             <app-sent-box (messageEmiter)="setMessage($event)" [channel]="channel"></app-sent-box>
         </div>
     </div>

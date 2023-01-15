@@ -50,7 +50,9 @@ import {AngularFireModule} from "@angular/fire/compat";
 
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
+import firebase from 'firebase/compat/app';
 
+firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent,

@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
+import { Channel } from 'src/app/model/channel/channel';
 
 @Component({
   selector: 'app-channels-list',
@@ -14,11 +15,10 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 export class ChannelsListComponent implements OnInit {
 
   displayedColumns: string[] = ['channel-id', 'channel-name'];
-  channels = [];
+  channels : Channel[] = [];
   isLoadingResults = true;
   previusChat : string = undefined;
-  @Output() chatMessagesEmiter = new EventEmitter<any>();
-  @Input() newMessage : any;
+  @Output() chatMessagesEmiter = new EventEmitter<Channel>();
 
   constructor(public datepipe: DatePipe, 
               private userService: UserService, 
@@ -28,7 +28,6 @@ export class ChannelsListComponent implements OnInit {
   initChannels(): void {
     this.chatService.firebaseChannels.on('value', resp => {
       this.channels = this.chatService.snapshotToArray(resp);
-      console.log(this.channels)
     });
     
   }
@@ -36,7 +35,7 @@ export class ChannelsListComponent implements OnInit {
     this,this.initChannels();
   }
 
-  enterChatRoom(channel: any) {
+  enterChatRoom(channel: Channel) {
     this.chatService.closeAllAdminChat();
     this.userService.getUserData(channel.id).subscribe({
       next: (response)=>{

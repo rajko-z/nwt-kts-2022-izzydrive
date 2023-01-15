@@ -9,6 +9,8 @@ import {NotificationM} from "./model/notifications/notification";
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
 import { Role } from './model/user/role';
+import { ChatService } from './services/chat/chat.service';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,12 +34,21 @@ export class AppComponent {
   // isUserLoggedIn: boolean = false;
   private stompClient: any;
 
-  constructor(private userService: UserService, public snackBar: MatSnackBar) {
+  constructor(private userService: UserService, public snackBar: MatSnackBar, private chatService : ChatService) {
     firebase.initializeApp(environment.firebaseConfig);
   }
 
   ngOnInit(): void {
+    firebase.initializeApp(environment.firebaseConfig);
     this.initializeWebSocketConnection();
+    this.listenForMessages();
+  }
+
+  listenForMessages() {
+    firebase.database().ref('messages/').on('child_added', (response : any) => {
+      console.log(this.chatService.snapshotToArray(response))
+      this.snackBar.open("You have new message", "OK");
+    }) 
   }
 
   isUserLoggedIn(): boolean {

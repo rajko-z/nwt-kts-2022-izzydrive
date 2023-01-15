@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 import firebase from 'firebase/compat/app'
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { Router } from '@angular/router';
+import { Channel } from 'src/app/model/channel/channel';
 
 @Component({
   selector: 'app-admin-chat',
@@ -15,16 +16,14 @@ export class AdminChatComponent implements OnInit {
   @ViewChildren('chatcontent') chatcontent: QueryList<any>;
   @ViewChild('chat_container') chat_container: ElementRef;
 
-  message :string;
+  message : Message;
   messages : Message[] = [];
-  channel: string;
-  newMessage : undefined
-  channels = []
-
+  channelId: string;
+  channels: Channel[]= []
+  isChatOpen : boolean = false;
   
-  constructor( private userService: UserService, 
-    private chatService : ChatService,
-    private router : Router) { 
+  constructor(  private chatService : ChatService,
+                private router : Router) { 
 
     }
 
@@ -38,25 +37,29 @@ export class AdminChatComponent implements OnInit {
       this.chat_container.nativeElement.scrollTop = this.chat_container.nativeElement.scrollHeight;
     } catch (err) {}
   }
-  
-  setMessage(message: any){
+
+  setMessage(message: Message){
     this.message = message;
     this.messages.push(message);
-    //this.initChannels();
   }
 
   loadMessages(channel : any){ 
-    this.channel = channel.id;
-    this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channel).on('value', (response : any) => {
+    this.channelId = channel.id;
+    this.isChatOpen = true;
+    this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channelId).on('value', (response : any) => {
         this.messages = this.chatService.snapshotToArray(response);
     })
     }
 
   ngOnInit(): void {
-   
+    firebase.database().ref('messages/').on('child_added', (response : any) => {
+      //this.messages = this.chatService.snapshotToArray(response);
+      console.log(response)
+    }) 
   }
 
   onCLose(){
+    this.isChatOpen = false;
     firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
       let channels = this.chatService.snapshotToArray(response);
       channels.forEach((c: any) => {
