@@ -1,8 +1,8 @@
 package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.dto.NewPassengerDTO;
-import com.izzydrive.backend.dto.PaymentStatusDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.service.users.PassengerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,5 +35,12 @@ public class PassengerController {
         List<UserDTO> drivers = passengerService.findAllPassenger();
 
         return new ResponseEntity<>(drivers, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @GetMapping("/current-driving")
+    public ResponseEntity<DrivingDTOWithLocations> findCurrentDrivingWithLocations() {
+        DrivingDTOWithLocations retVal = this.passengerService.getCurrentDrivingForLoggedPassenger();
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }

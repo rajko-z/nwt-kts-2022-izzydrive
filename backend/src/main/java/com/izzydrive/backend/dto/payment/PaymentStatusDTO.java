@@ -1,4 +1,4 @@
-package com.izzydrive.backend.dto;
+package com.izzydrive.backend.dto.payment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

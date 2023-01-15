@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { LoginComponent } from './views/login/login.component';
-import { OnboardingRouterModule } from './onboarding.router';
-import { AngularMaterialModule } from '../shared/angular-material.module';
+import { AngularMaterialModule } from '../../modules/shared/angular-material.module';
 import { OnboardingHeaderComponent } from './components/onboarding-header/onboarding-header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedComponentsModule } from '../shared/shared-components.module';
+import { SharedComponentsModule } from '../../modules/shared/shared-components.module';
 import { CommonModule } from '@angular/common';
 import {
   FacebookLoginProvider,
@@ -17,13 +16,12 @@ import { RegisterComponent } from './views/register/register.component';
 
 @NgModule({
   declarations: [LoginComponent, OnboardingHeaderComponent, RegisterComponent],
-  imports: [SocialLoginModule, 
-            CommonModule, 
-            JsonPipe, 
-            ReactiveFormsModule, 
-            OnboardingRouterModule, 
-            AngularMaterialModule, 
-            FormsModule, 
+  imports: [SocialLoginModule,
+            CommonModule,
+            JsonPipe,
+            ReactiveFormsModule,
+            AngularMaterialModule,
+            FormsModule,
             SharedComponentsModule],
   exports: [],
   providers: [

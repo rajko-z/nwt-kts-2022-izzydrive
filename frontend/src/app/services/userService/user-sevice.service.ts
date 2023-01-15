@@ -6,6 +6,7 @@ import { LoginResponse } from 'src/app/model/response/loginResponse';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from 'src/app/model/user/role';
 import { User } from 'src/app/model/user/user';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private _sanitizer: DomSanitizer,
+    private router: Router
   )
   { }
 
@@ -25,7 +27,11 @@ export class UserService {
     });
     return headers;
   }
-
+  logOut() {
+    // TODO:: check if driver has current or future drivings, and dont allow to log out
+    this.router.navigate(['anon/login']);
+    sessionStorage.removeItem('currentUser');
+  }
 
   isUserLoggedIn(): boolean {
     return this.getCurrentUserToken() !== null

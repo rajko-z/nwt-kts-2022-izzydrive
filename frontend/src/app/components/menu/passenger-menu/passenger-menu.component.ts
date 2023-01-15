@@ -13,8 +13,8 @@ export class PassengerMenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSupportChat(){
-    this.router.navigateByUrl("/support-chat")
+  orderDrivingNowClicked() {
+    this.router.navigateByUrl('/passenger/order-now')
   }
 
 }

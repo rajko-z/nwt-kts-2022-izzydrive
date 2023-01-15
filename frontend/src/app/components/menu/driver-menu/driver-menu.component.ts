@@ -13,7 +13,4 @@ export class DriverMenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSupportChat(){
-    this.router.navigateByUrl("/support-chat")
-  }
 }

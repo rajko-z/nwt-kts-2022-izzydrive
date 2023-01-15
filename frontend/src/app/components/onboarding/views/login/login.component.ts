@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
               private _ngZone: NgZone,
               private router: Router,
               private responseMessage: ResponseMessageService,
-              private chatService : ChatService) { 
+              private chatService : ChatService) {
 
   }
 
@@ -89,24 +89,25 @@ export class LoginComponent implements OnInit {
   })
   }
 
-  onSubmit(){
-   this.userService.regularLogin(this.loginForm.value)
-    .subscribe({
-
-        next : (responce) => {
-          console.log(responce)
-        this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
-        if (responce["user"].role === Role.ROLE_ADMIN.toString()){
-          console.log("eee")
-          this.chatService.checkNewMessagesForAdmin();
-        }
-        this.router.navigateByUrl('/driver')
-        //   this.router.navigateByUrl('/logged')
-      },
-        error: (error )=> {
+  onSubmit() {
+    this.userService.regularLogin(this.loginForm.value)
+      .subscribe({
+        next: (response) => {
+          this.userService.setCurrentUser({
+            email: response["user"].email,
+            token: response["token"],
+            role: response["user"].role,
+            id: response["user"].id
+          })
+          if (response["user"].role === Role.ROLE_ADMIN.toString()) {
+            this.chatService.checkNewMessagesForAdmin();
+          }
+          this.router.navigateByUrl('')
+        },
+        error: (error) => {
           this.responseMessage.openErrorMessage(error.error.message);
-      }
-    })
+        }
+      })
   }
 
   loginWithFacebook(): void {

@@ -4,6 +4,7 @@ import { getRole, Role } from 'src/app/model/user/role';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import {MatDialog} from "@angular/material/dialog";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
+import {PayingInfoComponent} from "../paying-info/paying-info.component";
 
 @Component({
   selector: 'app-menu',
@@ -45,10 +46,18 @@ export class MenuComponent implements OnInit {
   }
 
   onChangeProfile(){
-    this.router.navigateByUrl("/profile/edit-profile")
+    this.router.navigateByUrl("/user/edit-profile")
   }
 
   openChangePasswordDialog() {
     this.matDialog.open(ChangePasswordComponent);
+  }
+
+  openPayingInfoDialog() {
+    this.matDialog.open(PayingInfoComponent);
+  }
+
+  logOut() {
+    this.userService.logOut();
   }
 }

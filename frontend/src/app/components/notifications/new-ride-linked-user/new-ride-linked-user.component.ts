@@ -24,7 +24,7 @@ export class NewRideLinkedUserComponent implements OnInit {
   }
 
   openPaymentPageClick() {
-    this.router.navigateByUrl('/payment');
+    this.router.navigateByUrl('passenger/payment');
     this.data.preClose();
   }
 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileComponent } from './profile.component';
+import { HomePageAdminComponent } from './home-page-admin.component';
 
-describe('ProfileComponent', () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+describe('HomePageAdminComponent', () => {
+  let component: HomePageAdminComponent;
+  let fixture: ComponentFixture<HomePageAdminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileComponent ]
+      declarations: [ HomePageAdminComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProfileComponent);
+    fixture = TestBed.createComponent(HomePageAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

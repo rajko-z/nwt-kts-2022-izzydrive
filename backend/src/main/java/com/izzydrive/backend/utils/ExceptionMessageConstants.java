@@ -36,6 +36,9 @@ public final class ExceptionMessageConstants {
     public static final String ERROR_START_AND_END_LOCATION = "You have to provide one start and one end location";
     public static final String DRIVING_DOESNT_EXIST = "Driving with that id doesn't exists";
     public static final String DRIVER_IS_AVAILABLE = "Driver is already available";
+    public static final String ERROR_INVALID_ETH_ADDRESS = "ETH address is not valid";
+    public static final String ERROR_INVALID_SECRET_KEY = "Secret key is not valid";
+    public static final String ERROR_ETH_ADDRESS_DOES_NOT_MATCH_SECRET_KEY = "ETH address and private key does not match";
 
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);

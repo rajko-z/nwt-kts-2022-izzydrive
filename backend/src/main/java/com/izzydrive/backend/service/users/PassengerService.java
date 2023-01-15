@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users;
 
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.users.Passenger;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface PassengerService {
     Passenger getCurrentlyLoggedPassenger();
 
     void save(Passenger passenger);
+
+    DrivingDTOWithLocations getCurrentDrivingForLoggedPassenger();
 }

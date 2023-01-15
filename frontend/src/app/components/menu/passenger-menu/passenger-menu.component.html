@@ -3,26 +3,26 @@
             <mat-icon class="menu_item_icon">list</mat-icon>
             <mat-list-option >
                 My drivings
-            </mat-list-option>  
+            </mat-list-option>
         </div>
         <div class="menu_item">
             <mat-icon class="menu_item_icon">favorite</mat-icon>
             <mat-list-option>
                 Favorite drivings
-            </mat-list-option>  
+            </mat-list-option>
         </div>
         <div class="delimiter"></div>
         <div class="menu_item">
             <mat-icon class="menu_item_icon">add</mat-icon>
-            <mat-list-option >
+            <mat-list-option (click)="orderDrivingNowClicked()">
                 Order driving now
-            </mat-list-option>  
+            </mat-list-option>
         </div>
         <div class="menu_item">
             <mat-icon class="menu_item_icon">schedule</mat-icon>
             <mat-list-option>
                 Schedule the drive for later
-            </mat-list-option>  
+            </mat-list-option>
         </div>
         <div class="delimiter"></div>
 </div>

@@ -19,4 +19,8 @@ public interface DrivingService {
     void rejectDrivingLinkedUser(Long drivingId);
 
     DrivingDTO findById(Long id);
+
+    Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
+
+    Driving getDrivingWithLocations(Long id);
 }

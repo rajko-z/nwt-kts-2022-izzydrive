@@ -10,6 +10,9 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 })
 export class HeaderComponent implements OnInit {
 
+  sign_up_clicked: boolean = false;
+  sign_in_clicked: boolean = true;
+
   profilePhotoPath : SafeResourceUrl = '/assets/dark_logo.png'; //IZMENITI DA BUDE PRAVA SLIKA
   constructor(private userService : UserService, private router: Router, private _sanitizer: DomSanitizer) {
 

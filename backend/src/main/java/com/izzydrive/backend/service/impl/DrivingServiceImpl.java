@@ -4,23 +4,19 @@ import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
-import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverLocker;
-import com.izzydrive.backend.model.users.DriverStatus;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
-import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +29,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class DrivingServiceImpl implements DrivingService {
 
     private final DrivingRepository drivingRepository;
@@ -45,6 +40,14 @@ public class DrivingServiceImpl implements DrivingService {
     private final DriverLockerService driverLockerService;
 
     private final SimpMessagingTemplate simpMessagingTemplate;
+
+    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, SimpMessagingTemplate simpMessagingTemplate) {
+        this.drivingRepository = drivingRepository;
+        this.driverRepository = driverRepository;
+        this.passengerService = passengerService;
+        this.driverLockerService = driverLockerService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
+    }
 
     @Override
     public List<DrivingDTO> findAllByDriverId(Long driverId) {
@@ -149,5 +152,15 @@ public class DrivingServiceImpl implements DrivingService {
         } catch (OptimisticLockException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE); //vozac je vec oslobodjen
         }
+    }
+
+    @Override
+    public Driving getDrivingByIdWithDriverRouteAndPassengers(Long id) {
+        return this.drivingRepository.getDrivingByIdWithDriverRouteAndPassengers(id);
+    }
+
+    @Override
+    public Driving getDrivingWithLocations(Long id) {
+        return this.drivingRepository.getDrivingWithLocations(id);
     }
 }

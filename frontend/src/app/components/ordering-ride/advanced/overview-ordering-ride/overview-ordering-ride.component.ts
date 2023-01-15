@@ -26,8 +26,7 @@ export class OverviewOrderingRideComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     let payload = new DrivingRequest();
@@ -41,7 +40,7 @@ export class OverviewOrderingRideComponent implements OnInit {
       .subscribe({
           next: (response) => {
             this.apiLoading = false;
-            this.router.navigateByUrl('/payment');
+            this.router.navigateByUrl('passenger/payment');
           },
           error: (error) => {
             this.apiLoading = false;

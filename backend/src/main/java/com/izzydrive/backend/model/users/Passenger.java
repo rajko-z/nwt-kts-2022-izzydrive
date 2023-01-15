@@ -20,6 +20,12 @@ public class Passenger extends User {
     @Column(nullable = false)
     private boolean driving;
 
+    @Column
+    private String ethAddress;
+
+    @Column
+    private String secretKey;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Driving currentDriving;
 
