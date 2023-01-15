@@ -1,7 +1,21 @@
 <div class="prevois-chat-container">
-    <div class="prevois-chat" *ngFor="let channel of this.channels">
-        <button class="user-name">
-            {{channel.name}}
-        </button>
+    <div class="header">
+        Chats
     </div>
+    <button class="prevois-chat" *ngFor="let channel of this.channels" (click)="enterChatRoom(channel)">
+        <div class="button_content">
+            <img src="/assets/people.png" class="person_img"/>
+            <div style="display: flex; flex-direction: row;">
+                <div class="text">
+                    <div [ngClass]="{'user-name-bold': channel.unread_messages_by_admin,  'user-name': !channel.unread_messages_by_admin}" >
+                            {{channel.name}}
+                    </div>
+                    <div class="email-text">
+                            {{channel.id}}
+                    </div>
+                </div>
+                    <img src="/assets/chat-nottification.png" class="new_message-signal" *ngIf="channel.unread_messages_by_admin"/>
+            </div>
+        </div>
+    </button>
 </div>

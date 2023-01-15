@@ -11,6 +11,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTableModule} from "@angular/material/table";
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 
 // If you have any additional modules to be shared add them to the list
@@ -26,7 +28,8 @@ const materialModules = [
   MatCheckboxModule,
   MatProgressBarModule,
   MatTableModule,
-  MatDialogModule
+  MatDialogModule,
+  MatTooltipModule
 ];
 
 @NgModule({

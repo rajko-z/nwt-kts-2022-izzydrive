@@ -8,6 +8,11 @@ import {NotificationM} from "./model/notifications/notification";
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
+import { Role } from './model/user/role';
+import { ChatService } from './services/chat/chat.service';
+import { Message } from './model/message/message';
+import { Channel } from './model/channel/channel';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,19 +31,31 @@ import {environment} from "../environments/environment";
 export class AppComponent {
   title = 'NWT-KTS 2022 IZZYDRIVE';
 
+  
+
   // isUserLoggedIn: boolean = false;
   private stompClient: any;
 
-  constructor(private userService: UserService, public snackBar: MatSnackBar) {
+  constructor(private userService: UserService, public snackBar: MatSnackBar, private chatService : ChatService) {
     firebase.initializeApp(environment.firebaseConfig);
   }
 
   ngOnInit(): void {
+    //firebase.initializeApp(environment.firebaseConfig);
     this.initializeWebSocketConnection();
+    this.listenForMessages();
+  }
+
+  listenForMessages() {
+     this.chatService.listenForNewMessages();
   }
 
   isUserLoggedIn(): boolean {
     return this.userService.isUserLoggedIn();
+  }
+
+  isAdminLoggedIn(): boolean {
+    return this.userService.getRoleCurrentUserRole() == Role.ROLE_ADMIN.toString();
   }
 
   initializeWebSocketConnection() {

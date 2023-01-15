@@ -5,26 +5,10 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import firebase from 'firebase/compat/app'
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
+import { Role } from 'src/app/model/user/role';
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { Message } from 'src/app/model/message/message';
 
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
-
-export const snapshotToArray = (snapshot: any) => { //ovo izdvojiti
-  const returnArr = [];
-
-  snapshot.forEach((childSnapshot: any) => {
-      const item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      returnArr.push(item);
-  });
-
-  return returnArr;
-};
 
 @Component({
   selector: 'app-sent-box',
@@ -39,54 +23,43 @@ export class SentBoxComponent implements OnInit {
 
   @Input() channel : string;
   text = '';
-  users = [];
-  messages = [];
-  matcher = new MyErrorStateMatcher();
+  // messages : Message[] = [];
 
-  constructor(private router: Router,
-            private userService :UserService,
-              private route: ActivatedRoute,
+  constructor(private userService :UserService,
               private formBuilder: FormBuilder,
-              public datepipe: DatePipe) {
-                this.currentUserEmail = this.userService.getCurrentUserEmail()
-                 //nije u urlu treba slati kao input
-                // firebase.database().ref('chats/').on('value', resp => {
-                //   this.messages = [];
-                //   this.messages = snapshotToArray(resp);
-                //   setTimeout(() => this.scrolltop = this.chatcontent.nativeElement.scrollHeight, 500);
-                // });
-                // firebase.database().ref('roomusers/').orderByChild('roomname').equalTo(this.roomname).on('value', (resp2: any) => {
-                //   const roomusers = snapshotToArray(resp2);
-                //   this.users = roomusers.filter(x => x.status === 'online');
-                // });
+              public datepipe: DatePipe,
+              private chatService: ChatService) {
+                this.currentUserEmail = this.userService.getCurrentUserEmail();
               }
 
-  @Output() messageEmiter = new EventEmitter<string>();
+  @Output() messageEmiter = new EventEmitter<Message>();
 
   ngOnInit(): void {
     this.chatForm = this.formBuilder.group({
-      'text': new FormControl('', [Validators.required])
+      'text': new FormControl('', [])
     })
   }
-  // sendMessage(message : string){
-  //   this.messageEmiter.emit(message);
-  // }
 
   onFormSubmit() {
     this.text = this.chatForm.controls['text'].value;
-    this.messageEmiter.emit(this.text);
-    let chat = {channel : this.channel,
-                sender : this.userService.getCurrentUserEmail(),
-                timeStamp : this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
-                text: this.text,
-                read: false
-    }
-    const newMessage = firebase.database().ref('messages/').push();
-    newMessage.set(chat);
-    this.chatForm = this.formBuilder.group({
-      'text' : ['', Validators.required]
-    });
+    this.userService.getCurrentUserData().subscribe({
+      next: (user) => {
+        let mess : Message = new Message(this.userService.getCurrentUserEmail(),
+                                          this.text, 
+                                          this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm:ss'),
+                                          user.id.toString(),
+                                          this.channel)
+        this.chatService.markChannelAsRead(mess);
+        
+        const newMessage = firebase.database().ref('messages/').push();
+        newMessage.set(mess);
+        this.messageEmiter.emit(mess);
+        this.chatForm = this.formBuilder.group({
+          'text' : ['']
+        });
+      }
+    })
+   
   }
-
 
 }
