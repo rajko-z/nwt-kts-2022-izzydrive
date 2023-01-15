@@ -1,17 +1,23 @@
 package com.izzydrive.backend.service.users.impl;
 
 import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
+import com.izzydrive.backend.converters.DrivingDTOConverter;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.AddressRepository;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
+import com.izzydrive.backend.service.CarService;
+import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -42,6 +48,10 @@ public class PassengerServiceImpl implements PassengerService {
     private final UserRepository userRepository;
 
     private final PassengerRepository passengerRepository;
+
+    private final DrivingService drivingService;
+
+    private final CarService carService;
 
     public void registerPassenger(NewPassengerDTO newPassengerData){
         validateNewPassengerData(newPassengerData);
@@ -100,5 +110,16 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public void save(Passenger passenger) {
         this.passengerRepository.save(passenger);
+    }
+
+    @Override
+    public DrivingDTOWithLocations getCurrentDrivingForLoggedPassenger() {
+        Passenger passenger = this.getCurrentlyLoggedPassenger();
+        if (passenger.getCurrentDriving() == null) {
+            return null;
+        }
+        Driving currentDriving = this.drivingService.getDrivingByIdWithDriverRouteAndPassengers(passenger.getCurrentDriving().getId());
+        List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
+        return DrivingDTOConverter.convertWithLocationsAndDriver(currentDriving, locations, carService);
     }
 }

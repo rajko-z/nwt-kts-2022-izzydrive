@@ -7,7 +7,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -65,7 +67,7 @@ public class Driving {
     private Driver driver;
 
     @OneToMany(mappedBy = "currentDriving", fetch = FetchType.LAZY)
-    private List<Passenger> passengers = new ArrayList<>();
+    private Set<Passenger> passengers = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private Route route;
@@ -78,7 +80,11 @@ public class Driving {
         return locations;
     }
 
-    public List<Location> getLocationsForDriverToStart() {
+    public List<Location> getLocationsFromDriverToStart() {
         return locations.stream().filter(l -> !l.isForDrive()).collect(Collectors.toList());
+    }
+
+    public List<Location> getLocationsFromStartToEnd() {
+        return locations.stream().filter(Location::isForDrive).collect(Collectors.toList());
     }
 }

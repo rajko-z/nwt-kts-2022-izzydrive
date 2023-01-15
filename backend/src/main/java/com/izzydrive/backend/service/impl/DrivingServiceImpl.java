@@ -59,4 +59,14 @@ public class DrivingServiceImpl implements DrivingService {
         return ChronoUnit.MINUTES.between(driving.getCreationDate(), LocalDateTime.now())
                 >= Constants.MAX_NUMBER_OF_MINUTES_TO_COMPLETE_PAYMENT;
     }
+
+    @Override
+    public Driving getDrivingByIdWithDriverRouteAndPassengers(Long id) {
+        return this.drivingRepository.getDrivingByIdWithDriverRouteAndPassengers(id);
+    }
+
+    @Override
+    public Driving getDrivingWithLocations(Long id) {
+        return this.drivingRepository.getDrivingWithLocations(id);
+    }
 }

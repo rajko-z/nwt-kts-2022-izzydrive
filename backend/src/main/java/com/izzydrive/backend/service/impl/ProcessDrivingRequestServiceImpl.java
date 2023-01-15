@@ -24,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -87,7 +84,8 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
                                                CalculatedRouteDTO fromDriverToStart) {
 
         DrivingOptionDTO option = request.getDrivingOption();
-        List<Passenger> passengers = new ArrayList<>(List.of(passenger));
+        Set<Passenger> passengers = new HashSet<>();
+        passengers.add(passenger);
         passengers.addAll(getPassengersFromEmails(request.getDrivingFinderRequest().getLinkedPassengersEmails()));
 
         Driving driving = new Driving();
@@ -108,7 +106,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         updatePassengersCurrentDriving(passengers, passenger, driving);
         updateDriverDrivings(driver, driving);
     }
-    private void updatePassengersCurrentDriving(List<Passenger> linkedPassengers, Passenger initiator, Driving driving) {
+    private void updatePassengersCurrentDriving(Set<Passenger> linkedPassengers, Passenger initiator, Driving driving) {
         initiator.setCurrentDriving(driving);
         passengerService.save(initiator);
         for (Passenger p : linkedPassengers) {
