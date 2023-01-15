@@ -1,4 +1,4 @@
-<div *ngIf="drivingOptions?.length == 0">
+<div *ngIf="drivingOptions?.length === 0">
   There are currently no available drivers, please try again soon.
 </div>
 <div class="ride-area" *ngIf="drivingOptions?.length > 0">
@@ -7,8 +7,16 @@
         [ngClass]="{ 'selected-ride-info': option === selectedOption }">
     <div class="other-info">
       <div class="driver-info">
-        <img src="../../../../../assets/car.png" alt="car" class="driver-img">
-        <p class="driver-title">Driver: <span class="driver">{{option.driver.firstName}} {{option.driver.lastName}}</span></p>
+        <div class="tooltip">
+          <img *ngIf="option.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car" class="driver-img">
+          <img *ngIf="option.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png" alt="car" class="driver-img">
+          <img *ngIf="option.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png" alt="car" class="driver-img">
+          <span class="tooltiptext">{{option.driver.carData.carType}}</span>
+        </div>
+        <div class="driver-title">
+          <p>Driver: <span class="driver">{{option.driver.firstName}} {{option.driver.lastName}}</span></p>
+          <p class="registration">Registration: <span class="number">{{option.driver.carData.registration}}</span></p>
+        </div>
       </div>
       <div class="price-info">
         <p class="price-title">Price: <span class="price">{{option.price}} $</span></p>
@@ -33,7 +41,9 @@
       </div>
     </div>
     <div class="time-info">
+      <p class="time-title">Driver comes for:</p>
       <p class="minutes">{{option.timeForWaiting}}min</p>
+      <p class="time">Driving time: <span class="driving-time">{{option.startToEndPath.duration * 1000 | date:'m'}}min</span></p>
     </div>
   </div>
 </div>

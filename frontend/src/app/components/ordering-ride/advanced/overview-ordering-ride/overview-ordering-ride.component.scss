@@ -59,7 +59,7 @@
     }
 
     .driver-title {
-      margin: 5% 2%;
+      margin: 1% 2%;
     }
   }
 
@@ -75,30 +75,13 @@
 
 .third-line {
   display: flex;
-  justify-content: space-between;
-  margin-top: 2%;
+  justify-content: flex-end;
+  margin: 2% 3% 0 0;
 
-  .payment-info {
-    @include size(80%, 20vh);
-
-    .price-info {
-      display: flex;
-      justify-content: flex-start;
-      margin: 2%;
-
-      .price-title {
-        margin-left: 2%;
-      }
-
-      .price {
-        margin-left: 2%;
-      }
-    }
-  }
-
-  .done {
-    display: inline-block;
-    padding: 5%;
+  .price-title{
+    @include setFont(24px);
+    color: $dark3;
+    font-weight: bold;
   }
 }
 

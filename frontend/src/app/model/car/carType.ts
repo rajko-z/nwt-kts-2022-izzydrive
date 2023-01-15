@@ -1,12 +1,12 @@
 export enum CarType{
-    REGULAR,
-    AVARAGE,
-    PREMIUM
+    REGULAR="REGULAR",
+    AVERAGE="AVERAGE",
+    PREMIUM="PREMIUM"
 }
 
 export const getCarType = {
     "REGULAR" : CarType.REGULAR,
-    "AVARAGE": CarType.AVARAGE,
+    "AVERAGE": CarType.AVERAGE,
     "PREMIUM": CarType.PREMIUM
 }
 
