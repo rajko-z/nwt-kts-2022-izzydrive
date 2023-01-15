@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface DrivingService {
     List<DrivingDTO> findAllByDriverId(Long driverId);
+
     List<DrivingDTO> findAllByPassengerId(Long passengerId);
 
     void save(Driving driving);
@@ -14,4 +15,8 @@ public interface DrivingService {
     boolean passengerApprovedToPayDriving(Driving driving, String passengerEmail);
 
     boolean drivingExpiredForPayment(Driving driving);
+
+    void rejectDrivingLinkedUser(Long drivingId);
+
+    DrivingDTO findById(Long id);
 }

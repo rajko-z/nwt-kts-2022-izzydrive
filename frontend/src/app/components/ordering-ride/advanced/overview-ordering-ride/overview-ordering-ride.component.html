@@ -25,10 +25,20 @@
   <div class="second-line">
     <div class="driver-info">
       <div class="tooltip">
-        <img src="../../../../../assets/car.png" alt="car" class="driver-img">
+        <img *ngIf="selectedOption.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car"
+             class="driver-img">
+        <img *ngIf="selectedOption.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png"
+             alt="car" class="driver-img">
+        <img *ngIf="selectedOption.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png"
+             alt="car" class="driver-img">
         <span class="tooltiptext">{{selectedOption.driver.carData.carType}}</span>
       </div>
-      <p class="driver-title">Driver: <span class="driver">{{selectedOption.driver.firstName}} {{selectedOption.driver.lastName}}</span></p>
+      <div class="driver-title">
+        <p>Driver: <span class="driver">{{selectedOption.driver.firstName}} {{selectedOption.driver.lastName}}</span>
+        </p>
+        <p class="registration">Registration: <span class="number">{{selectedOption.driver.carData.registration}}</span>
+        </p>
+      </div>
     </div>
     <div class="additional-options-info">
       <div class="tooltip" *ngIf="selectedOption.driver.carData.carAccommodation.baggage">
@@ -48,6 +58,9 @@
         <span class="tooltiptext">Baby</span>
       </div>
     </div>
+  </div>
+  <div class="third-line">
+    <p class="price-title">= <span class="price">{{selectedOption.price}} $</span></p>
   </div>
 </div>
 <div class="submit-item">

@@ -3,6 +3,7 @@ package com.izzydrive.backend.dto;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.Passenger;
+import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
 @AllArgsConstructor
@@ -39,6 +40,16 @@ public class UserDTO {
         this.phoneNumber = passenger.getPhoneNumber();
         this.blocked = passenger.isBlocked();
         this.role = passenger.getRole().getName();
+    }
+
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.blocked = user.isBlocked();
+        this.role = user.getRole().getName();
     }
 }
 

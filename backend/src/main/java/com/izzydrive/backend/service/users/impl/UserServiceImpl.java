@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_DOESNT_EXISTS;
 
@@ -55,6 +57,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public List<UserDTO> findAllDTO() {
+        return userRepository.findAll().stream().sorted(Comparator.comparing(User::getId))
+                .map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -79,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             user.get().setBlocked(true);
             userRepository.save(user.get());
         }
@@ -93,17 +102,18 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user.get());
         }
     }
+
     public UserDTO changeUserInfo(UserDTO userDTO) {
         User user = userRepository.findByEmail(userDTO.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(userDTO.getEmail())));
 
-        if (validateNewUserData(userDTO)){
+        if (validateNewUserData(userDTO)) {
             user.setEmail(userDTO.getEmail());
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setPhoneNumber(userDTO.getPhoneNumber());
 
-            if(userDTO.getImageName() != null){
+            if (userDTO.getImageName() != null) {
                 imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
             }
             userRepository.save(user);
@@ -154,8 +164,8 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    private boolean validateNewUserData(UserDTO userDTO){
-       return Validator.validateEmail(userDTO.getEmail()) &&
+    private boolean validateNewUserData(UserDTO userDTO) {
+        return Validator.validateEmail(userDTO.getEmail()) &&
                 Validator.validateFirstName(userDTO.getFirstName()) &&
                 Validator.validateLastName(userDTO.getLastName()) &&
                 Validator.validatePhoneNumber(userDTO.getPhoneNumber());

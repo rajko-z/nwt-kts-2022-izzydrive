@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {MapService} from "../../../../services/mapService/map.service";
+import {CarType} from "../../../../model/car/carType";
 
 @Component({
   selector: 'app-ride-data-table',

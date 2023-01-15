@@ -1,0 +1,31 @@
+@import "src/style/styles";
+
+.title {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.location {
+  display: flex;
+  justify-content: flex-start;
+  margin: 2%;
+
+  .location-title {
+    margin-left: 2%;
+  }
+}
+
+
+.button {
+  display: flex;
+  justify-content: center;
+  height: 3vh;
+  margin: 1% 0 0 0;
+
+  .submit-button {
+    @include buttonStylePopup();
+    margin-left: 5px;
+    width: 20%;
+  }
+}
