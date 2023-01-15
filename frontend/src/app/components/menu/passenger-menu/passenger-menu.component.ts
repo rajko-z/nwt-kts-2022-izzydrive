@@ -17,4 +17,8 @@ export class PassengerMenuComponent implements OnInit {
     this.router.navigateByUrl("/support-chat")
   }
 
+  orderDrivingNowClicked() {
+    this.router.navigateByUrl('/passenger/order-now')
+  }
+
 }

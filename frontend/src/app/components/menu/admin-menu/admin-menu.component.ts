@@ -11,17 +11,17 @@ export class AdminMenuComponent  {
   constructor(private router: Router) { }
 
   routAddDriver(){
-    this.router.navigateByUrl("/profile/add-driver")
+    this.router.navigateByUrl("/admin/add-driver")
   }
   routAllDrivers(){
-    this.router.navigateByUrl("/drivers")
+    this.router.navigateByUrl("/admin/drivers")
   }
   routAllPassengers(){
-    this.router.navigateByUrl("/passengers")
+    this.router.navigateByUrl("/admin/passengers")
   }
 
   routSupportChat(){
-    this.router.navigateByUrl("/admin-chat")
+    this.router.navigateByUrl("/admin/admin-chat")
   }
 
 }

@@ -46,7 +46,7 @@ export class MenuComponent implements OnInit {
   }
 
   onChangeProfile(){
-    this.router.navigateByUrl("/profile/edit-profile")
+    this.router.navigateByUrl("/user/edit-profile")
   }
 
   openChangePasswordDialog() {
@@ -55,5 +55,9 @@ export class MenuComponent implements OnInit {
 
   openPayingInfoDialog() {
     this.matDialog.open(PayingInfoComponent);
+  }
+
+  logOut() {
+    this.userService.logOut();
   }
 }
