@@ -106,3 +106,43 @@
   width: 33vw;
   margin-top: 10px;
 }
+
+.ride-for-later {
+  margin-top: 5%;
+  display: flex;
+  justify-content: flex-start;
+
+  .option-schedule {
+    margin: 10% 0 10% 60%;
+  }
+}
+
+.input-time {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2%;
+
+  .input {
+    @include setFont(16px);
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: $dark3;
+  }
+}
+
+::ng-deep ngx-material-timepicker-content {
+  --body-background-color: #fff;
+  --primary-font-family: 'Roboto', sans-serif;
+  --button-color: #4C506C !important;
+  --dial-active-color: #fff;
+  --dial-inactive-color: rgba(255, 255, 255, .5);
+  --dial-background-color: #4C506C !important;
+  --dial-editable-active-color: #4C506C !important;
+  --dial-editable-background-color: #fff;
+  --clock-face-time-active-color: #fff;
+  --clock-face-time-inactive-color: #6c6c6c;
+  --clock-face-inner-time-inactive-color: #929292;
+  --clock-face-time-disabled-color: #c5c5c5;
+  --clock-face-background-color: #f0f0f0;
+  --clock-hand-color: #4C506C !important;
+}

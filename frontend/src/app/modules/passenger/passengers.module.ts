@@ -33,14 +33,14 @@ const declaredModules = [
 
 @NgModule({
   declarations: declaredModules,
-  imports: [
-    RouterModule,
-    CommonModule,
-    PassengersRoutingModule,
-    AngularMaterialModule,
-    ReactiveFormsModule,
-    SharedComponentsModule,
-  ],
+    imports: [
+        RouterModule,
+        CommonModule,
+        PassengersRoutingModule,
+        AngularMaterialModule,
+        ReactiveFormsModule,
+        SharedComponentsModule,
+    ],
   exports: declaredModules
 })
 export class PassengersModule {}

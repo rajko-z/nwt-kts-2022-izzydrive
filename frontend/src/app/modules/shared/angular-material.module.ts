@@ -15,6 +15,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 
 
 // If you have any additional modules to be shared add them to the list
@@ -35,6 +36,7 @@ const materialModules = [
   MatProgressSpinnerModule,
   MatExpansionModule,
   MatTooltipModule,
+  NgxMaterialTimepickerModule,
 ];
 
 @NgModule({

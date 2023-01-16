@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatStepper} from "@angular/material/stepper";
 import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
 import {DrivingOption} from "../../../model/driving/drivingOption";
@@ -21,6 +21,7 @@ export class OrderingRideAdvancedComponent implements OnInit {
   drivingOptions: DrivingOption[];
 
   selectedOption: DrivingOption;
+  @Input() scheduleRide: boolean;
 
   constructor() {
   }

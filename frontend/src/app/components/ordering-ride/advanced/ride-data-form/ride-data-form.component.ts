@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {OtherUsersDialogComponent} from "../../../other-users-dialog/other-users-dialog.component";
@@ -19,6 +19,7 @@ import {DrivingService} from "../../../../services/drivingService/driving.servic
 import {UserService} from "../../../../services/userService/user-sevice.service";
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
+import {addHours} from 'date-fns'
 
 @Component({
   selector: 'app-ride-data-form',
@@ -38,6 +39,14 @@ export class RideDataFormComponent {
 
   intermediatePanelOpened: boolean = false;
 
+  timeNow = new Date();
+  hourNow = this.timeNow.getHours();
+  minuteNow = this.timeNow.getMinutes();
+  hourMax = addHours(this.timeNow, 5).getHours();
+  startStr = `${this.hourNow}:${this.minuteNow}`;
+  endStr = `${this.hourMax}:${this.minuteNow}`;
+
+  @Input() scheduleRide: boolean;
   @Output() fetchedDrivingOptionsEvent = new EventEmitter<DrivingOption[]>()
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
@@ -52,7 +61,9 @@ export class RideDataFormComponent {
     foodOption: new FormControl(false),
     userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
-    userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()])
+    userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
+    scheduleRideControl: new FormControl(''),
+    scheduleTime: new FormControl('')
   })
 
   constructor(
@@ -129,7 +140,7 @@ export class RideDataFormComponent {
 
   checkUserHasAccount(): ValidatorFn {
     return ((control: AbstractControl): { [key: string]: boolean } | null => {
-      if(control.value === ''){
+      if (control.value === '') {
         return null;
       }
       return this.users?.find((user) => control.value === user.email) ? null : {'email': true};
@@ -138,13 +149,13 @@ export class RideDataFormComponent {
 
   private getLinkedPassengers(): string[] {
     let linkedPassengers: string[] = [];
-    if(this.routeForm.value.userEmailFriendsFirst != ''){
+    if (this.routeForm.value.userEmailFriendsFirst != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsFirst);
     }
-    if(this.routeForm.value.userEmailFriendsSecond != ''){
+    if (this.routeForm.value.userEmailFriendsSecond != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsSecond);
     }
-    if(this.routeForm.value.userEmailFriendsThird != ''){
+    if (this.routeForm.value.userEmailFriendsThird != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsThird);
     }
     return linkedPassengers;
