@@ -1,4 +1,4 @@
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule, DatePipe, JsonPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './angular-material.module';
@@ -14,7 +14,8 @@ import { ReviewRideTableComponent } from './review-ride-table/review-ride-table.
     CommonModule, 
     JsonPipe, 
     ReactiveFormsModule, 
-    FormsModule],
+    FormsModule,
+    DatePipe],
   exports: [BaseUserDataFormComponent, BaseCarDataFormComponent, ReviewRideTableComponent],
 })
 export class SharedComponentsModule{}

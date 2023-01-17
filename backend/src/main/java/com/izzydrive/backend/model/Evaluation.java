@@ -25,15 +25,19 @@ public class Evaluation {
     private LocalDateTime timestamp;
 
     @Column(nullable = false)
-    private double rate;
+    private double driverRate;
+
+    @Column(nullable = false)
+    private double vehicleGrade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Driving driving;
 
-    public Evaluation(String text, LocalDateTime now, Double rate, Driving driving) {
+    public Evaluation(String text, LocalDateTime now, Double driverRate, Double vehicleGrade, Driving driving) {
         this.text = text;
         this.timestamp = now;
-        this.rate = rate;
+        this.driverRate = driverRate;
+        this.vehicleGrade = vehicleGrade;
         this.driving = driving;
     }
 }

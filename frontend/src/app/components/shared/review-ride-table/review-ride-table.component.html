@@ -1,52 +1,79 @@
 <div class="dialog">
-  <div class="title">Review all rides - user: {{data.firstName}} {{data.lastName}}</div>
-  <div *ngIf="this.drivings?.length === 0">
-    <div class="notification">
-      <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-      <p class="text-message">The user does not have his own ride!</p></div>
+  <div class="title">Review all rides
+    <label *ngIf="isAdmin">
+      - user: {{data.firstName}} {{data.lastName}}
+    </label></div>
+  <div *ngIf="!this.gettingDataFinished" class="processing_container">
+    <p class="processing_text">Loading data ...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
-  <div *ngIf="drivings.length > 0">
-    <table mat-table [dataSource]="drivings" matSort (matSortChange)="sortData($event)" class="table-users">
+  <div *ngIf="this.gettingDataFinished">
+    <div *ngIf="this.drivings?.length === 0">
+      <div class="notification">
+        <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+        <p class="text-message">The user does not have his own ride!</p></div>
+    </div>
+    <div *ngIf="dataSource">
+      <table mat-table [dataSource]="dataSource" matSort class="table-users" (matSortChange)="sortData($event)">
+  
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let i = index">{{i + 1}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="startAddress">
+          <th mat-sort-header="startAddress" *matHeaderCellDef> start address</th>
+          <td mat-cell *matCellDef="let element"> {{element.start.name}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="endAddress">
+          <th mat-sort-header="endAddress" *matHeaderCellDef> end address </th>
+          <td mat-cell *matCellDef="let element"> {{element.end.name}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="startTime">
+          <th mat-sort-header="startTime" *matHeaderCellDef> start time </th>
+          <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="endTime">
+          <th mat-sort-header="endTime" *matHeaderCellDef> end time </th>
+          <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="price">
+          <th mat-sort-header="price" *matHeaderCellDef> price </th>
+          <td mat-cell *matCellDef="let element">{{element.price}}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let i = index">{{i + 1}} </td>
-      </ng-container>
+        <ng-container matColumnDef="details">
+          <th mat-sort-header *matHeaderCellDef> details </th>
+          <td mat-cell *matCellDef="let element" >
+            <button class="button-evaluate">DETAILS</button>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="evaluate" *ngIf="isPassenger">
+          <th mat-sort-header *matHeaderCellDef> evaluate </th>
+          <td mat-cell *matCellDef="let element">
+            <button *ngIf="element.evaluationAvailable" (click)="openDialog(element)" class="button-evaluate">EVALUATE</button>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="startAddress">
-        <th mat-sort-header="startAddress" *matHeaderCellDef> start address</th>
-        <td mat-cell *matCellDef="let element"> {{element.start.name}} </td>
-      </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
-      <ng-container matColumnDef="endAddress">
-        <th mat-sort-header="endAddress" *matHeaderCellDef> end address </th>
-        <td mat-cell *matCellDef="let element"> {{element.end.name}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="startTime">
-        <th mat-sort-header="startTime" *matHeaderCellDef> start time </th>
-        <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="endTime">
-        <th mat-sort-header="endTime" *matHeaderCellDef> end time </th>
-        <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="price">
-        <th mat-sort-header="price" *matHeaderCellDef> price </th>
-        <td mat-cell *matCellDef="let element">{{element.price}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="evaluate">
-        <th mat-header-cell *matHeaderCellDef> evaluate </th>
-        <td mat-cell *matCellDef="let element" >
-          <button *ngIf="isPassenger && element.evaluationAvailable" (click)="openDialog(element)" class="button-evaluate">EVALUATE</button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+    </div>
+   
   </div>
+  <mat-paginator [pageSizeOptions]="[1, 2, 5]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements" 
+    #paginator
+    (page)="onPaginateChange($event)">
+  </mat-paginator>
+
+
 </div>

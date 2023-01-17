@@ -22,8 +22,14 @@ public class EvaluationController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping("/add")
     public ResponseEntity<TextResponse> addEvaluation(@RequestBody EvaluationDTO evaluationDTO){
-        this.evaluationService.addEvaluation(evaluationDTO);
-        return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
+        try{
+            this.evaluationService.addEvaluation(evaluationDTO);
+            return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
 

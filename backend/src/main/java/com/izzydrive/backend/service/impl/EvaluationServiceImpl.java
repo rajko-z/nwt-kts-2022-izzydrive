@@ -33,6 +33,6 @@ public class EvaluationServiceImpl implements EvaluationService {
     public void addEvaluation(EvaluationDTO evalutionDTO) {
         Driving driving = drivingRepository.findById(evalutionDTO.getDrivingId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST));
-        evaluationRepository.save(new Evaluation(evalutionDTO.getText(), LocalDateTime.now(), evalutionDTO.getRate(), driving));
+        evaluationRepository.save(new Evaluation(evalutionDTO.getText(), LocalDateTime.now(), evalutionDTO.getDriverRate(), evalutionDTO.getVehicleGrade(), driving));
     }
 }

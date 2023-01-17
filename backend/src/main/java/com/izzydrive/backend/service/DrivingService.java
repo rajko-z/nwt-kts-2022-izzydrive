@@ -20,5 +20,5 @@ public interface DrivingService {
 
     DrivingDTO findById(Long id);
 
-    List<DrivingDTO> getPassengerDrivingHistory(Long passengerId);
+    List<DrivingDTO> getPassengerDrivingHistory(Long passengerId, int page, int pageSize);
 }

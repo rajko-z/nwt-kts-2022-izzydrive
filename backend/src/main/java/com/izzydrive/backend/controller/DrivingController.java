@@ -80,9 +80,9 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER')")
-    @GetMapping("passenger/history/{passengerId}")
-    public ResponseEntity<List<DrivingDTO>> getPassengerDrivingHistory(@PathVariable Long passengerId){
-        List<DrivingDTO> drivings = drivingService.getPassengerDrivingHistory(passengerId);
+    @GetMapping("passenger/history/{passengerId}/{page}/{pageSize}")
+    public ResponseEntity<List<DrivingDTO>> getPassengerDrivingHistory(@PathVariable Long passengerId,@PathVariable Integer page, @PathVariable Integer pageSize){
+        List<DrivingDTO> drivings = drivingService.getPassengerDrivingHistory(passengerId, page, pageSize);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
 }

@@ -21,12 +21,25 @@
 
 .button-evaluate{
   @include buttonStyle();
-  @include size(80%, 50%);
-  font-size: 13px;
+  @include size(90%, 100%);
+  font-size: 12px;
+  padding: 5px;
 }
 
 .table-users {
   width: 85vw;
   min-height: 20vh;
-  margin: 2% 5%;
+  margin: 5% 5%;
+}
+
+::ng-deep .mat-cell {
+  padding: 18px 18px 10px 10px !important;
+}
+
+::ng-deep .mat-sort-header-container{
+  font-weight: 400 !important;
+  justify-content: center !important;
+  border-bottom: solid 1px !important;
+  color: $dark3;
+  font-size: 16px;
 }

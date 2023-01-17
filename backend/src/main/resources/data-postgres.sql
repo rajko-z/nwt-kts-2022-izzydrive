@@ -105,15 +105,15 @@ VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023
 
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-16 18:10:00', false, null, null, 432432.3, false, '2023-01-16 18:00:00', 2, null, 3);
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-16 18:10:00', false, null, null, 232002.3, false, '2023-01-16 18:00:00', 2, null, 3);
 
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-15 18:15:00', false, null, null, 432432.3, false, '2023-01-15 18:00:00', 3, null, 3);
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-15 18:15:00', false, null, null, 311001.3, false, '2023-01-15 18:00:00', 3, null, 1);
 
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, null, 432432.3, false, '2023-01-13 22:00:00', 4, null, 3);
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, null, 11000.3, false, '2023-01-13 22:00:00', 4, null, 2);
 
 INSERT INTO passenger_driving
     (passenger_id, driving_id)

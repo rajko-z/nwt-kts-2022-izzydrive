@@ -2,6 +2,8 @@ package com.izzydrive.backend.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -10,6 +12,8 @@ import lombok.*;
 public class EvaluationDTO {
     private String text;
     private Long drivingId;
-    private Double rate;
+    private Double driverRate;
+    private Double vehicleGrade;
+    private LocalDateTime timeStamp;
 
 }

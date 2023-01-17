@@ -9,6 +9,7 @@ import {Driving, DrivingRequest} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
 import { UserService } from '../userService/user-sevice.service';
+import { Sort } from '@angular/material/sort';
 
 @Injectable({
   providedIn: 'root'
@@ -54,4 +55,34 @@ export class DrivingService {
   getDrivingsHistoryForPassenger(passengerId : number){
     return this.httpClientService.get(environment.apiUrl + `drivings/passenger/history/${passengerId}`);
   }
+
+  sortData(sort: Sort, dataSource : Driving[]) : Driving[] {
+    if (!sort.active || sort.direction === '') {
+      return dataSource
+    }
+
+    let sortedData = dataSource.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'startAddress':
+          return this.compare(a.start.name, b.start.name, isAsc);
+        case 'endAddress':
+          return this.compare(a.end.name, b.end.name, isAsc);
+        case 'startTime':
+          return this.compare(a.startDate, b.startDate, isAsc);
+        case 'endTime':
+          return this.compare(a.endDate, b.endDate, isAsc);
+        case 'price':
+          return this.compare(a.price, b.price, isAsc);
+        default:
+          return 0;
+      }
+    });
+    return sortedData;
+  }
+
+  
+compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
 }

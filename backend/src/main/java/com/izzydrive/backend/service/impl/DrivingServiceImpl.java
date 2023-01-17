@@ -23,6 +23,7 @@ import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -149,8 +150,8 @@ public class DrivingServiceImpl implements DrivingService {
 
     @Transactional
     @Override
-    public List<DrivingDTO> getPassengerDrivingHistory(Long passengerId) {
-        List<Driving> passengerDrivings = this.passengerRepository.getPassengerDrivings(passengerId);
+    public List<DrivingDTO> getPassengerDrivingHistory(Long passengerId, int page, int pageSize) {
+        List<Driving> passengerDrivings = this.passengerRepository.getPassengerDrivings(passengerId, PageRequest.of(page, pageSize));
         List<DrivingDTO> convertedDriving = new ArrayList<DrivingDTO>();
         for (Driving driving : passengerDrivings){
             DrivingDTO dto = new DrivingDTO((driving));

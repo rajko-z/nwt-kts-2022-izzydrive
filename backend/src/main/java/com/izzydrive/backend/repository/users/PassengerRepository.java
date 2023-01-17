@@ -2,6 +2,7 @@ package com.izzydrive.backend.repository.users;
 
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Passenger;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +18,6 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     Optional<Passenger> findByEmailWithCurrentDriving(String email);
 
     @Query("SELECT p.drivings from Passenger p WHERE p.id = ?1")
-    List<Driving> getPassengerDrivings(Long id);
+    List<Driving> getPassengerDrivings(Long id, PageRequest request);
 }
 
