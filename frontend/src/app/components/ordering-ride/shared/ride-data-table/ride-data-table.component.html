@@ -41,8 +41,8 @@
       </div>
     </div>
     <div class="time-info">
-      <p class="time-title">Driver comes for:</p>
-      <p class="minutes">{{option.timeForWaiting}}min</p>
+      <p class="time-title" *ngIf="!option.reservation">Driver comes for:</p>
+      <p class="minutes"  *ngIf="!option.reservation">{{option.timeForWaiting}}min</p>
       <p class="time">Driving time: <span class="driving-time">{{option.startToEndPath.duration * 1000 | date:'m'}}min</span></p>
     </div>
   </div>

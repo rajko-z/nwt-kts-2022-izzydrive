@@ -128,13 +128,17 @@
       <div>
         <p class="option-title">You can schedule a ride for later:</p>
         <p class="explanation">*it is possible to schedule a ride 5 hours in advance</p>
-        <div class="ngx-timepicker-field-example" *ngIf="routeForm.value.scheduleRideControl">
+        <div class="ngx-timepicker-field-example" *ngIf="routeForm.value.scheduleRideControl && hourNow < 19">
           <div class="input-time">
-            <input placeholder="time" class="input" [ngxTimepicker]="toggleTimepicker" [format]="24" [min]="startStr"
-                   [max]="endStr" [value]="routeForm.value.scheduleTime" readonly>
-            <ngx-material-timepicker-toggle [for]="toggleTimepicker"></ngx-material-timepicker-toggle>
+            <input placeholder="time" class="input" [ngxTimepicker]="fullTime" [format]="24" [min]="startStr"
+                   [max]="endStr" [value]="routeForm.value.scheduleTime" formControlName="scheduleTime" readonly>
+            <ngx-material-timepicker-toggle [for]="fullTime"></ngx-material-timepicker-toggle>
           </div>
-          <ngx-material-timepicker #toggleTimepicker formControlName="scheduleTime"></ngx-material-timepicker>
+          <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+        </div>
+        <div *ngIf="routeForm.value.scheduleRideControl && hourNow >= 19">
+
+
         </div>
       </div>
       <div>

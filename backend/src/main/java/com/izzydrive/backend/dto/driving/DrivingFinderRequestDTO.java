@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -26,4 +27,8 @@ public class DrivingFinderRequestDTO {
     private IntermediateStationsOrderType intermediateStationsOrderType;
     private OptimalDrivingType optimalDrivingType;
     private Set<String> linkedPassengersEmails;
+
+    @NotNull
+    private Boolean reservation;
+    private LocalDateTime scheduleTime;
 }

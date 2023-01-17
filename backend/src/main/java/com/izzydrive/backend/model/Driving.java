@@ -34,6 +34,9 @@ public class Driving {
     private LocalDateTime startDate;
 
     @Column
+    private LocalDateTime reservationDate;
+
+    @Column
     private LocalDateTime endDate;
 
     @Column(nullable = false)
@@ -75,6 +78,12 @@ public class Driving {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="driving_id")
     private List<Location> locations = new ArrayList<>();
+
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name="passengersInDriving",
+//            joinColumns = @JoinColumn(name="driving_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name="passenger_id", referencedColumnName = "id"))
+//    private Set<Passenger> allPassengers = new HashSet<>();
 
     public List<Location> getLocations() {
         return locations;

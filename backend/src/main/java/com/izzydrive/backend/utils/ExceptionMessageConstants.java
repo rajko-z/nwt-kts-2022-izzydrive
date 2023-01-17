@@ -39,7 +39,11 @@ public final class ExceptionMessageConstants {
     public static final String ERROR_INVALID_ETH_ADDRESS = "ETH address is not valid";
     public static final String ERROR_INVALID_SECRET_KEY = "Secret key is not valid";
     public static final String ERROR_ETH_ADDRESS_DOES_NOT_MATCH_SECRET_KEY = "ETH address and private key does not match";
+    public static final String INVALID_PERIOD_SCHEDULE_DRIVING = "The ride is scheduled at least 30 minutes before and at most 5 hours before";
 
+    public static String passengerAlreadyHasReservation(String email){
+        return String.format("The passenger %s already has a reservation in the selected period", email);
+    }
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
     }

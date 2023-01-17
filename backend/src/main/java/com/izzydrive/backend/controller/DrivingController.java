@@ -58,6 +58,13 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping("finder/schedule")
+    public ResponseEntity<List<DrivingOptionDTO>> findScheduleDrivings(@RequestBody @Valid DrivingFinderRequestDTO request) {
+        List<DrivingOptionDTO> retVal = drivingFinderService.getScheduleDrivingOptions(request);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping(value = "/process")
     public ResponseEntity<TextResponse> processDrivingRequest(@RequestBody DrivingRequestDTO request) {
         this.processDrivingRequestService.process(request);

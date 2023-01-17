@@ -15,6 +15,8 @@ public interface PassengerService {
 
     Optional<Passenger> findByEmailWithCurrentDriving(String email);
 
+    Optional<Passenger> findByEmailWithReservedDriving(String email);
+
     /**
      * @throws com.izzydrive.backend.exception.NotFoundException if there is no loggedPassenger
      * */

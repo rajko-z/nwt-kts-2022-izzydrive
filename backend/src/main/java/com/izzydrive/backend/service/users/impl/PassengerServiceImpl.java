@@ -98,6 +98,11 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
+    public Optional<Passenger> findByEmailWithReservedDriving(String email) {
+        return passengerRepository.findByEmailWithReservedDriving(email);
+    }
+
+    @Override
     public Passenger getCurrentlyLoggedPassenger() {
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Passenger> passenger = this.findByEmailWithCurrentDriving(passengerEmail);

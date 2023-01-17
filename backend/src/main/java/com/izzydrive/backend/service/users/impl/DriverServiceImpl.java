@@ -186,10 +186,29 @@ public class DriverServiceImpl implements DriverService {
     }
 
 
-    private boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
-                                         List<CalculatedRouteDTO> fromStartToEnd,
+    public boolean driverWillNotOutworkFuture(List<CalculatedRouteDTO> fromStartToEnd,
                                          Driver driver,
                                          AddressOnMapDTO endLocation)
+    {
+        int maxAllowed = Constants.MAX_WORKING_MINUTES;
+        long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
+
+        if (minWorked >= maxAllowed) {
+            return false;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration());
+        if (minWorked > maxAllowed) {
+            return false;
+        }
+
+        return minWorked <= maxAllowed;
+    }
+
+    public boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
+                                        List<CalculatedRouteDTO> fromStartToEnd,
+                                        Driver driver,
+                                        AddressOnMapDTO endLocation)
     {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
@@ -236,9 +255,9 @@ public class DriverServiceImpl implements DriverService {
                         getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
 
         LocalDateTime estimatedArrival = LocalDateTime.now().plusMinutes(totalTimeNeededToGetToStartOfFutureDriving);
-        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate();
+        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate(); //nisam stavila getReservationDate()
 
-        if (estimatedArrival.isAfter(startTime)) {
+        if (estimatedArrival.isAfter(startTime)) {//baca nullPointerException
             return false;
         }
 

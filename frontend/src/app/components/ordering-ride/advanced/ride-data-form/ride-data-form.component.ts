@@ -19,7 +19,7 @@ import {DrivingService} from "../../../../services/drivingService/driving.servic
 import {UserService} from "../../../../services/userService/user-sevice.service";
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
-import {addHours} from 'date-fns'
+import {addHours, addMinutes} from 'date-fns'
 
 @Component({
   selector: 'app-ride-data-form',
@@ -41,12 +41,13 @@ export class RideDataFormComponent {
 
   timeNow = new Date();
   hourNow = this.timeNow.getHours();
-  minuteNow = this.timeNow.getMinutes();
+  minuteMax = this.timeNow.getMinutes();
   hourMax = addHours(this.timeNow, 5).getHours();
+  minuteNow = addMinutes(this.timeNow, 30).getMinutes();
   startStr = `${this.hourNow}:${this.minuteNow}`;
-  endStr = `${this.hourMax}:${this.minuteNow}`;
+  endStr = `${this.hourMax}:${this.minuteMax}`;
 
-  @Input() scheduleRide: boolean;
+  @Input() scheduleRide: boolean; //if schedule is true, is advanced ordering is false -- to set scheduleRideControl
   @Output() fetchedDrivingOptionsEvent = new EventEmitter<DrivingOption[]>()
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
@@ -62,7 +63,7 @@ export class RideDataFormComponent {
     userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
-    scheduleRideControl: new FormControl(''),
+    scheduleRideControl: new FormControl(false),
     scheduleTime: new FormControl('')
   })
 
@@ -77,8 +78,9 @@ export class RideDataFormComponent {
     private userService: UserService,
     private loggedUserService: LoggedUserService
   ) {
+    console.log(this.hourNow, this.hourNow>=19);
     this.loggedUserService.getAllUsers().subscribe((res) => {
-      this.users = res as User[];
+      this.users = res;
     });
   }
 
@@ -92,6 +94,33 @@ export class RideDataFormComponent {
     let drivingFinderRequest: DrivingFinderRequest = this.createDrivingFinderRequest();
 
     console.log(drivingFinderRequest);
+
+    if (this.routeForm.value.scheduleRideControl) {
+      this.getScheduleDrivingOptions(drivingFinderRequest);
+    } else {
+      this.getAdvancedDrivingOptions(drivingFinderRequest);
+    }
+  }
+
+  private getScheduleDrivingOptions(drivingFinderRequest: DrivingFinderRequest) {
+    this.apiLoading = true;
+    this.drivingService.getScheduleDrivingOptions(drivingFinderRequest)
+      .subscribe({
+          next: (options) => {
+            this.apiLoading = false;
+            console.log(options);
+            this.fetchedDrivingOptionsEvent.emit(options);
+            this.drivingFinderRequestEvent.emit(drivingFinderRequest);
+          },
+          error: (error) => {
+            this.apiLoading = false;
+            this.openErrorMessage(error.error.message);
+          }
+        }
+      );
+  }
+
+  private getAdvancedDrivingOptions(drivingFinderRequest: DrivingFinderRequest) {
     this.apiLoading = true;
     this.drivingService.getAdvancedDrivingOptions(drivingFinderRequest)
       .subscribe({
@@ -126,7 +155,16 @@ export class RideDataFormComponent {
     drivingFinderRequest.intermediateStationsOrderType = this.getStationsOrderType();
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
+    drivingFinderRequest.reservation = this.routeForm.value.scheduleRideControl;
+    drivingFinderRequest.scheduleTime = this.getScheduleTime();
     return drivingFinderRequest;
+  }
+
+  private getScheduleTime(){
+    const time = this.routeForm.value.scheduleTime.split(':');
+    const date = new Date();
+    const dateTime = new Date(date.getFullYear(),date.getMonth(),date.getDate(),+time[0],+time[1]);
+    return dateTime;
   }
 
   checkEmailWithCurrentUser(): ValidatorFn {

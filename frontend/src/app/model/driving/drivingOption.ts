@@ -9,4 +9,5 @@ export class DrivingOption {
   price: number;
   driverToStartPath: CalculatedRoute;
   startToEndPath: CalculatedRoute;
+  reservation: boolean;
 }
