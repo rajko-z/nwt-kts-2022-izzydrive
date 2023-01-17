@@ -17,6 +17,6 @@ export class DeniedRideLinkedUserComponent implements OnInit {
 
   okClick() {
     this.data.preClose();
-    this.router.navigateByUrl('/logged');
+    this.router.navigateByUrl('/passenger');
   }
 }

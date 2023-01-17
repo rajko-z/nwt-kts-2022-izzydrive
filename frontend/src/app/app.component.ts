@@ -36,7 +36,7 @@ import { Channel } from './model/channel/channel';
 export class AppComponent {
   title = 'NWT-KTS 2022 IZZYDRIVE';
 
-  
+
 
   // isUserLoggedIn: boolean = false;
   private stompClient: any;
@@ -99,6 +99,24 @@ export class AppComponent {
     this.stompClient.subscribe('/notification/cancelRide', (message: { body: string }) => {
         let notification: NotificationM = JSON.parse(message.body);
         if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+          this.snackBar.openFromComponent(DeniedRideLinkedUserComponent, {
+            data: {
+              message: notification,
+              preClose: () => {
+                this.snackBar.dismiss()
+              }
+            },
+            verticalPosition: 'bottom',
+            horizontalPosition: 'right',
+          });
+        }
+      }
+    );
+
+    this.stompClient.subscribe('/notification/newReservationDriving', (message: { body: string }) => {
+        let notification: NotificationM = JSON.parse(message.body);
+        if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+          console.log(notification);
           this.snackBar.openFromComponent(DeniedRideLinkedUserComponent, {
             data: {
               message: notification,

@@ -192,6 +192,9 @@ public class DriverServiceImpl implements DriverService {
     {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
+       // na ovo vreme dodajes i ako ima trenutnu voznju i ako ima sledecu voznju
+        // pa na sve to dodajes i putanju od kraja sledece ili trenutne (zavisi) do ove koju zeli da rezervise
+
 
         if (minWorked >= maxAllowed) {
             return false;

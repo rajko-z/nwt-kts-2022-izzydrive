@@ -56,4 +56,8 @@ export class DrivingService {
     console.log("------");
     return this.httpClientService.postT<DrivingOption[]>(environment.apiUrl + 'drivings/finder/schedule', payload);
   }
+
+  createReservation(payload: DrivingRequest) {
+    return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process-reservation', payload);
+  }
 }

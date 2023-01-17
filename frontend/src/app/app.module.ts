@@ -16,12 +16,13 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import {HeaderComponent} from "./components/header/header.component";
+import { NewReservationComponent } from './components/notifications/new-reservation/new-reservation.component';
 
 
 firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, NewReservationComponent],
   imports: [
     CommonModule,
     BrowserModule,

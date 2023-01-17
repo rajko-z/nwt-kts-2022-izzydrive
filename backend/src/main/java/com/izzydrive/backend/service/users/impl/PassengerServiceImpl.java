@@ -105,11 +105,8 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public Passenger getCurrentlyLoggedPassenger() {
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<Passenger> passenger = this.findByEmailWithCurrentDriving(passengerEmail);
-        if (passenger.isEmpty()) {
-            throw new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail));
-        }
-        return passenger.get();
+        return this.findByEmailWithCurrentDriving(passengerEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
     }
 
     @Override

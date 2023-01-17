@@ -77,8 +77,14 @@
     </span>
   </div>
   <div class="submit-item" *ngIf="selectedOption.reservation">
-    <button class="submit-button" type="submit">
+    <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onBookRide()">
       Book a ride
     </button>
+    <span [hidden]="apiLoading===false">
+      <span><strong>Finding routes...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="40"></mat-spinner>
+      </button>
+    </span>
   </div>
 </div>

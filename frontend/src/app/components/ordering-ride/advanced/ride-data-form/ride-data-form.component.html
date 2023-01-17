@@ -137,7 +137,12 @@
           <ngx-material-timepicker #fullTime></ngx-material-timepicker>
         </div>
         <div *ngIf="routeForm.value.scheduleRideControl && hourNow >= 19">
-
+          <div class="input-time">
+            <input placeholder="time" class="input" [ngxTimepicker]="fullTime" [format]="24"
+                    [value]="routeForm.value.scheduleTime" formControlName="scheduleTime" readonly>
+            <ngx-material-timepicker-toggle [for]="fullTime"></ngx-material-timepicker-toggle>
+          </div>
+          <ngx-material-timepicker #fullTime></ngx-material-timepicker>
 
         </div>
       </div>

@@ -36,6 +36,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.izzydrive.backend.utils.Constants.*;
+import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds;
+
 @Service
 @AllArgsConstructor
 public class DrivingFinderServiceImpl implements DrivingFinderService {
@@ -133,7 +136,7 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
                     DriverDTOConverter.convertBasicWithCar(driver, carService),
                     new LocationDTO(driver.getLon(), driver.getLat()),
-                    Helper.getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
+                    getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
                     carService.calculatePrice(driver.getCar(), route.getDistance()),
                     fromDriverToStart,
                     route, false
@@ -258,29 +261,24 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
     }
 
     private void checkIfAnyPassengerAlreadyHasReservation(Set<String> linkedPassengers, String initiator, LocalDateTime time) {
-        //bice findByEmailWithReservedDriving
-        Optional<Passenger> currPass = this.passengerService.findByEmailWithReservedDriving(initiator);
-        if (currPass.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator));
-        }
-        //provera da nema buducu voznju u tom vremenu
-        for (Driving driving : currPass.get().getDrivings()) {
+        Passenger currPass = this.passengerService.findByEmailWithReservedDriving(initiator)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator)));
+
+        for (Driving driving : currPass.getDrivings()) {
             if (driving.isReservation()) {
-                checkIfPassengerHasReservationInThatTime(time, driving, currPass.get().getEmail());
+                checkIfPassengerHasReservationInThatTime(time, driving, initiator);
             }
         }
 
         for (String passengerEmail : linkedPassengers) {
-            Optional<Passenger> passenger = this.passengerService.findByEmailWithReservedDriving(passengerEmail);
-            if (passenger.isEmpty()) {
-                throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail));
-            }
-            for (Driving driving : passenger.get().getDrivings()) {
+            Passenger passenger = this.passengerService.findByEmailWithReservedDriving(passengerEmail)
+                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
+
+            for (Driving driving : passenger.getDrivings()) {
                 if (driving.isReservation()) {
-                    checkIfPassengerHasReservationInThatTime(time, driving, passenger.get().getEmail());
+                    checkIfPassengerHasReservationInThatTime(time, driving, passenger.getEmail());
                 }
             }
-            //provera da ulinkovani korisnik nema bbuducu voznju u tom vremenu
             if (passengerEmail.equals(initiator)) {
                 throw new BadRequestException(ExceptionMessageConstants.YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE);
             }
@@ -288,15 +286,12 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
     }
 
     private void checkIfPassengerHasReservationInThatTime(LocalDateTime currentTime, Driving driving, String email) {
-        LocalDateTime timeStart = driving.getReservationDate().minusMinutes(10);
-
-        LocalDateTime timeEnd = driving.getReservationDate().plusMinutes((long) (driving.getDuration() / 60 + 10));
+        LocalDateTime timeStart = driving.getReservationDate().minusMinutes(MINUTE_FOR_EXIST_RESERVATION);
+        LocalDateTime timeEnd = driving.getReservationDate().plusMinutes((getDurationInMinutesFromSeconds(driving.getDuration()) + MINUTE_FOR_EXIST_RESERVATION));
         if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
-            //postoji vec neka voznja koja je zakazana za izabrano vreme
             throw new BadRequestException(ExceptionMessageConstants.passengerAlreadyHasReservation(email));
         }
     }
-
 
     @Override
     public void validateDrivingFinderRequest(DrivingFinderRequestDTO request) {
@@ -307,13 +302,10 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
     @Override
     public List<DrivingOptionDTO> getScheduleDrivingOptions(DrivingFinderRequestDTO request) {
         request.setScheduleTime(request.getScheduleTime().plusHours(1));
-        //check time
-        checkScheduleTime(request);
 
-        //check passenger da li nemaju tada neku voznju
-        //ovde mi ne treba provera da li on ima trenutnu voznju - zameni sa proverom da li nema u tom vremenu vec neku zakazanu voznju
+        checkScheduleTime(request.getScheduleTime());
+
         validateDrivingFinderRequest(request);
-
 
         List<DrivingOptionDTO> options = getAllDrivingOptionsForReservation(
                 getAllPointsFromDrivingFinderRequest(request),
@@ -342,18 +334,19 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
         List<DrivingOptionDTO> options = new ArrayList<>();
 
-        for (Driver driver : getAllPossibleDriversForDrivingReservation()) { //+da nema rezervaciju u getAllPssible...
+        for (Driver driver : getAllPossibleDriversForDrivingReservation()) {
             calculateTimeAndFeelOptions(currentTime, fromStartToEndRoutes, startLocation, endLocation, options, driver);
         }
         return options;
     }
 
     private void calculateTimeAndFeelOptions(LocalDateTime currentTime, List<CalculatedRouteDTO> fromStartToEndRoutes, AddressOnMapDTO startLocation, AddressOnMapDTO endLocation, List<DrivingOptionDTO> options, Driver driver) {
-        LocalDateTime timeInterval = LocalDateTime.now().plusMinutes(45);
+        LocalDateTime timeInterval = LocalDateTime.now().plusMinutes(MINUTES_INTERVAL_BEFORE_RESERVATION);
         //ovo samo ako je 45 min pre voznje zakazana voznja
         if (currentTime.isBefore(timeInterval)) {
             CalculatedRouteDTO fromDriverToStart =
                     this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
+            //provera ako bi vozio trenutnu i sledecu da li bi stigao na rezervisanu
 
             if (driverService.driverWillNotOutwork(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {
                 feelOptionsForReservation(fromStartToEndRoutes, driver, options);
@@ -397,10 +390,10 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         return retVal;
     }
 
-    private void checkScheduleTime(DrivingFinderRequestDTO request) {
-        LocalDateTime timeMin = LocalDateTime.now().plusMinutes(30);
-        LocalDateTime timeMax = LocalDateTime.now().plusHours(5);
-        if (timeMin.isAfter(request.getScheduleTime()) || timeMax.isBefore(request.getScheduleTime())) {
+    private void checkScheduleTime(LocalDateTime currentTime) {
+        LocalDateTime timeMin = LocalDateTime.now().plusMinutes(MAX_HOUR_FOR_RESERVATION);
+        LocalDateTime timeMax = LocalDateTime.now().plusHours(MINUTES_BEFORE_RESERVATION);
+        if (timeMin.isAfter(currentTime) || timeMax.isBefore(currentTime)) {
             throw new BadRequestException(ExceptionMessageConstants.INVALID_PERIOD_SCHEDULE_DRIVING);
         }
     }

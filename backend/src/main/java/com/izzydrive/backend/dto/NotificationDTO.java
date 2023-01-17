@@ -3,6 +3,7 @@ package com.izzydrive.backend.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,4 +22,5 @@ public class NotificationDTO {
     private List<String> intermediateLocations;
     private double duration;
     private double price;
+    private LocalDateTime reservationTime;
 }

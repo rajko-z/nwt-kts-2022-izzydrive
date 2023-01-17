@@ -44,7 +44,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
     private final DrivingService drivingService;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final NotificationService notificationService;
 
     @Transactional
     public void process(DrivingRequestDTO request) {
@@ -67,20 +67,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
     private void sendNotificationLinkedPassengers(DrivingRequestDTO request, Driving driving) {
         for (String linkedPassenger : request.getDrivingFinderRequest().getLinkedPassengersEmails()) {
-            NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setMessage("You have been added to a new ride");
-            notificationDTO.setDrivingId(driving.getId());
-            notificationDTO.setDuration(driving.getDuration());
-            notificationDTO.setPrice(driving.getPrice());
-            notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
-            notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
-            List<String> intermediateStationDTO =new ArrayList<>();
-            for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
-                intermediateStationDTO.add(intermediateStation.getName());
-            }
-            notificationDTO.setIntermediateLocations(intermediateStationDTO);
-            notificationDTO.setUserEmail(linkedPassenger);
-            this.simpMessagingTemplate.convertAndSend("/notification/newRide", notificationDTO);
+            notificationService.sendNotificationNewDriving(linkedPassenger, driving);
         }
     }
 
@@ -170,7 +157,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         return retVal;
     }
 
-    private Route getRouteFromRequest(DrivingFinderRequestDTO request) {
+    public Route getRouteFromRequest(DrivingFinderRequestDTO request) {
         Route route = new Route();
         route.setStart(getAddressFromAddressOnMap(request.getStartLocation()));
         route.setEnd(getAddressFromAddressOnMap(request.getEndLocation()));

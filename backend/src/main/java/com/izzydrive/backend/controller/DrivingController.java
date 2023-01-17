@@ -9,6 +9,7 @@ import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.service.DrivingFinderService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.ProcessDrivingRequestService;
+import com.izzydrive.backend.service.ProcessDrivingReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,8 @@ public class DrivingController {
     private final DrivingFinderService drivingFinderService;
 
     private final ProcessDrivingRequestService processDrivingRequestService;
+
+    private final ProcessDrivingReservationService processDrivingReservationService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("driver/{driverId}")
@@ -68,6 +71,13 @@ public class DrivingController {
     @PostMapping(value = "/process")
     public ResponseEntity<TextResponse> processDrivingRequest(@RequestBody DrivingRequestDTO request) {
         this.processDrivingRequestService.process(request);
+        return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping(value = "/process-reservation")
+    public ResponseEntity<TextResponse> processDrivingReservationRequest(@RequestBody DrivingRequestDTO request) {
+        this.processDrivingReservationService.processReservation(request);
         return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
     }
 

@@ -6,6 +6,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {DrivingRequest} from "../../../../model/driving/driving";
 import {Router} from "@angular/router";
+import {
+  DeniedRideLinkedUserComponent
+} from "../../../notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 
 @Component({
   selector: 'app-overview-ordering-ride',
@@ -52,4 +55,30 @@ export class OverviewOrderingRideComponent implements OnInit {
       );
   }
 
+  onBookRide() {
+    let payload = new DrivingRequest();
+    payload.drivingOption = this.selectedOption;
+    payload.drivingFinderRequest = this.drivingFinderRequest;
+    console.log(payload);
+
+    this.apiLoading = true;
+    this.drivingService.createReservation(payload)
+      .subscribe({
+          next: (response) => {
+            this.apiLoading = false;
+            this.router.navigateByUrl('/passenger');
+            this.snackBar.open("You have successfully booked a ride!","Ok", {
+              verticalPosition: 'bottom',
+              horizontalPosition: 'right',
+            });
+          },
+          error: (error) => {
+            this.apiLoading = false;
+            this.snackBar.open(error.error.message, "ERROR", {
+              duration: 5000,
+            })
+          }
+        }
+      );
+  }
 }

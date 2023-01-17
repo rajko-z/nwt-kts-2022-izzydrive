@@ -76,9 +76,10 @@ export class RideDataFormComponent {
     private messageTooltip: MatSnackBar,
     private searchPlaceComponentService: SearchPlaceComponentService,
     private userService: UserService,
-    private loggedUserService: LoggedUserService
+    private loggedUserService: LoggedUserService,
+    private snackBar: MatSnackBar
   ) {
-    console.log(this.hourNow, this.hourNow>=19);
+    console.log(this.hourNow, this.hourNow >= 19);
     this.loggedUserService.getAllUsers().subscribe((res) => {
       this.users = res;
     });
@@ -88,6 +89,10 @@ export class RideDataFormComponent {
     event.preventDefault();
 
     if (!this.allFieldsValid()) {
+      return;
+    }
+
+    if(this.routeForm.value.scheduleRideControl && !this.checkTime()){
       return;
     }
 
@@ -160,11 +165,38 @@ export class RideDataFormComponent {
     return drivingFinderRequest;
   }
 
-  private getScheduleTime(){
+  private getScheduleTime() {
     const time = this.routeForm.value.scheduleTime.split(':');
     const date = new Date();
-    const dateTime = new Date(date.getFullYear(),date.getMonth(),date.getDate(),+time[0],+time[1]);
+    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
+    if ((this.hourNow >= 19)) {
+      if(+time[0] < 4 && +time[0] > 0){
+        dateTime.setDate(date.getDate() + 1);
+      }
+    }
     return dateTime;
+  }
+
+  //ovo treba testirati
+  private checkTime(): boolean{
+    const time = this.routeForm.value.scheduleTime.split(':');
+    const date = new Date();
+    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
+    if ((this.hourNow >= 19)) {
+      if(+time[0] < 4 && +time[0] > 0){
+        dateTime.setDate(date.getDate() + 1);
+      }
+      const dateMin = addMinutes(new Date(), 30);
+      const dateMax = addHours(new Date(), 5);
+      if (dateTime < dateMin || dateTime > dateMax) {
+        //nije okej
+        this.snackBar.open("Invalid time", "ERROR", {
+          duration: 5000,
+        })
+        return false;
+      }
+    }
+    return true;
   }
 
   checkEmailWithCurrentUser(): ValidatorFn {
