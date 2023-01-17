@@ -46,7 +46,10 @@ public class Driving {
     private boolean rejected;
 
     @Column
-    private String paymentApprovalIds;
+    private boolean locked;
+
+    @Version
+    private Integer version;
 
     @Enumerated(EnumType.STRING)
     private DrivingState drivingState;

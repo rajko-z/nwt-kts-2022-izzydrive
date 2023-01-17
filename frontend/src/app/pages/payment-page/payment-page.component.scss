@@ -1,0 +1,64 @@
+@import "src/style/styles";
+@import "src/app/components/shared/shared";
+
+
+.container {
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text {
+  font-size: 20px;
+}
+
+.submit-items{
+  @include size(auto, 5vh);
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin: 2%;
+
+  .submit-button{
+    @include buttonStyle();
+    @include size(15%, auto);
+    margin-right: 1%;
+  }
+}
+
+.button-text {
+  font-size: 20px;
+}
+
+.explanation-text {
+  font-size: 10px;
+}
+
+.helpIconContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 25vw;
+}
+
+.helpIcon {
+  color: $dark3;
+  margin-bottom: 1%;
+  font-size: 15px;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 15px!important;
+}
+
+.blur {
+  color: transparent;
+  text-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+.mat-form-field {
+  @include size(25vw, auto);
+}
+

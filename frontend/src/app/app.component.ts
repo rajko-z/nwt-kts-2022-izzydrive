@@ -18,6 +18,7 @@ import { Role } from './model/user/role';
 import { ChatService } from './services/chat/chat.service';
 import { Message } from './model/message/message';
 import { Channel } from './model/channel/channel';
+import {Router} from "@angular/router";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,12 +37,17 @@ import { Channel } from './model/channel/channel';
 export class AppComponent {
   title = 'NWT-KTS 2022 IZZYDRIVE';
 
-  
+
 
   // isUserLoggedIn: boolean = false;
   private stompClient: any;
 
-  constructor(private userService: UserService, public snackBar: MatSnackBar, private chatService : ChatService) {
+  constructor(
+    private userService: UserService,
+    public snackBar: MatSnackBar,
+    private chatService : ChatService,
+    private router: Router
+  ) {
     firebase.initializeApp(environment.firebaseConfig);
   }
 
@@ -109,8 +115,38 @@ export class AppComponent {
             verticalPosition: 'bottom',
             horizontalPosition: 'right',
           });
+          if (this.router.url === '/passenger/payment') {
+            this.router.navigateByUrl('/passenger/order-now');
+          }
         }
       }
     );
+    this.stompClient.subscribe('/notification/paymentSessionExpired', (message: { body: string }) => {
+      let notification: NotificationM = JSON.parse(message.body);
+      if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+        this.snackBar.open(notification.message, "OK");
+      }
+      if (this.router.url === '/passenger/payment') {
+        this.router.navigateByUrl('/passenger/order-now');
+      }
+    });
+
+    this.stompClient.subscribe('/notification/paymentSuccess', (message: { body: string }) => {
+      let notification: NotificationM = JSON.parse(message.body);
+      if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+        this.snackBar.open(notification.message, "OK");
+      }
+      this.router.navigateByUrl('/passenger/current-driving');
+    });
+
+    this.stompClient.subscribe('/notification/paymentFailure', (message: { body: string }) => {
+      let notification: NotificationM = JSON.parse(message.body);
+      if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+        this.snackBar.open(notification.message, "ERROR");
+      }
+      if (this.router.url === '/passenger/payment') {
+        this.router.navigateByUrl('/passenger/order-now');
+      }
+    });
   }
 }

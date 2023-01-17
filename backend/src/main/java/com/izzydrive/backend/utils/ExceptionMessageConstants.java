@@ -39,6 +39,8 @@ public final class ExceptionMessageConstants {
     public static final String ERROR_INVALID_ETH_ADDRESS = "ETH address is not valid";
     public static final String ERROR_INVALID_SECRET_KEY = "Secret key is not valid";
     public static final String ERROR_ETH_ADDRESS_DOES_NOT_MATCH_SECRET_KEY = "ETH address and private key does not match";
+    public static final String YOU_ALREADY_APPROVED_THIS_PAYING = "You already approved this paying";
+    public static final String CANT_USE_EXISTING_PAYING_DATA = "Can't use existing paying data, because you dont have one";
 
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);

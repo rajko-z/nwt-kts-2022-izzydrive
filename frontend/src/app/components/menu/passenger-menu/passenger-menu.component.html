@@ -13,6 +13,12 @@
         </div>
         <div class="delimiter"></div>
         <div class="menu_item">
+          <mat-icon class="menu_item_icon">location_on</mat-icon>
+          <mat-list-option (click)="currentDrivingClicked()">
+            Current driving
+          </mat-list-option>
+        </div>
+        <div class="menu_item">
             <mat-icon class="menu_item_icon">add</mat-icon>
             <mat-list-option (click)="orderDrivingNowClicked()">
                 Order driving now

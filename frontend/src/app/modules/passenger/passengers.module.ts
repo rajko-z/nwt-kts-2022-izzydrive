@@ -18,6 +18,10 @@ import {
 import {
   DeniedRideLinkedUserComponent
 } from "../../components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
+import {CurrentDrivingPageComponent} from "../../pages/current-driving-page/current-driving-page.component";
+import {
+  CurrentDrivingPassengerComponent
+} from "../../components/current-driving-passenger/current-driving-passenger.component";
 
 const declaredModules = [
   HomePageLoggedComponent,
@@ -28,7 +32,9 @@ const declaredModules = [
   OtherUsersDialogComponent,
   FavoriteRouteDialogComponent,
   NewRideLinkedUserComponent,
-  DeniedRideLinkedUserComponent
+  DeniedRideLinkedUserComponent,
+  CurrentDrivingPageComponent,
+  CurrentDrivingPassengerComponent
 ];
 
 @NgModule({

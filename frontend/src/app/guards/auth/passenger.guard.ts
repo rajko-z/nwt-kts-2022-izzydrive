@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
-import {UserService} from "../services/userService/user-sevice.service";
+import {UserService} from "../../services/userService/user-sevice.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DriverGuard implements CanActivate {
+export class PassengerGuard implements CanActivate {
 
   constructor(
     private userService: UserService,
@@ -24,11 +24,11 @@ export class DriverGuard implements CanActivate {
     const role = this.userService.getRoleCurrentUserRole();
 
     if (role === "ROLE_PASSENGER") {
-      this.router.navigate(['/passenger']);
+      return true;
     } else if (role === "ROLE_ADMIN") {
       this.router.navigate(['/admin']);
     } else if (role === "ROLE_DRIVER") {
-      return true;
+      this.router.navigate(['/driver']);
     }
     return false;
   }

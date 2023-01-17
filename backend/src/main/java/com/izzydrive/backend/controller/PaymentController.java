@@ -1,6 +1,7 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.TextResponse;
+import com.izzydrive.backend.dto.payment.CurrentPayingDTO;
 import com.izzydrive.backend.dto.payment.KeyPairDTO;
 import com.izzydrive.backend.dto.payment.PaymentStatusDTO;
 import com.izzydrive.backend.service.PaymentService;
@@ -42,6 +43,13 @@ public class PaymentController {
     public ResponseEntity<KeyPairDTO> getCurrentPaymentData() {
         KeyPairDTO keyPairDTO = paymentService.getPaymentDataForCurrentLoggedUser();
         return new ResponseEntity<>(keyPairDTO, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PutMapping("/pay")
+    public ResponseEntity<TextResponse> pay(@RequestBody @Valid CurrentPayingDTO currentPaying) {
+        paymentService.pay(currentPaying);
+        return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
     }
 
 }

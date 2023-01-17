@@ -78,13 +78,13 @@ values
     ('sava@gmail.com', null, 1),
     ('milojko@gmail.com', null, 1);
 
-insert into passengers (id, activated, blocked, email, first_name, last_name, password, phone_number, address_id, image_id, role_id, connected, driving, current_driving_id, eth_address, secret_key)
+insert into passengers (id, activated, blocked, email, first_name, last_name, password, phone_number, address_id, image_id, role_id, connected, driving, current_driving_id, eth_address, secret_key, paying_using_existing_info, once_time_eth_address, once_time_secret_key, approved_paying)
 values
-(nextval('users_id_gen'), true, false, 'john@gmail.com', 'John', 'Jonson', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634447899', 1, 1, 3, false, false, null, '0x9EBD578e9ecAf0EEf82fAa07c3983C820704fe17', 'd533521eb0cc70a0660a91cedeec92fcc919f416063d0d2be1d99d58d6140929'),
-(nextval('users_id_gen'), true, false, 'natasha.lakovic@gmail.com', 'Natasa', 'Lakovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3,false, false, null, null, null),
-(nextval('users_id_gen'), true, false, 'bob@gmail.com', 'Bob', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false,false, null, '0x0739eb5cb09cB2acCf324eE434cFF7805d90A168', '54b1aaea6ae9f74b3c280f391ca7e179322e178d472240b44ce7ab9444ef9799'),
-(nextval('users_id_gen'), true, false, 'sara@gmail.com', 'Sara', 'Saric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, false,null, '0xBD25D223968485Bba38Ede0Aca128967BE127a72', 'd7e0d8e79a824146d65e15909ff3023e9c1f329e9a63f0ebb1ecf4531ba23595'),
-(nextval('users_id_gen'), true, false, 'kate@gmail.com', 'Kate', 'Katen', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, false, null, null, null);
+(nextval('users_id_gen'), true, false, 'john@gmail.com', 'John', 'Jonson', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634447899', 1, 1, 3, false, false, null, '0x9EBD578e9ecAf0EEf82fAa07c3983C820704fe17', 'd533521eb0cc70a0660a91cedeec92fcc919f416063d0d2be1d99d58d6140929', true, null, null, false),
+(nextval('users_id_gen'), true, false, 'natasha.lakovic@gmail.com', 'Natasa', 'Lakovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3,false, false, null, null, null, false, null, null, false),
+(nextval('users_id_gen'), true, false, 'bob@gmail.com', 'Bob', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false,false, null, '0x0739eb5cb09cB2acCf324eE434cFF7805d90A168', '54b1aaea6ae9f74b3c280f391ca7e179322e178d472240b44ce7ab9444ef9799', true, null, null, false),
+(nextval('users_id_gen'), true, false, 'sara@gmail.com', 'Sara', 'Saric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, false,null, '0xBD25D223968485Bba38Ede0Aca128967BE127a72', 'd7e0d8e79a824146d65e15909ff3023e9c1f329e9a63f0ebb1ecf4531ba23595', true, null, null, false),
+(nextval('users_id_gen'), true, false, 'kate@gmail.com', 'Kate', 'Katen', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, false, null, null, null, false, null, null, false);
 
 insert into working_intervals(start_time, end_time, driver_id)
 values
@@ -95,13 +95,13 @@ values
 
 -- banijska 32 do zeleznicke
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
+VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, false, 1);
 
 -- cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
+VALUES (2900.9, 'INITIAL', 313.7, null, true, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, false, 1);
 
 
 UPDATE drivers SET current_driving_id=1 WHERE id=2;
@@ -109,8 +109,8 @@ UPDATE drivers SET reserved_from_client_driving_id=2 WHERE id=2;
 
 -- heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (3164.2, 'WAITING', 317.5, null, false, null, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
+VALUES (3164.2, 'WAITING', 317.5, null, false, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, false, 1);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 

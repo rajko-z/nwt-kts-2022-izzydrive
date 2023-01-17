@@ -42,8 +42,8 @@ export class DrivingService {
     return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process', payload);
   }
 
-  rejectDrivingLinkedPassenger(drivingId:number) {
-    return this.httpClientService.get(environment.apiUrl + `drivings/reject-linked-user/${drivingId}`);
+  rejectDrivingLinkedPassenger() {
+    return this.httpClientService.get(environment.apiUrl + 'drivings/reject-linked-user');
   }
 
   findById(id:number){

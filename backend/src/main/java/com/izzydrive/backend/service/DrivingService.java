@@ -12,15 +12,25 @@ public interface DrivingService {
 
     void save(Driving driving);
 
-    boolean passengerApprovedToPayDriving(Driving driving, String passengerEmail);
+    void saveAndFlush(Driving driving);
 
     boolean drivingExpiredForPayment(Driving driving);
 
-    void rejectDrivingLinkedUser(Long drivingId);
+    void rejectDrivingLinkedUser();
+
+    void removeDrivingPaymentSessionExpired(Long drivingId);
 
     DrivingDTO findById(Long id);
 
     Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
 
     Driving getDrivingWithLocations(Long id);
+
+    List<Driving> getAllDrivingsInStatusPayment();
+
+    boolean allPassengersApproveDriving(Long drivingId);
+
+    void cleanUpDrivingAfterFailurePaymentAndSendNotification(Driving driving);
+
+    void setUpDrivingAfterSuccessPaymentAndSendNotification(Driving driving);
 }

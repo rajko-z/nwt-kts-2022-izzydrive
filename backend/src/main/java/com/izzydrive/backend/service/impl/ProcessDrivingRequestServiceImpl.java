@@ -89,12 +89,12 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail());
             if (driverLocker.isEmpty()) {
                 DriverLocker lock = new DriverLocker(driver.getEmail(), passenger.getEmail(), 1);
-                this.driverLockerService.save(lock);
+                this.driverLockerService.saveAndFlush(lock);
             } else if (driverLocker.get().getPassengerEmail() != null) {
                 throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
             } else {
                 driverLocker.get().setPassengerEmail(passenger.getEmail());
-                driverLockerService.save(driverLocker.get());
+                driverLockerService.saveAndFlush(driverLocker.get());
             }
         } catch (OptimisticLockException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
@@ -123,7 +123,6 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         driving.setPassengers(passengers);
         driving.setLocations(getLocationsNeededForDriving(fromDriverToStart, option.getStartToEndPath()));
         driving.setDriver(driver);
-        driving.setPaymentApprovalIds(passenger.getEmail());
 
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, passenger, driving);
@@ -138,17 +137,6 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             passengerService.save(p);
         }
     }
-
-//    private void updateDriverDrivings(Driver driver, Driving driving) {
-//        if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
-//            driver.setDriverStatus(DriverStatus.TAKEN);
-//            driver.setCurrentDriving(driving);
-//        } else {
-//            driver.setDriverStatus(DriverStatus.RESERVED);
-//            driver.setNextDriving(driving);
-//        }
-//        driverService.save(driver);
-//    }
 
     private List<Location> getLocationsNeededForDriving(CalculatedRouteDTO fromDriverToStart, CalculatedRouteDTO fromStartToEnd) {
         List<Location> locations = new ArrayList<>();

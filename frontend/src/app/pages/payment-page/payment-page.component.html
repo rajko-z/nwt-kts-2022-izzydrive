@@ -1,1 +1,85 @@
-<p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+<div>
+  <div class="container" *ngIf="paymentStatus?.passengerApproved === false">
+    <div>
+      <span class="text">To pay: &nbsp;&nbsp;</span>
+      <span class="text"><strong>{{paymentStatus?.priceInRSD}} RSD -> {{paymentStatus?.priceInETH}} ETH</strong></span>
+    </div>
+
+    <br/>
+
+    <div class="text" *ngIf="userAlreadyHasPaymentData">
+      <mat-checkbox
+        [checked]="useExistingChecked"
+        (change)="useExistingChecked = !useExistingChecked"
+      >
+        Use existing payment info
+      </mat-checkbox>
+    </div>
+
+    <div [formGroup]="this.form" *ngIf="!useExistingChecked">
+      <div class="helpIconContainer">
+        <em class="fa fa-question-circle helpIcon"
+            matTooltip="ETH Address is your balance account, it is the only thing other people needs to know when they want to send ethers to you"></em>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>ETH Address</mat-label>
+        <input matInput
+               required
+               type="text"
+               formControlName="address"
+        >
+        <mat-error>Address field is required</mat-error>
+      </mat-form-field>
+
+      <div class="helpIconContainer">
+        <em class="fa fa-question-circle helpIcon"
+            matTooltip="Private key is like your password, it is used to identify that you are the owner of ethers on ETH balance account. Note that only one secret can match with your address"></em>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Secret key</mat-label>
+        <textarea matInput
+                  required
+                  placeholder="SECRET KEY"
+                  [class.blur]="hideSecretKey"
+                  formControlName="secretKey"></textarea>
+        <button [disabled]="this.form.controls.secretKey.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hideSecretKey = !hideSecretKey"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideSecretKey">
+          <mat-icon>{{hideSecretKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="paymentStatus?.waitingForOthers === true && paymentStatus?.passengerApproved === true">
+    <div>
+      <span class="explanationText" >*Payment will be processed only after all linked passengers approve to pay</span>
+    </div>
+    <br/>
+    <div class="submit-item">
+      <span><strong>Waiting for others to approve paying...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="50"></mat-spinner>
+      </button>
+    </div>
+  </div>
+
+  <div class="submit-items" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === false">
+    <button class="submit-button" type="submit" (click)="onCancelClicked()">
+      <span class="button-text">Cancel</span>
+    </button>
+    <button class="submit-button" type="submit" (click)="onPayClicked()">
+      <span class="button-text">Pay</span>
+    </button>
+  </div>
+  <div class="submit-items" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === true">
+    <div class="submit-item">
+      <span><strong>Processing request...</strong></span>
+      <button mat-button>
+        <mat-spinner diameter="50"></mat-spinner>
+      </button>
+    </div>
+  </div>
+
+
+
+</div>

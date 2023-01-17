@@ -18,9 +18,9 @@ import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.CarService;
 import com.izzydrive.backend.service.DrivingService;
-import com.izzydrive.backend.utils.Validator;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
+import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -53,11 +54,11 @@ public class PassengerServiceImpl implements PassengerService {
 
     private final CarService carService;
 
-    public void registerPassenger(NewPassengerDTO newPassengerData){
+    public void registerPassenger(NewPassengerDTO newPassengerData) {
         validateNewPassengerData(newPassengerData);
 
         Optional<User> user = userRepository.findByEmail(newPassengerData.getEmail());
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             Passenger passenger = new Passenger(
                     newPassengerData.getEmail(),
                     passwordEncoder.encode(newPassengerData.getPassword()),
@@ -73,13 +74,12 @@ public class PassengerServiceImpl implements PassengerService {
             String token = UUID.randomUUID().toString();
             confirmationTokenService.createVerificationToken(passenger, token);
             emailSender.sendConfirmationAsync(passenger.getEmail(), token, passenger.getFirstName());
-        }
-        else{
+        } else {
             throw new BadRequestException(ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE);
         }
     }
 
-    private void validateNewPassengerData(NewPassengerDTO newPassengerData)  {
+    private void validateNewPassengerData(NewPassengerDTO newPassengerData) {
         Validator.validateEmail(newPassengerData.getEmail());
         Validator.validateMatchingPassword(newPassengerData.getPassword(), newPassengerData.getRepeatedPassword());
         Validator.validateFirstName(newPassengerData.getFirstName());
@@ -121,5 +121,26 @@ public class PassengerServiceImpl implements PassengerService {
         Driving currentDriving = this.drivingService.getDrivingByIdWithDriverRouteAndPassengers(passenger.getCurrentDriving().getId());
         List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
         return DrivingDTOConverter.convertWithLocationsAndDriver(currentDriving, locations, carService);
+    }
+
+    @Override
+    public void saveAndFlush(Passenger passenger) {
+        this.passengerRepository.saveAndFlush(passenger);
+    }
+
+    @Override
+    public boolean passengerDoesNotHavePayingData(Passenger passenger) {
+        return passenger.getEthAddress() == null || passenger.getSecretKey() == null;
+    }
+
+    @Override
+    public void resetPassengersPayingInfo(Set<Passenger> passengers) {
+        for (Passenger p : passengers) {
+            p.setOnceTimeSecretKey(null);
+            p.setOnceTimeEthAddress(null);
+            p.setApprovedPaying(false);
+            p.setPayingUsingExistingInfo(!passengerDoesNotHavePayingData(p));
+            this.save(p);
+        }
     }
 }

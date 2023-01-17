@@ -7,10 +7,12 @@ import com.izzydrive.backend.model.users.Passenger;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface PassengerService {
 
     void registerPassenger(NewPassengerDTO newPassengerData);
+
     List<UserDTO> findAllPassenger();
 
     Optional<Passenger> findByEmailWithCurrentDriving(String email);
@@ -22,5 +24,12 @@ public interface PassengerService {
 
     void save(Passenger passenger);
 
+    void saveAndFlush(Passenger passenger);
+
     DrivingDTOWithLocations getCurrentDrivingForLoggedPassenger();
+
+    boolean passengerDoesNotHavePayingData(Passenger passenger);
+
+    void resetPassengersPayingInfo(Set<Passenger> passengers);
+
 }
