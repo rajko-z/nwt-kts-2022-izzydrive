@@ -19,4 +19,6 @@ public interface DrivingService {
     void rejectDrivingLinkedUser(Long drivingId);
 
     DrivingDTO findById(Long id);
+
+    List<DrivingDTO> getPassengerDrivingHistory(Long passengerId);
 }

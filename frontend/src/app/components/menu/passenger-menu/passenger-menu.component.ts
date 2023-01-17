@@ -17,4 +17,8 @@ export class PassengerMenuComponent implements OnInit {
     this.router.navigateByUrl("/support-chat")
   }
 
+  onDrivingHistory(){
+    this.router.navigateByUrl("/history/driving");
+  }
+
 }

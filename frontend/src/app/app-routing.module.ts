@@ -41,7 +41,12 @@ const routes: Routes = [
   {
     path: 'payment',
     component: PaymentPageComponent
-  }
+  },
+  {
+    path: 'history',
+    loadChildren: () =>
+      import('./components/driving-history/driving-history.module').then(m => m.DrivingHistoryModule),
+  },
 ];
 
 @NgModule({

@@ -18,8 +18,7 @@ import {SharedComponentsModule} from './components/shared/shared-components.modu
 import {AngularMaterialModule} from './components/shared/angular-material.module';
 import {AllPassengersPageAdminComponent} from './pages/all-passengers-page-admin/all-passengers-page-admin.component';
 import {AllDriversPageAdminComponent} from './pages/all-drivers-page-admin/all-drivers-page-admin.component';
-import {ReviewUsersTableComponent} from './components/review-users-table/review-users-table.component';
-import {ReviewRideTableComponent} from './components/review-ride-table/review-ride-table.component';
+import {ReviewUsersTableComponent} from './components/shared/review-users-table/review-users-table.component';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {FavoriteRouteDialogComponent} from './components/favorite-route-dialog/favorite-route-dialog.component';
 import {ReactiveFormsModule} from "@angular/forms";
@@ -53,7 +52,7 @@ import {environment} from "../environments/environment";
 import { NewRideLinkedUserComponent } from './components/notifications/new-ride-linked-user/new-ride-linked-user.component';
 import { DeniedRideLinkedUserComponent } from './components/notifications/denied-ride-linked-user/denied-ride-linked-user.component';
 import firebase from 'firebase/compat/app';
-
+import { DrivingHistoryModule } from './components/driving-history/driving-history.module';
 firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
@@ -67,7 +66,6 @@ firebase.initializeApp(environment.firebaseConfig);
                  OrderingRideAdvancedComponent,
                  AllDriversPageAdminComponent,
                  ReviewUsersTableComponent,
-                 ReviewRideTableComponent,
                  AllPassengersPageAdminComponent,
                  FavoriteRouteDialogComponent,
                  IntermediateStationsDialogComponent,
@@ -82,7 +80,8 @@ firebase.initializeApp(environment.firebaseConfig);
                  SearchPlaceComponent,
                  PaymentPageComponent,
                  NewRideLinkedUserComponent,
-                 DeniedRideLinkedUserComponent],
+                 DeniedRideLinkedUserComponent,
+                 ],
 
     imports: [
         CommonModule,
@@ -103,6 +102,7 @@ firebase.initializeApp(environment.firebaseConfig);
         MatExpansionModule,
         AngularFireModule.initializeApp(environment.firebaseConfig),
         AngularFireMessagingModule,
+        DrivingHistoryModule
     ],
     exports: [],
     providers: [{ provide: MAT_DIALOG_DATA, useValue: {} },

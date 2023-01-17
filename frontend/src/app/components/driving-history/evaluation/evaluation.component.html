@@ -1,0 +1,40 @@
+<div class="evaluation-container">
+  <div class="title">Evaluate the driving</div>
+  <div class="form">
+    <div class="form-field-title">
+      Write a comment
+    </div>
+    <form class="evaluation-form">
+      <mat-form-field class="text-field">
+        <mat-label>Leave a comment</mat-label>
+        <textarea matInput 
+                  placeholder="Leave comment here..."></textarea>
+      </mat-form-field>
+    </form>
+    <div class="form-field-title">
+      Rate the driver
+    </div>
+    <div class="rate-container">
+        <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedDriverGrade(grade)">
+          <mat-icon *ngIf="!(grade > selectedDriverGrade) || grade == selectedDriverGrade" class="icon-star">star</mat-icon>
+          <mat-icon *ngIf="grade > selectedDriverGrade" class="icon-star">star_border</mat-icon>
+        </button>
+    </div>
+    <div class="form-field-title">
+      Rate the vehicle
+    </div>
+    <div class="rate-container">
+        <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedVehicleGrade(grade)">
+          <mat-icon *ngIf="!(grade > selectedVehicleGrade) || grade == selectedVehicleGrade" class="icon-star">star</mat-icon>
+          <mat-icon *ngIf="grade > selectedVehicleGrade" class="icon-star">star_border</mat-icon>
+        </button>
+    </div>
+    <div class="subbmit-btn-container">
+      <button mat-raised-button class="large_button">
+        Subbmit
+      </button>
+    </div>
+   
+  </div>
+    
+</div>

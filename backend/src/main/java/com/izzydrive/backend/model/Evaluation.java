@@ -29,4 +29,11 @@ public class Evaluation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Driving driving;
+
+    public Evaluation(String text, LocalDateTime now, Double rate, Driving driving) {
+        this.text = text;
+        this.timestamp = now;
+        this.rate = rate;
+        this.driving = driving;
+    }
 }

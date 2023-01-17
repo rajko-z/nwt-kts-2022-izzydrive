@@ -1,0 +1,69 @@
+@import "src/style/styles";
+
+.evaluation-container{
+    width: 40vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.form{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    height: 70%;
+    margin-top: 5%;
+}
+
+.evaluation-form{
+    width: 80%;
+    height: 20%;
+    display: flex;
+}
+
+.text-field{
+    width: 100%;
+    height: 20%;
+}
+
+.icon-star {
+   transform: scale(2);
+   font-size: 20px;
+   color: $purple;
+   width: 35px;
+}
+
+.rate-container{
+    width: 50%;
+    height: 20%;
+}
+
+.title{
+    @include setFont(20px);
+    color: $dark3;
+    padding-top: 25px;
+    padding-bottom: 15px;
+    border-bottom: $light4 solid 1px;
+}
+
+.form-field-title{
+    @include setFont(15px);
+    color: $dark3;
+    padding-top: 25px;
+    padding-bottom: 15px;
+}
+
+.subbmit-btn-container{
+    padding-top: 50px;
+    width: 50%;
+    display: flex;
+    align-self: center;
+}
+
+::ng-deep .mat-icon-button{
+    width:50px !important;
+}

@@ -57,12 +57,6 @@ export class AdminChatComponent implements OnInit {
   onCLose(){
     this.isChatOpen = false;
     this.chatService.closeAllAdminChat();
-    // firebase.database().ref('channels/').once('value', (response : any) => { //svi chetovi su za admina sad zatvoreni
-    //   let channels = this.chatService.snapshotToArray(response);
-    //   channels.forEach((c: any) => {
-    //     firebase.database().ref('channels/' + c.key).update({open_by_admin:false})
-    //    });  
-    // })
     this.router.navigateByUrl('/logged');
   }
 }

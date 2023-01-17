@@ -3,7 +3,9 @@
 .table-users {
   width: 85vw;
   min-height: 20vh;
-  margin: 2% 5%;
+  margin: 5% 5%;
+  display: flex;
+  justify-self: center
 }
 
 .button-rides, .button-notes, .button-blocked{

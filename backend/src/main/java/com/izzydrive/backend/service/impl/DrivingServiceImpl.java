@@ -6,6 +6,8 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.Evaluation;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.DriverStatus;
@@ -15,10 +17,12 @@ import com.izzydrive.backend.repository.users.DriverRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.EvaluationService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -46,12 +50,18 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    private EvaluationService evaluationService;
+
+    private final PassengerRepository passengerRepository;
+
+    @Transactional
     @Override
     public List<DrivingDTO> findAllByDriverId(Long driverId) {
         return drivingRepository.findAllByDriverId(driverId)
                 .stream().map(DrivingDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public List<DrivingDTO> findAllByPassengerId(Long passengerId) {
         List<Driving> drivingDTOS = drivingRepository.findAllByPassengerId(passengerId);
@@ -137,6 +147,26 @@ public class DrivingServiceImpl implements DrivingService {
         return new DrivingDTO(driving.get());
     }
 
+    @Transactional
+    @Override
+    public List<DrivingDTO> getPassengerDrivingHistory(Long passengerId) {
+        List<Driving> passengerDrivings = this.passengerRepository.getPassengerDrivings(passengerId);
+        List<DrivingDTO> convertedDriving = new ArrayList<DrivingDTO>();
+        for (Driving driving : passengerDrivings){
+            DrivingDTO dto = new DrivingDTO((driving));
+            if (driving.getEndDate().isAfter(LocalDateTime.now().minusHours(72)) &&
+                    driving.getDrivingState() == DrivingState.FINISHED &&
+                    !isAlreadyEvaluatedDriving(driving.getId())){
+                dto.setEvaluationAvailable(true);
+            }
+            else{
+                dto.setEvaluationAvailable(false);
+            }
+            convertedDriving.add(dto);
+        }
+        return convertedDriving;
+    }
+
     private void unlockDriverIfPossible(Driver driver) {
         try {
             Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail());
@@ -149,5 +179,15 @@ public class DrivingServiceImpl implements DrivingService {
         } catch (OptimisticLockException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE); //vozac je vec oslobodjen
         }
+    }
+
+    private boolean isAlreadyEvaluatedDriving(Long drivingId){
+        List<Evaluation> existingEvaluations = this.evaluationService.findAll();
+        for (Evaluation evaluation : existingEvaluations){
+            if(evaluation.getDriving().getId() == drivingId){
+                return true;
+            }
+        }
+        return false;
     }
 }

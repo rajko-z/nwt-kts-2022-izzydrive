@@ -3,9 +3,6 @@
 .dialog{
   @include size(60vw, 60vh);
 }
-.row{
-
-}
 .title{
   @include setTitleStyle(55vw);
 }
@@ -20,4 +17,16 @@
   .text-message{
     margin-left: 1%;
   }
+}
+
+.button-evaluate{
+  @include buttonStyle();
+  @include size(80%, 50%);
+  font-size: 13px;
+}
+
+.table-users {
+  width: 85vw;
+  min-height: 20vh;
+  margin: 2% 5%;
 }

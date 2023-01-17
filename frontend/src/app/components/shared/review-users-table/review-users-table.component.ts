@@ -3,7 +3,7 @@ import {User} from 'src/app/model/user/user';
 import {MatDialog} from "@angular/material/dialog";
 import {ReviewRideTableComponent} from "../review-ride-table/review-ride-table.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
+import {LoggedUserService} from "../../../services/loggedUser/logged-user.service";
 
 @Component({
   selector: 'app-review-users-table',
@@ -24,7 +24,7 @@ export class ReviewUsersTableComponent {
 
   openDialog(user: User): void {
     this.dialog.open(ReviewRideTableComponent, {
-      data: {id: user.id, name: user.firstName, lastname: user.lastName, role: user.role},
+      data: {id: user.id, firstName: user.firstName, lastName: user.lastName, role: user.role},
     });
   }
 

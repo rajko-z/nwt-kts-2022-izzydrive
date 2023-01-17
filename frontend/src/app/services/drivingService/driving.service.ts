@@ -5,9 +5,10 @@ import {Observable} from "rxjs";
 import {DrivingOption} from "../../model/driving/drivingOption";
 import {DrivingFinderRequest} from "../../model/driving/drivingFinderRequest.";
 import {HttpClient} from "@angular/common/http";
-import {DrivingRequest} from "../../model/driving/driving";
+import {Driving, DrivingRequest} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
+import { UserService } from '../userService/user-sevice.service';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,9 @@ export class DrivingService {
 
   findById(id:number){
     return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
+  }
+
+  getDrivingsHistoryForPassenger(passengerId : number){
+    return this.httpClientService.get(environment.apiUrl + `drivings/passenger/history/${passengerId}`);
   }
 }
