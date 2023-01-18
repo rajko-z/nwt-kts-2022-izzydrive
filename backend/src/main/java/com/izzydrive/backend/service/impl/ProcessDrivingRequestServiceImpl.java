@@ -20,11 +20,11 @@ import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -96,7 +96,7 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
                 driverLocker.get().setPassengerEmail(passenger.getEmail());
                 driverLockerService.saveAndFlush(driverLocker.get());
             }
-        } catch (OptimisticLockException ex) {
+        } catch (OptimisticLockingFailureException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
     }

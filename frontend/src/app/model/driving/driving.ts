@@ -4,6 +4,7 @@ import {DrivingOption} from "./drivingOption";
 import {RouteDTO} from "../route/route";
 import {Driver} from "../driver/driver";
 import {Location} from "../map/location";
+import {CalculatedRoute} from "../map/calculatedRoute";
 
 export enum OptimalDrivingType {
   NO_PREFERENCE,
@@ -42,11 +43,9 @@ export class DrivingWithLocations {
   passengers: string[];
   isReservation: boolean;
   drivingState: DrivingState
-  duration: number;
-  distance: number;
   driver: Driver;
-  fromDriverToStart: Location[];
-  fromStartToEnd: Location[];
+  fromDriverToStart: CalculatedRoute;
+  fromStartToEnd: CalculatedRoute;
 }
 
 export enum DrivingState {

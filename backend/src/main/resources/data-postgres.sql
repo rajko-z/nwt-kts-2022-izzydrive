@@ -43,10 +43,10 @@ values
     (3,4),
     (5,8);
 
-insert into intermediate_stations(route_id, address_id)
+insert into intermediate_stations(route_id, address_id, station_order)
 values
-    (3, 6),
-    (3, 7);
+    (3, 6, 1),
+    (3, 7, 2);
 
 
 -- password is 123 for all users

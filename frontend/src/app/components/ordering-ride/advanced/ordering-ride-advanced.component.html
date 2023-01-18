@@ -9,7 +9,11 @@
 
   <mat-step completed="false">
     <ng-template matStepLabel>Choose ride</ng-template>
-    <app-ride-data-table (selectedOptionEvent)="onSecondStepNext($event, stepper)" [drivingOptions]="drivingOptions"></app-ride-data-table>
+    <app-ride-data-table
+      (selectedOptionEvent)="onSecondStepNext($event, stepper)"
+      [drivingOptions]="drivingOptions"
+      [drivingFinderRequest]="drivingFinderRequest"
+    ></app-ride-data-table>
   </mat-step>
 
   <mat-step completed="false">

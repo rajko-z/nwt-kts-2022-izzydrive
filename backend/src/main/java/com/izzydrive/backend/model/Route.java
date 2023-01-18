@@ -27,6 +27,7 @@ public class Route {
     private Address end;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderColumn(name = "station_order")
     @JoinTable(name="intermediate_stations",
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))

@@ -30,6 +30,7 @@ export class OverviewOrderingRideComponent implements OnInit {
 
   onSubmit() {
     let payload = new DrivingRequest();
+    this.setNewOrderedIntermediateLocationsIfNeeded();
     payload.drivingOption = this.selectedOption;
     payload.drivingFinderRequest = this.drivingFinderRequest;
 
@@ -50,6 +51,12 @@ export class OverviewOrderingRideComponent implements OnInit {
           }
         }
       );
+  }
+
+  setNewOrderedIntermediateLocationsIfNeeded() {
+    if (this.selectedOption.startToEndPath.reorderedIntermediate && this.drivingFinderRequest.intermediateLocations.length > 1) {
+      this.drivingFinderRequest.intermediateLocations = this.selectedOption.startToEndPath.reorderedIntermediate;
+    }
   }
 
 }

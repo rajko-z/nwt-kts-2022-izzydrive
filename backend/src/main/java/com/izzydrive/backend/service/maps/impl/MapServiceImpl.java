@@ -97,7 +97,9 @@ public class MapServiceImpl implements MapService {
 
         if (points.size() == 4) {
             CalculatedRouteDTO option1 = concatRoutesIntoOne(Arrays.asList(startToFirst, firstToSecond, secondToEnd));
+            option1.setReorderedIntermediate(List.of(start, first, second, end));
             CalculatedRouteDTO option2 = concatRoutesIntoOne(Arrays.asList(startToSecond, secondToFirst, firstToEnd));
+            option1.setReorderedIntermediate(List.of(start, second, first, end));
             return List.of(findBestMatchFromCalculatedRoutesByOptimalCriteria(Arrays.asList(option1, option2), optimalDrivingType));
         }
 
@@ -109,11 +111,22 @@ public class MapServiceImpl implements MapService {
         CalculatedRouteDTO thirdToEnd = getCalculatedRoutesFromPoints(Arrays.asList(third, end)).get(0);
 
         CalculatedRouteDTO option1 = concatRoutesIntoOne(Arrays.asList(startToFirst, firstToSecond, secondToThird, thirdToEnd));
+        option1.setReorderedIntermediate(List.of(first, second, third));
+
         CalculatedRouteDTO option2 = concatRoutesIntoOne(Arrays.asList(startToFirst, firstToThird, thirdToSecond, secondToEnd));
+        option2.setReorderedIntermediate(List.of(first, third, second));
+
         CalculatedRouteDTO option3 = concatRoutesIntoOne(Arrays.asList(startToSecond, secondToFirst, firstToThird, thirdToEnd));
+        option3.setReorderedIntermediate(List.of(second, first, third));
+
         CalculatedRouteDTO option4 = concatRoutesIntoOne(Arrays.asList(startToSecond, secondToThird, thirdToFirst, firstToEnd));
+        option4.setReorderedIntermediate(List.of(second, third, first));
+
         CalculatedRouteDTO option5 = concatRoutesIntoOne(Arrays.asList(startToThird, thirdToFirst, firstToSecond, secondToEnd));
+        option5.setReorderedIntermediate(List.of(third, first, second));
+
         CalculatedRouteDTO option6 = concatRoutesIntoOne(Arrays.asList(startToThird, thirdToSecond, secondToFirst, firstToEnd));
+        option6.setReorderedIntermediate(List.of(third, second, first));
 
         return List.of(findBestMatchFromCalculatedRoutesByOptimalCriteria(Arrays.asList(option1, option2, option3, option4, option5, option6), optimalDrivingType));
     }

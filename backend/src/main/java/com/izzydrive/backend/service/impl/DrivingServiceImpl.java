@@ -18,11 +18,11 @@ import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -186,7 +186,7 @@ public class DrivingServiceImpl implements DrivingService {
                 driverLocker.get().setPassengerEmail(null);
                 driverLockerService.saveAndFlush(driverLocker.get());
             }
-        } catch (OptimisticLockException ex) {
+        } catch (OptimisticLockingFailureException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE); //vozac je vec oslobodjen
         }
     }
