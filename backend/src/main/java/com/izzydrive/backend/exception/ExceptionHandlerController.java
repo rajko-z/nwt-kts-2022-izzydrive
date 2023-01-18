@@ -76,15 +76,15 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<ErrorMessage> nullPointerException(NullPointerException ex) {
-        ErrorMessage message = new ErrorMessage(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                new Date(),
-                SOMETHING_WENT_WRONG_MESSAGE
-        );
-
-        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(NullPointerException.class)
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    public ResponseEntity<ErrorMessage> nullPointerException(NullPointerException ex) {
+//        ErrorMessage message = new ErrorMessage(
+//                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+//                new Date(),
+//                SOMETHING_WENT_WRONG_MESSAGE
+//        );
+//
+//        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

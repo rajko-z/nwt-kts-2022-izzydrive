@@ -10,4 +10,6 @@ export class DrivingFinderRequest {
   intermediateStationsOrderType: IntermediateStationsOrderType;
   optimalDrivingType: OptimalDrivingType;
   linkedPassengersEmails: string[];
+  reservation: boolean;
+  scheduleTime: Date;
 }

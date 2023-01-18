@@ -13,5 +13,8 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
 
     @Query("select p from Passenger p left join fetch p.currentDriving c left join fetch c.passengers pp where p.email = ?1")
     Optional<Passenger> findByEmailWithCurrentDriving(String email);
+
+    @Query("select p from Passenger p left join fetch p.drivings where p.email = ?1")
+    Optional<Passenger> findByEmailWithReservedDriving(String email);
 }
 

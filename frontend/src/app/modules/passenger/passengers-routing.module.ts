@@ -7,10 +7,23 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageLoggedComponent,
+    data: {
+      reservation: false
+    }
   },
   {
     path: 'order-now',
     component: HomePageLoggedComponent,
+    data: {
+      reservation: false
+    }
+  },
+  {
+    path: 'order-for-later',
+    component: HomePageLoggedComponent,
+    data: {
+      reservation: true
+    }
   },
   {
     path: 'payment',

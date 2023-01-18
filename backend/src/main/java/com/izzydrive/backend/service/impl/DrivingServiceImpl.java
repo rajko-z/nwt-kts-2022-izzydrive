@@ -1,6 +1,5 @@
 package com.izzydrive.backend.service.impl;
 
-import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
@@ -12,11 +11,11 @@ import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.NotificationService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,14 +38,14 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final DriverLockerService driverLockerService;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final NotificationService notificationService;
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, SimpMessagingTemplate simpMessagingTemplate) {
+    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService) {
         this.drivingRepository = drivingRepository;
         this.driverRepository = driverRepository;
         this.passengerService = passengerService;
         this.driverLockerService = driverLockerService;
-        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -120,14 +119,9 @@ public class DrivingServiceImpl implements DrivingService {
         return passengersToSendNotifications;
     }
 
-    private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocationForNotification, String endLocationForNotification) {
+    private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
         for (String passenger : passengersToSendNotifications) {
-            NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setMessage("The ride was canceled when declined by the linked user");
-            notificationDTO.setStartLocation(startLocationForNotification);
-            notificationDTO.setEndLocation(endLocationForNotification);
-            notificationDTO.setUserEmail(passenger);
-            this.simpMessagingTemplate.convertAndSend("/notification/cancelRide", notificationDTO);
+            notificationService.sendNotificationRejectDriving(passenger, startLocation, endLocation);
         }
     }
 
@@ -142,15 +136,15 @@ public class DrivingServiceImpl implements DrivingService {
 
     private void unlockDriverIfPossible(Driver driver) {
         try {
-            Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail());
-            if (driverLocker.isEmpty()) { //ako je prazno greska da vozac nije zakljucan
-                throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE);
-            } else if (driverLocker.get().getPassengerEmail() != null) { //ovde treba postavili passenger na null
-                driverLocker.get().setPassengerEmail(null);
-                driverLockerService.save(driverLocker.get());
+            DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
+                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE));
+
+            if (driverLocker.getPassengerEmail() != null) {
+                driverLocker.setPassengerEmail(null);
+                driverLockerService.save(driverLocker);
             }
         } catch (OptimisticLockException ex) {
-            throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE); //vozac je vec oslobodjen
+            throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE);
         }
     }
 

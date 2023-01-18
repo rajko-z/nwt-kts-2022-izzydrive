@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {OtherUsersDialogComponent} from "../../../other-users-dialog/other-users-dialog.component";
@@ -19,6 +19,7 @@ import {DrivingService} from "../../../../services/drivingService/driving.servic
 import {UserService} from "../../../../services/userService/user-sevice.service";
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
+import {addHours, addMinutes} from 'date-fns'
 
 @Component({
   selector: 'app-ride-data-form',
@@ -38,6 +39,15 @@ export class RideDataFormComponent {
 
   intermediatePanelOpened: boolean = false;
 
+  timeNow = new Date();
+  hourNow = this.timeNow.getHours();
+  minuteMax = this.timeNow.getMinutes();
+  hourMax = addHours(this.timeNow, 5).getHours();
+  minuteNow = addMinutes(this.timeNow, 30).getMinutes();
+  startStr = `${this.hourNow}:${this.minuteNow}`;
+  endStr = `${this.hourMax}:${this.minuteMax}`;
+
+  @Input() scheduleRide: boolean;
   @Output() fetchedDrivingOptionsEvent = new EventEmitter<DrivingOption[]>()
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
@@ -52,8 +62,10 @@ export class RideDataFormComponent {
     foodOption: new FormControl(false),
     userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
-    userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()])
-  })
+    userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
+    scheduleRideControl: new FormControl(true),
+    scheduleTime: new FormControl('')
+  });
 
   constructor(
     public dialog: MatDialog,
@@ -64,10 +76,11 @@ export class RideDataFormComponent {
     private messageTooltip: MatSnackBar,
     private searchPlaceComponentService: SearchPlaceComponentService,
     private userService: UserService,
-    private loggedUserService: LoggedUserService
+    private loggedUserService: LoggedUserService,
+    private snackBar: MatSnackBar
   ) {
     this.loggedUserService.getAllUsers().subscribe((res) => {
-      this.users = res as User[];
+      this.users = res;
     });
   }
 
@@ -78,9 +91,40 @@ export class RideDataFormComponent {
       return;
     }
 
+    if (this.scheduleRide && !this.checkTime()) {
+      return;
+    }
+
     let drivingFinderRequest: DrivingFinderRequest = this.createDrivingFinderRequest();
 
     console.log(drivingFinderRequest);
+
+    if (this.scheduleRide) {
+      this.getScheduleDrivingOptions(drivingFinderRequest);
+    } else {
+      this.getAdvancedDrivingOptions(drivingFinderRequest);
+    }
+  }
+
+  private getScheduleDrivingOptions(drivingFinderRequest: DrivingFinderRequest) {
+    this.apiLoading = true;
+    this.drivingService.getScheduleDrivingOptions(drivingFinderRequest)
+      .subscribe({
+          next: (options) => {
+            this.apiLoading = false;
+            console.log(options);
+            this.fetchedDrivingOptionsEvent.emit(options);
+            this.drivingFinderRequestEvent.emit(drivingFinderRequest);
+          },
+          error: (error) => {
+            this.apiLoading = false;
+            this.openErrorMessage(error.error.message);
+          }
+        }
+      );
+  }
+
+  private getAdvancedDrivingOptions(drivingFinderRequest: DrivingFinderRequest) {
     this.apiLoading = true;
     this.drivingService.getAdvancedDrivingOptions(drivingFinderRequest)
       .subscribe({
@@ -115,7 +159,43 @@ export class RideDataFormComponent {
     drivingFinderRequest.intermediateStationsOrderType = this.getStationsOrderType();
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
+    drivingFinderRequest.reservation = this.scheduleRide;
+    drivingFinderRequest.scheduleTime = this.getScheduleTime();
     return drivingFinderRequest;
+  }
+
+  private getScheduleTime() {
+    const time = this.routeForm.value.scheduleTime.split(':');
+    const date = new Date();
+    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
+    if ((this.hourNow >= 19)) {
+      if (+time[0] < 4 && +time[0] > 0) {
+        dateTime.setDate(date.getDate() + 1);
+      }
+    }
+    return dateTime;
+  }
+
+  private checkTime(): boolean {
+    const time = this.routeForm.value.scheduleTime.split(':');
+    const date = new Date();
+    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
+    if ((this.hourNow >= 19)) {
+      if (+time[0] < 4 && +time[0] > 0) {
+        dateTime.setDate(date.getDate() + 1);
+      }
+      const dateMin = addMinutes(new Date(), 30);
+      const dateMax = addHours(new Date(), 5);
+      if (dateTime < dateMin || dateTime > dateMax) {
+        this.snackBar.open("The ride is scheduled at least 30 minutes before and at most 5 hours before", "ERROR", {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        })
+        return false;
+      }
+    }
+    return true;
   }
 
   checkEmailWithCurrentUser(): ValidatorFn {
@@ -129,7 +209,7 @@ export class RideDataFormComponent {
 
   checkUserHasAccount(): ValidatorFn {
     return ((control: AbstractControl): { [key: string]: boolean } | null => {
-      if(control.value === ''){
+      if (control.value === '') {
         return null;
       }
       return this.users?.find((user) => control.value === user.email) ? null : {'email': true};
@@ -138,13 +218,13 @@ export class RideDataFormComponent {
 
   private getLinkedPassengers(): string[] {
     let linkedPassengers: string[] = [];
-    if(this.routeForm.value.userEmailFriendsFirst != ''){
+    if (this.routeForm.value.userEmailFriendsFirst != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsFirst);
     }
-    if(this.routeForm.value.userEmailFriendsSecond != ''){
+    if (this.routeForm.value.userEmailFriendsSecond != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsSecond);
     }
-    if(this.routeForm.value.userEmailFriendsThird != ''){
+    if (this.routeForm.value.userEmailFriendsThird != '') {
       linkedPassengers.push(this.routeForm.value.userEmailFriendsThird);
     }
     return linkedPassengers;
@@ -285,12 +365,4 @@ export class RideDataFormComponent {
   openDialogOtherUsers() {
     this.dialog.open(OtherUsersDialogComponent);
   }
-
-  // openDialog() {
-  //   this.dialog.open(FavoriteRouteDialogComponent, {
-  //     data: {startLocation: this.routeForm.value.startLocation, endLocation: this.routeForm.value.endLocation},
-  //   });
-  // }
-
-
 }

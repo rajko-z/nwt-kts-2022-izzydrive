@@ -32,4 +32,15 @@ public interface DriverService {
     CalculatedRouteDTO getEstimatedRouteLeftFromCurrentDriving(String driverEmail);
 
     boolean driverWillNotOutworkAndWillBeOnTimeForFutureDriving(CalculatedRouteDTO fromDriverToStart, List<CalculatedRouteDTO> fromStartToEndRoutes, Driver driver, AddressOnMapDTO endLocation);
+
+    boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
+                                 List<CalculatedRouteDTO> fromStartToEnd,
+                                 Driver driver,
+                                 AddressOnMapDTO endLocation);
+
+    boolean driverWillNotOutworkFuture(List<CalculatedRouteDTO> fromStartToEnd,
+                                       Driver driver,
+                                       AddressOnMapDTO endLocation);
+
+    CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation);
 }

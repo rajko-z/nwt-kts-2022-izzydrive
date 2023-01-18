@@ -124,7 +124,34 @@
         </li>
       </ol>
     </mat-expansion-panel>
+    <div class="ride-for-later" *ngIf="scheduleRide === true">
+      <div>
+        <p class="option-title">You can schedule a ride for later:</p>
+        <p class="explanation">*it is possible to schedule a ride 5 hours in advance</p>
+        <div class="ngx-timepicker-field-example" *ngIf="routeForm.value.scheduleRideControl && hourNow < 19">
+          <div class="input-time">
+            <input placeholder="time" class="input" [ngxTimepicker]="fullTime" [format]="24" [min]="startStr"
+                   [max]="endStr" [value]="routeForm.value.scheduleTime" formControlName="scheduleTime" readonly>
+            <ngx-material-timepicker-toggle [for]="fullTime"></ngx-material-timepicker-toggle>
+          </div>
+          <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+        </div>
+        <div *ngIf="routeForm.value.scheduleRideControl && hourNow >= 19">
+          <div class="input-time">
+            <input placeholder="time" class="input" [ngxTimepicker]="fullTime" [format]="24"
+                    [value]="routeForm.value.scheduleTime" formControlName="scheduleTime" readonly>
+            <ngx-material-timepicker-toggle [for]="fullTime"></ngx-material-timepicker-toggle>
+          </div>
+          <ngx-material-timepicker #fullTime></ngx-material-timepicker>
 
+        </div>
+      </div>
+      <div>
+        <section class="option-schedule">
+          <mat-checkbox [checked]="scheduleRide" [disabled]="true" formControlName="scheduleRideControl">Schedule</mat-checkbox>
+        </section>
+      </div>
+    </div>
     <div class="optimal-driving-choose">
       <p class="option-title">You can choose optimal driving by:</p>
       <p class="explanation">*you can choose one option</p>

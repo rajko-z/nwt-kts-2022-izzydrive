@@ -4,6 +4,7 @@
     <app-ride-data-form
       (fetchedDrivingOptionsEvent)="onFirstStepNext($event, stepper)"
       (drivingFinderRequestEvent)="saveDrivingFinderRequest($event)"
+      [scheduleRide]="scheduleRide"
     ></app-ride-data-form>
   </mat-step>
 

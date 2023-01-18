@@ -17,4 +17,16 @@ public class DrivingOptionDTO {
     private double price;
     private CalculatedRouteDTO driverToStartPath;
     private CalculatedRouteDTO startToEndPath;
+    private Boolean reservation;
+
+    public DrivingOptionDTO(DriverDTO driver, LocationDTO driverCurrentLocation,
+                            double price, CalculatedRouteDTO startToEndPath,
+                            CalculatedRouteDTO driverToStartPath, Boolean reservation) {
+        this.driver = driver;
+        this.driverCurrentLocation = driverCurrentLocation;
+        this.price = price;
+        this.startToEndPath = startToEndPath;
+        this.driverToStartPath = driverToStartPath;
+        this.reservation = reservation;
+    }
 }

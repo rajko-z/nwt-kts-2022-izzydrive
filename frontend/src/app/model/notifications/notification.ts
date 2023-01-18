@@ -7,4 +7,5 @@ export class NotificationM {
   duration?: number;
   price?: number;
   drivingId?: number;
+  reservationTime?: Date;
 }

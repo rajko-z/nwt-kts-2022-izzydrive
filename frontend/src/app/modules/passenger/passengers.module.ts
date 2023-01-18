@@ -18,6 +18,7 @@ import {
 import {
   DeniedRideLinkedUserComponent
 } from "../../components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
+import { NewReservationComponent } from '../../components/notifications/new-reservation/new-reservation.component';
 
 const declaredModules = [
   HomePageLoggedComponent,
@@ -28,7 +29,8 @@ const declaredModules = [
   OtherUsersDialogComponent,
   FavoriteRouteDialogComponent,
   NewRideLinkedUserComponent,
-  DeniedRideLinkedUserComponent
+  DeniedRideLinkedUserComponent,
+  NewReservationComponent
 ];
 
 @NgModule({

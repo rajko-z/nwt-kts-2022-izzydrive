@@ -34,6 +34,9 @@ public class Driving {
     private LocalDateTime startDate;
 
     @Column
+    private LocalDateTime reservationDate;
+
+    @Column
     private LocalDateTime endDate;
 
     @Column(nullable = false)

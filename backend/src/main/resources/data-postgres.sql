@@ -95,13 +95,13 @@ values
 
 -- banijska 32 do zeleznicke
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
+VALUES (5614.2, 'INITIAL', 441.2, null, true, null, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, '2023-01-16 22:00:00');
 
 -- cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
+VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, '2023-01-16 22:00:00');
 
 
 UPDATE drivers SET current_driving_id=1 WHERE id=2;
@@ -109,8 +109,8 @@ UPDATE drivers SET reserved_from_client_driving_id=2 WHERE id=2;
 
 -- heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (3164.2, 'WAITING', 317.5, null, false, null, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
+VALUES (3164.2, 'WAITING', 317.5, null, false, null, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, null);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 
@@ -555,3 +555,8 @@ VALUES
     (45.255007, 19.806254, 3, true),
     (45.255179, 19.806138, 3, true),
     (45.25522, 19.80611, 3, true);
+
+insert into passengers_in_driving(passenger_id,  driving_id)
+values
+    (10,1),
+    (11,2);

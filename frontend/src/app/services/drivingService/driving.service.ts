@@ -49,4 +49,15 @@ export class DrivingService {
   findById(id:number){
     return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
   }
+
+  getScheduleDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]>{
+    console.log("------");
+    console.log(payload);
+    console.log("------");
+    return this.httpClientService.postT<DrivingOption[]>(environment.apiUrl + 'drivings/finder/schedule', payload);
+  }
+
+  createReservation(payload: DrivingRequest) {
+    return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process-reservation', payload);
+  }
 }

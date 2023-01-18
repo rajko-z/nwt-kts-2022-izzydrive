@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-denied-ride-linked-user',
@@ -8,7 +9,7 @@ import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
 })
 export class DeniedRideLinkedUserComponent implements OnInit {
 
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data) {
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data, private router : Router) {
   }
 
   ngOnInit(): void {
@@ -16,5 +17,6 @@ export class DeniedRideLinkedUserComponent implements OnInit {
 
   okClick() {
     this.data.preClose();
+    this.router.navigateByUrl('/passenger');
   }
 }

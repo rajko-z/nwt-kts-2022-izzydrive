@@ -153,6 +153,46 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation){
+
+        Driver driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+
+        if(driver.getCurrentDriving() != null){
+            CalculatedRouteDTO getEstimatedRouteLeft = this.getEstimatedRouteLeftFromCurrentDriving(driverEmail);
+            Address tmp = driver.getCurrentDriving().getRoute().getEnd();
+            AddressOnMapDTO currDrivingEndLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
+
+            if(driver.getNextDriving() != null){
+                CalculatedRouteDTO routeWithNextDriving =  getCalculatedRouteWithNextDriving(startLocation, driverEmail, currDrivingEndLocation);
+                return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, routeWithNextDriving));
+            }
+            CalculatedRouteDTO getRouteFromCurrDrivingEndToStart = mapService
+                    .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, startLocation)).get(0);
+
+            return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, getRouteFromCurrDrivingEndToStart));
+
+        }
+        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
+    }
+
+    private CalculatedRouteDTO getCalculatedRouteWithNextDriving(AddressOnMapDTO startLocationReservation, String driverEmail, AddressOnMapDTO currDrivingEndLocation) {
+        Driver driver = this.driverRepository.findByEmailWithNextDrivingAndLocations(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+
+        Address nextAddress = driver.getNextDriving().getRoute().getStart();
+        AddressOnMapDTO nextDrivingStartLocation = new AddressOnMapDTO(nextAddress.getLongitude(), nextAddress.getLatitude());
+
+        Address nextEndAddress = driver.getNextDriving().getRoute().getEnd();
+        AddressOnMapDTO nextDrivingEndLocation = new AddressOnMapDTO(nextEndAddress.getLongitude(), nextEndAddress.getLatitude());
+
+        return  mapService
+                .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, nextDrivingStartLocation, nextDrivingEndLocation, startLocationReservation)).get(0);
+    }
+
+
+    @Override
     public CalculatedRouteDTO getEstimatedRouteLeftFromCurrentDriving(String driverEmail) {
         Optional<Driver> driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail);
         if (driver.isEmpty()) {
@@ -186,10 +226,29 @@ public class DriverServiceImpl implements DriverService {
     }
 
 
-    private boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
-                                         List<CalculatedRouteDTO> fromStartToEnd,
+    public boolean driverWillNotOutworkFuture(List<CalculatedRouteDTO> fromStartToEnd,
                                          Driver driver,
                                          AddressOnMapDTO endLocation)
+    {
+        int maxAllowed = Constants.MAX_WORKING_MINUTES;
+        long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
+
+        if (minWorked >= maxAllowed) {
+            return false;
+        }
+
+        minWorked += getDurationInMinutesFromSeconds(fromStartToEnd.get(0).getDuration());
+        if (minWorked > maxAllowed) {
+            return false;
+        }
+
+        return minWorked <= maxAllowed;
+    }
+
+    public boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
+                                        List<CalculatedRouteDTO> fromStartToEnd,
+                                        Driver driver,
+                                        AddressOnMapDTO endLocation)
     {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
@@ -236,7 +295,7 @@ public class DriverServiceImpl implements DriverService {
                         getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
 
         LocalDateTime estimatedArrival = LocalDateTime.now().plusMinutes(totalTimeNeededToGetToStartOfFutureDriving);
-        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate();
+        LocalDateTime startTime = driver.getReservedFromClientDriving().getReservationDate();
 
         if (estimatedArrival.isAfter(startTime)) {
             return false;

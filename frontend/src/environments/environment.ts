@@ -2,20 +2,21 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { HttpHeaders } from "@angular/common/http";
+import {HttpHeaders} from "@angular/common/http";
 
 export const environment = {
   production: false,
   apiUrl: "https://localhost:8443/izzydrive/v1/",
+  socket: 'https://localhost:8443/izzydrive/v1/socket',
   clientId: '83743871907-93ba97v7t6j53p316sl6js0pgj9hmp51.apps.googleusercontent.com',
-  header : {
+  header: {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-       'Authorization': "Bearer "+ (JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
+      'Authorization': "Bearer " + (JSON.parse(sessionStorage.getItem('currentUser')) ? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
     })
   },
 
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: "AIzaSyAKK1keZb45wDnBvvsR5l6wk201kIZa1sE",
     authDomain: "izzydrive-368421.firebaseapp.com",
     projectId: "izzydrive-368421",
