@@ -16,9 +16,10 @@ import {NewReservationComponent} from "../../components/notifications/new-reserv
 export class NotificationService {
 
   constructor(public snackBar: MatSnackBar, private userService: UserService) {
+
   }
 
-  showNotification(message: string, component) {
+  showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.openFromComponent(component, {
@@ -34,33 +35,40 @@ export class NotificationService {
     }
   }
 
+  showNotificationText(message: string) {
+    const notification: NotificationM = JSON.parse(message);
+    if (notification.userEmail === this.userService.getCurrentUserEmail()) {
+      this.snackBar.open(notification.message, "OK", {
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+      });
+    }
+  }
+
   showNotificationNewRide(stompClient) {
     stompClient.subscribe('/notification/newRide', (message: { body: string }) => {
-        this.showNotification(message.body, NewRideLinkedUserComponent);
+        this.showNotificationComponent(message.body, NewRideLinkedUserComponent);
       }
     );
   }
 
   showNotificationCancelRide(stompClient) {
     stompClient.subscribe('/notification/cancelRide', (message: { body: string }) => {
-        this.showNotification(message.body, DeniedRideLinkedUserComponent);
+        this.showNotificationComponent(message.body, DeniedRideLinkedUserComponent);
       }
     );
   }
 
   showNotificationNewReservationDriving(stompClient) {
     stompClient.subscribe('/notification/newReservationDriving', (message: { body: string }) => {
-        this.showNotification(message.body, NewReservationComponent);
+        this.showNotificationComponent(message.body, NewReservationComponent);
       }
     );
   }
 
   showNotificationCancelRideDriver(stompClient) {
     stompClient.subscribe('/notification/cancelRideDriver', (message: { body: string }) => {
-      let notification: NotificationM = JSON.parse(message.body);
-      if (notification.userEmail === this.userService.getCurrentUserEmail()) {
-        this.snackBar.open(notification.message, "OK");
-      }
+      this.showNotificationText(message.body);
     });
   }
 }

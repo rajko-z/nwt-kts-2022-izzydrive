@@ -189,6 +189,8 @@ export class RideDataFormComponent {
       if (dateTime < dateMin || dateTime > dateMax) {
         this.snackBar.open("The ride is scheduled at least 30 minutes before and at most 5 hours before", "ERROR", {
           duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
         })
         return false;
       }
