@@ -11,6 +11,7 @@ import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.*;
 import com.izzydrive.backend.service.users.DriverService;
@@ -22,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+
+import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +44,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
 
     private final NotificationService notificationService;
 
-
+    private final DriverLockerService driverLockerService;
 
     @Transactional
     @Override
@@ -52,8 +56,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         Passenger passenger = passengerService.findByEmailWithReservedDriving(passengerEmail)
                 .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
 
-        //ovo treba izmeniti
-        //checkIfDriverIsStillAvailable(request, driver);
+        checkIfDriverIsStillAvailable(request, driver);
 
         Driving driving = makeAndSaveDrivingReservationFromRequest(request, driver, passenger);
 
@@ -93,11 +96,14 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         driving.setReservationDate(request.getDrivingFinderRequest().getScheduleTime().plusHours(1));//add 1 hour
 
         drivingService.save(driving);
-        updatePassengersCurrentDriving(passengers, driving);
+        updatePassengersReservationDrivings(passengers, driving);
+
+        driver.setReservedFromClientDriving(driving);
+        driverService.save(driver);
         return driving;
     }
 
-    private void updatePassengersCurrentDriving(Set<Passenger> linkedPassengers, Driving driving) {
+    private void updatePassengersReservationDrivings(Set<Passenger> linkedPassengers, Driving driving) {
         Passenger[] pass = linkedPassengers.toArray(Passenger[]::new);
 
         for (Passenger p : pass) {
@@ -134,18 +140,27 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         if (!driver.isActive()) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
-        //ako je u medju vremenu dobio rezervaciju
-        //ako je zakljucan
-        //kakulacija vremena za 8 sati
-        //kalkulacija ako je manje od 45min
-        //sadaznja i sledeca voznja
+        if(driver.getReservedFromClientDriving() != null){
+            throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
+        }
 
-        //checkIfDriverIsStillOnTheSamePath(request.getDrivingOption(), driver);
+        DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
+                .orElseThrow(()-> new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE));
+
+        if (driverLocker.getPassengerEmail() != null) {
+            throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
+        }
+
+        CalculatedRouteDTO fromDriverToStart = this.driverService.getCalculateRouteFromDriverToStartWithNextDriving(driver.getEmail(), request.getDrivingFinderRequest().getStartLocation());
+
+        if(getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) > ChronoUnit.MINUTES.between(request.getDrivingFinderRequest().getScheduleTime(), LocalDateTime.now()) ){
+            throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
+        }
 
         List<CalculatedRouteDTO> fromStartToEndRoutes = List.of(request.getDrivingOption().getStartToEndPath());
 
-//        if (!driverService.driverWillNotOutworkAndWillBeOnTimeForFutureDriving(fromDriverToStart, fromStartToEndRoutes, driver, request.getDrivingFinderRequest().getEndLocation())) {
-//            throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
-//        }
+        if (!driverService.driverWillNotOutworkFuture(fromStartToEndRoutes, driver, request.getDrivingFinderRequest().getEndLocation())) {
+            throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
+        }
     }
 }

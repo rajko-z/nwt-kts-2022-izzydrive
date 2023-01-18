@@ -79,12 +79,6 @@ public class Driving {
     @JoinColumn(name="driving_id")
     private List<Location> locations = new ArrayList<>();
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name="passengersInDriving",
-//            joinColumns = @JoinColumn(name="driving_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name="passenger_id", referencedColumnName = "id"))
-//    private Set<Passenger> allPassengers = new HashSet<>();
-
     public List<Location> getLocations() {
         return locations;
     }

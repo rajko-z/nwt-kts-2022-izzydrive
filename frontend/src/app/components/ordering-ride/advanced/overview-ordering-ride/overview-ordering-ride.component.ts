@@ -64,10 +64,6 @@ export class OverviewOrderingRideComponent implements OnInit {
           next: (response) => {
             this.apiLoading = false;
             this.router.navigateByUrl('/passenger');
-            // this.snackBar.open("You have successfully booked a ride!","Ok", {
-            //   verticalPosition: 'bottom',
-            //   horizontalPosition: 'right',
-            // });
           },
           error: (error) => {
             this.apiLoading = false;

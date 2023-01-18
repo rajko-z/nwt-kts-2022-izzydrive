@@ -101,7 +101,7 @@ VALUES (5614.2, 'INITIAL', 441.2, null, true, null, null, 432432.3, false, '2023
 -- cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
-VALUES (2900.9, 'PAYMENT', 313.7, null, false, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, null);
+VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, '2023-01-16 22:00:00');
 
 
 UPDATE drivers SET current_driving_id=1 WHERE id=2;

@@ -176,7 +176,6 @@ export class RideDataFormComponent {
     return dateTime;
   }
 
-  //ovo treba testirati
   private checkTime(): boolean {
     const time = this.routeForm.value.scheduleTime.split(':');
     const date = new Date();
@@ -188,8 +187,7 @@ export class RideDataFormComponent {
       const dateMin = addMinutes(new Date(), 30);
       const dateMax = addHours(new Date(), 5);
       if (dateTime < dateMin || dateTime > dateMax) {
-        //nije okej
-        this.snackBar.open("Invalid time", "ERROR", {
+        this.snackBar.open("The ride is scheduled at least 30 minutes before and at most 5 hours before", "ERROR", {
           duration: 5000,
         })
         return false;
@@ -365,12 +363,4 @@ export class RideDataFormComponent {
   openDialogOtherUsers() {
     this.dialog.open(OtherUsersDialogComponent);
   }
-
-  // openDialog() {
-  //   this.dialog.open(FavoriteRouteDialogComponent, {
-  //     data: {startLocation: this.routeForm.value.startLocation, endLocation: this.routeForm.value.endLocation},
-  //   });
-  // }
-
-
 }

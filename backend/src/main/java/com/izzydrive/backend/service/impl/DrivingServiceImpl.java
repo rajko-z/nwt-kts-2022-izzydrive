@@ -121,7 +121,7 @@ public class DrivingServiceImpl implements DrivingService {
 
     private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
         for (String passenger : passengersToSendNotifications) {
-                notificationService.sendNotificationRejectDriving(passenger,startLocation, endLocation);
+            notificationService.sendNotificationRejectDriving(passenger, startLocation, endLocation);
         }
     }
 
@@ -136,12 +136,12 @@ public class DrivingServiceImpl implements DrivingService {
 
     private void unlockDriverIfPossible(Driver driver) {
         try {
-            Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail());
-            if (driverLocker.isEmpty()) {
-                throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE);
-            } else if (driverLocker.get().getPassengerEmail() != null) {
-                driverLocker.get().setPassengerEmail(null);
-                driverLockerService.save(driverLocker.get());
+            DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
+                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE));
+
+            if (driverLocker.getPassengerEmail() != null) {
+                driverLocker.setPassengerEmail(null);
+                driverLockerService.save(driverLocker);
             }
         } catch (OptimisticLockException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE);

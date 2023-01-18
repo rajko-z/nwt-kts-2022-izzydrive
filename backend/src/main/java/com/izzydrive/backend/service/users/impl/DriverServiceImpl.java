@@ -180,15 +180,13 @@ public class DriverServiceImpl implements DriverService {
     private CalculatedRouteDTO getCalculatedRouteWithNextDriving(AddressOnMapDTO startLocationReservation, String driverEmail, AddressOnMapDTO currDrivingEndLocation) {
         Driver driver = this.driverRepository.findByEmailWithNextDrivingAndLocations(driverEmail)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
-        //od krajnje trenutne do prve lokacije next voznje
+
         Address nextAddress = driver.getNextDriving().getRoute().getStart();
         AddressOnMapDTO nextDrivingStartLocation = new AddressOnMapDTO(nextAddress.getLongitude(), nextAddress.getLatitude());
 
-        //od pocetka next voznje do kraja next voznje -- da li ima negde racunica sa scim medju stanicama
         Address nextEndAddress = driver.getNextDriving().getRoute().getEnd();
         AddressOnMapDTO nextDrivingEndLocation = new AddressOnMapDTO(nextEndAddress.getLongitude(), nextEndAddress.getLatitude());
 
-        //od kraja sledece do pocetka rezervacije
         return  mapService
                 .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, nextDrivingStartLocation, nextDrivingEndLocation, startLocationReservation)).get(0);
     }
@@ -234,9 +232,6 @@ public class DriverServiceImpl implements DriverService {
     {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
-       // na ovo vreme dodajes i ako ima trenutnu voznju i ako ima sledecu voznju
-        // pa na sve to dodajes i putanju od kraja sledece ili trenutne (zavisi) do ove koju zeli da rezervise
-
 
         if (minWorked >= maxAllowed) {
             return false;
@@ -300,9 +295,9 @@ public class DriverServiceImpl implements DriverService {
                         getDurationInMinutesFromSeconds(getRouteFromEndLocationToStartOfFutureDriving(endLocation, driver).getDuration());
 
         LocalDateTime estimatedArrival = LocalDateTime.now().plusMinutes(totalTimeNeededToGetToStartOfFutureDriving);
-        LocalDateTime startTime = driver.getReservedFromClientDriving().getStartDate(); //nisam stavila getReservationDate()
+        LocalDateTime startTime = driver.getReservedFromClientDriving().getReservationDate();
 
-        if (estimatedArrival.isAfter(startTime)) {//baca nullPointerException
+        if (estimatedArrival.isAfter(startTime)) {
             return false;
         }
 

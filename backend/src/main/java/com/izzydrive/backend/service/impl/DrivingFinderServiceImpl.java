@@ -115,13 +115,11 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         AddressOnMapDTO endLocation = points.get(points.size() - 1);
 
         List<DrivingOptionDTO> options = new ArrayList<>();
-        //do ovde isto
 
-        for (Driver driver : getAllPossibleDriversForDriving()) { //+da nema rezervaciju u getAllPssible...
+        for (Driver driver : getAllPossibleDriversForDriving()) {
             CalculatedRouteDTO fromDriverToStart =
-                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);//ovo samo ako je pola sata do sat vremena pre voznje zakazana voznja
+                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
 
-            //driverWillNotOutwork mi treba
             if (driverService.driverWillNotOutworkAndWillBeOnTimeForFutureDriving(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {
                 feelOptions(options, fromDriverToStart, fromStartToEndRoutes, driver);
             }
@@ -345,22 +343,15 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         LocalDateTime timeInterval = LocalDateTime.now().plusMinutes(MINUTES_INTERVAL_BEFORE_RESERVATION);
         CalculatedRouteDTO fromDriverToStart = this.driverService.getCalculateRouteFromDriverToStartWithNextDriving(driver.getEmail(), startLocation);
 
-        if(getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) < ChronoUnit.MINUTES.between(currentTime, LocalDateTime.now()) ){
+        if (getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) < ChronoUnit.MINUTES.between(currentTime, LocalDateTime.now())) {
             return;
-            //ne moze da stigne
         }
-        //ovo samo ako je 45 min pre voznje zakazana voznja
-        if (currentTime.isBefore(timeInterval)) {
-//            CalculatedRouteDTO fromDriverToStart =
-//                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
-            //provera ako bi vozio trenutnu i sledecu da li bi stigao na rezervisanu
 
+        if (currentTime.isBefore(timeInterval)) {
             if (driverService.driverWillNotOutwork(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {
                 feelOptionsForReservation(fromStartToEndRoutes, driver, options);
             }
         } else {
-            //ako je dosta u buducnosti
-            //nemamo racunanje koliko mu treba do pocetka -- provera 8 sati
             if (driverService.driverWillNotOutworkFuture(fromStartToEndRoutes, driver, endLocation)) {
                 feelOptionsForReservation(fromStartToEndRoutes, driver, options);
             }

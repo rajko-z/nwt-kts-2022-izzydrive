@@ -1,7 +1,6 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.dto.DriverDTO;
-import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
@@ -20,7 +19,6 @@ import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
