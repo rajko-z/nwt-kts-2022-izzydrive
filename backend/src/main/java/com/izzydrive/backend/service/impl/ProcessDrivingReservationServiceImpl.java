@@ -153,7 +153,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
 
         CalculatedRouteDTO fromDriverToStart = this.driverService.getCalculateRouteFromDriverToStartWithNextDriving(driver.getEmail(), request.getDrivingFinderRequest().getStartLocation());
 
-        if(getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) > ChronoUnit.MINUTES.between(request.getDrivingFinderRequest().getScheduleTime(), LocalDateTime.now()) ){
+        if(getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) > ChronoUnit.MINUTES.between(LocalDateTime.now(),request.getDrivingFinderRequest().getScheduleTime().plusHours(1)) ){
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
 
