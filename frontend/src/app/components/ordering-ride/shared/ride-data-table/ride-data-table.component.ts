@@ -34,7 +34,9 @@ export class RideDataTableComponent implements OnInit, OnChanges {
   showOptionOnMap(drivingOption: DrivingOption) {
     this.selectedOption = drivingOption;
     this.mapService.removeDrawRoutes();
-    this.mapService.drawRoute(drivingOption.driverToStartPath.coordinates, "#5715ff");
+    if(!drivingOption.reservation){
+      this.mapService.drawRoute(drivingOption.driverToStartPath.coordinates, "#5715ff");
+    }
     this.mapService.drawRoute(drivingOption.startToEndPath.coordinates, "#d3081f");
 
     this.mapService.startTrackingCurrentDriverOnMap(drivingOption.driver.email);

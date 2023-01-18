@@ -124,7 +124,7 @@
         </li>
       </ol>
     </mat-expansion-panel>
-    <div class="ride-for-later">
+    <div class="ride-for-later" *ngIf="scheduleRide === true">
       <div>
         <p class="option-title">You can schedule a ride for later:</p>
         <p class="explanation">*it is possible to schedule a ride 5 hours in advance</p>
@@ -148,7 +148,7 @@
       </div>
       <div>
         <section class="option-schedule">
-          <mat-checkbox [checked]="scheduleRide" formControlName="scheduleRideControl">Schedule</mat-checkbox>
+          <mat-checkbox [checked]="scheduleRide" [disabled]="true" formControlName="scheduleRideControl">Schedule</mat-checkbox>
         </section>
       </div>
     </div>

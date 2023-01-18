@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {OtherUsersDialogComponent} from "../../../other-users-dialog/other-users-dialog.component";
@@ -47,7 +47,7 @@ export class RideDataFormComponent {
   startStr = `${this.hourNow}:${this.minuteNow}`;
   endStr = `${this.hourMax}:${this.minuteMax}`;
 
-  @Input() scheduleRide: boolean; //if schedule is true, is advanced ordering is false -- to set scheduleRideControl
+  @Input() scheduleRide: boolean;
   @Output() fetchedDrivingOptionsEvent = new EventEmitter<DrivingOption[]>()
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
@@ -63,9 +63,9 @@ export class RideDataFormComponent {
     userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
-    scheduleRideControl: new FormControl(false),
+    scheduleRideControl: new FormControl(true),
     scheduleTime: new FormControl('')
-  })
+  });
 
   constructor(
     public dialog: MatDialog,
@@ -79,7 +79,6 @@ export class RideDataFormComponent {
     private loggedUserService: LoggedUserService,
     private snackBar: MatSnackBar
   ) {
-    console.log(this.hourNow, this.hourNow >= 19);
     this.loggedUserService.getAllUsers().subscribe((res) => {
       this.users = res;
     });
@@ -92,7 +91,7 @@ export class RideDataFormComponent {
       return;
     }
 
-    if(this.routeForm.value.scheduleRideControl && !this.checkTime()){
+    if (this.scheduleRide && !this.checkTime()) {
       return;
     }
 
@@ -100,7 +99,7 @@ export class RideDataFormComponent {
 
     console.log(drivingFinderRequest);
 
-    if (this.routeForm.value.scheduleRideControl) {
+    if (this.scheduleRide) {
       this.getScheduleDrivingOptions(drivingFinderRequest);
     } else {
       this.getAdvancedDrivingOptions(drivingFinderRequest);
@@ -160,7 +159,7 @@ export class RideDataFormComponent {
     drivingFinderRequest.intermediateStationsOrderType = this.getStationsOrderType();
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
-    drivingFinderRequest.reservation = this.routeForm.value.scheduleRideControl;
+    drivingFinderRequest.reservation = this.scheduleRide;
     drivingFinderRequest.scheduleTime = this.getScheduleTime();
     return drivingFinderRequest;
   }
@@ -170,7 +169,7 @@ export class RideDataFormComponent {
     const date = new Date();
     const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
     if ((this.hourNow >= 19)) {
-      if(+time[0] < 4 && +time[0] > 0){
+      if (+time[0] < 4 && +time[0] > 0) {
         dateTime.setDate(date.getDate() + 1);
       }
     }
@@ -178,12 +177,12 @@ export class RideDataFormComponent {
   }
 
   //ovo treba testirati
-  private checkTime(): boolean{
+  private checkTime(): boolean {
     const time = this.routeForm.value.scheduleTime.split(':');
     const date = new Date();
     const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
     if ((this.hourNow >= 19)) {
-      if(+time[0] < 4 && +time[0] > 0){
+      if (+time[0] < 4 && +time[0] > 0) {
         dateTime.setDate(date.getDate() + 1);
       }
       const dateMin = addMinutes(new Date(), 30);

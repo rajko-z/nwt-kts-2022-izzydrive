@@ -41,4 +41,6 @@ public interface DriverService {
     boolean driverWillNotOutworkFuture(List<CalculatedRouteDTO> fromStartToEnd,
                                        Driver driver,
                                        AddressOnMapDTO endLocation);
+
+    CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation);
 }

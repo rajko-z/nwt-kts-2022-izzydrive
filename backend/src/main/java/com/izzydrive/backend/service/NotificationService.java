@@ -9,4 +9,6 @@ public interface NotificationService {
     void sendNotificationNewDriving(String passengerEmail, Driving driving);
 
     void sendNotificationRejectDriving(String passengerEmail, String startLocation, String endLocation);
+
+    void sendNotificationRejectDrivingFromDriver(String adminEmail);
 }

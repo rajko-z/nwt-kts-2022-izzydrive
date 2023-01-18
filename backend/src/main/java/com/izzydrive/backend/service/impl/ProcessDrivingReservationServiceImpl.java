@@ -90,8 +90,8 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         driving.setPassengers(passengers);
         driving.setLocations(getLocationsNeededForDriving(option.getStartToEndPath()));
         driving.setDriver(driver);
-        driving.setReservationDate(request.getDrivingFinderRequest().getScheduleTime());
-        //add 1 hour
+        driving.setReservationDate(request.getDrivingFinderRequest().getScheduleTime().plusHours(1));//add 1 hour
+
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, driving);
         return driving;

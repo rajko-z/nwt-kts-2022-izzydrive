@@ -6,9 +6,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {DrivingRequest} from "../../../../model/driving/driving";
 import {Router} from "@angular/router";
-import {
-  DeniedRideLinkedUserComponent
-} from "../../../notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 
 @Component({
   selector: 'app-overview-ordering-ride',
@@ -67,10 +64,10 @@ export class OverviewOrderingRideComponent implements OnInit {
           next: (response) => {
             this.apiLoading = false;
             this.router.navigateByUrl('/passenger');
-            this.snackBar.open("You have successfully booked a ride!","Ok", {
-              verticalPosition: 'bottom',
-              horizontalPosition: 'right',
-            });
+            // this.snackBar.open("You have successfully booked a ride!","Ok", {
+            //   verticalPosition: 'bottom',
+            //   horizontalPosition: 'right',
+            // });
           },
           error: (error) => {
             this.apiLoading = false;

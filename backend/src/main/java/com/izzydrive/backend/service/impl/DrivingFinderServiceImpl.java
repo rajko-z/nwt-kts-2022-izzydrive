@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.izzydrive.backend.utils.Constants.*;
@@ -342,10 +343,16 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
     private void calculateTimeAndFeelOptions(LocalDateTime currentTime, List<CalculatedRouteDTO> fromStartToEndRoutes, AddressOnMapDTO startLocation, AddressOnMapDTO endLocation, List<DrivingOptionDTO> options, Driver driver) {
         LocalDateTime timeInterval = LocalDateTime.now().plusMinutes(MINUTES_INTERVAL_BEFORE_RESERVATION);
+        CalculatedRouteDTO fromDriverToStart = this.driverService.getCalculateRouteFromDriverToStartWithNextDriving(driver.getEmail(), startLocation);
+
+        if(getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) < ChronoUnit.MINUTES.between(currentTime, LocalDateTime.now()) ){
+            return;
+            //ne moze da stigne
+        }
         //ovo samo ako je 45 min pre voznje zakazana voznja
         if (currentTime.isBefore(timeInterval)) {
-            CalculatedRouteDTO fromDriverToStart =
-                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
+//            CalculatedRouteDTO fromDriverToStart =
+//                    this.driverService.getCalculatedRouteFromDriverToStart(driver.getEmail(), startLocation);
             //provera ako bi vozio trenutnu i sledecu da li bi stigao na rezervisanu
 
             if (driverService.driverWillNotOutwork(fromDriverToStart, fromStartToEndRoutes, driver, endLocation)) {

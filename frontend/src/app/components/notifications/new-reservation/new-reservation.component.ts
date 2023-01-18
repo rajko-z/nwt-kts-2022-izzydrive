@@ -10,7 +10,12 @@ import {DrivingService} from "../../../services/drivingService/driving.service";
 })
 export class NewReservationComponent implements OnInit {
 
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data, private router: Router, private drivingService: DrivingService) { }
+  time: string;
+
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data, private router: Router, private drivingService: DrivingService) {
+    const date = new Date(data.message.reservationTime);
+    this.time = `${date.getHours()}:${date.getMinutes()}  ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}.`
+  }
 
   ngOnInit(): void {
   }
@@ -21,10 +26,7 @@ export class NewReservationComponent implements OnInit {
   }
 
   cancelReservationClick() {
-    //ovo proveri da li je okej
-    this.drivingService.rejectDrivingLinkedPassenger(this.data.message.drivingId).subscribe((res) => {
-      console.log(res);
-    });
+    //reject reservation
     this.data.preClose();
   }
 }

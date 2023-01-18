@@ -153,6 +153,48 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation){
+
+        Driver driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+
+        if(driver.getCurrentDriving() != null){
+            CalculatedRouteDTO getEstimatedRouteLeft = this.getEstimatedRouteLeftFromCurrentDriving(driverEmail);
+            Address tmp = driver.getCurrentDriving().getRoute().getEnd();
+            AddressOnMapDTO currDrivingEndLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
+
+            if(driver.getNextDriving() != null){
+                CalculatedRouteDTO routeWithNextDriving =  getCalculatedRouteWithNextDriving(startLocation, driverEmail, currDrivingEndLocation);
+                return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, routeWithNextDriving));
+            }
+            CalculatedRouteDTO getRouteFromCurrDrivingEndToStart = mapService
+                    .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, startLocation)).get(0);
+
+            return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, getRouteFromCurrDrivingEndToStart));
+
+        }
+        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+        return mapService.getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
+    }
+
+    private CalculatedRouteDTO getCalculatedRouteWithNextDriving(AddressOnMapDTO startLocationReservation, String driverEmail, AddressOnMapDTO currDrivingEndLocation) {
+        Driver driver = this.driverRepository.findByEmailWithNextDrivingAndLocations(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+        //od krajnje trenutne do prve lokacije next voznje
+        Address nextAddress = driver.getNextDriving().getRoute().getStart();
+        AddressOnMapDTO nextDrivingStartLocation = new AddressOnMapDTO(nextAddress.getLongitude(), nextAddress.getLatitude());
+
+        //od pocetka next voznje do kraja next voznje -- da li ima negde racunica sa scim medju stanicama
+        Address nextEndAddress = driver.getNextDriving().getRoute().getEnd();
+        AddressOnMapDTO nextDrivingEndLocation = new AddressOnMapDTO(nextEndAddress.getLongitude(), nextEndAddress.getLatitude());
+
+        //od kraja sledece do pocetka rezervacije
+        return  mapService
+                .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, nextDrivingStartLocation, nextDrivingEndLocation, startLocationReservation)).get(0);
+    }
+
+
+    @Override
     public CalculatedRouteDTO getEstimatedRouteLeftFromCurrentDriving(String driverEmail) {
         Optional<Driver> driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail);
         if (driver.isEmpty()) {

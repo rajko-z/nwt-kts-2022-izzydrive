@@ -22,4 +22,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("select d from Driver d left join fetch d.currentDriving cd left join fetch cd.locations l left join fetch cd.route r where d.email = ?1")
     Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email);
+
+    @Query(value="select d from Driver d left join fetch d.nextDriving nd left join fetch nd.locations ln left join fetch nd.route rn where d.email = ?1")
+    Optional<Driver> findByEmailWithNextDrivingAndLocations(String email);
 }
