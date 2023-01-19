@@ -60,6 +60,12 @@ public class Driving {
     @Column
     private double distance;
 
+    @Column
+    private double durationFromDriverToStart;
+
+    @Column
+    private double distanceFromDriverToStart;
+
     @OneToMany(mappedBy = "driving", fetch = FetchType.LAZY)
     private List<Evaluation> evaluation = new ArrayList<>();
 

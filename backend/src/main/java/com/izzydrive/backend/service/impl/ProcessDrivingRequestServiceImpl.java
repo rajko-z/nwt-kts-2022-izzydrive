@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -119,6 +120,8 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         driving.setPrice(option.getPrice());
         driving.setRejected(false);
         driving.setReservation(false);
+        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
+        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
         driving.setRoute(getRouteFromRequest(request.getDrivingFinderRequest()));
         driving.setPassengers(passengers);
         driving.setLocations(getLocationsNeededForDriving(fromDriverToStart, option.getStartToEndPath()));
@@ -148,6 +151,13 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         }
         return locations;
     }
+
+    private List<Location> getLocationsFromCalculatedRoute(CalculatedRouteDTO calculatedRouteDTO, boolean forDrive) {
+        return calculatedRouteDTO.getCoordinates().stream()
+                .map(c -> new Location(c.getLat(), c.getLon(), forDrive))
+                .collect(Collectors.toList());
+    }
+
 
     private List<Passenger> getPassengersFromEmails(Set<String> passengerEmails) {
         List<Passenger> retVal = new ArrayList<>();

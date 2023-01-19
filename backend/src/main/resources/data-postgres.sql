@@ -62,8 +62,8 @@ values
     (nextval('users_id_gen'), true, false, 'predrag@gmail.com', 'Predrag', 'Macogovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511877', 1, null, 2, true, false, 'TAKEN', 8, null,null,null, 45.246848,  19.801531),
     (nextval('users_id_gen'), true, false, 'milan@gmail.com', 'Milan', 'Maric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511811', 1, null, 2, true, false, 'FREE', 2, null,null,null,45.254365, 19.848213),
     (nextval('users_id_gen'), true, false, 'petar@gmail.com', 'Petar', 'Ilic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511822', 1, null, 2, true, false, 'FREE', 3, null,null,null,45.237430, 19.731582),
-    (nextval('users_id_gen'), true, false, 'marko@gmail.com', 'Marko', 'Lekovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511337', 1, null, 2, false, false, 'FREE', 4,null,null,null, 45.238356, 19.808732),
-    (nextval('users_id_gen'), true, false, 'ljubisa@gmail.com', 'Ljubisa', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511823', 1, null, 2, false, false, 'FREE', 5,null,null,null, 45.248177, 19.839459),
+    (nextval('users_id_gen'), true, false, 'marko@gmail.com', 'Marko', 'Lekovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511337', 1, null, 2, true, false, 'FREE', 4,null,null,null, 45.238356, 19.808732),
+    (nextval('users_id_gen'), true, false, 'ljubisa@gmail.com', 'Ljubisa', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511823', 1, null, 2, true, false, 'FREE', 5,null,null,null, 45.248177, 19.839459),
     (nextval('users_id_gen'), true, false, 'sava@gmail.com', 'Sava', 'Peric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511855', 1, null, 2, false, false, 'FREE', 6, null,null,null,45.237163, 19.839484),
     (nextval('users_id_gen'), true, false, 'milojko@gmail.com', 'Milojko', 'Dragic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511111', 1, null, 2, false, false, 'FREE', 7,null,null,null, 45.260964, 19.829406);
 
@@ -95,13 +95,13 @@ values
 
 -- banijska 32 do zeleznicke
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
-VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, false, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
+VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, false, 1, 0, 0);
 
 -- cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
-VALUES (2900.9, 'INITIAL', 313.7, null, true, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, false, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
+VALUES (2900.9, 'INITIAL', 313.7, null, true, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, false, 1, 0, 0);
 
 
 UPDATE drivers SET current_driving_id=1 WHERE id=2;
@@ -109,8 +109,8 @@ UPDATE drivers SET reserved_from_client_driving_id=2 WHERE id=2;
 
 -- heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version)
-VALUES (3164.2, 'WAITING', 317.5, null, false, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, false, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
+VALUES (3164.2, 'WAITING', 317.5, null, false, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, false, 1, 0, 0);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 

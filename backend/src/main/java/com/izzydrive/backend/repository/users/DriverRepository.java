@@ -2,7 +2,9 @@ package com.izzydrive.backend.repository.users;
 
 import com.izzydrive.backend.model.users.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +24,10 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("select d from Driver d left join fetch d.currentDriving cd left join fetch cd.locations l left join fetch cd.route r where d.email = ?1")
     Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email);
+
+    @Modifying
+    @Query("update Driver d set d.lat = :lat, d.lon = :lon where d.email = :email")
+    void updateCoordinatesForDriver(@Param("email") String email,
+                                    @Param("lat") double lat,
+                                    @Param("lon") double lon);
 }

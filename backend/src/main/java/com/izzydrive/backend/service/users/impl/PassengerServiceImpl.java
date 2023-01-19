@@ -5,6 +5,7 @@ import com.izzydrive.backend.converters.DrivingDTOConverter;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
@@ -142,5 +143,11 @@ public class PassengerServiceImpl implements PassengerService {
             p.setPayingUsingExistingInfo(!passengerDoesNotHavePayingData(p));
             this.save(p);
         }
+    }
+
+    @Override
+    public CalculatedRouteDTO getEstimatedTimeLeftForCurrentDrivingToStart() {
+        // TODO::
+        return null;
     }
 }

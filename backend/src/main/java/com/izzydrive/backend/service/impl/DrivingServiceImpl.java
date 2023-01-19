@@ -11,6 +11,7 @@ import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.navigation.NavigationServiceImpl;
 import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.Constants;
@@ -47,13 +48,16 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final DriverService driverService;
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, SimpMessagingTemplate simpMessagingTemplate, DriverService driverService) {
+    private final NavigationServiceImpl navigationService;
+
+    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, SimpMessagingTemplate simpMessagingTemplate, DriverService driverService, NavigationServiceImpl navigationService) {
         this.drivingRepository = drivingRepository;
         this.driverRepository = driverRepository;
         this.passengerService = passengerService;
         this.driverLockerService = driverLockerService;
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.driverService = driverService;
+        this.navigationService = navigationService;
     }
 
     @Override
@@ -229,19 +233,22 @@ public class DrivingServiceImpl implements DrivingService {
         driving.setLocked(false);
         this.saveAndFlush(driving);
 
-        changeDriverStatus(driving);
+        changeDriverStatusAndStartNavigationSystem(driving);
         passengerService.resetPassengersPayingInfo(driving.getPassengers());
         unlockDriverIfPossible(driving.getDriver());
         sendNotificationForPaymentSuccess(driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList()));
 
-        // TODO start navigation job
     }
 
-    private void changeDriverStatus(Driving driving) {
+    private void changeDriverStatusAndStartNavigationSystem(Driving driving) {
         Driver driver = driving.getDriver();
         if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
             driver.setDriverStatus(DriverStatus.TAKEN);
             driver.setCurrentDriving(driving);
+            navigationService.startNavigationForDriver(
+                    driver.getEmail(),
+                    driving.getLocationsFromDriverToStart(),
+                    driving.getDurationFromDriverToStart());
         } else {
             driver.setDriverStatus(DriverStatus.RESERVED);
             driver.setNextDriving(driving);
@@ -253,4 +260,7 @@ public class DrivingServiceImpl implements DrivingService {
     public void saveAndFlush(Driving driving) {
         this.drivingRepository.saveAndFlush(driving);
     }
+
+
+
 }

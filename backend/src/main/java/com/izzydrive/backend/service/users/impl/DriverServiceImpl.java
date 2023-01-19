@@ -12,6 +12,7 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.User;
@@ -28,6 +29,7 @@ import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -260,13 +262,22 @@ public class DriverServiceImpl implements DriverService {
         CalculatedRouteDTO fromDriverToStart = mapService
                 .getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
 
-        CalculatedRouteDTO fromStartToEnd = convertDrivingToCalculatedRouteDTO(driver.getCurrentDriving());
+        CalculatedRouteDTO fromStartToEnd = convertDrivingToCalculatedRouteDTO(driver.getCurrentDriving(), false);
 
         return mapService.concatRoutesIntoOne(Arrays.asList(fromDriverToStart, fromStartToEnd));
     }
 
+    private CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartUsingExistingSavedData(Driver driver) {
+        CalculatedRouteDTO route = convertDrivingToCalculatedRouteDTO(driver.getCurrentDriving(), true);
+        return getEstimatedRouteLeftForDriver(driver, route);
+    }
+
     private CalculatedRouteDTO getEstimatedRouteLeftForActiveDriving(Driver driver) {
-        CalculatedRouteDTO route = convertDrivingToCalculatedRouteDTO(driver.getCurrentDriving());
+        CalculatedRouteDTO route = convertDrivingToCalculatedRouteDTO(driver.getCurrentDriving(), false);
+        return getEstimatedRouteLeftForDriver(driver, route);
+    }
+
+    private CalculatedRouteDTO getEstimatedRouteLeftForDriver(Driver driver, CalculatedRouteDTO route) {
         List<LocationDTO> coords = route.getCoordinates();
         List<LocationDTO> coordsLeft = new ArrayList<>();
         int coordinatesPassed = 0;
@@ -290,11 +301,31 @@ public class DriverServiceImpl implements DriverService {
         return new CalculatedRouteDTO(coordsLeft, estimatedDistance, estimatedDuration);
     }
 
-    private CalculatedRouteDTO convertDrivingToCalculatedRouteDTO(Driving driving) {
-        List<LocationDTO> coordinates = driving.getLocations().stream()
+
+    private CalculatedRouteDTO convertDrivingToCalculatedRouteDTO(Driving driving, boolean fromDriverToStart) {
+        List<Location> locations = driving.getLocationsFromStartToEnd();
+        if (fromDriverToStart) {
+            locations = driving.getLocationsFromDriverToStart();
+        }
+        List<LocationDTO> coordinates = locations.stream()
                 .map(l -> new LocationDTO(l.getLongitude(), l.getLatitude()))
                 .collect(Collectors.toList());
+
+        if (fromDriverToStart) {
+            return new CalculatedRouteDTO(coordinates,driving.getDistanceFromDriverToStart(), driving.getDurationFromDriverToStart());
+        }
         return new CalculatedRouteDTO(coordinates,driving.getDistance(), driving.getDuration());
     }
 
+    @Override
+    @Transactional
+    public void updateCoordinatesForDriver(String driverEmail, double lat, double lon) {
+        this.driverRepository.updateCoordinatesForDriver(driverEmail, lat, lon);
+    }
+
+    @Override
+    public CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartUsingExistingSavedData(String driverEmail) {
+        //TODO:
+        return null;
+    }
 }

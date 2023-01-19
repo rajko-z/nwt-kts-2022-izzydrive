@@ -3,6 +3,7 @@ package com.izzydrive.backend.service.users;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.model.users.Passenger;
 
 import java.util.List;
@@ -32,4 +33,5 @@ public interface PassengerService {
 
     void resetPassengersPayingInfo(Set<Passenger> passengers);
 
+    CalculatedRouteDTO getEstimatedTimeLeftForCurrentDrivingToStart();
 }

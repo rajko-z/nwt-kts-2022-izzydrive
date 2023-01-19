@@ -102,7 +102,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public void pay(CurrentPayingDTO currentPayingData) {
         Passenger passenger = passengerService.getCurrentlyLoggedPassenger();
         Driving driving = passenger.getCurrentDriving();
