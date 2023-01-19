@@ -10,12 +10,14 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTableModule} from "@angular/material/table";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDialogModule} from "@angular/material/dialog"
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 // If you have any additional modules to be shared add them to the list
@@ -37,6 +39,9 @@ const materialModules = [
   MatExpansionModule,
   MatTooltipModule,
   NgxMaterialTimepickerModule,
+  MatTooltipModule, 
+  MatSortModule,
+  MatPaginatorModule
 ];
 
 @NgModule({

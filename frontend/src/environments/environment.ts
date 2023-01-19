@@ -12,7 +12,8 @@ export const environment = {
   header: {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': "Bearer " + (JSON.parse(sessionStorage.getItem('currentUser')) ? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
+      //Authorization': "Bearer " + (JSON.parse(sessionStorage.getItem('currentUser')) ? JSON.parse(sessionStorage.getItem('currentUser')).username : '')
+       'Authorization': "Bearer "+ JSON.parse(sessionStorage.getItem('currentUser'))
     })
   },
 

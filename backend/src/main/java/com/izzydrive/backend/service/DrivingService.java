@@ -23,4 +23,5 @@ public interface DrivingService {
     Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
 
     Driving getDrivingWithLocations(Long id);
+    List<DrivingDTO> getPassengerDrivingHistory(Long passengerId);
 }

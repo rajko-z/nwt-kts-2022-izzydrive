@@ -2,6 +2,7 @@ package com.izzydrive.backend.dto.driving;
 
 import com.izzydrive.backend.dto.AddressDTO;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.User;
 import lombok.*;
 
@@ -25,7 +26,11 @@ public class DrivingDTO {
     private AddressDTO start;
     private AddressDTO end;
 
-    public DrivingDTO(Driving driving){
+    private boolean evaluationAvailable;
+
+    private DrivingState drivingState;
+
+    public DrivingDTO(Driving driving) {
         this.id = driving.getId();
         this.price = driving.getPrice();
         this.startDate = driving.getStartDate();
@@ -33,5 +38,6 @@ public class DrivingDTO {
         this.passengers = driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList());
         this.start = new AddressDTO(driving.getRoute().getStart());
         this.end = new AddressDTO(driving.getRoute().getEnd());
+        this.drivingState = driving.getDrivingState();
     }
 }

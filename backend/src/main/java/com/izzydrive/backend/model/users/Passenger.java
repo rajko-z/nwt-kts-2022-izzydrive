@@ -36,7 +36,7 @@ public class Passenger extends User {
     private List<Route> favouriteRoutes = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name="passengersInDriving",
+    @JoinTable(name="passengers_drivings",
             joinColumns = @JoinColumn(name="passenger_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="driving_id", referencedColumnName = "id"))
     private List<Driving> drivings = new ArrayList<>();

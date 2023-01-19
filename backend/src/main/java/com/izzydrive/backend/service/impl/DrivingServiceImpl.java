@@ -4,11 +4,14 @@ import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.Evaluation;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
+import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.NotificationService;
@@ -16,6 +19,7 @@ import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import org.springframework.context.annotation.Lazy;
+import com.izzydrive.backend.service.EvaluationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,20 +44,27 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final NotificationService notificationService;
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService) {
+    private final PassengerRepository passengerRepository;
+
+    private final EvaluationService evaluationService;
+
+    public DrivingServiceImpl(DrivingRepository drivingRepository, DriverRepository driverRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService, PassengerRepository passengerRepository, EvaluationService evaluationService) {
         this.drivingRepository = drivingRepository;
         this.driverRepository = driverRepository;
         this.passengerService = passengerService;
         this.driverLockerService = driverLockerService;
         this.notificationService = notificationService;
+        this.passengerRepository = passengerRepository;
+        this.evaluationService = evaluationService;
     }
-
+    @Transactional
     @Override
     public List<DrivingDTO> findAllByDriverId(Long driverId) {
         return drivingRepository.findAllByDriverId(driverId)
                 .stream().map(DrivingDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public List<DrivingDTO> findAllByPassengerId(Long passengerId) {
         List<Driving> drivingDTOS = drivingRepository.findAllByPassengerId(passengerId);
@@ -134,6 +145,29 @@ public class DrivingServiceImpl implements DrivingService {
         return new DrivingDTO(driving.get());
     }
 
+    @Transactional
+    @Override
+    public List<DrivingDTO> getPassengerDrivingHistory(Long passengerId) {
+        List<Driving> passengerDrivings = this.passengerRepository.getPassengerDrivings(passengerId);
+        List<DrivingDTO> convertedDriving = new ArrayList<DrivingDTO>();
+        for (Driving driving : passengerDrivings){
+            DrivingDTO dto = new DrivingDTO((driving));
+            if(!driving.isReservation()){
+                if (driving.getEndDate().isAfter(LocalDateTime.now().minusHours(72)) &&
+                        driving.getDrivingState() == DrivingState.FINISHED &&
+                        !isAlreadyEvaluatedDriving(driving.getId())){
+                    dto.setEvaluationAvailable(true);
+                }
+                else{
+                    dto.setEvaluationAvailable(false);
+                }
+                convertedDriving.add(dto);
+            }
+
+        }
+        return convertedDriving;
+    }
+
     private void unlockDriverIfPossible(Driver driver) {
         try {
             DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
@@ -156,5 +190,15 @@ public class DrivingServiceImpl implements DrivingService {
     @Override
     public Driving getDrivingWithLocations(Long id) {
         return this.drivingRepository.getDrivingWithLocations(id);
+    }
+
+    private boolean isAlreadyEvaluatedDriving(Long drivingId){
+        List<Evaluation> existingEvaluations = this.evaluationService.findAll();
+        for (Evaluation evaluation : existingEvaluations){
+            if(evaluation.getDriving().getId() == drivingId){
+                return true;
+            }
+        }
+        return false;
     }
 }

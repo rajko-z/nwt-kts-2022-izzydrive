@@ -27,4 +27,5 @@ export class Driving {
   start: Address;
   end: Address;
   intermediateStations?: Array<String>;
+  evaluationAvailable? : boolean;
 }

@@ -15,9 +15,9 @@ import {
   OverviewOrderingRideComponent
 } from "../../components/ordering-ride/advanced/overview-ordering-ride/overview-ordering-ride.component";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
-import {ReviewRideTableComponent} from "../../components/review-ride-table/review-ride-table.component";
 import {HomePageComponent} from "../../pages/home-page/home-page.component";
 import {RouterLinkWithHref} from "@angular/router";
+import { ReviewRideTableComponent } from 'src/app/components/shared/review-ride-table/review-ride-table.component';
 
 const declaredModules = [
   BaseUserDataFormComponent,
@@ -28,6 +28,7 @@ const declaredModules = [
   OverviewOrderingRideComponent,
   ReviewRideTableComponent,
   HomePageComponent
+
 ];
 
 @NgModule({

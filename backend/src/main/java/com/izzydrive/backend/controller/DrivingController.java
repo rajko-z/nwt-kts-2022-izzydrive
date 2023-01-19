@@ -6,6 +6,7 @@ import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.DrivingFinderService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.ProcessDrivingRequestService;
@@ -93,5 +94,12 @@ public class DrivingController {
     public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id){
         DrivingDTO driving = drivingService.findById(id);
         return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER')")
+    @GetMapping("passenger/history/{passengerId}")
+    public ResponseEntity<List<DrivingDTO>> getPassengerDrivingHistory(@PathVariable Long passengerId){
+        List<DrivingDTO> drivings = drivingService.getPassengerDrivingHistory(passengerId);
+        return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
 }

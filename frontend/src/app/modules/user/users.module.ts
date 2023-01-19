@@ -5,10 +5,13 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AngularMaterialModule} from "../shared/angular-material.module";
 import {UsersRoutingModule} from "./users-routing.module";
+import { DrivingHistoryComponent } from "src/app/components/driving-history/driving-history.component";
+import { SharedComponentsModule } from "../shared/shared-components.module";
 
 const declaredModules = [
   ChangePasswordComponent,
-  EditProfileComponent
+  EditProfileComponent,
+  DrivingHistoryComponent
 ];
 
 @NgModule({
@@ -19,6 +22,7 @@ const declaredModules = [
     AngularMaterialModule,
     UsersRoutingModule,
     ReactiveFormsModule,
+    SharedComponentsModule
   ],
   exports: declaredModules
 })
