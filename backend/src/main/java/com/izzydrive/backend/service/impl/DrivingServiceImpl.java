@@ -6,6 +6,7 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Evaluation;
+import com.izzydrive.backend.model.Route;
 import com.izzydrive.backend.model.users.*;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
@@ -176,6 +177,7 @@ public class DrivingServiceImpl implements DrivingService {
         List<DrivingDTO> convertedDriving = new ArrayList<DrivingDTO>();
         for (Driving driving : passengerDrivings){
             DrivingDTO dto = new DrivingDTO((driving));
+            dto.setFavoriteRoute(this.isFavouriteRoute(driving, passengerId));
             if(!driving.isReservation()){
                 if (driving.getEndDate().isAfter(LocalDateTime.now().minusHours(72)) &&
                         driving.getDrivingState() == DrivingState.FINISHED &&
@@ -190,6 +192,19 @@ public class DrivingServiceImpl implements DrivingService {
 
         }
         return convertedDriving;
+    }
+
+    private boolean isFavouriteRoute(Driving driving, Long passengerId) {
+        Optional<Passenger> passenger = passengerRepository.findByIdWithFavoriteRoutes(passengerId);
+        if(passenger.isPresent()){
+            for (Route route : passenger.get().getFavouriteRoutes()){
+                if(route.getStart().getName().equals(driving.getRoute().getStart().getName()) &&
+                        route.getEnd().getName().equals(driving.getRoute().getEnd().getName())){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

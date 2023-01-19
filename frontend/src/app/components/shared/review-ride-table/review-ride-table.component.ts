@@ -24,6 +24,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   isPassenger: boolean;
   gettingDataFinished : boolean =  false;
   dataSource : MatTableDataSource<Driving>;
+  tooltipText: string;
   
   @ViewChild('paginator') paginator: MatPaginator;
 
@@ -42,6 +43,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
           this.gettingDataFinished = true;
           if(this.isPassenger){
             this.displayedColumns.push('evaluate')
+            this.displayedColumns.push('favorite')
           }
         },
         error: (error) => {
@@ -52,6 +54,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
     else{
       this.isAdmin = this.data?.role === Role.ROLE_ADMIN;
       this.setDrivings();
+      this.sortData({active: "startTime", direction:'asc'} as Sort )
       this.gettingDataFinished = true;
     }
   } 
@@ -92,6 +95,14 @@ export class ReviewRideTableComponent implements AfterViewInit  {
      let pageIndex = event.pageIndex;
      let pageSize = event.pageSize;
      //ovde se nadovezati na bec ako ce se raditi paginacija na beku
+  }
+
+  removeFromFavourite(driving : Driving){
+    console.log("aaa")
+  }
+
+  addToFavourite(driving : Driving){
+    console.log("bb")
   }
 
 }
