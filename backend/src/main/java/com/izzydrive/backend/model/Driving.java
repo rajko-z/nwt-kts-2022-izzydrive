@@ -79,6 +79,9 @@ public class Driving {
     @JoinColumn(name="driving_id")
     private List<Location> locations = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "drivings", fetch = FetchType.LAZY)
+    private List<Passenger> allPassengers = new ArrayList<>();
+
     public List<Location> getLocations() {
         return locations;
     }

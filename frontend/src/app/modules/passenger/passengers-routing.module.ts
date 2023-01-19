@@ -1,5 +1,6 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
+import { ReservationsListComponent } from "src/app/components/reservations-list/reservations-list.component";
 import {HomePageLoggedComponent} from "../../pages/home-page-logged/home-page-logged.component";
 import {PaymentPageComponent} from "../../pages/payment-page/payment-page.component";
 
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'payment',
     component: PaymentPageComponent
+  },
+  {
+    path: 'reservations',
+    component: ReservationsListComponent
   }
 ];
 

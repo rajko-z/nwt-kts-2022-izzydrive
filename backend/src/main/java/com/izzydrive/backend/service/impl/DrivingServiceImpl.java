@@ -168,6 +168,17 @@ public class DrivingServiceImpl implements DrivingService {
         return convertedDriving;
     }
 
+    @Override
+    @Transactional
+    public List<DrivingDTO> getPassengerFutureReservations(Long passengerId) {
+        List<Driving> drivingsReservations = this.drivingRepository.getPassengerReservations(passengerId);
+        List<DrivingDTO> convertedDrivings = new ArrayList<>();
+        for(Driving driving : drivingsReservations){
+            convertedDrivings.add(new DrivingDTO(driving));
+        }
+        return convertedDrivings;
+    }
+
     private void unlockDriverIfPossible(Driver driver) {
         try {
             DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
