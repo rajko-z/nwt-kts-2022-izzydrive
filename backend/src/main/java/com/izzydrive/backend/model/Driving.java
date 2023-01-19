@@ -88,6 +88,12 @@ public class Driving {
     @JoinColumn(name="driving_id")
     private List<Location> locations = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "drivings", fetch = FetchType.LAZY)
+    private List<Passenger> allPassengers = new ArrayList<>();
+
+    @Column
+    private boolean  deleted = false;
+
     public List<Location> getLocations() {
         return locations;
     }

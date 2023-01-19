@@ -1,0 +1,50 @@
+@import "src/style/styles";
+
+.dialog{
+  @include size(60vw, 60vh);
+}
+.title{
+  @include setTitleStyle(55vw);
+}
+.notification{
+  @include size(60vw, auto);
+  @include setFont(26px);
+  display: flex;
+  justify-content: center;
+  margin: 10% auto;
+  color: $dark3;
+
+  .text-message{
+    margin-left: 1%;
+  }
+}
+
+.button-evaluate{
+  @include buttonStyle();
+  @include size(90%, 100%);
+  font-size: 12px;
+  padding: 5px;
+}
+
+.table-users {
+  width: 85vw;
+  min-height: 20vh;
+  margin: 5% 5%;
+}
+
+::ng-deep .mat-cell {
+  padding: 18px 18px 10px 10px !important;
+}
+
+::ng-deep .mat-sort-header-container{
+  font-weight: 400 !important;
+  justify-content: center !important;
+  border-bottom: solid 1px !important;
+  color: $dark3;
+  font-size: 16px;
+}
+
+.reservation-state{
+    font-weight: 500;
+    color: $purple;
+}

@@ -6,6 +6,7 @@ import {Driver} from "../driver/driver";
 import {Location} from "../map/location";
 import {CalculatedRoute} from "../map/calculatedRoute";
 
+
 export enum OptimalDrivingType {
   NO_PREFERENCE,
   CHEAPEST_RIDE,
@@ -32,6 +33,7 @@ export class Driving {
   end: Address;
   intermediateStations?: Array<String>;
   evaluationAvailable? : boolean;
+  drivingState : DrivingState
 }
 
 export class DrivingWithLocations {

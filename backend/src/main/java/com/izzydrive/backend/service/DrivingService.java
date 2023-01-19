@@ -36,4 +36,8 @@ public interface DrivingService {
 
     void setUpDrivingAfterSuccessPaymentAndSendNotification(Driving driving);
 
+    List<DrivingDTO> getPassengerFutureReservations(Long passengerId);
+
+    void cancelReservation(Long drivingId);
+
 }

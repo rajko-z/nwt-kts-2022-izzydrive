@@ -65,4 +65,10 @@ export class HttpClientService {
       headers: this.createHeader(),
     });
   }
+
+  delete<Type>(url) {
+    return this.http.delete<Type>(url, {
+      headers: this.createHeader(),
+    });
+  }
 }

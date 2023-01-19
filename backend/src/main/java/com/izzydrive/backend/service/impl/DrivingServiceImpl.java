@@ -8,6 +8,8 @@ import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Evaluation;
 import com.izzydrive.backend.model.users.*;
 import com.izzydrive.backend.repository.DrivingRepository;
+import com.izzydrive.backend.repository.users.DriverRepository;
+import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.EvaluationService;
@@ -50,8 +52,10 @@ public class DrivingServiceImpl implements DrivingService {
     private final EvaluationService evaluationService;
 
     private final NavigationServiceImpl navigationService;
+    private final PassengerRepository passengerRepository;
+    private final DriverService driverRepository;
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService, EvaluationService evaluationService, NavigationServiceImpl navigationService, DriverService driverService) {
+    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService, EvaluationService evaluationService, NavigationServiceImpl navigationService, DriverService driverService,PassengerRepository passengerRepository, DriverService driverRepository) {
         this.drivingRepository = drivingRepository;
         this.passengerService = passengerService;
         this.driverLockerService = driverLockerService;
@@ -59,6 +63,8 @@ public class DrivingServiceImpl implements DrivingService {
         this.evaluationService = evaluationService;
         this.navigationService = navigationService;
         this.driverService = driverService;
+        this.passengerRepository = passengerRepository;
+        this.driverRepository = driverRepository;
     }
 
     @Transactional
@@ -136,6 +142,17 @@ public class DrivingServiceImpl implements DrivingService {
         }
         return passengersToSendNotifications;
     }
+    private List<String> deleteDrivingFromPassengers2(Optional<Driving> driving) {
+        List<String> passengersToSendNotifications = new ArrayList<>();
+        if (driving.isPresent()) {
+            for (Passenger passenger : driving.get().getAllPassengers()) {
+                passengersToSendNotifications.add(passenger.getEmail());
+                passenger.setCurrentDriving(null);
+                passengerService.save(passenger);
+            }
+        }
+        return passengersToSendNotifications;
+    }
 
     private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
         for (String passenger : passengersToSendNotifications) {
@@ -173,6 +190,58 @@ public class DrivingServiceImpl implements DrivingService {
 
         }
         return convertedDriving;
+    }
+
+    @Override
+    @Transactional
+    public List<DrivingDTO> getPassengerFutureReservations(Long passengerId) {
+        List<Driving> drivingsReservations = this.drivingRepository.getPassengerReservations(passengerId);
+        List<DrivingDTO> convertedDrivings = new ArrayList<>();
+        for(Driving driving : drivingsReservations){
+            convertedDrivings.add(new DrivingDTO(driving));
+        }
+        return convertedDrivings;
+    }
+
+    @Override
+    @Transactional
+    public void cancelReservation(Long drivingId) {
+        Optional<Driving> driving = drivingRepository.findById(drivingId);
+        if (driving.isPresent()) {
+            List<String> passengersToSendNotifications = deleteDrivingFromPassengers2(driving);
+            if(driving.get().getDriver() != null){
+                unlockDriverIfPossible(driving.get().getDriver());
+                releaseDriverFromReservation(driving.get());
+            }
+
+            for(String passengerEmail : passengersToSendNotifications){
+                this.deleteFromPassangerDrivingtabel(passengerEmail, driving.get());
+            }
+
+            for(String passengerEmail : passengersToSendNotifications){
+                this.notificationService.sendNotificationCancelDriving(passengerEmail, driving.get());
+            }
+            driving.get().setDeleted(true);
+            drivingRepository.save(driving.get());
+        }
+    }
+
+    @Transactional
+    public void deleteFromPassangerDrivingtabel(String email, Driving driving) {
+        Optional<Passenger> pass = passengerRepository.findByEmail(email);
+        Long drivingId = driving.getId();
+        if(pass.isPresent()){
+            Passenger passenger = pass.get();
+            passenger.getDrivings().removeIf(d -> Objects.equals(d.getId(), drivingId));
+            driving.getAllPassengers().removeIf(p -> Objects.equals(p.getId(), passenger.getId()));
+            passengerRepository.save(passenger);
+            drivingRepository.save(driving);
+        }
+    }
+    private void releaseDriverFromReservation(Driving reservation){
+        Driver d = reservation.getDriver();
+        d.setReservedFromClientDriving(null);
+        driverRepository.save(d);
     }
 
     private void unlockDriverIfPossible(Driver driver) {

@@ -101,4 +101,18 @@ public class DrivingController {
         List<DrivingDTO> drivings = drivingService.getPassengerDrivingHistory(passengerId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @GetMapping("passenger/reservations/{passengerId}")
+    public ResponseEntity<List<DrivingDTO>> getPassengerFutureReservations(@PathVariable Long passengerId){
+        List<DrivingDTO> drivings = drivingService.getPassengerFutureReservations(passengerId);
+        return new ResponseEntity<>(drivings, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @DeleteMapping("passenger/cancel-reservation/{drivingId}")
+    public ResponseEntity<TextResponse> cancelReservation(@PathVariable Long drivingId){
+        drivingService.cancelReservation(drivingId);
+        return new ResponseEntity<>(new TextResponse("Successfully canceled reservation"), HttpStatus.OK);
+    }
 }

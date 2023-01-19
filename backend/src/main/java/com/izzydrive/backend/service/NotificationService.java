@@ -14,9 +14,12 @@ public interface NotificationService {
 
     void sendNotificationRejectDrivingFromDriver(String adminEmail);
 
+
     void sendNotificationForPaymentExpired(List<String> passengersToSendNotifications);
 
     void sendNotificationForPaymentFailure(List<String> passengersToSendNotifications);
 
     void sendNotificationForPaymentSuccess(List<String> passengersToSendNotifications);
+
+    void sendNotificationCancelDriving(String passengerEmail, Driving driving);
 }

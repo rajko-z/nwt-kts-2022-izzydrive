@@ -83,5 +83,6 @@ export class AppComponent implements OnInit {
     this.notificationService.showNotificationPaymentSessionExpired(this.stompClient);
     this.notificationService.showNotificationPaymentSuccess(this.stompClient);
     this.notificationService.showNotificationPaymentFailure(this.stompClient);
+    this.notificationService. showNotificationCancelReservationDriver(this.stompClient);
   }
 }

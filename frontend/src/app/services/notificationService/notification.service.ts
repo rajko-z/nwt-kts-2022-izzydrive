@@ -108,4 +108,12 @@ export class NotificationService {
       this.showNotificationText(message.body, callBackFn);
     });
   }
+  
+  showNotificationCancelReservationDriver(stompClient) {
+    stompClient.subscribe('/notification/cancelReservation', (message: { body: string }) => {
+      console.log(message);
+      this.showNotificationComponent(message.body, DeniedRideLinkedUserComponent);
+    }
+  );
+  }
 }

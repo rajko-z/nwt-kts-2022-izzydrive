@@ -24,5 +24,7 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     @Query("SELECT p.drivings from Passenger p WHERE p.id = ?1")
     List<Driving> getPassengerDrivings(Long id);
 
+    Optional<Passenger> findByEmail(String email);
+
 }
 
