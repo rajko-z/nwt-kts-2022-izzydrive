@@ -98,4 +98,8 @@ compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
 findPassengerReservations(passengerId:number){
   return this.httpClientService.get(environment.apiUrl + `drivings/passenger/reservations/${passengerId}`);
 }
+
+cancelReservation(drivingId: number): Observable<TextResponse>{
+  return this.httpClientService.delete<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
+}
 }

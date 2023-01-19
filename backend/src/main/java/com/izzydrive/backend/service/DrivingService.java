@@ -26,4 +26,6 @@ public interface DrivingService {
     List<DrivingDTO> getPassengerDrivingHistory(Long passengerId);
 
     List<DrivingDTO> getPassengerFutureReservations(Long passengerId);
+
+    void cancelReservation(Long drivingId);
 }

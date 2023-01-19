@@ -72,4 +72,14 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDTO.setUserEmail(adminEmail);
         this.simpMessagingTemplate.convertAndSend("/notification/cancelRideDriver", notificationDTO);
     }
+
+    @Override
+    public void sendNotificationCancelDriving(String passengerEmail, Driving driving) {
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setMessage("You reservations is canceled");
+        notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
+        notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+        notificationDTO.setUserEmail(passengerEmail);
+        this.simpMessagingTemplate.convertAndSend("/notification/cancelReservation", notificationDTO);
+    }
 }

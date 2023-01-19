@@ -1,6 +1,7 @@
 import {Address} from "../address/address";
 import {DrivingFinderRequest} from "./drivingFinderRequest.";
 import {DrivingOption} from "./drivingOption";
+import { DrivingState } from "./drivingState";
 
 export enum OptimalDrivingType {
   NO_PREFERENCE,
@@ -28,4 +29,5 @@ export class Driving {
   end: Address;
   intermediateStations?: Array<String>;
   evaluationAvailable? : boolean;
+  drivingState : DrivingState
 }

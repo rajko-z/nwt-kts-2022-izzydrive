@@ -11,4 +11,6 @@ public interface NotificationService {
     void sendNotificationRejectDriving(String passengerEmail, String startLocation, String endLocation);
 
     void sendNotificationRejectDrivingFromDriver(String adminEmail);
+
+    void sendNotificationCancelDriving(String passengerEmail, Driving driving);
 }

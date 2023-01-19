@@ -16,12 +16,13 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import {HeaderComponent} from "./components/header/header.component";
+import { ConfirmCancelReservationComponent } from './components/notifications/confirm-cancel-reservation/confirm-cancel-reservation.component';
 
 
 firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, ConfirmCancelReservationComponent],
   imports: [
     CommonModule,
     BrowserModule,

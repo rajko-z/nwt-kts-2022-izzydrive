@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -129,6 +130,17 @@ public class DrivingServiceImpl implements DrivingService {
         }
         return passengersToSendNotifications;
     }
+    private List<String> deleteDrivingFromPassengers2(Optional<Driving> driving) {
+        List<String> passengersToSendNotifications = new ArrayList<>();
+        if (driving.isPresent()) {
+            for (Passenger passenger : driving.get().getAllPassengers()) {
+                passengersToSendNotifications.add(passenger.getEmail());
+                passenger.setCurrentDriving(null);
+                passengerService.save(passenger);
+            }
+        }
+        return passengersToSendNotifications;
+    }
 
     private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
         for (String passenger : passengersToSendNotifications) {
@@ -177,6 +189,47 @@ public class DrivingServiceImpl implements DrivingService {
             convertedDrivings.add(new DrivingDTO(driving));
         }
         return convertedDrivings;
+    }
+
+    @Override
+    @Transactional
+    public void cancelReservation(Long drivingId) {
+        Optional<Driving> driving = drivingRepository.findById(drivingId);
+        if (driving.isPresent()) {
+            List<String> passengersToSendNotifications = deleteDrivingFromPassengers2(driving);
+            if(driving.get().getDriver() != null){
+                unlockDriverIfPossible(driving.get().getDriver());
+                releaseDriverFromReservation(driving.get());
+            }
+
+            for(String passengerEmail : passengersToSendNotifications){
+                this.deleteFromPassangerDrivingtabel(passengerEmail, driving.get());
+            }
+
+            for(String passengerEmail : passengersToSendNotifications){
+                this.notificationService.sendNotificationCancelDriving(passengerEmail, driving.get());
+            }
+            driving.get().setDeleted(true);
+            drivingRepository.save(driving.get());
+        }
+    }
+
+    @Transactional
+    private void deleteFromPassangerDrivingtabel(String email, Driving driving) {
+        Optional<Passenger> pass = passengerRepository.findByEmail(email);
+        Long drivingId = driving.getId();
+        if(pass.isPresent()){
+            Passenger passenger = pass.get();
+            passenger.getDrivings().removeIf(d -> Objects.equals(d.getId(), drivingId));
+            driving.getAllPassengers().removeIf(p -> Objects.equals(p.getId(), passenger.getId()));
+            passengerRepository.save(passenger);
+            drivingRepository.save(driving);
+        }
+    }
+    private void releaseDriverFromReservation(Driving reservation){
+        Driver d = reservation.getDriver();
+        d.setReservedFromClientDriving(null);
+        driverRepository.save(d);
     }
 
     private void unlockDriverIfPossible(Driver driver) {

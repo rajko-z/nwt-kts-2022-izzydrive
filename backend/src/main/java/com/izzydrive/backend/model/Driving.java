@@ -82,6 +82,9 @@ public class Driving {
     @ManyToMany(mappedBy = "drivings", fetch = FetchType.LAZY)
     private List<Passenger> allPassengers = new ArrayList<>();
 
+    @Column
+    private boolean  deleted = false;
+
     public List<Location> getLocations() {
         return locations;
     }

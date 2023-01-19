@@ -95,29 +95,29 @@ values
 
 -- banijska 32 do zeleznicke
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
-VALUES (5614.2, 'INITIAL', 441.2, null, true, null, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, '2023-01-16 22:00:00');
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, deleted)
+VALUES (5614.2, 'WAITING', 441.2, null, true, null, null, 432432.3, false, '2023-01-12 11:00:00', 2, null, 1, '2023-01-16 22:00:00', false);
 
 -- cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
-VALUES (2900.9, 'PAYMENT', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, '2023-01-16 22:00:00');
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, deleted)
+VALUES (2900.9, 'WAITING', 313.7, null, true, null, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, '2023-01-16 22:00:00', false);
 
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-16 18:10:00', false, null, null, 232002.3, false, '2023-01-16 18:00:00', 2, null, 3);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, deleted)
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-16 18:10:00', false, null, null, 232002.3, false, '2023-01-16 18:00:00', 2, null, 3, false);
 
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-15 18:15:00', false, null, null, 311001.3, false, '2023-01-15 18:00:00', 3, null, 1);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, deleted)
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-15 18:15:00', false, null, null, 311001.3, false, '2023-01-15 18:00:00', 3, null, 1, false);
 
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, null, 11000.3, false, '2023-01-13 22:00:00', 4, null, 2);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, deleted)
+VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, null, 11000.3, false, '2023-01-13 22:00:00', 4, null, 2, false);
 
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, reservation_date, driver_id, driving_note_id, route_id)
-VALUES (2900.9, 'INITIAL', 313.7, '2023-01-23 22:10:00', true, null, null, 11000.3, false, '2023-01-23 22:00:00', 4, null, 2);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, reservation_date, driver_id, driving_note_id, route_id, deleted)
+VALUES (2900.9, 'INITIAL', 313.7, '2023-01-23 22:10:00', true, null, null, 11000.3, false, '2023-01-23 22:00:00', null, null, 2, false);
 
 INSERT INTO passengers_drivings
     (passenger_id, driving_id)
@@ -134,8 +134,8 @@ UPDATE drivers SET reserved_from_client_driving_id=2 WHERE id=2;
 
 -- heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date)
-VALUES (3164.2, 'WAITING', 317.5, null, false, null, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, null);
+    distance, driving_state, duration, end_date, is_reservation, note, payment_approval_ids, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, deleted)
+VALUES (3164.2, 'WAITING', 317.5, null, false, null, null, 432432.3, false, '2023-01-08 14:30:00', 3, null, 2, null, false);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 
