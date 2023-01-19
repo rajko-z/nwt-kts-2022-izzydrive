@@ -19,18 +19,16 @@ import com.izzydrive.backend.service.users.DriverService;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestService {
-
-    private final DrivingFinderService drivingFinderService;
 
     private final DriverService driverService;
 
@@ -44,9 +42,11 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
     private final NotificationService notificationService;
 
+    private final DrivingValidationServiceImpl drivingValidationService;
+
     @Transactional
     public void process(DrivingRequestDTO request) {
-        drivingFinderService.validateDrivingFinderRequest(request.getDrivingFinderRequest());
+        drivingValidationService.validateDrivingFinderRequest(request.getDrivingFinderRequest());
 
         Driver driver = getDriverFromRequest(request);
         Passenger passenger = this.passengerService.getCurrentlyLoggedPassenger();
@@ -74,14 +74,14 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail());
             if (driverLocker.isEmpty()) {
                 DriverLocker lock = new DriverLocker(driver.getEmail(), passenger.getEmail(), 1);
-                this.driverLockerService.save(lock);
+                this.driverLockerService.saveAndFlush(lock);
             } else if (driverLocker.get().getPassengerEmail() != null) {
                 throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
             } else {
                 driverLocker.get().setPassengerEmail(passenger.getEmail());
-                driverLockerService.save(driverLocker.get());
+                driverLockerService.saveAndFlush(driverLocker.get());
             }
-        } catch (OptimisticLockException ex) {
+        } catch (OptimisticLockingFailureException ex) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
     }
@@ -104,11 +104,12 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
         driving.setPrice(option.getPrice());
         driving.setRejected(false);
         driving.setReservation(false);
+        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
+        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
         driving.setRoute(getRouteFromRequest(request.getDrivingFinderRequest()));
         driving.setPassengers(passengers);
         driving.setLocations(getLocationsNeededForDriving(fromDriverToStart, option.getStartToEndPath()));
         driving.setDriver(driver);
-        driving.setPaymentApprovalIds(passenger.getEmail());
 
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, passenger, driving);
@@ -123,17 +124,6 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
             passengerService.save(p);
         }
     }
-
-//    private void updateDriverDrivings(Driver driver, Driving driving) {
-//        if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
-//            driver.setDriverStatus(DriverStatus.TAKEN);
-//            driver.setCurrentDriving(driving);
-//        } else {
-//            driver.setDriverStatus(DriverStatus.RESERVED);
-//            driver.setNextDriving(driving);
-//        }
-//        driverService.save(driver);
-//    }
 
     private List<Location> getLocationsNeededForDriving(CalculatedRouteDTO fromDriverToStart, CalculatedRouteDTO fromStartToEnd) {
         List<Location> locations = new ArrayList<>();
@@ -265,7 +255,6 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
 
         return !locationPresentInLocations(currLoc, locations) ||
                 !locationPresentInLocations(endLoc, locations);
-
     }
 
 }

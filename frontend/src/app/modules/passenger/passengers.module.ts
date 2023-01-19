@@ -20,6 +20,10 @@ import {
 } from "../../components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 import { NewReservationComponent } from '../../components/notifications/new-reservation/new-reservation.component';
 import { EvaluationComponent } from "src/app/components/driving-history/evaluation/evaluation.component";
+import {CurrentDrivingPageComponent} from "../../pages/current-driving-page/current-driving-page.component";
+import {
+  CurrentDrivingPassengerComponent
+} from "../../components/current-driving-passenger/current-driving-passenger.component";
 
 const declaredModules = [
   HomePageLoggedComponent,
@@ -32,7 +36,9 @@ const declaredModules = [
   NewRideLinkedUserComponent,
   DeniedRideLinkedUserComponent,
   NewReservationComponent,
-  EvaluationComponent
+  EvaluationComponent,
+  CurrentDrivingPageComponent,
+  CurrentDrivingPassengerComponent
 ];
 
 @NgModule({

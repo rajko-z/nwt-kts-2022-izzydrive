@@ -32,7 +32,7 @@ import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds
 @AllArgsConstructor
 public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReservationService {
 
-    private final DrivingFinderService drivingFinderService;
+    private final DrivingValidationService drivingValidationService;
 
     private final DriverService driverService;
 
@@ -49,7 +49,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
     @Transactional
     @Override
     public void processReservation(DrivingRequestDTO request) {
-        drivingFinderService.validateDrivingFinderRequest(request.getDrivingFinderRequest());
+        drivingValidationService.validateDrivingFinderRequest(request.getDrivingFinderRequest());
         Driver driver = getDriverFromRequest(request);
 
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();

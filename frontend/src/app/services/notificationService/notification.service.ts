@@ -9,15 +9,18 @@ import {
   DeniedRideLinkedUserComponent
 } from "../../components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 import {NewReservationComponent} from "../../components/notifications/new-reservation/new-reservation.component";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(public snackBar: MatSnackBar, private userService: UserService) {
-
-  }
+  constructor(
+    public snackBar: MatSnackBar,
+    private userService: UserService,
+    private router: Router,
+    ) {}
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
@@ -35,13 +38,16 @@ export class NotificationService {
     }
   }
 
-  showNotificationText(message: string) {
+  showNotificationText(message: string, callbackFn = null) {
     const notification: NotificationM = JSON.parse(message);
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.open(notification.message, "OK", {
         verticalPosition: 'bottom',
         horizontalPosition: 'right',
       });
+      if (callbackFn !== null) {
+        callbackFn();
+      }
     }
   }
 
@@ -69,6 +75,37 @@ export class NotificationService {
   showNotificationCancelRideDriver(stompClient) {
     stompClient.subscribe('/notification/cancelRideDriver', (message: { body: string }) => {
       this.showNotificationText(message.body);
+    });
+  }
+
+  showNotificationPaymentSessionExpired(stompClient) {
+    let callBackFn = () => {
+      if (this.router.url === '/passenger/payment') {
+        this.router.navigateByUrl('/passenger/order-now');
+      }
+    }
+    stompClient.subscribe('/notification/paymentSessionExpired', (message: { body: string }) => {
+      this.showNotificationText(message.body, callBackFn);
+    });
+  }
+
+  showNotificationPaymentSuccess(stompClient) {
+    let callBackFn = () => {
+      this.router.navigateByUrl('/passenger/current-driving');
+    }
+    stompClient.subscribe('/notification/paymentSuccess', (message: { body: string }) => {
+      this.showNotificationText(message.body, callBackFn);
+    });
+  }
+
+  showNotificationPaymentFailure(stompClient) {
+    let callBackFn = () => {
+      if (this.router.url === '/passenger/payment') {
+        this.router.navigateByUrl('/passenger/order-now');
+      }
+    }
+    stompClient.subscribe('/notification/paymentFailure', (message: { body: string }) => {
+      this.showNotificationText(message.body, callBackFn);
     });
   }
 }

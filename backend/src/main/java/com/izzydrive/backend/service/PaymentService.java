@@ -1,5 +1,6 @@
 package com.izzydrive.backend.service;
 
+import com.izzydrive.backend.dto.payment.CurrentPayingDTO;
 import com.izzydrive.backend.dto.payment.KeyPairDTO;
 import com.izzydrive.backend.dto.payment.PaymentStatusDTO;
 
@@ -16,4 +17,6 @@ public interface PaymentService {
     KeyPairDTO getPaymentDataForCurrentLoggedUser();
 
     void savePaymentDataForCurrentLoggedUser(KeyPairDTO paymentData);
+
+    void pay(CurrentPayingDTO currentPayingData);
 }

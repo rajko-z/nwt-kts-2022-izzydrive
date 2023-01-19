@@ -43,4 +43,9 @@ public interface DriverService {
                                        AddressOnMapDTO endLocation);
 
     CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation);
+
+    void updateCoordinatesForDriver(String driverEmail, double lat, double lon);
+
+    // TODO:: better name and overall refactor
+    CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartUsingExistingSavedData(String driverEmail);
 }

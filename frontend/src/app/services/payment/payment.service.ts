@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClientService} from "../custom-http/http-client.service";
 import {environment} from "../../../environments/environment";
-import {PaymentData, PaymentStatus} from "../../model/payment/payment";
+import {CurrentPayingData, PaymentData, PaymentStatus} from "../../model/payment/payment";
 import {TextResponse} from "../../model/response/textresponse";
 
 @Injectable({
@@ -22,5 +22,9 @@ export class PaymentService {
 
   savePaymentData(payload: PaymentData) {
     return this.httpClientService.putT<TextResponse>(environment.apiUrl + 'payment/payment-data', payload);
+  }
+
+  pay(payload: CurrentPayingData) {
+    return this.httpClientService.putT<TextResponse>(environment.apiUrl + 'payment/pay', payload);
   }
 }

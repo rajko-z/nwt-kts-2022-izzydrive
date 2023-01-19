@@ -17,11 +17,13 @@ export class MapService {
   private routeToDrawBS = new BehaviorSubject<DrawnRoute>(null);
   private drawnRoutesToRemoveBS = new BehaviorSubject<void>(null);
   private currentDriverEmailToTrackBS = new BehaviorSubject<string>(null);
+  private toResetMapViewBS = new BehaviorSubject<void>(null);
   placeToAdd = this.placeToAddBS.asObservable();
   placeToRemove = this.placeToRemoveBS.asObservable();
   routeToDraw = this.routeToDrawBS.asObservable();
   drawnRoutesToRemove = this.drawnRoutesToRemoveBS.asObservable();
   currentDriverEmailToTrack = this.currentDriverEmailToTrackBS.asObservable();
+  toResetMapView = this.toResetMapViewBS.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -54,5 +56,9 @@ export class MapService {
 
   startTrackingCurrentDriverOnMap(driverEmail: string) {
     this.currentDriverEmailToTrackBS.next(driverEmail);
+  }
+
+  resetEverythingOnMap() {
+    this.toResetMapViewBS.next();
   }
 }

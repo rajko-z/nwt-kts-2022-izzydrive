@@ -8,5 +8,4 @@ public class Helper {
         return (int)Math.ceil(duration / 60);
     }
 
-
 }

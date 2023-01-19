@@ -49,7 +49,10 @@ public class Driving {
     private boolean rejected;
 
     @Column
-    private String paymentApprovalIds;
+    private boolean locked;
+
+    @Version
+    private Integer version;
 
     @Enumerated(EnumType.STRING)
     private DrivingState drivingState;
@@ -59,6 +62,12 @@ public class Driving {
 
     @Column
     private double distance;
+
+    @Column
+    private double durationFromDriverToStart;
+
+    @Column
+    private double distanceFromDriverToStart;
 
     @OneToMany(mappedBy = "driving", fetch = FetchType.LAZY)
     private List<Evaluation> evaluation = new ArrayList<>();

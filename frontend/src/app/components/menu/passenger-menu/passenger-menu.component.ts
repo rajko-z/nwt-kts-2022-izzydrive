@@ -21,8 +21,11 @@ export class PassengerMenuComponent implements OnInit {
     this.router.navigateByUrl('/passenger/order-for-later')
   }
 
-  onDrivingHistory(){
+  onDrivingHistory() {
     this.router.navigateByUrl("/user/driving-history");
   }
 
+  currentDrivingClicked() {
+    this.router.navigateByUrl('/passenger/current-driving')
+  }
 }

@@ -26,6 +26,18 @@ public class Passenger extends User {
     @Column
     private String secretKey;
 
+    @Column
+    private boolean payingUsingExistingInfo;
+
+    @Column
+    private String onceTimeEthAddress;
+
+    @Column
+    private String onceTimeSecretKey;
+
+    @Column
+    private boolean approvedPaying;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Driving currentDriving;
 

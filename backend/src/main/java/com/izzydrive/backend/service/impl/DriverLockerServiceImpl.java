@@ -20,7 +20,8 @@ public class DriverLockerServiceImpl implements DriverLockerService {
     }
 
     @Override
-    public void save(DriverLocker driverLocker) {
-        this.driverLockerRepository.save(driverLocker);
+    public void saveAndFlush(DriverLocker driverLocker) {
+
+        this.driverLockerRepository.saveAndFlush(driverLocker);
     }
 }

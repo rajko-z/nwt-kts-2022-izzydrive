@@ -11,4 +11,6 @@ public class PaymentStatusDTO {
     private boolean passengerApproved;
     private boolean waitingForOthers;
     private boolean sessionExpired;
+    private double priceInRSD;
+    private double priceInETH;
 }

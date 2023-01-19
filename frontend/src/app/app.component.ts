@@ -6,9 +6,26 @@ import * as SockJS from 'sockjs-client';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
-import {Role} from './model/user/role';
-import {ChatService} from './services/chat/chat.service';
 import {NotificationService} from "./services/notificationService/notification.service";
+import {
+  NewRideLinkedUserComponent
+} from "./components/notifications/new-ride-linked-user/new-ride-linked-user.component";
+import {
+  DeniedRideLinkedUserComponent
+} from "./components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
+import { Role } from './model/user/role';
+import { ChatService } from './services/chat/chat.service';
+import { Message } from './model/message/message';
+import { Channel } from './model/channel/channel';
+import {Router} from "@angular/router";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+
+// Initialize Firebase
 
 
 @Component({
@@ -18,9 +35,16 @@ import {NotificationService} from "./services/notificationService/notification.s
 })
 export class AppComponent implements OnInit {
   title = 'NWT-KTS 2022 IZZYDRIVE';
+
   private stompClient: any;
 
-  constructor(private userService: UserService, public snackBar: MatSnackBar, private chatService: ChatService, private notificationService: NotificationService) {
+  constructor(
+    private userService: UserService,
+    public snackBar: MatSnackBar,
+    private chatService : ChatService,
+    private router: Router,
+    private notificationService: NotificationService
+  ) {
     firebase.initializeApp(environment.firebaseConfig);
   }
 
@@ -56,5 +80,8 @@ export class AppComponent implements OnInit {
     this.notificationService.showNotificationNewRide(this.stompClient);
     this.notificationService.showNotificationCancelRide(this.stompClient);
     this.notificationService.showNotificationNewReservationDriving(this.stompClient);
+    this.notificationService.showNotificationPaymentSessionExpired(this.stompClient);
+    this.notificationService.showNotificationPaymentSuccess(this.stompClient);
+    this.notificationService.showNotificationPaymentFailure(this.stompClient);
   }
 }

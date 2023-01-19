@@ -17,8 +17,6 @@ import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import {HeaderComponent} from "./components/header/header.component";
 
-
-
 firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({

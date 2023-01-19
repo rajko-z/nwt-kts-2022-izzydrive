@@ -50,6 +50,20 @@ export class MapComponent implements OnInit {
     this.mapService.routeToDraw.subscribe(r => r != null && this.drawRoute(r));
     this.mapService.drawnRoutesToRemove.subscribe(_ => this.removeAllDrawnRoutes());
     this.mapService.currentDriverEmailToTrack.subscribe(e => e != null && this.setCurrentTrackingDriverEmail(e));
+    this.mapService.toResetMapView.subscribe(_ => this.removeEverything());
+  }
+
+  private removeEverything() {
+    delete this.startMarkerLayer;
+    delete this.endMarkerLayer;
+    delete this.firstIntermediateLayer;
+    delete this.secondIntermediateLayer;
+    delete this.thirdIntermediateLayer;
+    delete this.routesLayer;
+    delete this.currentTrackingDriverEmail;
+    delete this.driverLocationsLayer;
+    this.mainGroup = [];
+    this.routesLayer = new LayerGroup();
   }
 
   private setCurrentTrackingDriverEmail(driverEmail: string) {
@@ -58,8 +72,8 @@ export class MapComponent implements OnInit {
   }
 
   private fetchNewDriverLocationsPeriodically() {
-    //setInterval(() => this.fetchNewDriverLocationsAndAddToMap(), 2000);
-    this.fetchNewDriverLocationsAndAddToMap();
+    setInterval(() => this.fetchNewDriverLocationsAndAddToMap(), 2000);
+    //this.fetchNewDriverLocationsAndAddToMap();
   }
 
   private fetchNewDriverLocationsAndAddToMap() {

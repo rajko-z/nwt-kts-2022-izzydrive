@@ -72,4 +72,34 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDTO.setUserEmail(adminEmail);
         this.simpMessagingTemplate.convertAndSend("/notification/cancelRideDriver", notificationDTO);
     }
+
+    @Override
+    public void sendNotificationForPaymentExpired(List<String> passengersToSendNotifications) {
+        for (String passenger : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Payment session has expired. Your current driving is canceled");
+            notificationDTO.setUserEmail(passenger);
+            this.simpMessagingTemplate.convertAndSend("/notification/paymentSessionExpired", notificationDTO);
+        }
+    }
+
+    @Override
+    public void sendNotificationForPaymentFailure(List<String> passengersToSendNotifications) {
+        for (String passenger : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Payment failure, canceling current driving. Make sure every passenger input correct paying info and have enough funds.");
+            notificationDTO.setUserEmail(passenger);
+            this.simpMessagingTemplate.convertAndSend("/notification/paymentFailure", notificationDTO);
+        }
+    }
+
+    @Override
+    public void sendNotificationForPaymentSuccess(List<String> passengersToSendNotifications) {
+        for (String passenger : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Payment success.");
+            notificationDTO.setUserEmail(passenger);
+            this.simpMessagingTemplate.convertAndSend("/notification/paymentSuccess", notificationDTO);
+        }
+    }
 }

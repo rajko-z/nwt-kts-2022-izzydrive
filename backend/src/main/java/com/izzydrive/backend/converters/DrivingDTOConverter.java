@@ -1,6 +1,7 @@
 package com.izzydrive.backend.converters;
 
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Location;
@@ -15,16 +16,18 @@ public class DrivingDTOConverter {
     private DrivingDTOConverter() {}
 
     public static DrivingDTOWithLocations convertWithLocationsAndDriver(Driving driving, List<Location> locations, CarService carService) {
-        List<LocationDTO> fromDriverToStart = new ArrayList<>();
-        List<LocationDTO> fromStartToEnd = new ArrayList<>();
+        List<LocationDTO> fromDriverToStartLoc = new ArrayList<>();
+        List<LocationDTO> fromStartToEndLoc = new ArrayList<>();
 
         for (Location l : locations) {
             if (l.isForDrive()) {
-                fromStartToEnd.add(new LocationDTO(l.getLongitude(), l.getLatitude()));
+                fromStartToEndLoc.add(new LocationDTO(l.getLongitude(), l.getLatitude()));
             } else {
-                fromDriverToStart.add(new LocationDTO(l.getLongitude(), l.getLatitude()));
+                fromDriverToStartLoc.add(new LocationDTO(l.getLongitude(), l.getLatitude()));
             }
         }
+        CalculatedRouteDTO fromDriverToStart = new CalculatedRouteDTO(fromDriverToStartLoc, 0, 0);
+        CalculatedRouteDTO fromStartToEnd = new CalculatedRouteDTO(fromStartToEndLoc, driving.getDistance(), driving.getDuration());
 
         return DrivingDTOWithLocations.builder()
                 .id(driving.getId())
@@ -36,8 +39,6 @@ public class DrivingDTOConverter {
                 .passengers(driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList()))
                 .isReservation(driving.isReservation())
                 .drivingState(driving.getDrivingState())
-                .duration(driving.getDuration())
-                .distance(driving.getDistance())
                 .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver(), carService))
                 .fromDriverToStart(fromDriverToStart)
                 .fromStartToEnd(fromStartToEnd)

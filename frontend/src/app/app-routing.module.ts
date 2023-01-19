@@ -2,11 +2,11 @@ import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {HomePageComponent} from "./pages/home-page/home-page.component";
 import {HomepageGuard} from "./guards/homepage.guard";
-import {DriverGuard} from "./guards/driver.guard";
-import {PassengerGuard} from "./guards/passenger.guard";
-import {AdminGuard} from "./guards/admin.guard";
-import {AnonymousGuard} from "./guards/anonymous.guard";
-import {UserGuard} from "./guards/user.guard";
+import {DriverGuard} from "./guards/auth/driver.guard";
+import {PassengerGuard} from "./guards/auth/passenger.guard";
+import {AdminGuard} from "./guards/auth/admin.guard";
+import {AnonymousGuard} from "./guards/auth/anonymous.guard";
+import {UserGuard} from "./guards/auth/user.guard";
 
 const routes: Routes = [
   {

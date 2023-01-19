@@ -2,7 +2,7 @@ package com.izzydrive.backend.dto.driving;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.RouteDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.model.DrivingState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +26,7 @@ public class DrivingDTOWithLocations {
     private List<String> passengers;
     private boolean isReservation;
     private DrivingState drivingState;
-    private double duration;
-    private double distance;
     private DriverDTO driver;
-    private List<LocationDTO> fromDriverToStart;
-    private List<LocationDTO> fromStartToEnd;
+    private CalculatedRouteDTO fromDriverToStart;
+    private CalculatedRouteDTO fromStartToEnd;
 }

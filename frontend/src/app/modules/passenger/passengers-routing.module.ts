@@ -2,6 +2,7 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {HomePageLoggedComponent} from "../../pages/home-page-logged/home-page-logged.component";
 import {PaymentPageComponent} from "../../pages/payment-page/payment-page.component";
+import {CurrentDrivingPageComponent} from "../../pages/current-driving-page/current-driving-page.component";
 
 const routes: Routes = [
   {
@@ -10,6 +11,10 @@ const routes: Routes = [
     data: {
       reservation: false
     }
+  },
+  {
+    path: 'current-driving',
+    component: CurrentDrivingPageComponent
   },
   {
     path: 'order-now',
@@ -28,7 +33,7 @@ const routes: Routes = [
   {
     path: 'payment',
     component: PaymentPageComponent
-  }
+  },
 ];
 
 @NgModule({

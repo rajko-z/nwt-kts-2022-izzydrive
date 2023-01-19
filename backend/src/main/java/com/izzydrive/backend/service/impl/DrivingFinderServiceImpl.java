@@ -8,36 +8,27 @@ import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
-import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.car.CarAccommodation;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.DriverStatus;
-import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.CarService;
 import com.izzydrive.backend.service.DriverLockerService;
 import com.izzydrive.backend.service.DrivingFinderService;
+import com.izzydrive.backend.service.DrivingValidationService;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.DriverService;
-import com.izzydrive.backend.service.users.PassengerService;
-import com.izzydrive.backend.utils.ExceptionMessageConstants;
-import com.izzydrive.backend.utils.Helper;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
-import static com.izzydrive.backend.utils.Constants.*;
+import static com.izzydrive.backend.utils.Constants.MINUTES_INTERVAL_BEFORE_RESERVATION;
 import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds;
 
 @Service
@@ -50,13 +41,13 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
     private final MapService mapService;
 
-    private final PassengerService passengerService;
-
     private final DriverLockerService driverLockerService;
+
+    private final DrivingValidationService drivingValidationService;
 
     @Override
     public List<DrivingOptionDTO> getSimpleDrivingOptions(List<AddressOnMapDTO> locations) {
-        validateAllLocationsForSimpleRequest(locations);
+        drivingValidationService.validateAllLocationsForSimpleRequest(locations);
 
         List<DrivingOptionDTO> options = getAllDrivingOptions(
                 locations,
@@ -73,7 +64,7 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
 
     @Override
     public List<DrivingOptionDTO> getAdvancedDrivingOptions(DrivingFinderRequestDTO request) {
-        validateDrivingFinderRequest(request);
+        drivingValidationService.validateDrivingFinderRequest(request);
 
         List<DrivingOptionDTO> options = getAllDrivingOptions(
                 getAllPointsFromDrivingFinderRequest(request),
@@ -176,135 +167,13 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         return mapService.getCalculatedRoutesFromPoints(points);
     }
 
-    private void validateAllLocationsForSimpleRequest(List<AddressOnMapDTO> locations) {
-        if (locations == null || locations.size() != 2) {
-            throw new BadRequestException(ExceptionMessageConstants.ERROR_START_AND_END_LOCATION);
-        }
-        validateAllLocationsBelongsToNS(locations);
-        validateAllLocationsForUniqueness(locations);
-    }
-
-    private void validateAllLocationsFromDrivingFinderRequest(DrivingFinderRequestDTO request) {
-        List<AddressOnMapDTO> locations = new ArrayList<>();
-        locations.add(request.getStartLocation());
-        locations.addAll(request.getIntermediateLocations());
-        locations.add(request.getEndLocation());
-
-        validateAllLocationsForUniqueness(locations);
-        validateAllLocationsBelongsToNS(locations);
-        validateSizeOfIntermediateLocations(request.getIntermediateLocations());
-    }
-
-    private void validateAllLocationsBelongsToNS(List<AddressOnMapDTO> locations) {
-        for (AddressOnMapDTO l : locations) {
-            if (!mapService.addressBelongsToBoundingBoxOfNS(l)) {
-                throw new BadRequestException(ExceptionMessageConstants.LOCATION_OUTSIDE_OF_NOVI_SAD);
-            }
-        }
-    }
-
-    private void validateSizeOfIntermediateLocations(List<AddressOnMapDTO> locations) {
-        if (locations.size() > 3) {
-            throw new BadRequestException(ExceptionMessageConstants.ERROR_SIZE_OF_INTERMEDIATE_LOCATIONS);
-        }
-    }
-
-    private void validateAllLocationsForUniqueness(List<AddressOnMapDTO> locations) {
-        for (int i = 0; i < locations.size() - 1; ++i) {
-            AddressOnMapDTO l1 = locations.get(i);
-            for (int j = i + 1; j < locations.size(); ++j) {
-                AddressOnMapDTO l2 = locations.get(j);
-                if (l1.getName().equals(l2.getName()) || (l1.getLatitude() == l2.getLatitude() && l1.getLongitude() == l2.getLongitude())) {
-                    throw new BadRequestException(ExceptionMessageConstants.INVALID_LOCATIONS_UNIQUENESS);
-                }
-            }
-        }
-    }
-
-    private void checkIfAnyPassengerAlreadyHasRide(Set<String> linkedPassengers, String initiator) {
-        Optional<Passenger> currPass = this.passengerService.findByEmailWithCurrentDriving(initiator);
-        if (currPass.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator));
-        }
-        if (currPass.get().getCurrentDriving() != null) {
-            throw new BadRequestException(ExceptionMessageConstants.YOU_ALREADY_HAVE_CURRENT_DRIVING);
-        }
-
-        for (String passengerEmail : linkedPassengers) {
-            Optional<Passenger> passenger = this.passengerService.findByEmailWithCurrentDriving(passengerEmail);
-            if (passenger.isEmpty()) {
-                throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail));
-            }
-            if (passenger.get().getCurrentDriving() != null) {
-                throw new BadRequestException(ExceptionMessageConstants.cantLinkPassengerThatAlreadyHasCurrentDriving(passengerEmail));
-            }
-            if (passengerEmail.equals(initiator)) {
-                throw new BadRequestException(ExceptionMessageConstants.YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE);
-            }
-        }
-    }
-
-    private void validatePassengers(DrivingFinderRequestDTO request) {
-        String currPassengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Set<String> linkedPassengers = request.getLinkedPassengersEmails();
-        if (linkedPassengers.size() > 3) {
-            throw new BadRequestException(ExceptionMessageConstants.MAX_NUMBER_OF_LINKED_PASSENGERS);
-        }
-        if (request.getReservation()) {
-            checkIfAnyPassengerAlreadyHasReservation(linkedPassengers, currPassengerEmail, request.getScheduleTime());
-        } else {
-            checkIfAnyPassengerAlreadyHasRide(linkedPassengers, currPassengerEmail);
-        }
-
-    }
-
-    private void checkIfAnyPassengerAlreadyHasReservation(Set<String> linkedPassengers, String initiator, LocalDateTime time) {
-        Passenger currPass = this.passengerService.findByEmailWithReservedDriving(initiator)
-                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator)));
-
-        for (Driving driving : currPass.getDrivings()) {
-            if (driving.isReservation()) {
-                checkIfPassengerHasReservationInThatTime(time, driving, initiator);
-            }
-        }
-
-        for (String passengerEmail : linkedPassengers) {
-            Passenger passenger = this.passengerService.findByEmailWithReservedDriving(passengerEmail)
-                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
-
-            for (Driving driving : passenger.getDrivings()) {
-                if (driving.isReservation()) {
-                    checkIfPassengerHasReservationInThatTime(time, driving, passenger.getEmail());
-                }
-            }
-            if (passengerEmail.equals(initiator)) {
-                throw new BadRequestException(ExceptionMessageConstants.YOU_CAN_NOT_LINK_YOURSELF_FOR_DRIVE);
-            }
-        }
-    }
-
-    private void checkIfPassengerHasReservationInThatTime(LocalDateTime currentTime, Driving driving, String email) {
-        LocalDateTime timeStart = driving.getReservationDate().minusMinutes(MINUTE_FOR_EXIST_RESERVATION);
-        LocalDateTime timeEnd = driving.getReservationDate().plusMinutes((getDurationInMinutesFromSeconds(driving.getDuration()) + MINUTE_FOR_EXIST_RESERVATION));
-        if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
-            throw new BadRequestException(ExceptionMessageConstants.passengerAlreadyHasReservation(email));
-        }
-    }
-
-    @Override
-    public void validateDrivingFinderRequest(DrivingFinderRequestDTO request) {
-        validatePassengers(request);
-        validateAllLocationsFromDrivingFinderRequest(request);
-    }
-
     @Override
     public List<DrivingOptionDTO> getScheduleDrivingOptions(DrivingFinderRequestDTO request) {
         request.setScheduleTime(request.getScheduleTime().plusHours(1));
 
-        checkScheduleTime(request.getScheduleTime());
+        drivingValidationService.checkReservationScheduledTime(request.getScheduleTime());
 
-        validateDrivingFinderRequest(request);
+        drivingValidationService.validateDrivingFinderRequest(request);
 
         List<DrivingOptionDTO> options = getAllDrivingOptionsForReservation(
                 getAllPointsFromDrivingFinderRequest(request),
@@ -343,7 +212,7 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         LocalDateTime timeInterval = LocalDateTime.now().plusMinutes(MINUTES_INTERVAL_BEFORE_RESERVATION);
         CalculatedRouteDTO fromDriverToStart = this.driverService.getCalculateRouteFromDriverToStartWithNextDriving(driver.getEmail(), startLocation);
 
-        if (getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) < ChronoUnit.MINUTES.between(currentTime, LocalDateTime.now())) {
+        if (getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()) > ChronoUnit.MINUTES.between(LocalDateTime.now(), currentTime)) {
             return;
         }
 
@@ -388,11 +257,4 @@ public class DrivingFinderServiceImpl implements DrivingFinderService {
         return retVal;
     }
 
-    private void checkScheduleTime(LocalDateTime currentTime) {
-        LocalDateTime timeMin = LocalDateTime.now().plusMinutes(MAX_HOUR_FOR_RESERVATION);
-        LocalDateTime timeMax = LocalDateTime.now().plusHours(MINUTES_BEFORE_RESERVATION);
-        if (timeMin.isAfter(currentTime) || timeMax.isBefore(currentTime)) {
-            throw new BadRequestException(ExceptionMessageConstants.INVALID_PERIOD_SCHEDULE_DRIVING);
-        }
-    }
 }

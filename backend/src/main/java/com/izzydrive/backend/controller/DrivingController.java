@@ -6,7 +6,6 @@ import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
-import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.DrivingFinderService;
 import com.izzydrive.backend.service.DrivingService;
 import com.izzydrive.backend.service.ProcessDrivingRequestService;
@@ -83,9 +82,9 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping(value = "/reject-linked-user/{drivingId}")
-    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(@PathVariable Long drivingId){
-        this.drivingService.rejectDrivingLinkedUser(drivingId);
+    @GetMapping(value = "/reject-linked-user")
+    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
+        this.drivingService.rejectDrivingLinkedUser();
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 
