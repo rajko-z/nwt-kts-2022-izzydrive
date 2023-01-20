@@ -54,7 +54,6 @@ export class ReviewRideTableComponent implements AfterViewInit  {
     else{
       this.isAdmin = this.data?.role === Role.ROLE_ADMIN;
       this.setDrivings();
-      this.sortData({active: "startTime", direction:'asc'} as Sort )
       this.gettingDataFinished = true;
     }
   } 
@@ -67,10 +66,12 @@ export class ReviewRideTableComponent implements AfterViewInit  {
     if(this.data?.role === Role.ROLE_DRIVER){
       this.drivingService.findAllByDriverId(this.data.id).subscribe((res) => {
         this.setDataSource(res as Driving[])    
+        this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }else if(this.data?.role === Role.ROLE_PASSENGER){
-      this.drivingService.getDrivingsHistoryForPassenger(this.data.id).subscribe((res) => {
+      this.drivingService.getDrivingsHistoryForPassenger(this.data.id).subscribe((res) => {        
         this.setDataSource(res as Driving[])
+        this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }
   }

@@ -14,17 +14,8 @@ export class DrivingHistoryComponent implements OnInit {
 
   constructor(private drivingService : DrivingService, private userService : UserService, public dialog: MatDialog) { }
 
-  drivings : Driving[] = [];
 
   ngOnInit(): void {
-    this.drivingService.getDrivingsHistoryForPassenger(this.userService.getCurrentUserId()).subscribe({
-      next : (response) => {
-        console.log(response)
-        this.drivings = response as Driving[];
-      },
-      error : (error) =>{
-        console.log(error);
-      }
-    })
+  
   }
 }
