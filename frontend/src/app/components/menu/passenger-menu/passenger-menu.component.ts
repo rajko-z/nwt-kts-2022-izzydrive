@@ -31,4 +31,7 @@ export class PassengerMenuComponent implements OnInit {
   currentDrivingClicked() {
     this.router.navigateByUrl('/passenger/current-driving')
   }
+  onFavoriteRouts(){
+    this.router.navigateByUrl('/passenger/favorites')
+  }
 }

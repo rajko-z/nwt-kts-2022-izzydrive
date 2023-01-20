@@ -1,0 +1,63 @@
+@import "src/style/styles";
+
+.container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 10%;
+    padding-top: 5%;
+}
+
+.route-container{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    min-width: 150px;
+    min-height: 150px;;
+    padding: 15px;
+    background-color: $lightpink;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+    align-items: center;
+}
+
+.label{
+    color: $dark3;
+    font-weight: 300;
+    display: flex;
+}
+.text{
+    color: #6B2167;
+    font-weight: 400;
+    padding-left: 10px;
+}
+
+.get-ride-button{
+    font-size: 15px;
+    background-color: #6B2167;
+    color: #E9EAEF;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    float: right;
+    padding: 5px;
+    border: none;
+    margin-top: 10px;
+}
+.separator{
+    width: 100%;
+    border-bottom: solid $light2 1px;
+}
+
+.intermediate-label{
+    padding-top: 15px;
+    color: $dark3;
+    font-weight: 300;
+    display: flex;
+}
+
+.intermediate-text{
+    @include setFont(13px);
+    color: $dark6;
+}
+

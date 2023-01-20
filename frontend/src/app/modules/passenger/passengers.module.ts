@@ -26,6 +26,7 @@ import {
 } from "../../components/current-driving-passenger/current-driving-passenger.component";
 import { ReservationsListComponent } from "src/app/components/reservations-list/reservations-list.component";
 import { ConfirmCancelReservationComponent } from "src/app/components/notifications/confirm-cancel-reservation/confirm-cancel-reservation.component";
+import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/favorite-routs.component";
 
 const declaredModules = [
   HomePageLoggedComponent,
@@ -42,7 +43,8 @@ const declaredModules = [
   CurrentDrivingPageComponent,
   CurrentDrivingPassengerComponent,
   ReservationsListComponent,
-  ConfirmCancelReservationComponent
+  ConfirmCancelReservationComponent,
+  FavouriteRoutsComponent
 ];
 
 @NgModule({
