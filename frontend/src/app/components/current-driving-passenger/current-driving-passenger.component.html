@@ -23,7 +23,7 @@
 <!--              <button type="button" class="report-button" (click)="reportDriver()">Report</button>-->
 <!--            </div>-->
       <div class="time-info">
-        <p class="minutes">{{currentDriving.fromDriverToStart.duration}}min</p>
+        <p class="minutes">{{currentDriving.fromDriverToStart.duration * 1000 | date:'m'}}min</p>
       </div>
     </div>
     <div class="second-line">

@@ -37,6 +37,17 @@
   }
 }
 
+.report-info{
+  margin: 7% 4%;
+  padding: 4%;
+
+  .report-button{
+    @include buttonStyle();
+    width: 140%;
+    padding: 5%;
+  }
+}
+
 .location, .intermediate-station, .other-users {
   display: flex;
   justify-content: flex-start;
@@ -60,6 +71,14 @@
 
     .driver-title {
       margin: 1% 2%;
+    }
+  }
+
+  .driver-image{
+    margin-top: 1%;
+    margin-left: 33%;
+    .profile-image{
+      @include size(65px, 65px);
     }
   }
 

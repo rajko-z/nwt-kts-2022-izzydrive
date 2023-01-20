@@ -1,4 +1,7 @@
+import {NotificationStatus} from "./notificationStatus";
+
 export class NotificationM {
+  id?:number;
   userEmail: string;
   message: string;
   startLocation?: string;
@@ -6,6 +9,7 @@ export class NotificationM {
   intermediateLocations?: string[];
   duration?: number;
   price?: number;
-  drivingId?: number;
   reservationTime?: Date;
+  notificationStatus: NotificationStatus;
+  creationDate: Date;
 }

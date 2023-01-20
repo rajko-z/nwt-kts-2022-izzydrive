@@ -1,0 +1,96 @@
+@import "src/style/styles";
+
+.review-notifications {
+  @include size(100vw, 100vh);
+}
+
+.title {
+  @include setTitleStyle(85vw);
+}
+
+.notification-area {
+  @include size(90vw, 90vh);
+  margin: 2% 5% 1% 5%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.no-notification {
+  @include setFont(20px);
+  margin: 3% 10% 1% 10%;
+  padding: 1%;
+  color: $dark3;
+}
+
+.notification-info {
+  @include size(80vw, 17vh);
+  margin: 2%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-radius: 5px;
+  position: relative;
+  transition: box-shadow 0.3s ease-in-out;
+
+  .notification {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    .body-message {
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: row;
+
+      .icon {
+        @include size(50px, 50px);
+        margin: 10px;
+      }
+    }
+  }
+}
+
+.time {
+  color: $grey_color;
+  font-size: 13px;
+  margin: 25px 3% 1% 0;
+  width: 100px;
+}
+
+.submit-item {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  .submit-button {
+    font-size: 15px;
+    font-weight: bold;
+    background-color: $light1;
+    color: $dark4;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 50px;
+    margin-top: 5px;
+    margin-left: 40%;
+    text-align: center;
+  }
+}
+
+.message-area {
+  margin-left: 5px;
+
+  .message {
+    @include setFont(16px);
+    font-weight: bold;
+    color: $dark3;
+  }
+
+  .text {
+    @include setFont(14px);
+    color: $dark3;
+    margin: 0;
+    padding: 0;
+  }
+}
+

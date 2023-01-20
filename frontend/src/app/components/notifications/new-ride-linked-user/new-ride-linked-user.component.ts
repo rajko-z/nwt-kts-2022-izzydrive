@@ -2,8 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {DrivingService} from "../../../services/drivingService/driving.service";
-import {UserService} from "../../../services/userService/user-sevice.service";
-import {Driving} from "../../../model/driving/driving";
 
 @Component({
   selector: 'app-new-ride-linked-user',

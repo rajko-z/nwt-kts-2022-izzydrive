@@ -7,11 +7,15 @@ import {AngularMaterialModule} from "../shared/angular-material.module";
 import {UsersRoutingModule} from "./users-routing.module";
 import { DrivingHistoryComponent } from "src/app/components/driving-history/driving-history.component";
 import { SharedComponentsModule } from "../shared/shared-components.module";
+import {
+  NotificationReviewComponent
+} from "../../components/notifications/notification-review/notification-review.component";
 
 const declaredModules = [
   ChangePasswordComponent,
   EditProfileComponent,
-  DrivingHistoryComponent
+  DrivingHistoryComponent,
+  NotificationReviewComponent
 ];
 
 @NgModule({

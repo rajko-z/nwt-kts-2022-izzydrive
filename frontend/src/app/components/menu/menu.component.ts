@@ -60,4 +60,8 @@ export class MenuComponent implements OnInit {
   logOut() {
     this.userService.logOut();
   }
+
+  openNotificationReview() {
+    this.router.navigateByUrl("/user/notifications");
+  }
 }

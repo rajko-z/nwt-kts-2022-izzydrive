@@ -44,6 +44,7 @@ public final class ExceptionMessageConstants {
     public static final String INVALID_PERIOD_SCHEDULE_DRIVING = "The ride is scheduled at least 30 minutes before and at most 5 hours before";
     public static final String YOU_ALREADY_APPROVED_THIS_PAYING = "You already approved this paying";
     public static final String CANT_USE_EXISTING_PAYING_DATA = "Can't use existing paying data, because you dont have one";
+    public static final String NOTIFICATION_DOESNT_EXIST = "Notification with that id doesn't exists";
 
 
     public static String passengerAlreadyHasReservation(String email) {

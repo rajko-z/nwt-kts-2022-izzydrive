@@ -1,7 +1,10 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import { DrivingHistoryComponent } from "src/app/components/driving-history/driving-history.component";
+import {DrivingHistoryComponent} from "src/app/components/driving-history/driving-history.component";
 import {EditProfileComponent} from "../../components/profile/edit-profile/edit-profile.component";
+import {
+  NotificationReviewComponent
+} from "../../components/notifications/notification-review/notification-review.component";
 
 const routes: Routes = [
   {
@@ -15,6 +18,10 @@ const routes: Routes = [
   {
     path: 'driving-history',
     component: DrivingHistoryComponent,
+  },
+  {
+    path: 'notifications',
+    component: NotificationReviewComponent,
   },
 ];
 

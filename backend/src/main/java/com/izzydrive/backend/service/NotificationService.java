@@ -1,5 +1,6 @@
 package com.izzydrive.backend.service;
 
+import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Driving;
 
 import java.util.List;
@@ -14,7 +15,6 @@ public interface NotificationService {
 
     void sendNotificationRejectDrivingFromDriver(String adminEmail);
 
-
     void sendNotificationForPaymentExpired(List<String> passengersToSendNotifications);
 
     void sendNotificationForPaymentFailure(List<String> passengersToSendNotifications);
@@ -22,4 +22,8 @@ public interface NotificationService {
     void sendNotificationForPaymentSuccess(List<String> passengersToSendNotifications);
 
     void sendNotificationCancelDriving(String passengerEmail, Driving driving);
+
+    List<NotificationDTO> findAll();
+
+    void deleteNotification(Long id);
 }

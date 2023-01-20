@@ -8,8 +8,8 @@ import {HttpClient} from "@angular/common/http";
 import {Driving, DrivingRequest} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
-import { UserService } from '../userService/user-sevice.service';
-import { Sort } from '@angular/material/sort';
+import {UserService} from '../userService/user-sevice.service';
+import {Sort} from '@angular/material/sort';
 
 @Injectable({
   providedIn: 'root'
@@ -48,11 +48,11 @@ export class DrivingService {
     return this.httpClientService.get(environment.apiUrl + 'drivings/reject-linked-user');
   }
 
-  findById(id:number){
+  findById(id: number) {
     return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
   }
 
-  getScheduleDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]>{
+  getScheduleDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]> {
     console.log(payload);
     return this.httpClientService.postT<DrivingOption[]>(environment.apiUrl + 'drivings/finder/schedule', payload);
   }
@@ -61,11 +61,11 @@ export class DrivingService {
     return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'drivings/process-reservation', payload);
   }
 
-  getDrivingsHistoryForPassenger(passengerId : number){
+  getDrivingsHistoryForPassenger(passengerId: number) {
     return this.httpClientService.get(environment.apiUrl + `drivings/passenger/history/${passengerId}`);
   }
 
-  sortData(sort: Sort, dataSource : Driving[]) : Driving[] {
+  sortData(sort: Sort, dataSource: Driving[]): Driving[] {
     if (!sort.active || sort.direction === '') {
       return dataSource
     }
@@ -90,16 +90,16 @@ export class DrivingService {
     return sortedData;
   }
 
-  
-compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
 
-findPassengerReservations(passengerId:number){
-  return this.httpClientService.get(environment.apiUrl + `drivings/passenger/reservations/${passengerId}`);
-}
+  compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
 
-cancelReservation(drivingId: number): Observable<TextResponse>{
-  return this.httpClientService.delete<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
-}
+  findPassengerReservations(passengerId: number) {
+    return this.httpClientService.get(environment.apiUrl + `drivings/passenger/reservations/${passengerId}`);
+  }
+
+  cancelReservation(drivingId: number): Observable<TextResponse> {
+    return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
+  }
 }

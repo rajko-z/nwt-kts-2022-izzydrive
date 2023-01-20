@@ -27,4 +27,6 @@ public interface UserService extends UserDetailsService {
     UserDTO changeUserInfo(UserDTO userDTO);
 
     User disconnectFromChat(String email);
+
+    User getCurrentlyLoggedUser();
 }

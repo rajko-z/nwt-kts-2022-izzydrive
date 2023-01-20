@@ -6,6 +6,7 @@ import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Image;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.ImageService;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,6 +68,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User getCurrentlyLoggedUser() {
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.findByEmail(userEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(userEmail)));
     }
 
     @Override

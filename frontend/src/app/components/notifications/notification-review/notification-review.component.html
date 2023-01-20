@@ -1,0 +1,51 @@
+<div class="review-notifications">
+  <div class="title">Notifications</div>
+  <div class="list-notification">
+    <div *ngIf="notifications?.length === 0">
+      <p class="no-notification">You currently do not have any notifications.</p>
+    </div>
+    <div class="notification-area" *ngIf="notifications?.length > 0">
+      <div class="notification-info" *ngFor="let option of notifications">
+        <div class="notification">
+          <div class="body-message">
+            <img *ngIf="option.notificationStatus === 'NEW_RESERVATION'" src="assets/reservation.png"
+                 alt="new reservation" class="icon">
+            <img *ngIf="option.notificationStatus === 'NEW_DRIVING'" src="assets/driving.png" alt="new driving"
+                 class="icon">
+            <img *ngIf="option.notificationStatus === 'REJECTED_RESERVATION'" src="assets/no_reservation.png"
+                 alt="rejected reservation" class="icon">
+            <img *ngIf="option.notificationStatus === 'REJECTED_DRIVING_PASSENGER'" src="assets/no-driving.png"
+                 alt="rejected driving passenger" class="icon">
+            <img *ngIf="option.notificationStatus === 'REJECTED_DRIVING_DRIVER'" src="assets/no-driving.png"
+                 alt="rejected driving driver" class="icon">
+            <img *ngIf="option.notificationStatus === 'REPORT_DRIVER'" src="assets/report.png" alt="report driver"
+                 class="icon">
+            <img *ngIf="option.notificationStatus === 'PAYMENT_SUCCESS'" src="assets/payment.png" alt="payment success"
+                 class="icon">
+            <img
+              *ngIf="option.notificationStatus === 'PAYMENT_FAILURE' || option.notificationStatus === 'PAYMENT_EXPIRED' "
+              src="assets/payment_fail.png" alt="payment faild" class="icon">
+            <div class="message-area">
+              <p class="message">{{option.message}}</p>
+              <div
+                *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE' && option.notificationStatus !== 'PAYMENT_EXPIRED'">
+                <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
+                <p class="text">Price: {{option.price}}</p>
+                <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
+                <p class="text"
+                   *ngIf="option.notificationStatus === 'NEW_RESERVATION' || option.notificationStatus === 'REJECTED_RESERVATION'">
+                  Reservation
+                  time: {{option.reservationTime[3] + ':' + option.reservationTime[4] + ' ' + option.reservationTime[2] + '-' + option.reservationTime[1] + '-' + option.reservationTime[0]}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="submit-item">
+            <button class="submit-button" type="button" (click)="deleteNotification(option.id)">X</button>
+            <p
+              class="time">{{option.creationDate[3] + ':' + option.creationDate[4] + ' ' + option.creationDate[2] + '-' + option.creationDate[1] + '-' + option.creationDate[0]}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

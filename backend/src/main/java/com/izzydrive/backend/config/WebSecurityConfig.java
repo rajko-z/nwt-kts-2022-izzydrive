@@ -49,29 +49,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
-            .authorizeRequests()
-            .antMatchers("/auth/**").permitAll()
-            .antMatchers("/users/**").permitAll()
-            .antMatchers("/admins/**").permitAll()
-            .antMatchers("/passengers/**").permitAll()
-            .antMatchers("/drivers/**").hasAnyAuthority("ROLE_DRIVER", "ROLE_ADMIN" )
-            .antMatchers("/addresses/**").permitAll()
-            .antMatchers("/admin-notes/**").permitAll()
-            .antMatchers("/drivings/**").permitAll()
-            .antMatchers("/driving-notes/**").permitAll()
-            .antMatchers("/evaluations/**").permitAll()
-            .antMatchers("/images/**").permitAll()
-            .antMatchers("/messages/**").permitAll()
-            .antMatchers("/routes/**").permitAll()
-            .antMatchers("/working-intervals/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/admins/**").permitAll()
+                .antMatchers("/passengers/**").permitAll()
+                .antMatchers("/drivers/**").hasAnyAuthority("ROLE_DRIVER", "ROLE_ADMIN")
+                .antMatchers("/addresses/**").permitAll()
+                .antMatchers("/admin-notes/**").permitAll()
+                .antMatchers("/drivings/**").permitAll()
+                .antMatchers("/driving-notes/**").permitAll()
+                .antMatchers("/evaluations/**").permitAll()
+                .antMatchers("/images/**").permitAll()
+                .antMatchers("/messages/**").permitAll()
+                .antMatchers("/routes/**").permitAll()
+                .antMatchers("/working-intervals/**").permitAll()
+                .antMatchers("/notifications/**").permitAll()
 
-            .anyRequest().authenticated().and()
-            .cors().and()
-            .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class)
-            .oauth2Login()
+                .anyRequest().authenticated().and()
+                .cors().and()
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class)
+                .oauth2Login()
                 .loginPage("/login")
                 .userInfoEndpoint()
                 .userService(oauth2UserService)
@@ -83,23 +84,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers(HttpMethod.POST,
-                        "/auth/login",
-                        "/auth/login-fb",
-                        "/auth/login-google",
-                        "/passengers/registration",
-                        "/driving/finder/simple");
+                "/auth/login",
+                "/auth/login-fb",
+                "/auth/login-google",
+                "/passengers/registration",
+                "/driving/finder/simple");
 
         web.ignoring().antMatchers(HttpMethod.GET,
-                    "/","/webjars/**",
-                        "/*.html",
-                        "favicon.ico",
-                        "/**/*.html",
-                        "/maps/**",
-                        "/drivers/current-locations",
-                        "/confirmation",
-                        "/working-intervals/get-minutes/**",
-                        "/socket/**",
-                        "/**/*.css",
-                        "/**/*.js");
+                "/", "/webjars/**",
+                "/*.html",
+                "favicon.ico",
+                "/**/*.html",
+                "/maps/**",
+                "/drivers/current-locations",
+                "/confirmation",
+                "/working-intervals/get-minutes/**",
+                "/socket/**",
+                "/**/*.css",
+                "/**/*.js");
     }
 }

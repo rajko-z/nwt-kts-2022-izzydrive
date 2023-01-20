@@ -10,6 +10,8 @@ import {
 } from "../../components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
 import {NewReservationComponent} from "../../components/notifications/new-reservation/new-reservation.component";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
+import {HttpClientService} from "../custom-http/http-client.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,9 @@ export class NotificationService {
     public snackBar: MatSnackBar,
     private userService: UserService,
     private router: Router,
-    ) {}
+    private httpClientService: HttpClientService,
+  ) {
+  }
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
@@ -108,12 +112,20 @@ export class NotificationService {
       this.showNotificationText(message.body, callBackFn);
     });
   }
-  
+
   showNotificationCancelReservationDriver(stompClient) {
     stompClient.subscribe('/notification/cancelReservation', (message: { body: string }) => {
-      console.log(message);
-      this.showNotificationComponent(message.body, DeniedRideLinkedUserComponent);
-    }
-  );
+        console.log(message);
+        this.showNotificationComponent(message.body, DeniedRideLinkedUserComponent);
+      }
+    );
+  }
+
+  findAll() {
+    return this.httpClientService.get(environment.apiUrl + `notifications`);
+  }
+
+  deleteNotification(id: number) {
+    return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/${id}`);
   }
 }
