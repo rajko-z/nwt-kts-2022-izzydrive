@@ -33,7 +33,7 @@ public class DrivingController {
 
     private final ProcessDrivingReservationService processDrivingReservationService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
     public ResponseEntity<List<DrivingDTO>> findAllByDriverId(@PathVariable Long driverId){
         List<DrivingDTO> drivings = drivingService.findAllByDriverId(driverId);

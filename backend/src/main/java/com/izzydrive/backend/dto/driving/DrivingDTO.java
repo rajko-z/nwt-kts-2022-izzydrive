@@ -26,6 +26,8 @@ public class DrivingDTO {
     private AddressDTO start;
     private AddressDTO end;
 
+    private boolean isFavoriteRoute;
+
     private boolean evaluationAvailable;
     private DrivingState drivingState;
     private LocalDateTime reservationDate;

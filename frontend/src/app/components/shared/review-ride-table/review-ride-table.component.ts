@@ -24,6 +24,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   isPassenger: boolean;
   gettingDataFinished : boolean =  false;
   dataSource : MatTableDataSource<Driving>;
+  tooltipText: string;
   
   @ViewChild('paginator') paginator: MatPaginator;
 
@@ -42,6 +43,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
           this.gettingDataFinished = true;
           if(this.isPassenger){
             this.displayedColumns.push('evaluate')
+            this.displayedColumns.push('favorite')
           }
         },
         error: (error) => {
@@ -64,10 +66,12 @@ export class ReviewRideTableComponent implements AfterViewInit  {
     if(this.data?.role === Role.ROLE_DRIVER){
       this.drivingService.findAllByDriverId(this.data.id).subscribe((res) => {
         this.setDataSource(res as Driving[])    
+        this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }else if(this.data?.role === Role.ROLE_PASSENGER){
-      this.drivingService.getDrivingsHistoryForPassenger(this.data.id).subscribe((res) => {
+      this.drivingService.getDrivingsHistoryForPassenger(this.data.id).subscribe((res) => {        
         this.setDataSource(res as Driving[])
+        this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }
   }
@@ -92,6 +96,14 @@ export class ReviewRideTableComponent implements AfterViewInit  {
      let pageIndex = event.pageIndex;
      let pageSize = event.pageSize;
      //ovde se nadovezati na bec ako ce se raditi paginacija na beku
+  }
+
+  removeFromFavourite(driving : Driving){
+    console.log("aaa")
+  }
+
+  addToFavourite(driving : Driving){
+    console.log("bb")
   }
 
 }
