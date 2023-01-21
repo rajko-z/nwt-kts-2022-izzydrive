@@ -53,6 +53,9 @@ public final class ExceptionMessageConstants {
     public static String userWithEmailDoesNotExist(String email) {
         return String.format("User with email: %s does not exists", email);
     }
+    public static String userDoesNotExist() {
+        return String.format("Userdoes not exists");
+    }
 
     public static String cantLinkPassengerThatAlreadyHasCurrentDriving(String email) {
         return String.format("Can't link passenger with email: %s because he already has current driving or he is waiting for one", email);

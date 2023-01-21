@@ -31,7 +31,7 @@ public class Route {
     @JoinTable(name="intermediate_stations",
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))
-    private List<Address> intermediateStations = new ArrayList<>();
+    private List<Address> intermediateStations;
 
     public Route(Address start, Address end){
         this.start = start;

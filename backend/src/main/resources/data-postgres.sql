@@ -134,6 +134,12 @@ VALUES
     (10,6),
     (11,2);
 
+INSERT INTO favourite_routes (passenger_id, route_id)
+VALUES
+    (10, 3),
+    (10,2);
+
+
 -- banijska - zeleznicka
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive)
 VALUES
