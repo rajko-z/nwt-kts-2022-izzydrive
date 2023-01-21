@@ -4,11 +4,14 @@ import {environment} from "../../../environments/environment";
 import {FavoriteRoute} from "../../model/route/favoriteRoute";
 import { Route } from '@angular/router';
 import { Observable } from 'rxjs';
+import { RouteDTO } from 'src/app/model/route/route';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouteService {
+
+  selectedFavouriteRides : {};
 
   constructor(private http: HttpClientService ) { }
 
@@ -20,7 +23,7 @@ export class RouteService {
     )
   }
 
-  getPassengerFavouriteRides(passengerId : number) : Observable<Route[]>{
-    return this.http.getT<Route[]>(environment.apiUrl + `routes/favorite-routes/${passengerId}`)
+  getPassengerFavouriteRides(passengerId : number) : Observable<RouteDTO[]>{
+    return this.http.getT<RouteDTO[]>(environment.apiUrl + `routes/favorite-routes/${passengerId}`)
   }
 }

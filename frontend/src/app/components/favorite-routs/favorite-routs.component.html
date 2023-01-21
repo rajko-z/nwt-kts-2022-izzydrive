@@ -1,3 +1,4 @@
+<div class="title">Review your favorite routes</div>
 <div class="container" *ngIf="favoriteRides">
     <div class="route-container" *ngFor="let ride of this.favoriteRides">
         <div class="img-container">
@@ -19,7 +20,7 @@
             
         </div>
         <div style="width: 100%;">
-            <button class="get-ride-button">
+            <button class="get-ride-button" (click)="getRide(ride)">
                 Get a ride
             </button>
         </div>

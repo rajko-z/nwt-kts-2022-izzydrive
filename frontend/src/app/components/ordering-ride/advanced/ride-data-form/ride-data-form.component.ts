@@ -20,6 +20,9 @@ import {UserService} from "../../../../services/userService/user-sevice.service"
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
 import {addHours, addMinutes} from 'date-fns'
+import { RouteService } from 'src/app/services/routeService/route.service';
+import { RouteDTO } from 'src/app/model/route/route';
+import { ro } from 'date-fns/locale';
 
 @Component({
   selector: 'app-ride-data-form',
@@ -77,11 +80,27 @@ export class RideDataFormComponent {
     private searchPlaceComponentService: SearchPlaceComponentService,
     private userService: UserService,
     private loggedUserService: LoggedUserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private routeService : RouteService
   ) {
     this.loggedUserService.getAllUsers().subscribe((res) => {
       this.users = res;
     });
+    this.checkIsOrderedFromFavoriteRides()
+  }
+
+  checkIsOrderedFromFavoriteRides(){
+    if (this.routeService.selectedFavouriteRides && this.userService.getCurrentUserId() in this.routeService.selectedFavouriteRides){
+      let route : RouteDTO = this.routeService.selectedFavouriteRides[this.userService.getCurrentUserId()]
+      this.startPlaceSelected(route.start)
+      this.endPlaceSelected(route.end)
+      console.log("tuuu")
+      for( let i = 0 ; i < route.intermediateStations.length ; i++){
+          if (i === 0) this.firstIntermediatePlaceSelected(route.intermediateStations[i])
+          if (i === 1) this.secondIntermediatePlaceSelected(route.intermediateStations[i])
+          if (i === 2) this.thirdIntermediatePlaceSelected(route.intermediateStations[i])
+      }
+    }
   }
 
   onSubmit(event) {
