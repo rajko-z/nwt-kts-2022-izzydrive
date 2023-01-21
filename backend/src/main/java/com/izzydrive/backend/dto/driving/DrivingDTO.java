@@ -25,7 +25,6 @@ public class DrivingDTO {
     private List<String> passengers = new ArrayList<>();
     private AddressDTO start;
     private AddressDTO end;
-
     private boolean isFavoriteRoute;
 
     private boolean evaluationAvailable;

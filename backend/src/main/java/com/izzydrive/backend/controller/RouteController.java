@@ -2,6 +2,7 @@ package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.NewFavoriteRouteDTO;
 import com.izzydrive.backend.dto.RouteDTO;
+import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.service.RouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,9 @@ public class RouteController {
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping("addFavorite")
-    public ResponseEntity<String> addFavoriteRoute(@RequestBody @Valid NewFavoriteRouteDTO favoriteRouteDTO){
+    public ResponseEntity<TextResponse> addFavoriteRoute(@RequestBody @Valid NewFavoriteRouteDTO favoriteRouteDTO){
         routeService.addFavoriteRoute(favoriteRouteDTO);
-        return new ResponseEntity<>("You have successfully saved the route as a favorite", HttpStatus.OK);
+        return new ResponseEntity<>(new TextResponse("You have successfully saved the route as a favorite"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")

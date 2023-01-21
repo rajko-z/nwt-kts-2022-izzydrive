@@ -26,6 +26,7 @@ export class FavouriteRoutsComponent implements OnInit {
         this.favoriteRides = response;
       },
       error: (error) => {
+        console.log(error)
         this.snackbar.open(error.error.message, "OK");
       }
     })

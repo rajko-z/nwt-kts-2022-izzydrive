@@ -5,6 +5,7 @@ import {FavoriteRoute} from "../../model/route/favoriteRoute";
 import { Route } from '@angular/router';
 import { Observable } from 'rxjs';
 import { RouteDTO } from 'src/app/model/route/route';
+import { TextResponse } from 'src/app/model/response/textresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,8 @@ export class RouteService {
 
   constructor(private http: HttpClientService ) { }
 
-  addFavoriteRoute(favoriteRoute: FavoriteRoute){
-    console.log("pozvano")
-    return this.http.post(
+  addFavoriteRoute(favoriteRoute: FavoriteRoute): Observable<TextResponse>{
+    return this.http.postT<TextResponse>(
       environment.apiUrl + "routes/addFavorite",
       favoriteRoute
     )

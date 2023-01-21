@@ -34,7 +34,7 @@ export class Driving {
   intermediateStations?: Array<String>;
   evaluationAvailable? : boolean;
   drivingState : DrivingState;
-  isFavoriteRoute : boolean
+  favoriteRoute : boolean
 }
 
 export class DrivingWithLocations {

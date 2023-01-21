@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,19 +32,21 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public void addFavoriteRoute(NewFavoriteRouteDTO newFavoriteRouteDTO) {
-        Address startLocation = new Address(newFavoriteRouteDTO.getStartLocation());
-        Address endLocation = new Address(newFavoriteRouteDTO.getEndLocation());
+        Address startLocation = addressRepository.save(new Address(newFavoriteRouteDTO.getStartLocation()));
+        Address endLocation = addressRepository.save(new Address(newFavoriteRouteDTO.getEndLocation()));
+
         Route route = new Route(startLocation, endLocation);
+        if(newFavoriteRouteDTO.getIntermediateLocations() != null){
+            route.setIntermediateStations(this.getIntermediateStations(newFavoriteRouteDTO.getIntermediateLocations()));
+        }
+        Route r  = routeRepository.save(route);
         Optional<Passenger> passenger = passengerRepository.findByIdWithFavoriteRoutes(newFavoriteRouteDTO.getPassengerId());
         if(passenger.isPresent()){
             List<Route> favoriteRoutes = passenger.get().getFavouriteRoutes();
-            favoriteRoutes.add(route);
+            favoriteRoutes.add(r);
             passenger.get().setFavouriteRoutes(favoriteRoutes);
             passengerRepository.save(passenger.get());
         }
-        addressRepository.save(startLocation);
-        addressRepository.save(endLocation);
-        routeRepository.save(route);
     }
 
     @Override
@@ -62,5 +65,15 @@ public class RouteServiceImpl implements RouteService {
             convertedRouts.add(RouteDTOConverter.convert(rout));
         }
         return convertedRouts;
+    }
+
+    private List<Address> getIntermediateStations(List<String> stationNames){
+        List<Address> addresses = new ArrayList<>();
+        for(String name: stationNames){
+            Address address = new Address(name);
+            addressRepository.save(address);
+            addresses.add(address);
+        }
+        return addresses;
     }
 }
