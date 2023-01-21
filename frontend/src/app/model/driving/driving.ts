@@ -36,6 +36,8 @@ export class Driving {
   drivingState : DrivingState;
   isFavoriteRoute : boolean;
   driverEmail?: string;
+  favoriteRoute : boolean
+  routeId : number;
 }
 
 export class DrivingWithLocations {

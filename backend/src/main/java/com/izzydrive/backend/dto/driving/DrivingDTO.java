@@ -30,6 +30,7 @@ public class DrivingDTO {
     private DrivingState drivingState;
     private LocalDateTime reservationDate;
     private String driverEmail;
+    private Long routeId;
 
     public DrivingDTO(Driving driving) {
         this.id = driving.getId();
@@ -42,6 +43,7 @@ public class DrivingDTO {
         this.drivingState = driving.getDrivingState();
         this.reservationDate = driving.getReservationDate();
         this.driverEmail = driving.getDriver().getEmail();
+        this.routeId = driving.getRoute().getId();
     }
 
     public DrivingDTO(String driverEmail) {

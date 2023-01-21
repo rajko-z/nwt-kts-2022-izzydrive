@@ -20,10 +20,10 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address start;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address end;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -31,7 +31,7 @@ public class Route {
     @JoinTable(name="intermediate_stations",
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="address_id", referencedColumnName = "id"))
-    private List<Address> intermediateStations = new ArrayList<>();
+    private List<Address> intermediateStations;
 
     public Route(Address start, Address end){
         this.start = start;

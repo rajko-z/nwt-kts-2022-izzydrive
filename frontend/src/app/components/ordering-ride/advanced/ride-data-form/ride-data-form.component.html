@@ -3,12 +3,14 @@
     <div class="location-fields">
       <app-search-place
         [alreadySelectedPlaces]="selectedLocations"
+        [placeFromFavouriteRoute]="startPlace"
         [typeOfPlace]="'start'"
         (placeSelectedEvent)="startPlaceSelected($event)"
         (placeRemovedEvent)="startPlaceDeleted()">
       </app-search-place>
       <app-search-place
         [alreadySelectedPlaces]="selectedLocations"
+        [placeFromFavouriteRoute]="endPlace"
         [typeOfPlace]="'end'"
         (placeSelectedEvent)="endPlaceSelected($event)"
         (placeRemovedEvent)="endPlaceDeleted()">
@@ -34,6 +36,7 @@
               [alreadySelectedPlaces]="selectedLocations"
               [typeOfPlace]="'first intermediate'"
               [isPlaceRequired]="false"
+              [placeFromFavouriteRoute]="firstIntermediatePlace"
               (placeSelectedEvent)="firstIntermediatePlaceSelected($event)"
               (placeRemovedEvent)="firstIntermediatePlaceDeleted()">
             </app-search-place>
@@ -43,6 +46,7 @@
               [alreadySelectedPlaces]="selectedLocations"
               [typeOfPlace]="'second intermediate'"
               [isPlaceRequired]="false"
+              [placeFromFavouriteRoute]="secondIntermediatePlace"
               (placeSelectedEvent)="secondIntermediatePlaceSelected($event)"
               (placeRemovedEvent)="secondIntermediatePlaceDeleted()">
             </app-search-place>
@@ -52,6 +56,7 @@
               [alreadySelectedPlaces]="selectedLocations"
               [typeOfPlace]="'third intermediate'"
               [isPlaceRequired]="false"
+              [placeFromFavouriteRoute]="thirdIntermediatePlace"
               (placeSelectedEvent)="thirdIntermediatePlaceSelected($event)"
               (placeRemovedEvent)="thirdIntermediatePlaceDeleted()">
             </app-search-place>

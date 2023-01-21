@@ -45,6 +45,7 @@ public final class ExceptionMessageConstants {
     public static final String YOU_ALREADY_APPROVED_THIS_PAYING = "You already approved this paying";
     public static final String CANT_USE_EXISTING_PAYING_DATA = "Can't use existing paying data, because you dont have one";
     public static final String NOTIFICATION_DOESNT_EXIST = "Notification with that id doesn't exists";
+    public static final String FAVORITE_ROUTES_NOT_FOUND = "You don't have favorite routes";
 
 
     public static String passengerAlreadyHasReservation(String email) {
@@ -69,6 +70,14 @@ public final class ExceptionMessageConstants {
 
     public static String cantLocatePlaceForText(String text) {
         return String.format("Error geocode, can't locate place for text: %s", text);
+    }
+
+    public static String userDoesntExist() {
+        return "User doesn't exist";
+    }
+
+    public static String routeDoesntExist() {
+        return "Route doesn't exist";
     }
 }
 
