@@ -90,16 +90,18 @@ export class RideDataFormComponent {
   }
 
   checkIsOrderedFromFavoriteRides(){
-    if (this.routeService.selectedFavouriteRides && this.userService.getCurrentUserId() in this.routeService.selectedFavouriteRides){
-      let route : RouteDTO = this.routeService.selectedFavouriteRides[this.userService.getCurrentUserId()]
+    console.log(RouteService.selectedFavouriteRides)
+    if (RouteService.selectedFavouriteRides && this.userService.getCurrentUserId() in RouteService.selectedFavouriteRides){
+      let route : RouteDTO = RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()]
       this.startPlaceSelected(route.start)
       this.endPlaceSelected(route.end)
-      console.log("tuuu")
       for( let i = 0 ; i < route.intermediateStations.length ; i++){
           if (i === 0) this.firstIntermediatePlaceSelected(route.intermediateStations[i])
           if (i === 1) this.secondIntermediatePlaceSelected(route.intermediateStations[i])
           if (i === 2) this.thirdIntermediatePlaceSelected(route.intermediateStations[i])
       }
+      delete RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()];
+      console.log(RouteService.selectedFavouriteRides)
     }
   }
 

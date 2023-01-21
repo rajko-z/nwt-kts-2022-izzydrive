@@ -50,7 +50,7 @@ public class RouteServiceImpl implements RouteService {
     @Transactional
     public List<RouteDTO> getPassengerFavoriteRides(Long passengerId) {
         Passenger passenger = passengerRepository.findByIdWithFavoriteRoutes(passengerId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userDoesNotExist()));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.FAVORITE_ROUTES_NOT_FOUND));
 
         return this.createFavoriteRouteDTO(passenger.getFavouriteRoutes());
 

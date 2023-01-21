@@ -24,6 +24,8 @@ export class SearchPlaceComponent implements OnInit {
 
   @ViewChildren('inputField') inputField: QueryList<ElementRef>;
 
+  @Input() placeFromFavouriteRoute : PlaceOnMap;
+
   placeOptions$: Observable<PlaceOnMap[]>;
 
   isPlaceSelected: boolean = false;
@@ -35,8 +37,12 @@ export class SearchPlaceComponent implements OnInit {
   ){}
 
   ngOnInit() {
+    console.log(this.alreadySelectedPlaces)
     this.searchPlaceComponentService.locationFieldErrorSignal.subscribe(s => s === true && this.setErrorMessageToField());
-    this.setUpPlaceOptions();
+   if (this.placeFromFavouriteRoute){
+    this.placeFormControl.setValue(this.placeFromFavouriteRoute.name)
+    this.placeSelectedEvent.emit(this.placeFromFavouriteRoute)
+   }
   }
 
   private setErrorMessageToField() {

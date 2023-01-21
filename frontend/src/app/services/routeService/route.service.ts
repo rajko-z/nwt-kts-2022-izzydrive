@@ -11,7 +11,7 @@ import { RouteDTO } from 'src/app/model/route/route';
 })
 export class RouteService {
 
-  selectedFavouriteRides : {};
+  public static selectedFavouriteRides = {};
 
   constructor(private http: HttpClientService ) { }
 

@@ -1,5 +1,8 @@
 <div class="title">Review your favorite routes</div>
 <div class="container" *ngIf="favoriteRides">
+    <div *ngIf="!this.favoriteRides">
+        You don't have favorite routes
+    </div>
     <div class="route-container" *ngFor="let ride of this.favoriteRides">
         <div class="img-container">
             <img src="/assets/favorite-route.png" style="width: 220px;"/>
