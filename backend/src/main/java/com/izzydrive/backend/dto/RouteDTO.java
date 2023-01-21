@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RouteDTO {
+    private Long id;
     private AddressOnMapDTO start;
     private AddressOnMapDTO end;
     private List<AddressOnMapDTO> intermediateStations;

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {RouteService} from "../../services/routeService/route.service";
 import {UserService} from "../../services/userService/user-sevice.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { TextResponse } from 'src/app/model/response/textresponse';
 
 @Component({
   selector: 'app-favorite-route-dialog',
@@ -17,8 +18,8 @@ export class FavoriteRouteDialogComponent {
 
   saveFavoriteRoute() {
     this.data.passengerId = this.userService.getCurrentUserId();
-    this.routeService.addFavoriteRoute(this.data).subscribe((response:string) => {
-        this.snackBar.open(response, "OK", {
+    this.routeService.addFavoriteRoute(this.data).subscribe((response:TextResponse) => {
+        this.snackBar.open(response.text, "OK", {
           duration: 2000,
         })
       }

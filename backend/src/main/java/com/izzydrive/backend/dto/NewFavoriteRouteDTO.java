@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +21,8 @@ public class NewFavoriteRouteDTO {
 
     @NotBlank
     private String endLocation;
+
+    private List<String> intermediateLocations;
+
+    private Long routeId;
 }

@@ -8,8 +8,11 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { EvaluationComponent } from '../../driving-history/evaluation/evaluation.component';
 import { DatePipe } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
+import { FavoriteRoute } from 'src/app/model/route/favoriteRoute';
+import { RouteService } from 'src/app/services/routeService/route.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -27,12 +30,20 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   tooltipText: string;
   
   @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild(MatTable) matTable!: MatTable<any>;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
-  constructor(private drivingService:DrivingService, @Inject(MAT_DIALOG_DATA) public data, private userService: UserService, public dialog: MatDialog, public datepipe: DatePipe) {
+  constructor(private drivingService:DrivingService, 
+              @Inject(MAT_DIALOG_DATA) public data, 
+              private userService: UserService, 
+              public dialog: MatDialog, 
+              public datepipe: DatePipe,
+              private routeService: RouteService,
+              private snackbar : MatSnackBar) {
+
     if(Object.keys(this.data).length == 0){
       this.userService.getCurrentUserData().subscribe({
         next : (user) => {
@@ -47,7 +58,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
           }
         },
         error: (error) => {
-          console.log(error);
+          this.snackbar.open(error.error.message, "OK")
         }
       })
     }
@@ -65,7 +76,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   setDrivings(){
     if(this.data?.role === Role.ROLE_DRIVER){
       this.drivingService.findAllByDriverId(this.data.id).subscribe((res) => {
-        this.setDataSource(res as Driving[])    
+        this.setDataSource(res as Driving[])  
         this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }else if(this.data?.role === Role.ROLE_PASSENGER){
@@ -99,11 +110,32 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   }
 
   removeFromFavourite(driving : Driving){
-    console.log("aaa")
+    this.routeService.removeFromFavoriteRoutes(driving.routeId,  this.userService.getCurrentUserId()).subscribe({
+      next : (response) => {
+        driving.favoriteRoute = false;
+        this.snackbar.open(response.text, "OK")
+      },
+      error : (error) => {
+        this.snackbar.open(error.error.message, "OK")
+      }
+    })
   }
 
   addToFavourite(driving : Driving){
-    console.log("bb")
+    console.log(driving.routeId)
+    let newFavoriteRide = new FavoriteRoute(this.userService.getCurrentUserId(),
+                                            driving.routeId);
+    this.routeService.addNewFavoriteRoute(newFavoriteRide).subscribe({
+      next: (response)=> {
+          driving.favoriteRoute = true
+          this.matTable.renderRows();
+          this.snackbar.open(response.text, "OK")
+      },
+      error: (error) => {
+        console.log(error)
+        this.snackbar.open(error.error.message, "OK")
+      }
+    })
   }
 
 }

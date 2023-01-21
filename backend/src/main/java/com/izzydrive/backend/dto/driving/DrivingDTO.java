@@ -25,12 +25,13 @@ public class DrivingDTO {
     private List<String> passengers = new ArrayList<>();
     private AddressDTO start;
     private AddressDTO end;
-
     private boolean isFavoriteRoute;
 
     private boolean evaluationAvailable;
     private DrivingState drivingState;
     private LocalDateTime reservationDate;
+
+    private Long routeId;
 
     public DrivingDTO(Driving driving) {
         this.id = driving.getId();
@@ -42,5 +43,6 @@ public class DrivingDTO {
         this.end = new AddressDTO(driving.getRoute().getEnd());
         this.drivingState = driving.getDrivingState();
         this.reservationDate = driving.getReservationDate();
+        this.routeId = driving.getRoute().getId();
     }
 }

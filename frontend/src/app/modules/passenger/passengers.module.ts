@@ -27,6 +27,8 @@ import {
 import { ReservationsListComponent } from "src/app/components/reservations-list/reservations-list.component";
 import { ConfirmCancelReservationComponent } from "src/app/components/notifications/confirm-cancel-reservation/confirm-cancel-reservation.component";
 import {ReportDriverCheckComponent} from "../../components/report-driver-check/report-driver-check.component";
+import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/favorite-routs.component";
+
 
 const declaredModules = [
   HomePageLoggedComponent,
@@ -45,6 +47,7 @@ const declaredModules = [
   ReservationsListComponent,
   ConfirmCancelReservationComponent,
   ReportDriverCheckComponent,
+  FavouriteRoutsComponent
 ];
 
 @NgModule({
