@@ -39,10 +39,11 @@ export class SearchPlaceComponent implements OnInit {
   ngOnInit() {
     console.log(this.alreadySelectedPlaces)
     this.searchPlaceComponentService.locationFieldErrorSignal.subscribe(s => s === true && this.setErrorMessageToField());
-   if (this.placeFromFavouriteRoute){
-    this.placeFormControl.setValue(this.placeFromFavouriteRoute.name)
-    this.placeSelectedEvent.emit(this.placeFromFavouriteRoute)
-   }
+    this.setUpPlaceOptions();
+    if (this.placeFromFavouriteRoute) {
+      this.placeFormControl.setValue(this.placeFromFavouriteRoute.name)
+      this.placeSelectedEvent.emit(this.placeFromFavouriteRoute)
+    }
   }
 
   private setErrorMessageToField() {
