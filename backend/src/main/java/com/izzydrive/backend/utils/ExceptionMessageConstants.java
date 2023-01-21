@@ -70,5 +70,13 @@ public final class ExceptionMessageConstants {
     public static String cantLocatePlaceForText(String text) {
         return String.format("Error geocode, can't locate place for text: %s", text);
     }
+
+    public static String userDoesntExist() {
+        return "User doesn't exist";
+    }
+
+    public static String routeDoesntExist() {
+        return "Route doesn't exist";
+    }
 }
 

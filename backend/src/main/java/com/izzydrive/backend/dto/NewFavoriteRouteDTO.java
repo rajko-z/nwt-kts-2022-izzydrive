@@ -23,4 +23,6 @@ public class NewFavoriteRouteDTO {
     private String endLocation;
 
     private List<String> intermediateLocations;
+
+    private Long routeId;
 }

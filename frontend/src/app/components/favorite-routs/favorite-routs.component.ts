@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ro } from 'date-fns/locale';
 import { RouteDTO } from 'src/app/model/route/route';
 import { RouteService } from 'src/app/services/routeService/route.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
@@ -22,11 +23,9 @@ export class FavouriteRoutsComponent implements OnInit {
   ngOnInit(): void {
     this.routeService.getPassengerFavouriteRides(this.userService.getCurrentUserId()).subscribe({
       next: (response) => {
-        console.log(response)
         this.favoriteRides = response;
       },
       error: (error) => {
-        console.log(error)
         this.snackbar.open(error.error.message, "OK");
       }
     })
@@ -41,6 +40,18 @@ export class FavouriteRoutsComponent implements OnInit {
       RouteService.selectedFavouriteRides = { [id]: route }
     } 
     this.router.navigateByUrl("/passenger/order-now")
+  }
+
+  removeFromFavorites(route : RouteDTO){
+    this.routeService.removeFromFavoriteRoutes(route.id,  this.userService.getCurrentUserId()).subscribe({
+      next : (response) => {
+        this.snackbar.open(response.text, "OK")
+        this.favoriteRides = this.favoriteRides.filter((r) => r.id !== route.id)
+      },
+      error : (error) => {
+        this.snackbar.open(error.error.message, "OK")
+      }
+    })
   }
 
 }

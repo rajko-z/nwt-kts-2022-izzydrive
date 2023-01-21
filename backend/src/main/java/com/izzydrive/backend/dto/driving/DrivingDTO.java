@@ -31,6 +31,8 @@ public class DrivingDTO {
     private DrivingState drivingState;
     private LocalDateTime reservationDate;
 
+    private Long routeId;
+
     public DrivingDTO(Driving driving) {
         this.id = driving.getId();
         this.price = driving.getPrice();
@@ -41,5 +43,6 @@ public class DrivingDTO {
         this.end = new AddressDTO(driving.getRoute().getEnd());
         this.drivingState = driving.getDrivingState();
         this.reservationDate = driving.getReservationDate();
+        this.routeId = driving.getRoute().getId();
     }
 }

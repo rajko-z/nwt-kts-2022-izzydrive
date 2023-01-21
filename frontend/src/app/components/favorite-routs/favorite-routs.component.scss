@@ -7,6 +7,7 @@
     padding-left: 10%;
     padding-top: 2%;
     column-gap: 50px;
+    row-gap: 50px;
     overflow: auto;
     height: 75%;
 }
@@ -74,4 +75,10 @@
 
 .title{
     @include setTitleStyle(55vw);
+}
+
+.remove-btn{
+    border: none;
+    background-color: transparent;
+    color: $dark3;
 }

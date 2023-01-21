@@ -26,4 +26,13 @@ export class RouteService {
   getPassengerFavouriteRides(passengerId : number) : Observable<RouteDTO[]>{
     return this.http.getT<RouteDTO[]>(environment.apiUrl + `routes/favorite-routes/${passengerId}`)
   }
+
+  removeFromFavoriteRoutes(routeId : number, passengerId : number): Observable<TextResponse>{
+    return this.http.delete<TextResponse>(environment.apiUrl + `routes/remove-favorite/${routeId}/${passengerId}`
+      )
+  }
+
+  addNewFavoriteRoute(favoriteRoute : FavoriteRoute):Observable<TextResponse>{
+    return this.http.postT<TextResponse>(environment.apiUrl + `routes/add-new`, favoriteRoute )
+  }
 }

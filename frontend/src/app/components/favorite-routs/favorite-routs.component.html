@@ -22,7 +22,13 @@
                 - {{inter.name}}</p>
             
         </div>
-        <div style="width: 100%;">
+        <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+            <button class="remove-btn" 
+                    #tooltip="matTooltip"
+                    matTooltip="Remove from favorites"
+                    (click)="removeFromFavorites(ride)">                    
+                <mat-icon>delete</mat-icon>
+            </button>
             <button class="get-ride-button" (click)="getRide(ride)">
                 Get a ride
             </button>

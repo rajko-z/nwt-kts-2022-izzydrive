@@ -58,7 +58,7 @@ export class ReviewRideTableComponent implements AfterViewInit  {
           }
         },
         error: (error) => {
-          console.log(error);
+          this.snackbar.open(error.error.message, "OK")
         }
       })
     }
@@ -82,7 +82,6 @@ export class ReviewRideTableComponent implements AfterViewInit  {
     }else if(this.data?.role === Role.ROLE_PASSENGER){
       this.drivingService.getDrivingsHistoryForPassenger(this.data.id).subscribe((res) => {        
         this.setDataSource(res as Driving[])
-        console.log(res)
         this.sortData({active: "startTime", direction:'desc'} as Sort )
       });
     }
@@ -111,15 +110,22 @@ export class ReviewRideTableComponent implements AfterViewInit  {
   }
 
   removeFromFavourite(driving : Driving){
-    console.log("aaa")
+    this.routeService.removeFromFavoriteRoutes(driving.routeId,  this.userService.getCurrentUserId()).subscribe({
+      next : (response) => {
+        driving.favoriteRoute = false;
+        this.snackbar.open(response.text, "OK")
+      },
+      error : (error) => {
+        this.snackbar.open(error.error.message, "OK")
+      }
+    })
   }
 
   addToFavourite(driving : Driving){
-    let newFavoriteRide = new FavoriteRoute(this.userService.getCurrentUserId(), 
-                                            driving.start.name,   
-                                            driving.end.name, 
-                                            driving.intermediateStations);
-    this.routeService.addFavoriteRoute(newFavoriteRide).subscribe({
+    console.log(driving.routeId)
+    let newFavoriteRide = new FavoriteRoute(this.userService.getCurrentUserId(),
+                                            driving.routeId);
+    this.routeService.addNewFavoriteRoute(newFavoriteRide).subscribe({
       next: (response)=> {
           driving.favoriteRoute = true
           this.matTable.renderRows();

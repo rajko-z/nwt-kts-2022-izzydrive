@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -51,12 +52,41 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @Transactional
+    public void addToFavoriteRoute(Long routeId, Long passengerId) {
+        Passenger passenger = passengerRepository.findById(passengerId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userDoesntExist()));
+        Route route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.routeDoesntExist()));
+
+        List<Route> favoriteRoutes = passenger.getFavouriteRoutes();
+            favoriteRoutes.add(route);
+            passenger.setFavouriteRoutes(favoriteRoutes);
+            passengerRepository.save(passenger);
+
+    }
+
+    @Override
+    @Transactional
     public List<RouteDTO> getPassengerFavoriteRides(Long passengerId) {
         Passenger passenger = passengerRepository.findByIdWithFavoriteRoutes(passengerId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.FAVORITE_ROUTES_NOT_FOUND));
 
         return this.createFavoriteRouteDTO(passenger.getFavouriteRoutes());
 
+    }
+
+    @Override
+    @Transactional
+    public void removeFavoriteRoute(Long routeId, Long passengerId) {
+        Passenger passenger = passengerRepository.findById(passengerId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userDoesntExist()));
+        Route route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.routeDoesntExist()));
+
+        passenger.getFavouriteRoutes().removeIf(r -> Objects.equals(r.getId(), routeId));
+        //route.getAllPassengers().removeIf(p -> Objects.equals(p.getId(), passenger.getId()));
+        passengerRepository.save(passenger);
+        //routeRepository.save(route);
     }
 
     private List<RouteDTO> createFavoriteRouteDTO(List<Route> routs){

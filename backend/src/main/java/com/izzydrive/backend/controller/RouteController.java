@@ -35,4 +35,18 @@ public class RouteController {
         return new ResponseEntity<>(favoriteRouts, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @DeleteMapping("remove-favorite/{routeId}/{passengerId}")
+    public ResponseEntity<TextResponse> removeFavoriteRoute(@PathVariable Long routeId, @PathVariable Long passengerId){
+        routeService.removeFavoriteRoute(routeId, passengerId);
+        return new ResponseEntity<>(new TextResponse("You have successfully remove the route as a favorite"), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @PostMapping("add-new")
+    public ResponseEntity<TextResponse> addToFavoriteRoute(@RequestBody NewFavoriteRouteDTO favoriteRouteDTO){
+        routeService.addToFavoriteRoute(favoriteRouteDTO.getRouteId(), favoriteRouteDTO.getPassengerId());
+        return new ResponseEntity<>(new TextResponse("You have successfully saved the route as a favorite"), HttpStatus.OK);
+    }
+
 }

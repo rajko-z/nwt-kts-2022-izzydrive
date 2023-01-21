@@ -25,6 +25,7 @@ public class RouteDTOConverter {
             intermediate.add(new AddressOnMapDTO(a.getLongitude(), a.getLatitude(), a.getName()));
         }
         return RouteDTO.builder()
+                .id(route.getId())
                 .start(start)
                 .end(end)
                 .intermediateStations(intermediate)
