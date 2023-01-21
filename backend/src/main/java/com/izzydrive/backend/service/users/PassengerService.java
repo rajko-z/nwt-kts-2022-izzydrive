@@ -17,9 +17,9 @@ public interface PassengerService {
 
     List<UserDTO> findAllPassenger();
 
-    Optional<Passenger> findByEmailWithCurrentDriving(String email);
+    Passenger findByEmailWithCurrentDriving(String email);
 
-    Optional<Passenger> findByEmailWithReservedDriving(String email);
+    Passenger findByEmailWithReservedDriving(String email);
 
     /**
      * @throws com.izzydrive.backend.exception.NotFoundException if there is no loggedPassenger

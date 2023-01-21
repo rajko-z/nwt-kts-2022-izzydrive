@@ -2,10 +2,12 @@ package com.izzydrive.backend.service.users;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public interface DriverService {
 
     void save(Driver driver);
 
-    Optional<Driver> findByEmailWithAllDrivings(String email);
+    Driver findByEmailWithAllDrivings(String email);
 
     Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email);
 
@@ -48,4 +50,10 @@ public interface DriverService {
 
     // TODO:: better name and overall refactor
     CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartUsingExistingSavedData(String driverEmail);
+
+    Driver getCurrentlyLoggedDriver();
+
+    Driver getCurrentlyLoggedDriverWithCurrentDriving();
+
+    Driver getCurrentlyLoggedDriverWithNextDriving();
 }

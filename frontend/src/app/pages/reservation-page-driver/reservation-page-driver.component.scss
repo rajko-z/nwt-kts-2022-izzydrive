@@ -1,0 +1,33 @@
+@import "src/style/styles";
+
+.home-page {
+  @include size(100vw, 100vh);
+  display: flex;
+  justify-content: start;
+}
+
+.right-side-home-page {
+  @include size(40vw, 85vh);
+  margin: 20px 20px;
+  font-size: 15px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.left-side-home-page {
+  @include size(60vw, 100vh);
+}
+
+
+.title {
+  @include setFont(20px);
+  @include setTitleStyle(90%);
+  font-weight: bold;
+}
+
+.current-driving {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-radius: 5px;
+}
+

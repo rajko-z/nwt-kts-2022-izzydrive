@@ -1,7 +1,6 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.NotificationDTO;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.service.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +32,13 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER', 'ROLE_DRIVER')")
     public ResponseEntity<String> deleteNotification(@PathVariable Long id){
         notificationService.deleteNotification(id);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "admin/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteNotificationFromAdmin(@PathVariable Long id){
+        notificationService.deleteNotificationFromAdmin(id);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 }

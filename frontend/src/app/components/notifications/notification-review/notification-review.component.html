@@ -30,7 +30,7 @@
               <div
                 *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE' && option.notificationStatus !== 'PAYMENT_EXPIRED'">
                 <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
-                <p class="text">Price: {{option.price}}</p>
+                <p class="text">Price: {{option.price}} $</p>
                 <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
                 <p class="text"
                    *ngIf="option.notificationStatus === 'NEW_RESERVATION' || option.notificationStatus === 'REJECTED_RESERVATION'">
@@ -43,6 +43,10 @@
             <button class="submit-button" type="button" (click)="deleteNotification(option.id)">X</button>
             <p
               class="time">{{option.creationDate[3] + ':' + option.creationDate[4] + ' ' + option.creationDate[2] + '-' + option.creationDate[1] + '-' + option.creationDate[0]}}</p>
+            <div *ngIf="option.notificationStatus === 'REJECTED_DRIVING_DRIVER'">
+              <button class="submit-button" type="button" (click)="onYesClick(option.drivingId, option.id)">Yes</button>
+              <button class="submit-button" type="button" (click)="onNoClick(option.drivingId, option.id)">No</button>
+            </div>
           </div>
         </div>
       </div>

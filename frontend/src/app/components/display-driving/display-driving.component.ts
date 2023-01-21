@@ -14,7 +14,7 @@ export class DisplayDrivingComponent implements OnInit {
   time: string;
 
   @Input()
-  driving: Driving;
+  driving?: Driving;
   formatStartDate: string;
 
 
@@ -22,8 +22,8 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let startDate = this.driving.startDate;
-    this.formatStartDate = `${startDate.getHours()}:${startDate.getMinutes()}  ${startDate.getDay()}-${startDate.getMonth()}-${startDate.getFullYear()}`;
+    let startDate = this.driving?.startDate;
+    this.formatStartDate = `${startDate?.getHours()}:${startDate?.getMinutes()}  ${startDate?.getDay()}-${startDate?.getMonth()}-${startDate?.getFullYear()}`;
   }
 
   cancelDriving() {
@@ -35,6 +35,10 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   startDriving() {
+
+  }
+
+  cancelReservation(){
 
   }
 }

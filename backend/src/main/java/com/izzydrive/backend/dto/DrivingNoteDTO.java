@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class DrivingNoteDTO {
     private String text;
-    private Long userId;
+    private String driverEmail;
     private Long drivingId;
     private LocalDateTime timestamp;
     private boolean fromPassenger;

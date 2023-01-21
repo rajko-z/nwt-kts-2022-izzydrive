@@ -12,9 +12,16 @@ export class DriverMenuComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
+
   onDrivingHistory() {
     this.router.navigateByUrl("/user/driving-history");
   }
 
+  onCurrentDrivingsClick() {
+    this.router.navigateByUrl("/driver/current-drivings");
+  }
+
+  onReservationClick() {
+    this.router.navigateByUrl("/driver/reservation");
+  }
 }

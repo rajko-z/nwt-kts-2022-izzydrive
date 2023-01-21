@@ -11,7 +11,6 @@ export class RouteService {
   constructor(private http: HttpClientService) { }
 
   addFavoriteRoute(favoriteRoute: FavoriteRoute){
-    console.log("pozvano")
     return this.http.post(
       environment.apiUrl + "routes/addFavorite",
       favoriteRoute

@@ -1,8 +1,7 @@
-
-export class DrivingNote{
+export class DrivingNote {
   text: string;
-  userId: number;
+  driverEmail: string;
   timestamp: Date;
   fromPassenger: boolean;
-  divingId: number;
+  drivingId: number;
 }

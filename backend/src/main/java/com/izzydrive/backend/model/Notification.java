@@ -45,4 +45,10 @@ public class Notification {
 
     @Column
     private LocalDateTime creationDate;
+
+    @Column
+    private String driverEmail;
+
+    @Column
+    private Long drivingId;
 }

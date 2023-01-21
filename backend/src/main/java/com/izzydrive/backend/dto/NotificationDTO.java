@@ -4,6 +4,7 @@ import com.izzydrive.backend.model.Notification;
 import com.izzydrive.backend.model.NotificationStatus;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +29,8 @@ public class NotificationDTO {
     @NotBlank
     private LocalDateTime creationDate;
     private NotificationStatus notificationStatus;
+    private String driverEmail;
+    private Long drivingId;
 
     public NotificationDTO(Notification notification) {
         this.id = notification.getId();
@@ -40,5 +43,7 @@ public class NotificationDTO {
         this.reservationTime = notification.getReservationDate();
         this.creationDate = notification.getCreationDate();
         this.notificationStatus = notification.getNotificationStatus();
+        this.driverEmail = notification.getDriverEmail();
+        this.drivingId = notification.getDrivingId();
     }
 }

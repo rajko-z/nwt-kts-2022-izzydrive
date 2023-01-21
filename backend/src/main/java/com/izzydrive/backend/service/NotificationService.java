@@ -13,7 +13,7 @@ public interface NotificationService {
 
     void sendNotificationRejectDriving(String passengerEmail, String startLocation, String endLocation);
 
-    void sendNotificationRejectDrivingFromDriver(String adminEmail);
+    void sendNotificationRejectDrivingFromDriver(String adminEmail, Driving driving, String driverEmail,  String reason);
 
     void sendNotificationForPaymentExpired(List<String> passengersToSendNotifications);
 
@@ -23,7 +23,11 @@ public interface NotificationService {
 
     void sendNotificationCancelDriving(String passengerEmail, Driving driving);
 
+    void sendNotificationNewDrivingDriver(String driverEmail);
+
     List<NotificationDTO> findAll();
 
     void deleteNotification(Long id);
+
+    void deleteNotificationFromAdmin(Long drivingId);
 }

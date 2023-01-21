@@ -50,7 +50,7 @@ export class MapComponent implements OnInit {
     this.mapService.routeToDraw.subscribe(r => r != null && this.drawRoute(r));
     this.mapService.drawnRoutesToRemove.subscribe(_ => this.removeAllDrawnRoutes());
     this.mapService.currentDriverEmailToTrack.subscribe(e => e != null && this.setCurrentTrackingDriverEmail(e));
-    this.mapService.toResetMapView.subscribe(_ => this.removeEverything());
+    this.mapService.toResetMapView.subscribe(_ =>  this.removeEverything());
   }
 
   private removeEverything() {

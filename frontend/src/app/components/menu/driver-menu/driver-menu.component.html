@@ -1,10 +1,21 @@
 <div class="profile_options">
-    <div class="menu_item">
-        <mat-icon class="menu_item_icon">list</mat-icon>
-        <mat-list-option (click)="onDrivingHistory()">
-            My drivings
-        </mat-list-option> 
-        
-    </div>
-    <div class="delimiter"></div>
+  <div class="menu_item">
+    <mat-icon class="menu_item_icon">list</mat-icon>
+    <mat-list-option (click)="onDrivingHistory()">
+      My drivings
+    </mat-list-option>
+  </div>
+  <div class="menu_item">
+    <mat-icon class="menu_item_icon">directions_car</mat-icon>
+    <mat-list-option (click)="onCurrentDrivingsClick()">
+      My current drivings
+    </mat-list-option>
+  </div>
+  <div class="menu_item">
+    <mat-icon class="menu_item_icon">alarm</mat-icon>
+    <mat-list-option (click)="onReservationClick()">
+      My reservation
+    </mat-list-option>
+  </div>
+  <div class="delimiter"></div>
 </div>

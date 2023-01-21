@@ -22,7 +22,6 @@ export class HomePageLoggedComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
       this.reservation = data.reservation;
-      console.log(this.reservation);
     });
     this.passengerService.findCurrentDrivingWithLocations()
       .subscribe({

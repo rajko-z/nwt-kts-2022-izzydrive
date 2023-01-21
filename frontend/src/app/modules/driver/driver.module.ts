@@ -7,11 +7,13 @@ import {DriverRoutingModule} from "./driver-routing.module";
 import {HomePageDriverComponent} from "../../pages/home-page-driver/home-page-driver.component";
 import {DisplayDrivingComponent} from "../../components/display-driving/display-driving.component";
 import {ExplanationDialogComponent} from "../../components/explanation-dialog/explanation-dialog.component";
+import {ReservationPageDriverComponent} from "../../pages/reservation-page-driver/reservation-page-driver.component";
 
 const declaredModules = [
   HomePageDriverComponent,
   DisplayDrivingComponent,
-  ExplanationDialogComponent
+  ExplanationDialogComponent,
+  ReservationPageDriverComponent
 ];
 
 @NgModule({

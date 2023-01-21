@@ -115,4 +115,25 @@ public class DrivingController {
         drivingService.cancelReservation(drivingId);
         return new ResponseEntity<>(new TextResponse("Successfully canceled reservation"), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("current-driving")
+    public ResponseEntity<DrivingDTO> getCurrentDriving(){
+        DrivingDTO driving = drivingService.getCurrentDriving();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("next-driving")
+    public ResponseEntity<DrivingDTO> getNextDriving(){
+        DrivingDTO driving = drivingService.getNextDriving();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("delete/{id}")
+    public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id){
+        drivingService.deleteDriving(id);
+        return new ResponseEntity<>(new TextResponse("Successfully delete driving"), HttpStatus.OK);
+    }
 }

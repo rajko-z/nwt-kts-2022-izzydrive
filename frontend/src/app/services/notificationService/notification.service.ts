@@ -12,6 +12,9 @@ import {NewReservationComponent} from "../../components/notifications/new-reserv
 import {Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
 import {HttpClientService} from "../custom-http/http-client.service";
+import {
+  RejectRideDriverComponent
+} from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +31,7 @@ export class NotificationService {
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
+    console.log(notification);
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.openFromComponent(component, {
         data: {
@@ -78,12 +82,18 @@ export class NotificationService {
 
   showNotificationCancelRideDriver(stompClient) {
     stompClient.subscribe('/notification/cancelRideDriver', (message: { body: string }) => {
-      this.showNotificationText(message.body);
+      this.showNotificationComponent(message.body, RejectRideDriverComponent);
+    });
+  }
+
+  showNotificationNewRideDriver(stompClient) {
+    stompClient.subscribe('/notification/newRideDriver', (message: { body: string }) => {
+      this.showNotificationText(message.body, "Ok");
     });
   }
 
   showNotificationPaymentSessionExpired(stompClient) {
-    let callBackFn = () => {
+    const callBackFn = () => {
       if (this.router.url === '/passenger/payment') {
         this.router.navigateByUrl('/passenger/order-now');
       }
@@ -94,7 +104,7 @@ export class NotificationService {
   }
 
   showNotificationPaymentSuccess(stompClient) {
-    let callBackFn = () => {
+    const callBackFn = () => {
       this.router.navigateByUrl('/passenger/current-driving');
     }
     stompClient.subscribe('/notification/paymentSuccess', (message: { body: string }) => {
@@ -103,7 +113,7 @@ export class NotificationService {
   }
 
   showNotificationPaymentFailure(stompClient) {
-    let callBackFn = () => {
+    const callBackFn = () => {
       if (this.router.url === '/passenger/payment') {
         this.router.navigateByUrl('/passenger/order-now');
       }
@@ -127,5 +137,9 @@ export class NotificationService {
 
   deleteNotification(id: number) {
     return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/${id}`);
+  }
+
+  deleteNotificationFromAdmin(id: number) {
+    return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/admin/${id}`);
   }
 }

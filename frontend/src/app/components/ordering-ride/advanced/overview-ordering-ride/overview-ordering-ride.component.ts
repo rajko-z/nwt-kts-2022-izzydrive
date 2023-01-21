@@ -37,8 +37,6 @@ export class OverviewOrderingRideComponent implements OnInit {
     payload.drivingOption = this.selectedOption;
     payload.drivingFinderRequest = this.drivingFinderRequest;
 
-    console.log(payload);
-
     this.apiLoading = true;
     this.drivingService.processDrivingRequest(payload)
       .subscribe({
@@ -60,7 +58,6 @@ export class OverviewOrderingRideComponent implements OnInit {
     let payload = new DrivingRequest();
     payload.drivingOption = this.selectedOption;
     payload.drivingFinderRequest = this.drivingFinderRequest;
-    console.log(payload);
 
     this.apiLoading = true;
     this.drivingService.createReservation(payload)
@@ -78,6 +75,7 @@ export class OverviewOrderingRideComponent implements OnInit {
         }
       );
   }
+
   setNewOrderedIntermediateLocationsIfNeeded() {
     if (this.selectedOption.startToEndPath.reorderedIntermediate && this.drivingFinderRequest.intermediateLocations.length > 1) {
       this.drivingFinderRequest.intermediateLocations = this.selectedOption.startToEndPath.reorderedIntermediate;

@@ -17,10 +17,14 @@ import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.CarService;
 import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.impl.DrivingServiceImpl;
 import com.izzydrive.backend.service.users.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,8 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DrivingServiceImpl.class);
 
     private final PasswordEncoder passwordEncoder;
 
@@ -90,20 +96,21 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public Optional<Passenger> findByEmailWithCurrentDriving(String email) {
-        return passengerRepository.findByEmailWithCurrentDriving(email);
+    public Passenger findByEmailWithCurrentDriving(String email) {
+        return passengerRepository.findByEmailWithCurrentDriving(email)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
     }
 
     @Override
-    public Optional<Passenger> findByEmailWithReservedDriving(String email) {
-        return passengerRepository.findByEmailWithReservedDriving(email);
+    public Passenger findByEmailWithReservedDriving(String email) {
+        return passengerRepository.findByEmailWithReservedDriving(email)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
     }
 
     @Override
     public Passenger getCurrentlyLoggedPassenger() {
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.findByEmailWithCurrentDriving(passengerEmail)
-                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
+        return this.findByEmailWithCurrentDriving(passengerEmail);
     }
 
     @Override
@@ -117,9 +124,17 @@ public class PassengerServiceImpl implements PassengerService {
         if (passenger.getCurrentDriving() == null) {
             return null;
         }
-        Driving currentDriving = this.drivingService.getDrivingByIdWithDriverRouteAndPassengers(passenger.getCurrentDriving().getId());
-        List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
-        return DrivingDTOConverter.convertWithLocationsAndDriver(currentDriving, locations, carService);
+        try {
+            Driving currentDriving = this.drivingService.getDrivingByIdWithDriverRouteAndPassengers(passenger.getCurrentDriving().getId());
+            if (currentDriving.isRejected()) {
+                return null;
+            }
+            List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
+            return DrivingDTOConverter.convertWithLocationsAndDriver(currentDriving, locations, carService);
+        } catch (OptimisticLockingFailureException e) {
+            LOG.error(e.getMessage());
+        }
+        return null;
     }
 
     @Override

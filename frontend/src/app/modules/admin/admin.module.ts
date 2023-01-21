@@ -12,13 +12,17 @@ import {AddDriverComponent} from "../../components/profile/add-driver/add-driver
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ChatModule} from "../../components/chat/chat.module";
 import { ReviewUsersTableComponent } from "src/app/components/shared/review-users-table/review-users-table.component";
+import {
+  RejectRideDriverComponent
+} from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
   AllPassengersPageAdminComponent,
   ReviewUsersTableComponent,
   HomePageAdminComponent,
-  AddDriverComponent
+  AddDriverComponent,
+  RejectRideDriverComponent
 ];
 
 @NgModule({

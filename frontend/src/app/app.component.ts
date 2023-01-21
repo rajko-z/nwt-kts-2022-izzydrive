@@ -7,26 +7,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import firebase from 'firebase/compat/app';
 import {environment} from "../environments/environment";
 import {NotificationService} from "./services/notificationService/notification.service";
-import {
-  NewRideLinkedUserComponent
-} from "./components/notifications/new-ride-linked-user/new-ride-linked-user.component";
-import {
-  DeniedRideLinkedUserComponent
-} from "./components/notifications/denied-ride-linked-user/denied-ride-linked-user.component";
-import { Role } from './model/user/role';
-import { ChatService } from './services/chat/chat.service';
-import { Message } from './model/message/message';
-import { Channel } from './model/channel/channel';
+import {Role} from './model/user/role';
+import {ChatService} from './services/chat/chat.service';
 import {Router} from "@angular/router";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-
-// Initialize Firebase
-
 
 @Component({
   selector: 'app-root',
@@ -41,7 +24,7 @@ export class AppComponent implements OnInit {
   constructor(
     private userService: UserService,
     public snackBar: MatSnackBar,
-    private chatService : ChatService,
+    private chatService: ChatService,
     private router: Router,
     private notificationService: NotificationService
   ) {
@@ -83,6 +66,7 @@ export class AppComponent implements OnInit {
     this.notificationService.showNotificationPaymentSessionExpired(this.stompClient);
     this.notificationService.showNotificationPaymentSuccess(this.stompClient);
     this.notificationService.showNotificationPaymentFailure(this.stompClient);
-    this.notificationService. showNotificationCancelReservationDriver(this.stompClient);
+    this.notificationService.showNotificationCancelReservationDriver(this.stompClient);
+    this.notificationService.showNotificationNewRideDriver(this.stompClient);
   }
 }

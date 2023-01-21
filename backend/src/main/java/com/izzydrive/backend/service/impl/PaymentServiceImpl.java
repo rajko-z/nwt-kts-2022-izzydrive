@@ -141,7 +141,8 @@ public class PaymentServiceImpl implements PaymentService {
             driving.setLocked(true);
             drivingService.saveAndFlush(driving);
 
-            boolean result = payForAllPassengers(driving);
+//            boolean result = payForAllPassengers(driving);
+            boolean result = true;
             if (result) {
                 drivingService.setUpDrivingAfterSuccessPaymentAndSendNotification(driving);
             } else {

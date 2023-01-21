@@ -53,13 +53,13 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         Driver driver = getDriverFromRequest(request);
 
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Passenger passenger = passengerService.findByEmailWithReservedDriving(passengerEmail)
-                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
+        Passenger passenger = passengerService.findByEmailWithReservedDriving(passengerEmail);
 
         checkIfDriverIsStillAvailable(request, driver);
 
         Driving driving = makeAndSaveDrivingReservationFromRequest(request, driver, passenger);
 
+        notificationService.sendNotificationNewReservationDriving(driver.getEmail(), driving);
         notificationService.sendNotificationNewReservationDriving(passengerEmail, driving);
         sendNotificationLinkedPassengers(request, driving);
 
@@ -115,8 +115,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
     private List<Passenger> getPassengersFromEmails(Set<String> passengerEmails) {
         List<Passenger> retVal = new ArrayList<>();
         for (String email : passengerEmails) {
-            Passenger passenger = passengerService.findByEmailWithReservedDriving(email)
-                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
+            Passenger passenger = passengerService.findByEmailWithReservedDriving(email);
             retVal.add(passenger);
         }
         return retVal;
@@ -132,8 +131,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
 
     private Driver getDriverFromRequest(DrivingRequestDTO request) {
         DriverDTO driverDTO = request.getDrivingOption().getDriver();
-        return driverService.findByEmailWithAllDrivings(driverDTO.getEmail())
-                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverDTO.getEmail()))); //ne znam da li ce mi trebati sve voznje ali mi treba findByEmail
+        return driverService.findByEmailWithAllDrivings(driverDTO.getEmail());
     }
 
     private void checkIfDriverIsStillAvailable(DrivingRequestDTO request, Driver driver) {

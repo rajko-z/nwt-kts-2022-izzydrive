@@ -32,7 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserService userService;
 
     @Override
-    public void sendNotificationNewReservationDriving(String passengerEmail, Driving driving) {
+    public void sendNotificationNewReservationDriving(String email, Driving driving) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage("You have a new reservation");
         notificationDTO.setDuration(driving.getDuration());
@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         notificationDTO.setIntermediateLocations(intermediateStationDTO);
         notificationDTO.setReservationTime(driving.getReservationDate());
-        notificationDTO.setUserEmail(passengerEmail);
+        notificationDTO.setUserEmail(email);
         notificationDTO.setNotificationStatus(NotificationStatus.NEW_RESERVATION);
         this.simpMessagingTemplate.convertAndSend("/notification/newReservationDriving", notificationDTO);
         createAndSaveNotification(notificationDTO);
@@ -83,10 +83,21 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationRejectDrivingFromDriver(String adminEmail) {
+    public void sendNotificationRejectDrivingFromDriver(String adminEmail, Driving driving, String driverEmail, String reason) {
         NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setMessage("The ride was cancelled!");
+        notificationDTO.setMessage(reason);
+        notificationDTO.setDuration(driving.getDuration());
+        notificationDTO.setPrice(driving.getPrice());
+        notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
+        notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+        List<String> intermediateStationDTO = new ArrayList<>();
+        for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
+            intermediateStationDTO.add(intermediateStation.getName());
+        }
+        notificationDTO.setIntermediateLocations(intermediateStationDTO);
         notificationDTO.setUserEmail(adminEmail);
+        notificationDTO.setDriverEmail(driverEmail);
+        notificationDTO.setDrivingId(driving.getId());
         notificationDTO.setNotificationStatus(NotificationStatus.REJECTED_DRIVING_DRIVER);
         this.simpMessagingTemplate.convertAndSend("/notification/cancelRideDriver", notificationDTO);
         createAndSaveNotification(notificationDTO);
@@ -129,6 +140,16 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void sendNotificationNewDrivingDriver(String driverEmail) {
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setMessage("You have been assigned a new ride.");
+        notificationDTO.setUserEmail(driverEmail);
+        notificationDTO.setNotificationStatus(NotificationStatus.NEW_DRIVING_DRIVER);
+        this.simpMessagingTemplate.convertAndSend("/notification/newRideDriver", notificationDTO);
+        createAndSaveNotification(notificationDTO);
+    }
+
+    @Override
     public void sendNotificationCancelDriving(String passengerEmail, Driving driving) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage("You reservations is canceled");
@@ -145,13 +166,21 @@ public class NotificationServiceImpl implements NotificationService {
     public List<NotificationDTO> findAll() {
         User user = userService.getCurrentlyLoggedUser();
         return notificationRepository.findAllByUserEmail(user.getEmail())
-                .stream().map(NotificationDTO::new).collect(Collectors.toList());
-
+                .stream().map(NotificationDTO::new)
+                .sorted((n1, n2) -> n2.getCreationDate().compareTo(n1.getCreationDate())).collect(Collectors.toList());
     }
 
     @Override
     public void deleteNotification(Long id) {
         Notification notification = this.notificationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
+        notificationRepository.delete(notification);
+    }
+
+    @Override
+    public void deleteNotificationFromAdmin(Long drivingId) {
+        User user = userService.getCurrentlyLoggedUser();
+        Notification notification = this.notificationRepository.findByDrivingIdAndUserEmail(drivingId, user.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
         notificationRepository.delete(notification);
     }
@@ -167,6 +196,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setNotificationStatus(notificationDTO.getNotificationStatus());
         notification.setUserEmail(notificationDTO.getUserEmail());
         notification.setCreationDate(LocalDateTime.now());
+        notification.setDrivingId(notificationDTO.getDrivingId());
         notificationRepository.save(notification);
     }
 }

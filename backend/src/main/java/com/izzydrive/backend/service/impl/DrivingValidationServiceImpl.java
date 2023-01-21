@@ -91,20 +91,14 @@ public class DrivingValidationServiceImpl implements DrivingValidationService {
     }
 
     private void checkIfAnyPassengerAlreadyHasRide(Set<String> linkedPassengers, String initiator) {
-        Optional<Passenger> currPass = this.passengerService.findByEmailWithCurrentDriving(initiator);
-        if (currPass.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator));
-        }
-        if (currPass.get().getCurrentDriving() != null) {
+        Passenger currPass = this.passengerService.findByEmailWithCurrentDriving(initiator);
+        if (currPass.getCurrentDriving() != null) {
             throw new BadRequestException(ExceptionMessageConstants.YOU_ALREADY_HAVE_CURRENT_DRIVING);
         }
 
         for (String passengerEmail : linkedPassengers) {
-            Optional<Passenger> passenger = this.passengerService.findByEmailWithCurrentDriving(passengerEmail);
-            if (passenger.isEmpty()) {
-                throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail));
-            }
-            if (passenger.get().getCurrentDriving() != null) {
+            Passenger passenger = this.passengerService.findByEmailWithCurrentDriving(passengerEmail);
+            if (passenger.getCurrentDriving() != null) {
                 throw new BadRequestException(ExceptionMessageConstants.cantLinkPassengerThatAlreadyHasCurrentDriving(passengerEmail));
             }
             if (passengerEmail.equals(initiator)) {
@@ -129,8 +123,7 @@ public class DrivingValidationServiceImpl implements DrivingValidationService {
     }
 
     private void checkIfAnyPassengerAlreadyHasReservation(Set<String> linkedPassengers, String initiator, LocalDateTime scheduledTime) {
-        Passenger currPass = this.passengerService.findByEmailWithReservedDriving(initiator)
-                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(initiator)));
+        Passenger currPass = this.passengerService.findByEmailWithReservedDriving(initiator);
 
         for (Driving driving : currPass.getDrivings()) {
             if (driving.isReservation()) {
@@ -139,8 +132,7 @@ public class DrivingValidationServiceImpl implements DrivingValidationService {
         }
 
         for (String passengerEmail : linkedPassengers) {
-            Passenger passenger = this.passengerService.findByEmailWithReservedDriving(passengerEmail)
-                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
+            Passenger passenger = this.passengerService.findByEmailWithReservedDriving(passengerEmail);
 
             for (Driving driving : passenger.getDrivings()) {
                 if (driving.isReservation()) {

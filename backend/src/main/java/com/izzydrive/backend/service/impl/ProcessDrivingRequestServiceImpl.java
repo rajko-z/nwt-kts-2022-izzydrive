@@ -139,8 +139,8 @@ public class ProcessDrivingRequestServiceImpl implements ProcessDrivingRequestSe
     private List<Passenger> getPassengersFromEmails(Set<String> passengerEmails) {
         List<Passenger> retVal = new ArrayList<>();
         for (String email : passengerEmails) {
-            Optional<Passenger> passenger = passengerService.findByEmailWithCurrentDriving(email);
-            passenger.ifPresent(retVal::add);
+            Passenger passenger = passengerService.findByEmailWithCurrentDriving(email);
+            retVal.add(passenger);
         }
         return retVal;
     }

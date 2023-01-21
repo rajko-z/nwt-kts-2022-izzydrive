@@ -33,4 +33,10 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     void updateCoordinatesForDriver(@Param("email") String email,
                                     @Param("lat") double lat,
                                     @Param("lon") double lon);
+
+    @Query("select d from Driver d left join fetch d.currentDriving cd where d.email = ?1")
+    Optional<Driver> findByEmailWithCurrentDriving(String email);
+
+    @Query("select d from Driver d left join fetch d.nextDriving nd where d.email = ?1")
+    Optional<Driver> findByEmailWithNextDriving(String email);
 }

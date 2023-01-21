@@ -1,9 +1,10 @@
 <div class="explanation">
   <form [formGroup]="this.explanationForm">
+<!--    (ngSubmit)="onSubmit()"-->
     <h2 class="title">Enter an explanation for the ride reject</h2>
     <textarea class="explanation-text" formControlName="explanation"></textarea>
     <div class="submit-item">
-      <button class="submit-button" type="submit" (click)="onSubmit()">Send</button>
+      <button class="submit-button" type="button" (click)="onSubmit()">Send</button>
     </div>
   </form>
 </div>

@@ -8,7 +8,6 @@ import {HttpClient} from "@angular/common/http";
 import {Driving, DrivingRequest} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
-import {UserService} from '../userService/user-sevice.service';
 import {Sort} from '@angular/material/sort';
 
 @Injectable({
@@ -29,7 +28,7 @@ export class DrivingService {
   }
 
   rejectDriving(explanation) {
-    return this.httpClientService.post(environment.apiUrl + `driving-notes/reject`, explanation);
+    return this.httpClientService.postWithText(environment.apiUrl + `driving-notes/reject`, explanation);
   }
 
   getSimpleDrivingOptions(payload: PlaceOnMap[]): Observable<DrivingOption[]> {
@@ -53,7 +52,6 @@ export class DrivingService {
   }
 
   getScheduleDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]> {
-    console.log(payload);
     return this.httpClientService.postT<DrivingOption[]>(environment.apiUrl + 'drivings/finder/schedule', payload);
   }
 
@@ -101,5 +99,17 @@ export class DrivingService {
 
   cancelReservation(drivingId: number): Observable<TextResponse> {
     return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
+  }
+
+  getCurrentDriving() {
+    return this.httpClientService.get(environment.apiUrl + 'drivings/current-driving');
+  }
+
+  getNextDriving() {
+    return this.httpClientService.get(environment.apiUrl + 'drivings/next-driving');
+  }
+
+  deleteDriving(id:number) {
+    return this.httpClientService.getT<TextResponse>(environment.apiUrl + `drivings/delete/${id}`);
   }
 }

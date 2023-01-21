@@ -9,6 +9,7 @@ public enum NotificationStatus {
     REPORT_DRIVER,
     PAYMENT_SUCCESS,
     PAYMENT_FAILURE,
-    PAYMENT_EXPIRED
+    PAYMENT_EXPIRED,
+    NEW_DRIVING_DRIVER
     //obavestenja o rezervaciji na 15, 10, 5 min
 }

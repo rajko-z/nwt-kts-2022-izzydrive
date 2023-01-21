@@ -22,7 +22,11 @@ p {
   }
 }
 
-.location-info, .passenger-info, .time, .price {
+.location-info {
+  width: 90%;
+}
+
+.location-info, .passenger-info, .price {
   @include setFont(15px);
   margin-bottom: 2%;
 }

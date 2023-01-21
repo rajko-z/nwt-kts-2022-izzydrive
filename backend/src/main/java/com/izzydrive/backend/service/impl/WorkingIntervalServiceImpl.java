@@ -92,7 +92,7 @@ public class WorkingIntervalServiceImpl implements WorkingIntervalService {
     }
 
     private void checkDriverCurrentDrivings(String email) {
-        Driver driver = driverService.findByEmailWithAllDrivings(email).get();
+        Driver driver = driverService.findByEmailWithAllDrivings(email);
 
         if (driver.getCurrentDriving() != null || driver.getNextDriving() != null) {
             throw new BadRequestException(ExceptionMessageConstants.CANT_CHANGE_DS_TO_INACTIVE_CAUSE_DRIVINGS_EXISTS);

@@ -40,4 +40,10 @@ public interface DrivingService {
 
     void cancelReservation(Long drivingId);
 
+    DrivingDTO getCurrentDriving();
+
+    DrivingDTO getNextDriving();
+
+    void deleteDriving(Long id);
+
 }

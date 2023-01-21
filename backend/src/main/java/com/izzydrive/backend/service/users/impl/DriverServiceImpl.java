@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users.impl;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
@@ -27,6 +28,8 @@ import com.izzydrive.backend.utils.Constants;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +66,7 @@ public class DriverServiceImpl implements DriverService {
         validateNewDriver(driverDTO);
 
         Optional<Driver> existingDriver = driverRepository.findByEmail(driverDTO.getEmail());
-        if(existingDriver.isEmpty()){
+        if (existingDriver.isEmpty()) {
             Car car = carService.createNewCar(driverDTO.getCarData());
             String password = userService.generatePassword();
             Driver newDriver = new Driver(driverDTO.getEmail(),
@@ -79,13 +82,12 @@ public class DriverServiceImpl implements DriverService {
             carService.saveCar(car);
 
             emailSender.sendDriverRegistrationMail(driverDTO.getEmail(), password);
-        }
-        else{
+        } else {
             throw new BadRequestException(ExceptionMessageConstants.USER_ALREADY_EXISTS_MESSAGE);
         }
     }
 
-    private void validateNewDriver(DriverDTO driverDTO){
+    private void validateNewDriver(DriverDTO driverDTO) {
         Validator.validateFirstName(driverDTO.getFirstName());
         Validator.validateLastName(driverDTO.getLastName());
         Validator.validatePhoneNumber(driverDTO.getPhoneNumber());
@@ -95,7 +97,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<UserDTO> findAllDrivers(){
+    public List<UserDTO> findAllDrivers() {
         return driverRepository.findAll().stream().sorted(Comparator.comparing(User::getId))
                 .map(UserDTO::new).collect(Collectors.toList());
     }
@@ -124,8 +126,22 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public Optional<Driver> findByEmailWithAllDrivings(String email) {
-        return this.driverRepository.findByEmailWithAllDrivings(email);
+    public Driver findByEmailWithAllDrivings(String email) {
+        return this.driverRepository.findByEmailWithAllDrivings(email)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
+    }
+
+    @Override
+    public Driver getCurrentlyLoggedDriverWithCurrentDriving(){
+        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.driverRepository.findByEmailWithCurrentDriving(driverEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+    }
+    @Override
+    public Driver getCurrentlyLoggedDriverWithNextDriving(){
+        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.driverRepository.findByEmailWithNextDriving(driverEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
     }
 
     @Override
@@ -155,18 +171,18 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation){
+    public CalculatedRouteDTO getCalculateRouteFromDriverToStartWithNextDriving(String driverEmail, AddressOnMapDTO startLocation) {
 
         Driver driver = this.driverRepository.findByEmailWithCurrentDrivingAndLocations(driverEmail)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
 
-        if(driver.getCurrentDriving() != null){
+        if (driver.getCurrentDriving() != null) {
             CalculatedRouteDTO getEstimatedRouteLeft = this.getEstimatedRouteLeftFromCurrentDriving(driverEmail);
             Address tmp = driver.getCurrentDriving().getRoute().getEnd();
             AddressOnMapDTO currDrivingEndLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
 
-            if(driver.getNextDriving() != null){
-                CalculatedRouteDTO routeWithNextDriving =  getCalculatedRouteWithNextDriving(startLocation, driverEmail, currDrivingEndLocation);
+            if (driver.getNextDriving() != null) {
+                CalculatedRouteDTO routeWithNextDriving = getCalculatedRouteWithNextDriving(startLocation, driverEmail, currDrivingEndLocation);
                 return mapService.concatRoutesIntoOne(Arrays.asList(getEstimatedRouteLeft, routeWithNextDriving));
             }
             CalculatedRouteDTO getRouteFromCurrDrivingEndToStart = mapService
@@ -189,7 +205,7 @@ public class DriverServiceImpl implements DriverService {
         Address nextEndAddress = driver.getNextDriving().getRoute().getEnd();
         AddressOnMapDTO nextDrivingEndLocation = new AddressOnMapDTO(nextEndAddress.getLongitude(), nextEndAddress.getLatitude());
 
-        return  mapService
+        return mapService
                 .getCalculatedRoutesFromPoints(Arrays.asList(currDrivingEndLocation, nextDrivingStartLocation, nextDrivingEndLocation, startLocationReservation)).get(0);
     }
 
@@ -207,10 +223,9 @@ public class DriverServiceImpl implements DriverService {
         Driving currDriving = driver.get().getCurrentDriving();
 
         if (!currDriving.getDrivingState().equals(DrivingState.FINISHED) &&
-            !currDriving.getDrivingState().equals(DrivingState.ACTIVE)) {
+                !currDriving.getDrivingState().equals(DrivingState.ACTIVE)) {
             return getEstimatedRouteLeftForDrivingThatDidNotStartYet(driver.get());
-        }
-        else if (currDriving.getDrivingState().equals(DrivingState.ACTIVE)) {
+        } else if (currDriving.getDrivingState().equals(DrivingState.ACTIVE)) {
             return getEstimatedRouteLeftForActiveDriving(driver.get());
         }
 
@@ -219,19 +234,17 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean driverWillNotOutworkAndWillBeOnTimeForFutureDriving(CalculatedRouteDTO fromDriverToStart,
-                                                                        List<CalculatedRouteDTO> fromStartToEnd,
-                                                                        Driver driver,
-                                                                        AddressOnMapDTO endLocation)
-    {
+                                                                       List<CalculatedRouteDTO> fromStartToEnd,
+                                                                       Driver driver,
+                                                                       AddressOnMapDTO endLocation) {
         return driverWillNotOutwork(fromDriverToStart, fromStartToEnd, driver, endLocation) &&
                 driverWillBeOnTimeForFutureDrivings(fromDriverToStart, fromStartToEnd, driver, endLocation);
     }
 
 
     public boolean driverWillNotOutworkFuture(List<CalculatedRouteDTO> fromStartToEnd,
-                                         Driver driver,
-                                         AddressOnMapDTO endLocation)
-    {
+                                              Driver driver,
+                                              AddressOnMapDTO endLocation) {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
 
@@ -250,8 +263,7 @@ public class DriverServiceImpl implements DriverService {
     public boolean driverWillNotOutwork(CalculatedRouteDTO fromDriverToStart,
                                         List<CalculatedRouteDTO> fromStartToEnd,
                                         Driver driver,
-                                        AddressOnMapDTO endLocation)
-    {
+                                        AddressOnMapDTO endLocation) {
         int maxAllowed = Constants.MAX_WORKING_MINUTES;
         long minWorked = workingIntervalService.getNumberOfMinutesDriverHasWorkedInLast24Hours(driver.getEmail());
 
@@ -285,8 +297,7 @@ public class DriverServiceImpl implements DriverService {
     private boolean driverWillBeOnTimeForFutureDrivings(CalculatedRouteDTO fromDriverToStart,
                                                         List<CalculatedRouteDTO> fromStartToEnd,
                                                         Driver driver,
-                                                        AddressOnMapDTO endLocation)
-    {
+                                                        AddressOnMapDTO endLocation) {
         if (driver.getReservedFromClientDriving() == null) {
             return true;
         }
@@ -344,7 +355,7 @@ public class DriverServiceImpl implements DriverService {
         for (int i = 0; i < coords.size(); ++i) {
             if (driver.getLon() == coords.get(i).getLon() && driver.getLat() == coords.get(i).getLat()) {
                 coordinatesPassed = i;
-                coordsLeft = coords.subList(i+1, coords.size());
+                coordsLeft = coords.subList(i + 1, coords.size());
             }
         }
 
@@ -371,9 +382,9 @@ public class DriverServiceImpl implements DriverService {
                 .collect(Collectors.toList());
 
         if (fromDriverToStart) {
-            return new CalculatedRouteDTO(coordinates,driving.getDistanceFromDriverToStart(), driving.getDurationFromDriverToStart());
+            return new CalculatedRouteDTO(coordinates, driving.getDistanceFromDriverToStart(), driving.getDurationFromDriverToStart());
         }
-        return new CalculatedRouteDTO(coordinates,driving.getDistance(), driving.getDuration());
+        return new CalculatedRouteDTO(coordinates, driving.getDistance(), driving.getDuration());
     }
 
     @Override
@@ -386,5 +397,13 @@ public class DriverServiceImpl implements DriverService {
     public CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartUsingExistingSavedData(String driverEmail) {
         //TODO:
         return null;
+    }
+
+    @Override
+    public Driver getCurrentlyLoggedDriver() {
+        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.driverRepository.findByEmail(driverEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+
     }
 }
