@@ -1,0 +1,8 @@
+@import "src/style/styles";
+
+.title{
+    @include setTitleStyle(50vw);
+    width: 90%;
+    display: flex;
+    align-content: center;
+}

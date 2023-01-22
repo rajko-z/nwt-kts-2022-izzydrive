@@ -14,4 +14,6 @@ public interface CarService {
     double calculatePrice(Car car, double distance);
 
     CarDTO findByDriverid(Long id);
+
+    void editCar(CarDTO carDTO);
 }

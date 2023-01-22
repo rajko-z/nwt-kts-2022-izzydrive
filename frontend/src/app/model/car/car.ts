@@ -2,6 +2,7 @@ import {CarType} from "./carType";
 import {CarAccommodation} from "./carAccommodation";
 
 export class Car {
+  id: number;
   registration: string;
   model: string;
   maxPassengers: number;
