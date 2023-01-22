@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Car, carImageMapper } from 'src/app/model/car/car';
 import { CarType } from 'src/app/model/car/carType';
+import { TextResponse } from 'src/app/model/response/textresponse';
 import { ProfilePageData } from 'src/app/model/user/profileData';
 import { environment } from 'src/environments/environment';
 import { HttpClientService } from '../custom-http/http-client.service';
@@ -32,4 +33,9 @@ export class CarService {
     profileData.image =  "/assets/" + carImageMapper[car.carType];
     return profileData;
 }
+
+editCarData(car : Car) : Observable<TextResponse>{
+  return this.http.putT<TextResponse>(environment.apiUrl + "/cars/edit", car);
 }
+}
+ 

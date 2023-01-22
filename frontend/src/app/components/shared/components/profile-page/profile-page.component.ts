@@ -19,12 +19,17 @@ export class ProfilePageComponent implements OnInit {
   @Input() profileData : ProfilePageData;
 
   ngOnInit(): void {
-    console.log("tuuu")
     console.log(this.profileData)
   }
 
   onChangeData(){
-    this.router.navigateByUrl("/user/edit-profile")
+    console.log(Object.keys(this.profileData.otherAttributes))
+    if (Object.keys(this.profileData.otherAttributes).includes("phone number")){
+      this.router.navigateByUrl("/user/edit-profile")
+    }
+    else{
+      this.router.navigateByUrl('/driver/edit-car')
+    }
   }
 
 }

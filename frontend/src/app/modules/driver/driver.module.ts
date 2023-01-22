@@ -11,13 +11,15 @@ import {ReservationPageDriverComponent} from "../../pages/reservation-page-drive
 import { ProfilePageCarComponent } from "src/app/components/profile/profile-page-car/profile-page-car.component";
 import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
 import { UsersModule } from "../user/users.module";
+import { EditCarComponent } from "src/app/components/profile/edit-car/edit-car.component";
 
 const declaredModules = [
   HomePageDriverComponent,
   DisplayDrivingComponent,
   ExplanationDialogComponent,
   ReservationPageDriverComponent,
-  ProfilePageCarComponent
+  ProfilePageCarComponent,
+  EditCarComponent
 ];
 
 @NgModule({

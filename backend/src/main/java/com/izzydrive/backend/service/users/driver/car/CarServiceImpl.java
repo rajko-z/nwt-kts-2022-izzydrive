@@ -80,7 +80,9 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDTO findByDriverid(Long id) {
         Car car = this.carRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
-        return new CarDTO(car);
+        CarDTO carDTO =  new CarDTO(car);
+        carDTO.setCarAccommodation(this.getCarAccommodationFromString(car.getCarAccommodations()));
+        return carDTO;
     }
 
     private CarType getCarType(String carType){

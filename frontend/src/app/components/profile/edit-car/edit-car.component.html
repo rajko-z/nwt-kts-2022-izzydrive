@@ -1,0 +1,5 @@
+<div class="title">Edit car information</div>
+<div style="margin-top: -8%;"> 
+    <app-base-car-data-form *ngIf="isDataLoaded" [existingCarData]="carData" (formData)="onFormSubmit($event)"></app-base-car-data-form>
+</div>
+

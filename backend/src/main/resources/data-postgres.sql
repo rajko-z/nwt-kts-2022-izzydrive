@@ -6,14 +6,14 @@ insert into images (name) values ('john@gmail.com.jpg');
 
 insert into cars (car_accommodations, car_type, max_num_of_passengers, model, registration)
 values
-    ('BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-116IX'),
-    ('BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-111IX'),
-    ('PET;BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-112IX'),
-    ('FOOD;BAGGAGE', 'AVERAGE', 5, 'Audi A6', 'NS-113IX'),
-    ('BABY;BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-114IX'),
-    ('PET;BAGGAGE', 'AVERAGE', 5, 'Audi A6', 'NS-115IX'),
-    ('PET;BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-117IX'),
-    ('PET;BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-118IX');
+    ('BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-116-IX'),
+    ('BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-111-IX'),
+    ('PET;BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-112-IX'),
+    ('FOOD;BAGGAGE', 'AVERAGE', 5, 'Audi A6', 'NS-113-IX'),
+    ('BABY;BAGGAGE', 'REGULAR', 5, 'Audi A6', 'NS-114-IX'),
+    ('PET;BAGGAGE', 'AVERAGE', 5, 'Audi A6', 'NS-115-IX'),
+    ('PET;BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-117-IX'),
+    ('PET;BABY;BAGGAGE', 'PREMIUM', 5, 'Audi A6', 'NS-118-IX');
 
 INSERT INTO public.adresses(latitude, longitude, name)
 VALUES
