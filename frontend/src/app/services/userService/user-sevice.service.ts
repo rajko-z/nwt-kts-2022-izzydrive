@@ -154,5 +154,9 @@ export class UserService {
     return this.http.post<TextResponse>(environment.apiUrl + "users/reset-password-email", email);
  }
 
+  verifyResetPasswordToken(token: string) {
+    return this.http.get<TextResponse>(environment.apiUrl + "confirmation/reset-password?token=" + token);
+  }
+
 
 }

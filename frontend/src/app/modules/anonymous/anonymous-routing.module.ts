@@ -19,7 +19,7 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'reset-password',
+    path: 'reset-password/:type',
     component: ResetPasswordComponent,
   }, 
 ];

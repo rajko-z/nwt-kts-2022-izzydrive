@@ -6,7 +6,7 @@ public interface EmailSender {
 
     void sendDriverRegistrationMail(String email, String password);
 
-    void sendResetPasswordLink(String email, Long userId);
+    void sendResetPasswordLink(String email, String userId);
 
 
 }

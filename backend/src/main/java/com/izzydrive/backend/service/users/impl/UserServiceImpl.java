@@ -1,5 +1,6 @@
 package com.izzydrive.backend.service.users.impl;
 
+import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,10 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_DOESNT_EXISTS;
@@ -44,6 +43,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final EmailSender emailSender;
+
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     @Transactional
@@ -176,7 +177,9 @@ public class UserServiceImpl implements UserService {
     public void sendEmailForResetPassword(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
-        this.emailSender.sendResetPasswordLink(email, user.getId());
+        String token = UUID.randomUUID().toString();
+        this.confirmationTokenService.createVerificationToken(user, token);
+        this.emailSender.sendResetPasswordLink(user.getEmail(), token);
     }
 
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {

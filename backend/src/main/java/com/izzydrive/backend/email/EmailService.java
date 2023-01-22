@@ -93,12 +93,12 @@ public class EmailService implements EmailSender {
 
     @Override
     @Async
-    public void sendResetPasswordLink(String email, Long userId) {
+    public void sendResetPasswordLink(String email, String token) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
         mail.setSubject("Primer slanja emaila pomoću Spring taska");
-        String link = "https://localhost:4200/anon/reset-password";
+        String link = "https://localhost:4200/anon/reset-password/" + token;
         mail.setText("You can reset your password on this link " + link + ".");
         javaMailSender.send(mail);
     }

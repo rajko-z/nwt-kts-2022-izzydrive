@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 export class ResetPasswordComponent implements OnInit {
   hideNewPassword: boolean = true;
   hideRepeatPassword: boolean = true;
+  isValidToken: boolean = false;
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -26,6 +27,18 @@ export class ResetPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let urlTokens : string[] = window.location.href.split("/")
+    let token: string = urlTokens[urlTokens.length - 1];
+    console.log(token);
+    this.userService.verifyResetPasswordToken(token).subscribe({
+      next: (response) => {
+        this.isValidToken = true;
+      },
+      error : (error) => {
+        console.log(error)
+        this.snackBar.open(error.error.message, "ERROR");
+      }
+    })
   }
 
   validate(): boolean {

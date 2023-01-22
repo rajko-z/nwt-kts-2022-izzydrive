@@ -46,6 +46,7 @@ public final class ExceptionMessageConstants {
     public static final String CANT_USE_EXISTING_PAYING_DATA = "Can't use existing paying data, because you dont have one";
     public static final String NOTIFICATION_DOESNT_EXIST = "Notification with that id doesn't exists";
     public static final String FAVORITE_ROUTES_NOT_FOUND = "You don't have favorite routes";
+    public static final String ALREADY_USED_THIS_LINK = "You already used this link";
 
 
     public static String passengerAlreadyHasReservation(String email) {
