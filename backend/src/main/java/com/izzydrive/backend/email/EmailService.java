@@ -7,7 +7,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -18,6 +20,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +32,8 @@ public class EmailService implements EmailSender {
     private final JavaMailSender javaMailSender;
 
     private final Configuration freemarkerConfig;
+
+    private final Environment env;
 
     @Async
     public void sendConfirmationAsync(String email, String token, String firstName){
@@ -84,5 +89,17 @@ public class EmailService implements EmailSender {
         } catch (IOException e) {
             throw new InternalServerException(ExceptionMessageConstants.SOMETHING_WENT_WRONG_MESSAGE);
         }
+    }
+
+    @Override
+    @Async
+    public void sendResetPasswordLink(String email, Long userId) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+        mail.setSubject("Primer slanja emaila pomoću Spring taska");
+        String link = "https://localhost:4200/anon/reset-password";
+        mail.setText("You can reset your password on this link " + link + ".");
+        javaMailSender.send(mail);
     }
 }

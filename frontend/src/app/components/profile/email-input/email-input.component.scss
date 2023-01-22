@@ -1,0 +1,38 @@
+@import "src/style/styles";
+@import "src/app/components/shared/shared";
+
+.container {
+  width: 40vw;
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+.mat-form-field {
+  @include size(25vw, auto);
+}
+
+.submit-item{
+  @include size(auto, 5vh);
+  display: flex;
+  justify-content: flex-end;
+  margin: 2% 5% 0 0;
+
+  .submit-button{
+    @include buttonStyle();
+    @include size(25%, auto);
+    @include setFont(16px)
+  }
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 20px;
+    @include setFont(18px);
+    color: $dark3;
+    font-weight: 500;
+}
+

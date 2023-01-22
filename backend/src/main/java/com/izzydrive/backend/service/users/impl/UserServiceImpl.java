@@ -3,6 +3,7 @@ package com.izzydrive.backend.service.users.impl;
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Image;
@@ -41,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final EmailSender emailSender;
 
     @Override
     @Transactional
@@ -169,6 +172,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user.get());
     }
 
+    @Override
+    public void sendEmailForResetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
+        this.emailSender.sendResetPasswordLink(email, user.getId());
+    }
+
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
@@ -179,6 +189,8 @@ public class UserServiceImpl implements UserService {
                 Validator.validateLastName(userDTO.getLastName()) &&
                 Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
+
+
 
 
 }

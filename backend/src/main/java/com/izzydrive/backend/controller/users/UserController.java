@@ -17,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +81,12 @@ public class UserController {
     @PutMapping("/change-info")
     public ResponseEntity<UserDTO> changeBasicUserInfo(@RequestBody UserDTO userDTO){
         return ResponseEntity.ok(userService.changeUserInfo(userDTO));
+    }
+
+    @PostMapping("/reset-password-email")
+    public ResponseEntity<TextResponse> sendEmailForResetPassword(@RequestBody String email){
+        this.userService.sendEmailForResetPassword(email);
+        return ResponseEntity.ok(new TextResponse("We sent you and email with link"));
     }
 
 }

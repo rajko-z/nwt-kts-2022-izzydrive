@@ -29,4 +29,6 @@ public interface UserService extends UserDetailsService {
     User disconnectFromChat(String email);
 
     User getCurrentlyLoggedUser();
+
+    void sendEmailForResetPassword(String email);
 }

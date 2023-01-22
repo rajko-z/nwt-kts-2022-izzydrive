@@ -10,11 +10,15 @@ import {
   RideDataBasicFormComponent
 } from "../../components/ordering-ride/basic/ride-data-basic-form/ride-data-basic-form.component";
 import {OnboardingModule} from "../../components/onboarding/onboarding.module";
+import { EmailInputComponent } from "src/app/components/profile/email-input/email-input.component";
+import { ResetPasswordComponent } from "src/app/components/profile/reset-password/reset-password.component";
 
 const declaredModules = [
   HomePageUnLoggedComponent,
   OrderingRideBasicComponent,
-  RideDataBasicFormComponent
+  RideDataBasicFormComponent,
+  EmailInputComponent,
+  ResetPasswordComponent
 ];
 
 @NgModule({
