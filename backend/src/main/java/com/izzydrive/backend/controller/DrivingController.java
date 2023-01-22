@@ -134,7 +134,7 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("next-driving")
+    @GetMapping("reservation")
     public ResponseEntity<DrivingDTO> getReservation(){
         DrivingDTO driving = drivingService.getReservation();
         return new ResponseEntity<>(driving, HttpStatus.OK);

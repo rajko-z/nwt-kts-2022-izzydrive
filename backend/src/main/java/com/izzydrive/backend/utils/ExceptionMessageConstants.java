@@ -51,6 +51,7 @@ public final class ExceptionMessageConstants {
     public static final String YOU_DO_NOT_HAVE_CURRENT_WAITING_DRIVING = "You don't have current driving that you are waiting for";
     public static final String ALREADY_USED_THIS_LINK = "You already used this link";
     public static final String INVALID_RESET_PASSWORD_TOKEN = "There is no user with provided token";
+    public static final String PASSENGER_NO_LONGER_AVAILABLE = "The passenger already has a ride!";
 
 
     public static String passengerAlreadyHasReservation(String email) {

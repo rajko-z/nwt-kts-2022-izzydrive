@@ -47,4 +47,8 @@ public interface DrivingService {
     void deleteDriving(Long id);
 
     Driving findByIdWithLocationsAndDriver(Long id);
+
+    List<Driving> getAllReservationWithDriverAndPassengers();
+
+    void deleteReservation(Driving d);
 }

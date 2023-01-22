@@ -15,6 +15,9 @@ import {HttpClientService} from "../custom-http/http-client.service";
 import {
   RejectRideDriverComponent
 } from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
+import {
+  PaymentReservationComponent
+} from "../../components/notifications/payment-reservation/payment-reservation.component";
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +91,7 @@ export class NotificationService {
 
   showNotificationNewRideDriver(stompClient) {
     stompClient.subscribe('/notification/newRideDriver', (message: { body: string }) => {
-      this.showNotificationText(message.body, "Ok");
+      this.showNotificationText(message.body);
     });
   }
 
@@ -125,8 +128,28 @@ export class NotificationService {
 
   showNotificationCancelReservationDriver(stompClient) {
     stompClient.subscribe('/notification/cancelReservation', (message: { body: string }) => {
-        console.log(message);
         this.showNotificationComponent(message.body, DeniedRideLinkedUserComponent);
+      }
+    );
+  }
+
+  sendNotificationReservationReminder(stompClient) {
+    stompClient.subscribe('/notification/reservationReminder', (message: { body: string }) => {
+        this.showNotificationText(message.body);
+      }
+    );
+  }
+
+  sendNotificationForPaymentReservation(stompClient) {
+    stompClient.subscribe('/notification/paymentReservation', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, PaymentReservationComponent);
+      }
+    );
+  }
+
+  sendNotificationForReservationDeleted(stompClient) {
+    stompClient.subscribe('/notification/reservationDeleted', (message: { body: string }) => {
+        this.showNotificationText(message.body);
       }
     );
   }

@@ -158,4 +158,11 @@ public class DriverServiceImpl implements DriverService {
         return this.driverRepository.findByEmailWithNextDriving(driverEmail)
                 .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
     }
+
+    @Override
+    public Driver getCurrentlyLoggedDriverWithReservation(){
+        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.driverRepository.findByEmailWithReservation(driverEmail)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+    }
 }

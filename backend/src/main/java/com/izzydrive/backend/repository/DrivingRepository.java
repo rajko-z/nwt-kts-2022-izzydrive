@@ -39,4 +39,11 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             " left join fetch d.route r" +
             " where d.id = ?1")
     Driving findByIdWithLocationsAndDriver(Long id);
+
+    @Query("SELECT d FROM Driving d " +
+            "LEFT JOIN FETCH d.allPassengers p  LEFT JOIN FETCH d.route r LEFT JOIN FETCH r.intermediateStations " +
+            "LEFT JOIN FETCH d.driver dr " +
+            "LEFT JOIN FETCH dr.currentDriving " +
+            "LEFT JOIN FETCH dr.nextDriving WHERE d.isReservation = true")
+    List<Driving> getAllReservationWithDriverAndPassengers();
 }

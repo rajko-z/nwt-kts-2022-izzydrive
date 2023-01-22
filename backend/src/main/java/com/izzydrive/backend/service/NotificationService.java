@@ -2,6 +2,7 @@ package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.users.User;
 
 import java.util.List;
 
@@ -30,4 +31,10 @@ public interface NotificationService {
     void deleteNotification(Long id);
 
     void deleteNotificationFromAdmin(Long drivingId);
+
+    void sendNotificationReservationReminder(Integer startMinutes, List<User> userForNotification);
+
+    void sendNotificationForPaymentReservation(Driving d);
+
+    void sendNotificationForReservationDeleted(Driving d, String message);
 }

@@ -40,4 +40,6 @@ public interface DriverService {
     Driver getCurrentlyLoggedDriverWithCurrentDriving();
 
     Driver getCurrentlyLoggedDriverWithNextDriving();
+
+    Driver getCurrentlyLoggedDriverWithReservation();
 }
