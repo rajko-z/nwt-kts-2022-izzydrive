@@ -10,6 +10,8 @@ import lombok.*;
 @Setter
 @Builder
 public class CarDTO {
+
+    public Long id;
     private String registration;
     private String model;
     private int maxPassengers;
@@ -19,6 +21,7 @@ public class CarDTO {
     private String accommodations;
 
     public CarDTO(Car car){
+        this.id = car.getId();
         this.registration = car.getRegistration();
         this.model = car.getModel();
         this.maxPassengers = car.getMaxNumOfPassengers();

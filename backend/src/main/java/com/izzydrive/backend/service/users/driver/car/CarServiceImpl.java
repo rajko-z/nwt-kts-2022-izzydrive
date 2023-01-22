@@ -6,6 +6,7 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.*;
 import com.izzydrive.backend.repository.CarRepository;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
+import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +84,21 @@ public class CarServiceImpl implements CarService {
         CarDTO carDTO =  new CarDTO(car);
         carDTO.setCarAccommodation(this.getCarAccommodationFromString(car.getCarAccommodations()));
         return carDTO;
+    }
+
+    @Override
+    public void editCar(CarDTO carDTO) {
+        if (Validator.validateCarRegistration(carDTO.getRegistration()) &&
+        Validator.validateCarType(carDTO.getCarType())){
+            Car car = this.carRepository.findById(carDTO.getId()).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
+            car.setCarType(getCarType(carDTO.getCarType()));
+            car.setModel(carDTO.getModel());
+            car.setMaxNumOfPassengers(carDTO.getMaxPassengers());
+            car.setRegistration(carDTO.getRegistration());
+            car.setCarAccommodations(this.getCarAccommodationString(carDTO.getCarAccommodation()));
+            carRepository.save(car);
+        }
+
     }
 
     private CarType getCarType(String carType){

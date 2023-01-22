@@ -12,5 +12,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query("select c from Car c where c.driver.id = ?1")
     Optional<Car> findByUserId(Long id);
+
+    Optional<Car> findById(Long id);
 }
 
