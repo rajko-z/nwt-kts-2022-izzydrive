@@ -105,5 +105,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.css",
                 "/**/*.js"
                 );
+
+        web.ignoring().antMatchers(HttpMethod.PUT,
+                "/users/reset-password");
+
     }
 }

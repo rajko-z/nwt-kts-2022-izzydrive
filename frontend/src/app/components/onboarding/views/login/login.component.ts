@@ -141,6 +141,9 @@ export class LoginComponent implements OnInit {
   }
 
   onResetPassword(){
-    this.matDialog.open(EmailInputComponent);
+    this.matDialog.open(EmailInputComponent, {
+      width:'400px',   // Set width to 600px
+      height:'350px',  // Set height to 530px
+    });
   }
 }

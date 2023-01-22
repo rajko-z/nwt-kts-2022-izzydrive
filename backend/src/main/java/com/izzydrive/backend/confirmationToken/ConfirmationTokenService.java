@@ -8,4 +8,6 @@ public interface ConfirmationTokenService {
     void verifyResetPasswordLink(String token);
 
     void createVerificationToken(User user, String token);
+
+    ConfirmationToken fingByToken(String token);
 }

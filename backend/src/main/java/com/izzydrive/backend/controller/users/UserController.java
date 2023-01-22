@@ -2,6 +2,7 @@ package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.ResetPasswordDTO;
 import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.exception.NotFoundException;
@@ -87,6 +88,12 @@ public class UserController {
     public ResponseEntity<TextResponse> sendEmailForResetPassword(@RequestBody String email){
         this.userService.sendEmailForResetPassword(email);
         return ResponseEntity.ok(new TextResponse("We sent you and email with link"));
+    }
+
+    @PutMapping("/reset-password")
+    public ResponseEntity<TextResponse> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO){
+        this.userService.resetPassword(resetPasswordDTO);
+        return ResponseEntity.ok(new TextResponse("Successfully reset password "));
     }
 
 }

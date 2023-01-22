@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { NewPassword } from 'src/app/model/user/newPassword';
+import { ResetPassword } from 'src/app/model/user/resetPassword';
 import { LoggedUserService } from 'src/app/services/loggedUser/logged-user.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
@@ -14,6 +16,7 @@ export class ResetPasswordComponent implements OnInit {
   hideNewPassword: boolean = true;
   hideRepeatPassword: boolean = true;
   isValidToken: boolean = false;
+  resetpasswordToke : string;
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -22,16 +25,15 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    private loggedUserService: LoggedUserService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     let urlTokens : string[] = window.location.href.split("/")
-    let token: string = urlTokens[urlTokens.length - 1];
-    console.log(token);
-    this.userService.verifyResetPasswordToken(token).subscribe({
-      next: (response) => {
+    this.resetpasswordToke = urlTokens[urlTokens.length - 1];
+    this.userService.verifyResetPasswordToken(this.resetpasswordToke).subscribe({
+      next: () => {
         this.isValidToken = true;
       },
       error : (error) => {
@@ -56,25 +58,19 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.validate()) {
       return;
     }
-
-    const payload: NewPassword = new NewPassword();
-    payload.newPassword = this.passwordForm.controls.newPassword.value;
-    payload.email = this.userService.getCurrentUserEmail();
-
-    this.loggedUserService.changePassword(payload)
-      .subscribe({
-          next: (response) => {
-            this.snackBar.open(response.text, "OK", {
-              duration: 5000,
-            })
-          },
-          error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
-          }
-        }
-      );
+    let resetPassword : ResetPassword = new ResetPassword;
+    resetPassword.password = this.passwordForm.value.newPassword;
+    resetPassword.repeatedPassword = this.passwordForm.value.repeatedPassword;
+    resetPassword.token = this.resetpasswordToke;
+    this.userService.resetPassword(resetPassword).subscribe({
+      next : (response) => {
+        this.snackBar.open(response.text, "OK")
+        this.router.navigateByUrl('/anon/login')
+      },
+      error : (error) => {
+        this.snackBar.open(error.error.message, "ERROR")
+      }
+    })
   }
 
 }

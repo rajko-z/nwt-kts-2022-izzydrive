@@ -23,11 +23,7 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: NotificationReviewComponent,
-  },
-  {
-    path: 'reset-password',
-    component: ResetPasswordComponent,
-  }, 
+  }
 ];
 
 @NgModule({

@@ -1,8 +1,10 @@
 package com.izzydrive.backend.service.users.impl;
 
+import com.izzydrive.backend.confirmationToken.ConfirmationToken;
 import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.ResetPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
@@ -180,6 +182,18 @@ public class UserServiceImpl implements UserService {
         String token = UUID.randomUUID().toString();
         this.confirmationTokenService.createVerificationToken(user, token);
         this.emailSender.sendResetPasswordLink(user.getEmail(), token);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        ConfirmationToken token  = confirmationTokenService.fingByToken(resetPasswordDTO.getToken());
+        User user = token.getUser();
+        if (user != null &&
+                Validator.validateMatchingPassword(resetPasswordDTO.getPassword(), resetPasswordDTO.getRepeatedPassword()) &&
+                Validator.validatePassword(resetPasswordDTO.getPassword())) {
+            user.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
+            userRepository.save(user);
+        }
     }
 
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {

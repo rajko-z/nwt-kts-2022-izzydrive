@@ -2,8 +2,6 @@
 @import "src/app/components/shared/shared";
 
 .container {
-  width: 40vw;
-  height: 40vh;
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -11,6 +9,7 @@
 }
 .mat-form-field {
   @include size(25vw, auto);
+  min-width: 150px;
 }
 
 .submit-item{
@@ -21,8 +20,9 @@
 
   .submit-button{
     @include buttonStyle();
-    @include size(25%, auto);
-    @include setFont(16px)
+    @include size(45%, 80%);
+    @include setFont(16px);
+    min-height: 30px;
   }
 }
 
@@ -31,8 +31,14 @@
     flex-direction: row;
     justify-content: center;
     padding-top: 20px;
-    @include setFont(18px);
+    @include setFont(16px);
     color: $dark3;
     font-weight: 500;
+}
+
+.email-input-form{
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
 }
 
