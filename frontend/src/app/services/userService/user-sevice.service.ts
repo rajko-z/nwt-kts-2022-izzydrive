@@ -9,6 +9,7 @@ import { User } from 'src/app/model/user/user';
 import {Router} from "@angular/router";
 import { TextResponse } from 'src/app/model/response/textresponse';
 import { ResetPassword } from 'src/app/model/user/resetPassword';
+import { ProfilePageData } from 'src/app/model/user/profileData';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private _sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer,
   )
   { }
 
@@ -163,5 +165,16 @@ export class UserService {
     return this.http.put<TextResponse>(environment.apiUrl + "users/reset-password" , resetPassword);
   }
 
+  public getProfilePageDataFromUser(user : User) : ProfilePageData{
+    let profileData = new ProfilePageData();
+    profileData.title = `${user.firstName} ${user.lastName}`;
+    profileData.subtitle = user.email;
+    profileData.otherAttributes = {} as Record<string,any>;
+    profileData.otherAttributes["phone number"] = user.phoneNumber;
+    profileData.otherAttributes["role"] = user.role.substring(5);
+    profileData.image = user.imageName?  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
+    console.log(profileData)
+    return profileData;
+}
 
 }

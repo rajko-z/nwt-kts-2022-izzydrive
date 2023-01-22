@@ -1,0 +1,35 @@
+<div style=" justify-content: center;
+display: flex;
+flex-wrap: wrap;
+margin-top: 10px;
+overflow: scroll;
+height: 80%;
+align-items: center;">
+<mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title class="title">{{profileData.title}}</mat-card-title>
+      <mat-card-subtitle>{{profileData.subtitle}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image *ngIf="profileData.image"  [src]="profileData.image" style="max-height: 40vh;">
+    <img mat-card-image *ngIf="!profileData.image" src="/assets/no-image.png" style="max-height: 40vh">
+    <!-- <img mat-card-image mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu" > -->
+    <mat-card-content>
+      <div style="display: flex; flex-direction: column;">
+        
+        <div style="display: flex; flex-direction: row;" *ngFor="let item of profileData.otherAttributes | keyvalue">
+            <p class="label">
+            {{item.key}}
+            </p>
+            <p class="text">
+            {{item.value}}
+            </p>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="change-btn" (click)="onChangeData()">CHANGE</button>
+    </mat-card-actions>
+  </mat-card>
+
+
+</div>

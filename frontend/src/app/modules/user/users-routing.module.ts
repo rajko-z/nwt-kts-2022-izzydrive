@@ -5,7 +5,8 @@ import {EditProfileComponent} from "../../components/profile/edit-profile/edit-p
 import {
   NotificationReviewComponent
 } from "../../components/notifications/notification-review/notification-review.component";
-import { ResetPasswordComponent } from "src/app/components/profile/reset-password/reset-password.component";
+import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
+import { ProfilePageUserComponent } from "src/app/components/profile/profile-page-user/profile-page-user.component";
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: NotificationReviewComponent,
+  },
+  {
+    path: 'profile-page',
+    component: ProfilePageUserComponent,
   }
 ];
 

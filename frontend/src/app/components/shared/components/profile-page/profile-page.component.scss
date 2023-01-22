@@ -1,0 +1,40 @@
+
+@import "src/style/styles";
+
+.example-card {
+    width: 35%;
+    height: 100%;
+    overflow: auto;
+    height: fit-content;
+    min-height: fit-content;
+    background-color: $lightpink;
+  }
+  
+  .example-header-image {
+    background-size: cover;
+  }
+
+  ::-webkit-scrollbar{
+    display: none;
+}
+
+.label{
+    color: $dark3;
+    font-weight: 300;
+    display: flex;
+}
+.text{
+    color: $pink;
+    font-weight: 400;
+    padding-left: 10px;
+}
+
+.change-btn{
+    background-color: $pink;
+    color: white;
+}
+
+.title{
+    color: $dark6;
+}
+    

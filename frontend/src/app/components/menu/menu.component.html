@@ -15,7 +15,7 @@
     <mat-selection-list #menuItems [multiple]="false">
       <div class="menu_item">
         <mat-icon class="menu_item_icon">perm_identity</mat-icon>
-        <mat-list-option>
+        <mat-list-option (click)="openProfilePage()">
           View profile
         </mat-list-option>
       </div>

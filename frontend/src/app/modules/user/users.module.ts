@@ -10,12 +10,16 @@ import { SharedComponentsModule } from "../shared/shared-components.module";
 import {
   NotificationReviewComponent
 } from "../../components/notifications/notification-review/notification-review.component";
+import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
+import { ProfilePageUserComponent } from "src/app/components/profile/profile-page-user/profile-page-user.component";
 
 const declaredModules = [
   ChangePasswordComponent,
   EditProfileComponent,
   DrivingHistoryComponent,
-  NotificationReviewComponent
+  NotificationReviewComponent,
+  ProfilePageComponent,
+  ProfilePageUserComponent
 ];
 
 @NgModule({

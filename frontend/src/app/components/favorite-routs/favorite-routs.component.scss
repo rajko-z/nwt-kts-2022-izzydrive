@@ -31,14 +31,14 @@
     display: flex;
 }
 .text{
-    color: #6B2167;
+    color: $pink;
     font-weight: 400;
     padding-left: 10px;
 }
 
 .get-ride-button{
     font-size: 15px;
-    background-color: #6B2167;
+    background-color: $pink;
     color: #E9EAEF;
     border-radius: 8px;
     cursor: pointer;
