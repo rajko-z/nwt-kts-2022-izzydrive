@@ -1,18 +1,11 @@
-<div style=" justify-content: center;
-display: flex;
-flex-wrap: wrap;
-margin-top: 10px;
-overflow: scroll;
-height: 80%;
-align-items: center;">
+<div class="container" >
 <mat-card class="example-card">
     <mat-card-header>
       <mat-card-title class="title">{{profileData.title}}</mat-card-title>
       <mat-card-subtitle>{{profileData.subtitle}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image *ngIf="profileData.image"  [src]="profileData.image" style="max-height: 40vh;">
-    <img mat-card-image *ngIf="!profileData.image" src="/assets/no-image.png" style="max-height: 40vh">
-    <!-- <img mat-card-image mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu" > -->
+    <img mat-card-image *ngIf="profileData.image"  [src]="profileData.image" class="img">
+    <img mat-card-image *ngIf="!profileData.image" src="/assets/no-photos.png" class="no-img">
     <mat-card-content>
       <div style="display: flex; flex-direction: column;">
         

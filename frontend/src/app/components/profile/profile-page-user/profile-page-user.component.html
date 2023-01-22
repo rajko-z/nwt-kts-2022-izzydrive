@@ -1,1 +1,2 @@
-<app-profile-page [profileData]="profilePagedata"></app-profile-page>
+<mat-progress-bar mode="indeterminate" *ngIf="!isUserLoaded" style="margin-top: 10%;"></mat-progress-bar>
+<app-profile-page [profileData]="profilePagedata" *ngIf="isUserLoaded"></app-profile-page>

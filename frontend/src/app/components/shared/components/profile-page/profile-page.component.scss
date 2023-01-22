@@ -22,11 +22,13 @@
     color: $dark3;
     font-weight: 300;
     display: flex;
+    @include setFont(15px)
 }
 .text{
     color: $pink;
     font-weight: 400;
     padding-left: 10px;
+    @include setFont(15px)
 }
 
 .change-btn{
@@ -37,4 +39,26 @@
 .title{
     color: $dark6;
 }
-    
+
+.container{
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    overflow: scroll;
+    height: 80%;
+    align-items: center;
+}
+
+.no-img{
+    max-height: 40vh; 
+    padding: 10%; 
+    padding-left: 30%; 
+    padding-right: 30%;
+}
+
+.img{
+    max-height: 40vh; 
+    padding-left: 15%; 
+    padding-right: 15%;
+}

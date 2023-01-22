@@ -12,14 +12,15 @@ export class ProfilePageUserComponent implements OnInit {
 
   constructor(private userService: UserService, private snackbar : MatSnackBar) { }
   profilePagedata : ProfilePageData;
+  isUserLoaded: boolean = false;
 
   ngOnInit(): void {
     
-    this.userService.getCurrentUserData().subscribe({
+    this.userService.getCurrrentUserDataWithImg().subscribe({
       next : (response) => {
        console.log(response)
        this.profilePagedata = this.userService.getProfilePageDataFromUser(response);
-       console.log(this.profilePagedata)
+       this.isUserLoaded = true;
         ;
       },
       error : (error) => {

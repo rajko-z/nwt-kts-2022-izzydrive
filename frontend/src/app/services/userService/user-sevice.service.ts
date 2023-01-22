@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginResponse } from 'src/app/model/response/loginResponse';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Role } from 'src/app/model/user/role';
 import { User } from 'src/app/model/user/user';
 import {Router} from "@angular/router";
@@ -20,7 +20,6 @@ export class UserService {
     private http: HttpClient,
     private _sanitizer: DomSanitizer,
     private router: Router,
-    private sanitizer: DomSanitizer,
   )
   { }
 
@@ -172,8 +171,8 @@ export class UserService {
     profileData.otherAttributes = {} as Record<string,any>;
     profileData.otherAttributes["phone number"] = user.phoneNumber;
     profileData.otherAttributes["role"] = user.role.substring(5);
-    profileData.image = user.imageName?  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
-    console.log(profileData)
+    profileData.image = user.imageName? this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
+    profileData.image = user.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
     return profileData;
 }
 

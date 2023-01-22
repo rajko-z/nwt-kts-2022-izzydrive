@@ -19,7 +19,8 @@ export class ProfilePageComponent implements OnInit {
   @Input() profileData : ProfilePageData;
 
   ngOnInit(): void {
-    
+    console.log("tuuu")
+    console.log(this.profileData)
   }
 
   onChangeData(){

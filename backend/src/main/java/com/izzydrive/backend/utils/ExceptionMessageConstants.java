@@ -52,6 +52,8 @@ public final class ExceptionMessageConstants {
     public static final String ALREADY_USED_THIS_LINK = "You already used this link";
     public static final String INVALID_RESET_PASSWORD_TOKEN = "There is no user with provided token";
 
+    public static final String NO_CAR_FOR_USER="There is no car for provided user";
+
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);
@@ -84,5 +86,6 @@ public final class ExceptionMessageConstants {
     public static String routeDoesntExist() {
         return "Route doesn't exist";
     }
+
 }
 

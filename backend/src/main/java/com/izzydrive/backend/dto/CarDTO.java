@@ -1,5 +1,6 @@
 package com.izzydrive.backend.dto;
 
+import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.car.CarAccommodation;
 import lombok.*;
 
@@ -14,4 +15,14 @@ public class CarDTO {
     private int maxPassengers;
     private String carType;
     private CarAccommodation carAccommodation;
+
+    private String accommodations;
+
+    public CarDTO(Car car){
+        this.registration = car.getRegistration();
+        this.model = car.getModel();
+        this.maxPassengers = car.getMaxNumOfPassengers();
+        this.carType = car.getCarType().toString();
+        this.accommodations = car.getCarAccommodations();
+    }
 }
