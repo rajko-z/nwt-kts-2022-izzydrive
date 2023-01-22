@@ -8,12 +8,16 @@ import {HomePageDriverComponent} from "../../pages/home-page-driver/home-page-dr
 import {DisplayDrivingComponent} from "../../components/display-driving/display-driving.component";
 import {ExplanationDialogComponent} from "../../components/explanation-dialog/explanation-dialog.component";
 import {ReservationPageDriverComponent} from "../../pages/reservation-page-driver/reservation-page-driver.component";
+import { ProfilePageCarComponent } from "src/app/components/profile/profile-page-car/profile-page-car.component";
+import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
+import { UsersModule } from "../user/users.module";
 
 const declaredModules = [
   HomePageDriverComponent,
   DisplayDrivingComponent,
   ExplanationDialogComponent,
-  ReservationPageDriverComponent
+  ReservationPageDriverComponent,
+  ProfilePageCarComponent
 ];
 
 @NgModule({
@@ -24,7 +28,8 @@ const declaredModules = [
     SharedComponentsModule,
     FormsModule,
     ReactiveFormsModule,
-    DriverRoutingModule
+    DriverRoutingModule,
+    UsersModule
   ],
   exports: declaredModules
 })

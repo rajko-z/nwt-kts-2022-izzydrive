@@ -24,4 +24,8 @@ export class DriverMenuComponent implements OnInit {
   onReservationClick() {
     this.router.navigateByUrl("/driver/reservation");
   }
+
+  onCarInfo(){
+    this.router.navigateByUrl("/driver/car-data")
+  }
 }

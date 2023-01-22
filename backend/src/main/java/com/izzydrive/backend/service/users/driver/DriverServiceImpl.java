@@ -158,4 +158,5 @@ public class DriverServiceImpl implements DriverService {
         return this.driverRepository.findByEmailWithNextDriving(driverEmail)
                 .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
     }
+
 }

@@ -2,8 +2,10 @@ package com.izzydrive.backend.service.users.driver.car;
 
 import com.izzydrive.backend.dto.CarDTO;
 import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.*;
 import com.izzydrive.backend.repository.CarRepository;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +75,12 @@ public class CarServiceImpl implements CarService {
                 return 120 * km * CarPrices.PREMIUM;
         }
         return 1;
+    }
+
+    @Override
+    public CarDTO findByDriverid(Long id) {
+        Car car = this.carRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
+        return new CarDTO(car);
     }
 
     private CarType getCarType(String carType){

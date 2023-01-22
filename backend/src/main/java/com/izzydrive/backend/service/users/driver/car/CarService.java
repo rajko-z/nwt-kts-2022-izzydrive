@@ -12,4 +12,6 @@ public interface CarService {
     CarAccommodation getCarAccommodationFromString(String accommodation);
 
     double calculatePrice(Car car, double distance);
+
+    CarDTO findByDriverid(Long id);
 }

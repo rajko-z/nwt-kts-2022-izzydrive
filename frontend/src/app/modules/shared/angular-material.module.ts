@@ -18,6 +18,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
 
 
 // If you have any additional modules to be shared add them to the list
@@ -41,7 +43,9 @@ const materialModules = [
   NgxMaterialTimepickerModule,
   MatTooltipModule, 
   MatSortModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatButtonToggleModule,
+  MatCardModule
 ];
 
 @NgModule({

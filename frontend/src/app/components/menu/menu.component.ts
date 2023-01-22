@@ -64,4 +64,8 @@ export class MenuComponent implements OnInit {
   openNotificationReview() {
     this.router.navigateByUrl("/user/notifications");
   }
+
+  openProfilePage(){
+    this.router.navigateByUrl("/user/profile-page")
+  }
 }
