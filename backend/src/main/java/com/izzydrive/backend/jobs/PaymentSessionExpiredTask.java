@@ -1,7 +1,8 @@
 package com.izzydrive.backend.jobs;
 
 import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.service.DrivingService;
+import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,22 @@ public class PaymentSessionExpiredTask {
 
     private final DrivingService drivingService;
 
+    private final DrivingValidationService drivingValidationService;
+
     @Scheduled(cron = "${payment-session-expired-job.cron}")
     public void cancelDrivingForExpiredPaymentSession() {
         LOG.info("> job started");
+        /**
+         * Putnik ima pravo da pravi od 15 - 10 min pre pocetka voznje
+         * TODO:: proveriti ako se radi o rezervaciji i ako je ostalo manje od 10 min
+         * do pocetka onda je potrebno obrisati rezervaciju i baciti svim putnicima, your
+         * payment session expired, canceling reserved driving.
+         * Obrisati driving, i skinuti reserved from client reservation na driveru
+         * i reservation na putniku
+         * */
         List<Driving> drivings = drivingService.getAllDrivingsInStatusPayment();
         for (Driving d : drivings) {
-            if (drivingService.drivingExpiredForPayment(d) && !d.isLocked()) {
+            if (drivingValidationService.drivingExpiredForPayment(d) && !d.isLocked()) {
                 try {
                     drivingService.removeDrivingPaymentSessionExpired(d.getId());
                     LOG.info(String.format("> driving with id:%d successfully removed", d.getId()));

@@ -3,7 +3,7 @@ package com.izzydrive.backend.converters;
 import com.izzydrive.backend.dto.CarDTO;
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.service.CarService;
+import com.izzydrive.backend.service.users.driver.car.CarService;
 
 public class DriverDTOConverter {
 

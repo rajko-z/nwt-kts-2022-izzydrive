@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
-import {OtherUsersDialogComponent} from "../../../other-users-dialog/other-users-dialog.component";
 import {PlaceOnMap} from "../../../../model/map/placeOnMap";
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {MarkerType} from "../../../../model/map/markerType";
@@ -20,9 +19,9 @@ import {UserService} from "../../../../services/userService/user-sevice.service"
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
 import {addHours, addMinutes} from 'date-fns'
-import { RouteService } from 'src/app/services/routeService/route.service';
-import { RouteDTO } from 'src/app/model/route/route';
-import { ro } from 'date-fns/locale';
+import {RouteService} from 'src/app/services/routeService/route.service';
+import {RouteDTO} from 'src/app/model/route/route';
+
 
 @Component({
   selector: 'app-ride-data-form',
@@ -80,8 +79,7 @@ export class RideDataFormComponent {
     private searchPlaceComponentService: SearchPlaceComponentService,
     private userService: UserService,
     private loggedUserService: LoggedUserService,
-    private snackBar: MatSnackBar,
-    private routeService : RouteService
+    private snackBar: MatSnackBar
   ) {
     this.loggedUserService.getAllUsers().subscribe((res) => {
       this.users = res;
@@ -181,7 +179,9 @@ export class RideDataFormComponent {
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
     drivingFinderRequest.reservation = this.scheduleRide;
-    drivingFinderRequest.scheduleTime = this.getScheduleTime();
+    if (drivingFinderRequest.reservation) {
+        drivingFinderRequest.scheduleTime = this.getScheduleTime();
+    }
     return drivingFinderRequest;
   }
 
@@ -194,7 +194,28 @@ export class RideDataFormComponent {
         dateTime.setDate(date.getDate() + 1);
       }
     }
-    return dateTime;
+    console.log(this.formatDate(dateTime));
+    return this.formatDate(dateTime);
+  }
+
+  padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+  formatDate(date) {
+    return (
+      [
+        date.getFullYear(),
+        this.padTo2Digits(date.getMonth() + 1),
+        this.padTo2Digits(date.getDate()),
+      ].join('-') +
+      ' ' +
+      [
+        this.padTo2Digits(date.getHours()),
+        this.padTo2Digits(date.getMinutes()),
+        this.padTo2Digits(date.getSeconds()),
+      ].join(':')
+    );
   }
 
   private checkTime(): boolean {
@@ -271,6 +292,24 @@ export class RideDataFormComponent {
       this.searchPlaceComponentService.sendLocationFieldErrorSignal();
       return false;
     }
+
+    if (this.secondIntermediatePlace !== null && this.firstIntermediatePlace == null) {
+      this.snackBar.open("First intermediate stations should be selected before second", "ERROR", {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+      });
+      return false;
+    }
+    if (this.thirdIntermediatePlace !== null && (this.firstIntermediatePlace == null || this.secondIntermediatePlace == null)) {
+      this.snackBar.open("First and second intermediate stations should be selected before third", "ERROR", {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+      });
+      return false;
+    }
+
     return true;
   }
 
@@ -381,9 +420,5 @@ export class RideDataFormComponent {
     this.routeForm.patchValue({
       userEmailFriendsThird: ''
     });
-  }
-
-  openDialogOtherUsers() {
-    this.dialog.open(OtherUsersDialogComponent);
   }
 }

@@ -6,10 +6,11 @@ import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
-import com.izzydrive.backend.service.DrivingFinderService;
-import com.izzydrive.backend.service.DrivingService;
-import com.izzydrive.backend.service.ProcessDrivingRequestService;
-import com.izzydrive.backend.service.ProcessDrivingReservationService;
+import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
+import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
+import com.izzydrive.backend.service.drivingprocessing.reservation.ProcessDrivingReservationService;
+import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,11 @@ public class DrivingController {
 
     private final DrivingService drivingService;
 
-    private final DrivingFinderService drivingFinderService;
+    private final DrivingFinderRegularService drivingFinderRegularService;
 
-    private final ProcessDrivingRequestService processDrivingRequestService;
+    private final DrivingFinderReservationService drivingFinderReservationService;
+
+    private final ProcessDrivingRegularService processDrivingRegularService;
 
     private final ProcessDrivingReservationService processDrivingReservationService;
 
@@ -49,28 +52,28 @@ public class DrivingController {
 
     @PostMapping("/finder/simple")
     public ResponseEntity<List<DrivingOptionDTO>> findSimpleDrivings(@RequestBody @Valid List<AddressOnMapDTO> addresses) {
-        List<DrivingOptionDTO> retVal = drivingFinderService.getSimpleDrivingOptions(addresses);
+        List<DrivingOptionDTO> retVal = drivingFinderRegularService.getSimpleDrivingOptions(addresses);
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping("finder/advanced")
     public ResponseEntity<List<DrivingOptionDTO>> findAdvancedDrivings(@RequestBody @Valid DrivingFinderRequestDTO request) {
-        List<DrivingOptionDTO> retVal = drivingFinderService.getAdvancedDrivingOptions(request);
+        List<DrivingOptionDTO> retVal = drivingFinderRegularService.getAdvancedDrivingOptions(request);
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping("finder/schedule")
     public ResponseEntity<List<DrivingOptionDTO>> findScheduleDrivings(@RequestBody @Valid DrivingFinderRequestDTO request) {
-        List<DrivingOptionDTO> retVal = drivingFinderService.getScheduleDrivingOptions(request);
+        List<DrivingOptionDTO> retVal = drivingFinderReservationService.getScheduleDrivingOptions(request);
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping(value = "/process")
     public ResponseEntity<TextResponse> processDrivingRequest(@RequestBody DrivingRequestDTO request) {
-        this.processDrivingRequestService.process(request);
+        this.processDrivingRegularService.process(request);
         return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
     }
 

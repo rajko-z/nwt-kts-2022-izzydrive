@@ -12,11 +12,16 @@ export class CurrentDrivingPassengerComponent implements OnInit {
 
   @Input() currentDriving: DrivingWithLocations;
 
+  minLeft: number;
+
   constructor( private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
   }
+
+
+
 
   reportDriver() {
     this.snackBar.openFromComponent(ReportDriverCheckComponent, {

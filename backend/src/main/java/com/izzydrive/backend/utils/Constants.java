@@ -15,4 +15,6 @@ public class Constants {
     public static int MINUTES_INTERVAL_BEFORE_RESERVATION = 45;
 
     public static int MINUTE_FOR_EXIST_RESERVATION = 10;
+
+    public static int MIN_MINUTES_LEFT_FOR_RESERVATION_TO_EXPIRE_FOR_PAYMENT = 10;
 }

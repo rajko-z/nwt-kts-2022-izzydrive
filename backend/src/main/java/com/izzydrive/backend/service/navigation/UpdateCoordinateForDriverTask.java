@@ -1,8 +1,8 @@
 package com.izzydrive.backend.service.navigation;
 
 import com.izzydrive.backend.config.SpringContext;
-import com.izzydrive.backend.service.users.DriverService;
-import com.izzydrive.backend.service.users.impl.DriverServiceImpl;
+import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.users.driver.DriverServiceImpl;
 
 public class UpdateCoordinateForDriverTask implements Runnable{
 

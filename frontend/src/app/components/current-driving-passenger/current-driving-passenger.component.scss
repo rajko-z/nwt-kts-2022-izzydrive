@@ -35,6 +35,13 @@
     padding: 10% 20%;
     border-radius: 50px;
   }
+
+  .time-title {
+    @include setFont(14px);
+    color: $dark3;
+    margin: 0 4%;
+    text-align: center;
+  }
 }
 
 .location, .intermediate-station, .other-users {

@@ -33,7 +33,7 @@ public final class ExceptionMessageConstants {
     public static final String ERROR_SIZE_OF_INTERMEDIATE_LOCATIONS = "Currently only up to 3 intermediate locations are supported";
     public static final String DRIVER_NO_LONGER_AVAILABLE = "Sorry, but driver you chosen is no longer available. Please go back and choose another one, or try again later";
     public static final String YOU_ALREADY_HAVE_CURRENT_DRIVING = "You already have a ride, wait for the ride to finish and you can order another one";
-    public static final String YOU_DON_NOT_HAVING_DRIVING_FOR_PAYMENT = "You do not have driving for payment";
+    public static final String YOU_DO_NOT_HAVE_DRIVING_FOR_PAYMENT = "You do not have driving for payment";
     public static final String MAX_NUMBER_OF_LINKED_PASSENGERS = "You can add up to 3 linked passengers";
     public static final String ERROR_START_AND_END_LOCATION = "You have to provide one start and one end location";
     public static final String DRIVING_DOESNT_EXIST = "Driving with that id doesn't exists";
@@ -46,7 +46,7 @@ public final class ExceptionMessageConstants {
     public static final String CANT_USE_EXISTING_PAYING_DATA = "Can't use existing paying data, because you dont have one";
     public static final String NOTIFICATION_DOESNT_EXIST = "Notification with that id doesn't exists";
     public static final String FAVORITE_ROUTES_NOT_FOUND = "You don't have favorite routes";
-
+    public static final String YOU_DO_NOT_HAVE_CURRENT_WAITING_DRIVING = "You don't have current driving that you are waiting for";
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);

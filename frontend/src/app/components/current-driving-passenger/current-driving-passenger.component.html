@@ -16,13 +16,14 @@
         </div>
         <div class="other-users" *ngFor="let pass of currentDriving.passengers">
           <em class='fas fa-users'></em>
-          <p class="users-title">Other passengers: <span>{{pass}}</span></p>
+          <p class="users-title">Passengers: <span>{{pass}}</span></p>
         </div>
       </div>
 <!--            <div class="report-info">-->
 <!--              <button type="button" class="report-button" (click)="reportDriver()">Report</button>-->
 <!--            </div>-->
       <div class="time-info">
+        <p class="time-title">Driver comes for:</p>
         <p class="minutes">{{currentDriving.fromDriverToStart.duration * 1000 | date:'m'}}min</p>
       </div>
     </div>
@@ -67,8 +68,6 @@
         </div>
       </div>
     </div>
-    <div class="third-line">
-      <p class="price-title">= <span class="price">{{currentDriving.price}} $</span></p>
-    </div>
+
   </div>
 </div>

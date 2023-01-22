@@ -23,6 +23,7 @@ export class RideDataTableComponent implements OnInit, OnChanges {
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
+
   }
 
   ngOnChanges(changes: SimpleChanges) {

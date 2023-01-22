@@ -101,7 +101,7 @@ VALUES (5614.2, 'ACTIVE', 441.2, null, false, null, 432432.3, false, '2023-01-12
 -- 2. cara dusana - safarikova multistanice - buduca voznja
 INSERT INTO public.driving(
     creation_date, distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start , deleted)
-VALUES ('2023-01-20 18:00:00', 2900.9, 'WAITING', 313.7, null, true, null, 432432.3, false, '2023-01-20 18:00:00', 2, null, 3, '2023-01-16 22:00:00', false, 1, 0, 0, false);
+VALUES ('2023-01-20 18:00:00', 2900.9, 'WAITING', 313.7, null, true, null, 432432.3, false, '2023-01-20 22:00:00', 2, null, 3, '2023-01-30 22:00:00', false, 1, 0, 0, false);
 
 
 INSERT INTO notification(price, reservation_date, message, duration, distance, start_location, end_location, user_email, notification_status, creation_date)
