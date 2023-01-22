@@ -35,7 +35,7 @@ export class CarService {
 }
 
 editCarData(car : Car) : Observable<TextResponse>{
-  return this.http.putT<TextResponse>(environment.apiUrl + "/cars/edit", car);
+  return this.http.putT<TextResponse>(environment.apiUrl + "cars/edit", car);
 }
 }
  

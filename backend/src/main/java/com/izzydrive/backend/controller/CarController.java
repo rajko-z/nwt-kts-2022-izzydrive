@@ -25,7 +25,7 @@ public class CarController {
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
     @PutMapping("/edit")
     public ResponseEntity<TextResponse> editCar(@RequestBody CarDTO carDTO){
         this.carService.editCar(carDTO);

@@ -32,12 +32,13 @@ export class EditCarComponent implements OnInit {
   }
 
   onFormSubmit(carForm : FormGroup){
-    this.carService.editCarData(carForm.value).subscribe({
+    let car : Car = carForm.value;
+    car.id = this.carData.id;
+    this.carService.editCarData(car).subscribe({
       next: (response) => {
-        console.log(response)
+        this.snackbar.open(response.text, "Ok")
       },
       error : (error) => {
-        console.log(error);
         this.snackbar.open(error.error.message, "ERROR")
       }
     })
