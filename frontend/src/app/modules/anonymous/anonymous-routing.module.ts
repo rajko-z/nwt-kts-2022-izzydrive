@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {HomePageUnLoggedComponent} from "../../pages/home-page-un-logged/home-page-un-logged.component";
 import {LoginComponent} from "../../components/onboarding/views/login/login.component";
 import {RegisterComponent} from "../../components/onboarding/views/register/register.component";
+import { ResetPasswordComponent } from "src/app/components/profile/reset-password/reset-password.component";
 
 const routes: Routes = [
   {
@@ -16,7 +17,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
-  }
+  },
+  {
+    path: 'reset-password/:type',
+    component: ResetPasswordComponent,
+  }, 
 ];
 
 @NgModule({

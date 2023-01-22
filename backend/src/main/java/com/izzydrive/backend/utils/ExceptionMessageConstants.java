@@ -2,6 +2,8 @@ package com.izzydrive.backend.utils;
 
 public final class ExceptionMessageConstants {
 
+
+
     private ExceptionMessageConstants() {
     }
 
@@ -47,6 +49,9 @@ public final class ExceptionMessageConstants {
     public static final String NOTIFICATION_DOESNT_EXIST = "Notification with that id doesn't exists";
     public static final String FAVORITE_ROUTES_NOT_FOUND = "You don't have favorite routes";
     public static final String YOU_DO_NOT_HAVE_CURRENT_WAITING_DRIVING = "You don't have current driving that you are waiting for";
+    public static final String ALREADY_USED_THIS_LINK = "You already used this link";
+    public static final String INVALID_RESET_PASSWORD_TOKEN = "There is no user with provided token";
+
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);

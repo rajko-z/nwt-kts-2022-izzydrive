@@ -50,3 +50,14 @@ $facebook_blue: "#8984FF";
     flex-grow: 0.5;
 }
 
+.reset-password-link{
+    border-bottom: solid $dark3 1px;
+    color: $dark3;
+    margin-top: 10px;
+    border-radius: 0;
+}
+
+.reset-password-link.mat-button
+{
+  background-color: white;
+}

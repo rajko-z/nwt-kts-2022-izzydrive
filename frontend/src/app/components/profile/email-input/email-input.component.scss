@@ -1,0 +1,44 @@
+@import "src/style/styles";
+@import "src/app/components/shared/shared";
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+.mat-form-field {
+  @include size(25vw, auto);
+  min-width: 150px;
+}
+
+.submit-item{
+  @include size(auto, 5vh);
+  display: flex;
+  justify-content: flex-end;
+  margin: 2% 5% 0 0;
+
+  .submit-button{
+    @include buttonStyle();
+    @include size(45%, 80%);
+    @include setFont(16px);
+    min-height: 30px;
+  }
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 20px;
+    @include setFont(16px);
+    color: $dark3;
+    font-weight: 500;
+}
+
+.email-input-form{
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+

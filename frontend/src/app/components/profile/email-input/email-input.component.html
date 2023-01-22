@@ -1,0 +1,22 @@
+<div class="email-input-form">
+    <div class="header">
+        Enter the email where we can send you the link to reset the password
+    </div>
+    <div class="container" [formGroup]="this.emailForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput
+               required
+               formControlName="email"
+        >
+        <mat-error *ngIf="this.emailForm.controls['email'].hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="this.emailForm.controls['email'].hasError('email')">Required format: you@email.com</mat-error>    
+      </mat-form-field>
+    </div>
+    <div class="submit-item">
+      <button class="submit-button" (click)="onSubmit()" mat-dialog-close>
+        Send
+      </button>
+    </div>
+</div>
+  

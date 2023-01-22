@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { Role } from 'src/app/model/user/role';
+import { EmailInputComponent } from 'src/app/components/profile/email-input/email-input.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +41,9 @@ export class LoginComponent implements OnInit {
               private _ngZone: NgZone, 
               private router: Router,
               private responseMessage: ResponseMessageService,
-              private chatService : ChatService) {
+              private chatService : ChatService,
+              private matDialog: MatDialog
+) {
 
   }
 
@@ -136,5 +140,10 @@ export class LoginComponent implements OnInit {
     this.socialAuthService.signOut();
   }
 
-
+  onResetPassword(){
+    this.matDialog.open(EmailInputComponent, {
+      width:'400px',   // Set width to 600px
+      height:'350px',  // Set height to 530px
+    });
+  }
 }

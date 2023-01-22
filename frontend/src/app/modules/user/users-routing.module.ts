@@ -5,6 +5,7 @@ import {EditProfileComponent} from "../../components/profile/edit-profile/edit-p
 import {
   NotificationReviewComponent
 } from "../../components/notifications/notification-review/notification-review.component";
+import { ResetPasswordComponent } from "src/app/components/profile/reset-password/reset-password.component";
 
 const routes: Routes = [
   {
@@ -22,7 +23,7 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: NotificationReviewComponent,
-  },
+  }
 ];
 
 @NgModule({

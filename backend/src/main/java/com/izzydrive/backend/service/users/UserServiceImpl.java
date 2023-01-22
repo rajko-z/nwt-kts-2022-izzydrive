@@ -1,8 +1,12 @@
 package com.izzydrive.backend.service.users;
 
+import com.izzydrive.backend.confirmationToken.ConfirmationToken;
+import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
 import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.ResetPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.User;
@@ -14,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,10 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.izzydrive.backend.utils.ExceptionMessageConstants.USER_DOESNT_EXISTS;
@@ -38,6 +40,10 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final EmailSender emailSender;
+
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     @Transactional
@@ -166,6 +172,27 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user.get());
     }
 
+    @Override
+    public void sendEmailForResetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
+        String token = UUID.randomUUID().toString();
+        this.confirmationTokenService.createVerificationToken(user, token);
+        this.emailSender.sendResetPasswordLink(user.getEmail(), token);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        ConfirmationToken token  = confirmationTokenService.fingByToken(resetPasswordDTO.getToken());
+        User user = token.getUser();
+        if (user != null &&
+                Validator.validateMatchingPassword(resetPasswordDTO.getPassword(), resetPasswordDTO.getRepeatedPassword()) &&
+                Validator.validatePassword(resetPasswordDTO.getPassword())) {
+            user.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
+            userRepository.save(user);
+        }
+    }
+
     private boolean passwordsMatch(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
@@ -176,6 +203,8 @@ public class UserServiceImpl implements UserService {
                 Validator.validateLastName(userDTO.getLastName()) &&
                 Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
+
+
 
 
 }

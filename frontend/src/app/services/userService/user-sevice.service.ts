@@ -7,6 +7,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from 'src/app/model/user/role';
 import { User } from 'src/app/model/user/user';
 import {Router} from "@angular/router";
+import { TextResponse } from 'src/app/model/response/textresponse';
+import { ResetPassword } from 'src/app/model/user/resetPassword';
 
 @Injectable({
   providedIn: 'root'
@@ -148,5 +150,18 @@ export class UserService {
       })       
     return "";
   }
+
+  sendResetPasswordEmail(email : string):Observable<TextResponse>{
+    return this.http.post<TextResponse>(environment.apiUrl + "users/reset-password-email", email);
+ }
+
+  verifyResetPasswordToken(token: string) {
+    return this.http.get<TextResponse>(environment.apiUrl + "confirmation/reset-password?token=" + token);
+  }
+
+  resetPassword(resetPassword : ResetPassword) {
+    return this.http.put<TextResponse>(environment.apiUrl + "users/reset-password" , resetPassword);
+  }
+
 
 }

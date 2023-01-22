@@ -19,11 +19,13 @@ public class ConfirmationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(nullable = true, name = "my_user_id")
     private User user;
 
     private Date expiryDate;
+
+    private boolean verified;
 
     public ConfirmationToken() {
         expiryDate = calculateExpiryDate();
@@ -66,6 +68,14 @@ public class ConfirmationToken {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }
 

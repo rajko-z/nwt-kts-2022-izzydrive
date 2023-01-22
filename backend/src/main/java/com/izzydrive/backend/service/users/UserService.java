@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service.users;
 
 import com.izzydrive.backend.dto.NewPasswordDTO;
+import com.izzydrive.backend.dto.ResetPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.model.users.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,4 +30,8 @@ public interface UserService extends UserDetailsService {
     User disconnectFromChat(String email);
 
     User getCurrentlyLoggedUser();
+
+    void sendEmailForResetPassword(String email);
+
+    void resetPassword(ResetPasswordDTO resetPasswordDTO);
 }

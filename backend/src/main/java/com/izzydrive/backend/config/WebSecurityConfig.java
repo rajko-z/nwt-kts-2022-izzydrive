@@ -88,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/auth/login-fb",
                 "/auth/login-google",
                 "/passengers/registration",
-                "/driving/finder/simple");
+                "/driving/finder/simple",
+                "/users/reset-password-email");
 
         web.ignoring().antMatchers(HttpMethod.GET,
                 "/", "/webjars/**",
@@ -98,9 +99,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/maps/**",
                 "/drivers/current-locations",
                 "/confirmation",
+                "/confirmation/reset-password",
                 "/working-intervals/get-minutes/**",
                 "/socket/**",
                 "/**/*.css",
-                "/**/*.js");
+                "/**/*.js"
+                );
+
+        web.ignoring().antMatchers(HttpMethod.PUT,
+                "/users/reset-password");
+
     }
 }
