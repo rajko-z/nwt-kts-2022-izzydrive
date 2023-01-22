@@ -26,7 +26,7 @@ public class Route {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Address end;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @OrderColumn(name = "station_order")
     @JoinTable(name="intermediate_stations",
               joinColumns = @JoinColumn(name="route_id", referencedColumnName = "id"),

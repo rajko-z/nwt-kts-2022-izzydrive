@@ -11,5 +11,5 @@ export class DrivingFinderRequest {
   optimalDrivingType: OptimalDrivingType;
   linkedPassengersEmails: string[];
   reservation: boolean;
-  scheduleTime: Date;
+  scheduleTime?: string;
 }

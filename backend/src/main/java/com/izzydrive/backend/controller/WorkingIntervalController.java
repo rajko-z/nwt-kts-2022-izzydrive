@@ -1,6 +1,6 @@
 package com.izzydrive.backend.controller;
 
-import com.izzydrive.backend.service.WorkingIntervalService;
+import com.izzydrive.backend.service.users.driver.workingtime.WorkingIntervalService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

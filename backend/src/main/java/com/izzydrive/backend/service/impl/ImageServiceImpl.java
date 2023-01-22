@@ -1,9 +1,7 @@
 package com.izzydrive.backend.service.impl;
 
 import com.izzydrive.backend.exception.InternalServerException;
-import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Image;
-import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.ImageRepository;
 import com.izzydrive.backend.service.ImageService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -18,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;

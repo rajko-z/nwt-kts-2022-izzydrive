@@ -20,6 +20,8 @@ import {UserService} from "../../../../services/userService/user-sevice.service"
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
 import {addHours, addMinutes} from 'date-fns'
+import {bounds} from "leaflet";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-ride-data-form',
@@ -160,7 +162,9 @@ export class RideDataFormComponent {
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
     drivingFinderRequest.reservation = this.scheduleRide;
-    drivingFinderRequest.scheduleTime = this.getScheduleTime();
+    if (drivingFinderRequest.reservation) {
+        drivingFinderRequest.scheduleTime = this.getScheduleTime();
+    }
     return drivingFinderRequest;
   }
 
@@ -173,7 +177,28 @@ export class RideDataFormComponent {
         dateTime.setDate(date.getDate() + 1);
       }
     }
-    return dateTime;
+    console.log(this.formatDate(dateTime));
+    return this.formatDate(dateTime);
+  }
+
+  padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+  formatDate(date) {
+    return (
+      [
+        date.getFullYear(),
+        this.padTo2Digits(date.getMonth() + 1),
+        this.padTo2Digits(date.getDate()),
+      ].join('-') +
+      ' ' +
+      [
+        this.padTo2Digits(date.getHours()),
+        this.padTo2Digits(date.getMinutes()),
+        this.padTo2Digits(date.getSeconds()),
+      ].join(':')
+    );
   }
 
   private checkTime(): boolean {
@@ -250,6 +275,24 @@ export class RideDataFormComponent {
       this.searchPlaceComponentService.sendLocationFieldErrorSignal();
       return false;
     }
+
+    if (this.secondIntermediatePlace !== null && this.firstIntermediatePlace == null) {
+      this.snackBar.open("First intermediate stations should be selected before second", "ERROR", {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+      });
+      return false;
+    }
+    if (this.thirdIntermediatePlace !== null && (this.firstIntermediatePlace == null || this.secondIntermediatePlace == null)) {
+      this.snackBar.open("First and second intermediate stations should be selected before third", "ERROR", {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+      });
+      return false;
+    }
+
     return true;
   }
 
@@ -360,9 +403,5 @@ export class RideDataFormComponent {
     this.routeForm.patchValue({
       userEmailFriendsThird: ''
     });
-  }
-
-  openDialogOtherUsers() {
-    this.dialog.open(OtherUsersDialogComponent);
   }
 }

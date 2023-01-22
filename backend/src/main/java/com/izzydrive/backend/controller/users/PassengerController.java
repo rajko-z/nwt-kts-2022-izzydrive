@@ -4,7 +4,7 @@ import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.service.users.PassengerService;
+import com.izzydrive.backend.service.users.passenger.PassengerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class PassengerController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/current-driving-left-to-start")
     public ResponseEntity<CalculatedRouteDTO> findEstimatedTimeLeftForCurrentDrivingToStart() {
-        CalculatedRouteDTO retVal = this.passengerService.getEstimatedTimeLeftForCurrentDrivingToStart();
-        return new ResponseEntity<>(retVal, HttpStatus.OK);
+        // TODO::
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

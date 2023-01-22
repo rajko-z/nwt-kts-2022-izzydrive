@@ -3,7 +3,7 @@ package com.izzydrive.backend.controller.users;
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
-import com.izzydrive.backend.service.users.DriverService;
+import com.izzydrive.backend.service.users.driver.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

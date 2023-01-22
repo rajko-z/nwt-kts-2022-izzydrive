@@ -1,9 +1,8 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
-import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.service.maps.MapService;
-import com.izzydrive.backend.service.users.DriverService;
+import com.izzydrive.backend.service.users.driver.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -97,9 +97,9 @@ public class MapServiceImpl implements MapService {
 
         if (points.size() == 4) {
             CalculatedRouteDTO option1 = concatRoutesIntoOne(Arrays.asList(startToFirst, firstToSecond, secondToEnd));
-            option1.setReorderedIntermediate(List.of(start, first, second, end));
+            option1.setReorderedIntermediate(List.of(first, second));
             CalculatedRouteDTO option2 = concatRoutesIntoOne(Arrays.asList(startToSecond, secondToFirst, firstToEnd));
-            option1.setReorderedIntermediate(List.of(start, second, first, end));
+            option2.setReorderedIntermediate(List.of(second, first));
             return List.of(findBestMatchFromCalculatedRoutesByOptimalCriteria(Arrays.asList(option1, option2), optimalDrivingType));
         }
 
