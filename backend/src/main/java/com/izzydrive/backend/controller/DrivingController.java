@@ -133,6 +133,13 @@ public class DrivingController {
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("next-driving")
+    public ResponseEntity<DrivingDTO> getReservation(){
+        DrivingDTO driving = drivingService.getReservation();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("delete/{id}")
     public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id){

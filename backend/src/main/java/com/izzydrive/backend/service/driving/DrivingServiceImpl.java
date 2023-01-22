@@ -330,6 +330,15 @@ public class DrivingServiceImpl implements DrivingService {
         return null;
     }
 
+    @Override
+    public DrivingDTO getReservation() {
+//        Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
+//        if (driver.getCurrentDriving() != null) {
+//            return findDriving(driver.getCurrentDriving().getId());
+//        }
+        return null;
+    }
+
     private DrivingDTO findDriving(Long drivingId) {
         try {
             Driving driving = drivingRepository.findById(drivingId)

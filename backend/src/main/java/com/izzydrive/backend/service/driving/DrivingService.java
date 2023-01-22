@@ -42,6 +42,8 @@ public interface DrivingService {
 
     DrivingDTO getNextDriving();
 
+    DrivingDTO getReservation();
+
     void deleteDriving(Long id);
 
     Driving findByIdWithLocationsAndDriver(Long id);
