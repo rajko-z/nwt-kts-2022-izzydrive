@@ -34,7 +34,6 @@ export class NotificationService {
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
-    console.log(notification);
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.openFromComponent(component, {
         data: {

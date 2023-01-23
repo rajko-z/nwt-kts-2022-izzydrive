@@ -18,7 +18,7 @@ public class Constants {
 
     public static int MIN_MINUTES_LEFT_FOR_RESERVATION_TO_EXPIRE_FOR_PAYMENT = 10;
 
-    public static int FIRST_INTERVAL_BEFORE_RESERVATION = 30;//15
+    public static int FIRST_INTERVAL_BEFORE_RESERVATION = 30;//15 - radi lakseg testiranja
 
     public static int SECOND_INTERVAL_BEFORE_RESERVATION = 25;//10
 

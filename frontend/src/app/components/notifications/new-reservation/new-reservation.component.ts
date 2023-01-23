@@ -2,9 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {DrivingService} from "../../../services/drivingService/driving.service";
-import {User} from "../../../model/user/user";
 import {UserService} from "../../../services/userService/user-sevice.service";
-import {user} from "@angular/fire/auth";
 
 @Component({
   selector: 'app-new-reservation',

@@ -26,7 +26,7 @@ export class PaymentReservationComponent implements OnInit {
   }
 
   cancelRideClick() {
-    //delete reservation - imam funkciju na beku
+    //delete reservation
     this.drivingService.cancelReservation(this.data.drivingId).subscribe({
       next: (response) => {
         this.router.navigateByUrl('/passenger');

@@ -51,7 +51,6 @@ export class ReservationPageDriverComponent implements OnInit {
   private loadData() {
     this.drivingService.getReservation().subscribe((res) => {
       const driving: Driving = res as Driving;
-      console.log(driving);
       if (driving.driverEmail === this.userService.getCurrentUserEmail()) {
         this.reservation = driving;
       }

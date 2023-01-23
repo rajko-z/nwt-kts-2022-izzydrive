@@ -231,7 +231,6 @@ public class DrivingServiceImpl implements DrivingService {
             for (String passengerEmail : passengersToSendNotifications) {
                 this.notificationService.sendNotificationCancelDriving(passengerEmail, driving.get());
             }
-            //add notification to driver - reservation is cancel
             this.notificationService.sendNotificationCancelDriving(driving.get().getDriver().getEmail(), driving.get());
             this.simpMessagingTemplate.convertAndSend("/driving/loadReservation", new DrivingDTO(driving.get().getDriver().getEmail()));
 

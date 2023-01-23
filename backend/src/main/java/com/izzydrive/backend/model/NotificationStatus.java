@@ -14,5 +14,4 @@ public enum NotificationStatus {
     RESERVATION_REMINDER,
     PAYMENT_RESERVATION,
     RESERVATION_DELETE
-    //obavestenja o rezervaciji na 15, 10, 5 min
 }
