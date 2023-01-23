@@ -39,6 +39,15 @@ export class NewReservationComponent implements OnInit {
 
   cancelReservationClick() {
     //reject reservation
+    this.drivingService.cancelReservation(this.data.drivingId).subscribe({
+      next: (response) => {
+        this.router.navigateByUrl('/passenger');
+        // this.snackbar.open(response.text, "OK")
+      },
+      error: (error) => {
+        // this.snackbar.open(error.error.message, "OK")
+      }
+    })
     this.data.preClose();
   }
 }

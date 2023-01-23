@@ -221,7 +221,6 @@ public class DrivingServiceImpl implements DrivingService {
         if (driving.isPresent()) {
             List<String> passengersToSendNotifications = deleteDrivingFromPassengers2(driving);
             if (driving.get().getDriver() != null) {
-                unlockDriverIfPossible(driving.get().getDriver());//zasto se otkljucava vozac kada nije bio zakljucan?
                 releaseDriverFromReservation(driving.get());
             }
 
@@ -233,6 +232,7 @@ public class DrivingServiceImpl implements DrivingService {
                 this.notificationService.sendNotificationCancelDriving(passengerEmail, driving.get());
             }
             //add notification to driver - reservation is cancel
+            this.notificationService.sendNotificationCancelDriving(driving.get().getDriver().getEmail(), driving.get());
             this.simpMessagingTemplate.convertAndSend("/driving/loadReservation", new DrivingDTO(driving.get().getDriver().getEmail()));
 
             driving.get().setDeleted(true);
@@ -362,7 +362,7 @@ public class DrivingServiceImpl implements DrivingService {
         for (Passenger p : driving.getPassengers()) {
             Passenger passenger = this.passengerService.findByEmailWithCurrentDriving(p.getEmail());
             passenger.setCurrentDriving(null);
-            if(driving.isReservation()){
+            if (driving.isReservation()) {
                 passenger.getDrivings().removeIf(d -> !Objects.equals(d.getId(), driving.getId()));
             }
             passengerService.save(passenger);
@@ -421,8 +421,8 @@ public class DrivingServiceImpl implements DrivingService {
     public void deleteReservation(Driving d) {
         d.getDriver().setReservedFromClientDriving(null);
         driverService.save(d.getDriver());
-        for(Passenger p :d.getAllPassengers()){
-            if(Objects.equals(p.getCurrentDriving().getId(), d.getId())){
+        for (Passenger p : d.getAllPassengers()) {
+            if (Objects.equals(p.getCurrentDriving().getId(), d.getId())) {
                 p.setCurrentDriving(null);
             }
             p.getDrivings().removeIf(driving -> !Objects.equals(d.getId(), driving.getId()));
