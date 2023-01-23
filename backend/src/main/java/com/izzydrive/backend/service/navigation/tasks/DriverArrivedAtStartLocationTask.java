@@ -1,19 +1,15 @@
 package com.izzydrive.backend.service.navigation.tasks;
 
 import com.izzydrive.backend.config.SpringContext;
-import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.users.User;
-import com.izzydrive.backend.service.NotificationService;
-import com.izzydrive.backend.service.impl.NotificationServiceImpl;
-import com.izzydrive.backend.service.notification.DriverNotificationService;
-import com.izzydrive.backend.service.notification.DriverNotificationServiceImpl;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.service.notification.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationServiceImpl;
+import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
+import com.izzydrive.backend.service.notification.driver.DriverNotificationServiceImpl;
 
 public class DriverArrivedAtStartLocationTask  implements Runnable {
 
-    private final Driving driving;
+    private final DrivingDTOWithLocations driving;
 
     private NotificationService getNotificationService() {
         return SpringContext.getBean(NotificationServiceImpl.class);
@@ -23,14 +19,13 @@ public class DriverArrivedAtStartLocationTask  implements Runnable {
         return SpringContext.getBean(DriverNotificationServiceImpl.class);
     }
 
-    public DriverArrivedAtStartLocationTask(Driving driving) {
+    public DriverArrivedAtStartLocationTask(DrivingDTOWithLocations driving) {
         this.driving = driving;
     }
 
     @Override
     public void run() {
-        List<String> passEmails = driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList());
-        getNotificationService().sendNotificationDriverArrivedAtStartLocation(passEmails);
+        getNotificationService().sendNotificationDriverArrivedAtStartLocation(driving.getPassengers());
         getDriverNotificationService().sendSignalThatDriverArrivedAtStart(driving.getDriver().getEmail());
     }
 }

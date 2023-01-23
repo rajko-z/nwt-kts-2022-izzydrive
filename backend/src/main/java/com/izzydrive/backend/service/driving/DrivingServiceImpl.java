@@ -11,14 +11,10 @@ import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.EvaluationService;
-import com.izzydrive.backend.service.NotificationService;
-import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class DrivingServiceImpl implements DrivingService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DrivingServiceImpl.class);
-
     private final DrivingRepository drivingRepository;
-
-    private final DriverService driverService;
 
     private final PassengerService passengerService;
 
@@ -47,19 +39,15 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final PassengerRepository passengerRepository;
 
-    private final DriverService driverRepository;
-
     private final SimpMessagingTemplate simpMessagingTemplate;
 
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, NotificationService notificationService, EvaluationService evaluationService, DriverService driverService, PassengerRepository passengerRepository, DriverService driverRepository, SimpMessagingTemplate simpMessagingTemplate) {
+    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, NotificationService notificationService, EvaluationService evaluationService, PassengerRepository passengerRepository, SimpMessagingTemplate simpMessagingTemplate) {
         this.drivingRepository = drivingRepository;
         this.passengerService = passengerService;
         this.notificationService = notificationService;
         this.evaluationService = evaluationService;
-        this.driverService = driverService;
         this.passengerRepository = passengerRepository;
-        this.driverRepository = driverRepository;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -188,7 +176,6 @@ public class DrivingServiceImpl implements DrivingService {
     private void releaseDriverFromReservation(Driving reservation) {
         Driver d = reservation.getDriver();
         d.setReservedFromClientDriving(null);
-        driverRepository.save(d);
     }
 
     @Override
@@ -222,42 +209,6 @@ public class DrivingServiceImpl implements DrivingService {
         return driving.filter(value -> value.getPassengers().stream()
                 .filter(Passenger::isApprovedPaying)
                 .count() == value.getPassengers().size()).isPresent();
-    }
-
-    @Override
-    @Transactional
-    public DrivingDTOWithLocations getCurrentDriving() {
-        try {
-            Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
-            if (driver.getCurrentDriving() == null) {
-                return null;
-            }
-            if (driver.getCurrentDriving().isRejected()) {
-                return null;
-            }
-            return findDrivingWithLocationsDTOById(driver.getCurrentDriving().getId());
-        } catch (OptimisticLockingFailureException e) {
-            LOG.error(e.getMessage());
-        }
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public DrivingDTOWithLocations getNextDriving() {
-        try {
-            Driver driver = driverService.getCurrentlyLoggedDriverWithNextDriving();
-            if (driver.getNextDriving() == null) {
-                return null;
-            }
-            if (driver.getNextDriving().isRejected()) {
-                return null;
-            }
-            return findDrivingWithLocationsDTOById(driver.getNextDriving().getId());
-        } catch (OptimisticLockingFailureException e) {
-            LOG.error(e.getMessage());
-        }
-        return null;
     }
 
     @Override

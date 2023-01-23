@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users.driver;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.email.EmailSender;
@@ -11,11 +12,15 @@ import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.DriverRepository;
+import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class DriverServiceImpl implements DriverService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DriverServiceImpl.class);
+
     private final DriverRepository driverRepository;
 
     private final CarService carService;
@@ -41,6 +48,8 @@ public class DriverServiceImpl implements DriverService {
     private final PasswordEncoder passwordEncoder;
 
     private final EmailSender emailSender;
+
+    private final DrivingService drivingService;
 
     @Override
     public Optional<Driver> findByEmail(String email) {
@@ -157,5 +166,41 @@ public class DriverServiceImpl implements DriverService {
         String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return this.driverRepository.findByEmailWithNextDriving(driverEmail)
                 .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+    }
+
+    @Override
+    @Transactional
+    public DrivingDTOWithLocations getCurrentDriving() {
+        try {
+            Driver driver = getCurrentlyLoggedDriverWithCurrentDriving();
+            if (driver.getCurrentDriving() == null) {
+                return null;
+            }
+            if (driver.getCurrentDriving().isRejected()) {
+                return null;
+            }
+            return drivingService.findDrivingWithLocationsDTOById(driver.getCurrentDriving().getId());
+        } catch (OptimisticLockingFailureException e) {
+            LOG.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public DrivingDTOWithLocations getNextDriving() {
+        try {
+            Driver driver = getCurrentlyLoggedDriverWithNextDriving();
+            if (driver.getNextDriving() == null) {
+                return null;
+            }
+            if (driver.getNextDriving().isRejected()) {
+                return null;
+            }
+            return drivingService.findDrivingWithLocationsDTOById(driver.getNextDriving().getId());
+        } catch (OptimisticLockingFailureException e) {
+            LOG.error(e.getMessage());
+        }
+        return null;
     }
 }

@@ -3,6 +3,10 @@ import {DrivingState, DrivingWithLocations} from "../../model/driving/driving";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-check.component";
 import {PassengerService} from "../../services/passengerService/passenger.service";
+import {environment} from "../../../environments/environment";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import {UserService} from "../../services/userService/user-sevice.service";
 
 @Component({
   selector: 'app-current-driving-passenger',
@@ -20,12 +24,17 @@ export class CurrentDrivingPassengerComponent implements OnInit {
 
   waitingForRideToStart: boolean = false;
 
+  private stompClient: any;
+
   constructor(
     private snackBar: MatSnackBar,
-    private passengerService: PassengerService) {
+    private passengerService: PassengerService,
+    private userService: UserService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initializeWebSocketConnection();
+  }
 
   ngOnChanges(): void {
     if (this.currentDriving !== undefined) {
@@ -36,6 +45,32 @@ export class CurrentDrivingPassengerComponent implements OnInit {
         this.fetchNewTimePeriodically();
       }
     }
+  }
+
+  initializeWebSocketConnection() {
+    let ws = new SockJS(environment.socket);
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
+    let that = this;
+    this.stompClient.connect({}, function () {
+      that.openDrivingSocket();
+    });
+  }
+
+  openDrivingSocket() {
+    this.onRideStart();
+  }
+
+  private onRideStart() {
+    this.stompClient.subscribe('/driving/rideStarted', (message: { body: string }) => {
+      console.log(message.body);
+      const emails: string[] = JSON.parse(message.body);
+      for (const email of emails) {
+        if (email === this.userService.getCurrentUserEmail()) {
+          this.drivingActive = true;
+        }
+      }
+    });
   }
 
   fetchNewTimePeriodically() {

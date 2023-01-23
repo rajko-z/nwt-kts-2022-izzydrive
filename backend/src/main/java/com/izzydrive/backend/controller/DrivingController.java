@@ -1,14 +1,18 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.driving.*;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
+import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
+import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
 import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
-import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
 import com.izzydrive.backend.service.drivingprocessing.reservation.ProcessDrivingReservationService;
-import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +39,8 @@ public class DrivingController {
     private final ProcessDrivingReservationService processDrivingReservationService;
 
     private final DrivingRejectionService drivingRejectionService;
+
+    private final DrivingExecutionService drivingExecutionService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
@@ -119,24 +125,17 @@ public class DrivingController {
         return new ResponseEntity<>(new TextResponse("Successfully canceled reservation"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("current-driving")
-    public ResponseEntity<DrivingDTOWithLocations> getCurrentDriving(){
-        DrivingDTOWithLocations driving = drivingService.getCurrentDriving();
-        return new ResponseEntity<>(driving, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("next-driving")
-    public ResponseEntity<DrivingDTOWithLocations> getNextDriving(){
-        DrivingDTOWithLocations driving = drivingService.getNextDriving();
-        return new ResponseEntity<>(driving, HttpStatus.OK);
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("delete/{id}")
     public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id){
         drivingService.deleteDriving(id);
         return new ResponseEntity<>(new TextResponse("Successfully delete driving"), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("/start")
+    public ResponseEntity<TextResponse> startDriving() {
+        drivingExecutionService.startDriving();
+        return new ResponseEntity<>(new TextResponse("Driving successfully started"), HttpStatus.OK);
     }
 }

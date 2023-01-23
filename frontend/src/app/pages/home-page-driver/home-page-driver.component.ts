@@ -3,8 +3,8 @@ import {DrivingState, DrivingWithLocations} from "../../model/driving/driving";
 import {environment} from "../../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import {DrivingService} from "../../services/drivingService/driving.service";
 import {UserService} from "../../services/userService/user-sevice.service";
+import {DriverService} from "../../services/driverService/driver.service";
 
 @Component({
   selector: 'app-home-page-driver',
@@ -20,7 +20,9 @@ export class HomePageDriverComponent implements OnInit {
 
   private stompClient: any;
 
-  constructor(private drivingService: DrivingService, private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private driverService: DriverService) {
   }
 
   ngOnInit(): void {
@@ -84,7 +86,7 @@ export class HomePageDriverComponent implements OnInit {
   }
 
   private loadNextDriving() {
-    this.drivingService.getNextDriving().subscribe((driving) => {
+    this.driverService.getNextDriving().subscribe((driving) => {
       if (driving && driving.driver.email === this.userService.getCurrentUserEmail()) {
         this.nextDriving = driving;
       }
@@ -92,7 +94,7 @@ export class HomePageDriverComponent implements OnInit {
   }
 
   private loadCurrentDriving() {
-    this.drivingService.getCurrentDriving().subscribe((driving) => {
+    this.driverService.getCurrentDriving().subscribe((driving) => {
       if (driving && driving.driver.email === this.userService.getCurrentUserEmail()) {
         this.currentDriving = driving
         this.setCurrDrivingStatus();

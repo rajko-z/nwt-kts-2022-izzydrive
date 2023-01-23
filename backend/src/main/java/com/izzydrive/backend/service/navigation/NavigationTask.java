@@ -1,8 +1,8 @@
 package com.izzydrive.backend.service.navigation;
 
 import com.izzydrive.backend.config.SpringContext;
-import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.Location;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.service.navigation.tasks.DriverArrivedAtStartLocationTask;
 import com.izzydrive.backend.service.navigation.tasks.UpdateCoordinateForDriverTask;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -12,9 +12,7 @@ import java.util.List;
 
 public class NavigationTask implements Runnable{
 
-    private final Driving driving;
-
-    private final List<Location> locations;
+    private final DrivingDTOWithLocations driving;
 
     private final boolean navigationFromDriverToStart;
 
@@ -22,16 +20,19 @@ public class NavigationTask implements Runnable{
         return SpringContext.getBean(ThreadPoolTaskScheduler.class);
     }
 
-    public NavigationTask(Driving driving, List<Location> locations, boolean navigationFromDriverToStart) {
+    public NavigationTask(DrivingDTOWithLocations driving, boolean navigationFromDriverToStart) {
         this.driving = driving;
-        this.locations = locations;
         this.navigationFromDriverToStart = navigationFromDriverToStart;
     }
 
     @Override
     public void run() {
-        double totalDuration = navigationFromDriverToStart ?
-                driving.getDurationFromDriverToStart() : driving.getDuration();
+        double totalDuration = driving.getFromDriverToStart().getDuration();
+        List<LocationDTO> locations = driving.getFromDriverToStart().getCoordinates();
+        if (!navigationFromDriverToStart) {
+            totalDuration = driving.getFromStartToEnd().getDuration();
+            locations = driving.getFromStartToEnd().getCoordinates();
+        }
 
         if (locations.isEmpty()) {
             return;
@@ -41,11 +42,11 @@ public class NavigationTask implements Runnable{
         long intervalInMillis = interval * 1000L;
 
         int counter = 0;
-        for (Location l : locations) {
+        for (LocationDTO l : locations) {
             UpdateCoordinateForDriverTask job = new UpdateCoordinateForDriverTask(
                     driving.getDriver().getEmail(),
-                    l.getLatitude(),
-                    l.getLongitude());
+                    l.getLat(),
+                    l.getLon());
 
             getThreadPoolTaskScheduler().schedule(
                     job,

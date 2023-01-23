@@ -101,15 +101,11 @@ export class DrivingService {
     return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
   }
 
-  getCurrentDriving() {
-    return this.httpClientService.getT<DrivingWithLocations>(environment.apiUrl + 'drivings/current-driving');
-  }
-
-  getNextDriving() {
-    return this.httpClientService.getT<DrivingWithLocations>(environment.apiUrl + 'drivings/next-driving');
-  }
-
   deleteDriving(id:number) {
     return this.httpClientService.getT<TextResponse>(environment.apiUrl + `drivings/delete/${id}`);
+  }
+
+  startDriving() {
+    return this.httpClientService.getT<TextResponse>(environment.apiUrl + 'drivings/start');
   }
 }

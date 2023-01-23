@@ -1,7 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Driving, DrivingWithLocations} from "../../model/driving/driving";
+import {DrivingWithLocations} from "../../model/driving/driving";
 import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
+import {DrivingService} from "../../services/drivingService/driving.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-display-driving',
@@ -16,7 +18,10 @@ export class DisplayDrivingComponent implements OnInit {
   @Input()
   driving?: DrivingWithLocations;
 
-  constructor(public dialog: MatDialog) {
+  constructor(
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private drivingService: DrivingService) {
   }
 
   ngOnInit(): void {}
@@ -30,7 +35,18 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   startDriving() {
-
+    this.drivingService.startDriving()
+      .subscribe({
+          next: (_) => {
+            this.currDrivingStatus = 'active';
+          },
+          error: (error) => {
+            this.snackBar.open(error.error.message, "ERROR", {
+              duration: 5000,
+            })
+          }
+        }
+      );
   }
 
   cancelReservation(){

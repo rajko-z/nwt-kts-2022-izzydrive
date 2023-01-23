@@ -1,4 +1,4 @@
-package com.izzydrive.backend.service.impl;
+package com.izzydrive.backend.service.notification;
 
 
 import com.izzydrive.backend.dto.NotificationDTO;
@@ -9,7 +9,6 @@ import com.izzydrive.backend.model.Notification;
 import com.izzydrive.backend.model.NotificationStatus;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.NotificationRepository;
-import com.izzydrive.backend.service.NotificationService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;

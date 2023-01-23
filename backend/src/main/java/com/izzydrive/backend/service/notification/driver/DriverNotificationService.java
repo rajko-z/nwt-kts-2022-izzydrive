@@ -1,4 +1,4 @@
-package com.izzydrive.backend.service.notification;
+package com.izzydrive.backend.service.notification.driver;
 
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 

@@ -1,10 +1,7 @@
 package com.izzydrive.backend.service.navigation;
 
-import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.Location;
-
-import java.util.List;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 
 public interface NavigationService {
-    void startNavigationForDriver(Driving driving, List<Location> locations, boolean fromDriverToStart);
+    void startNavigationForDriver(DrivingDTOWithLocations drivingDTOWithLocations, boolean fromDriverToStart);
 }

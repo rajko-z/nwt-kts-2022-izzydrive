@@ -7,11 +7,11 @@ import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverStatus;
 import com.izzydrive.backend.model.users.Passenger;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.navigation.NavigationService;
-import com.izzydrive.backend.service.notification.DriverNotificationService;
+import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import lombok.AllArgsConstructor;
@@ -62,12 +62,9 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
             driver.setDriverStatus(DriverStatus.TAKEN);
             driver.setCurrentDriving(driving);
 
-            navigationService.startNavigationForDriver(
-                    driving,
-                    drivingWithLocations.getLocationsFromDriverToStart(),
-                    true);
-
             DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, drivingWithLocations.getLocations());
+
+            navigationService.startNavigationForDriver(data, true);
             driverNotificationService.sendCurrentDrivingToDriver(data);
         } else {
             driver.setDriverStatus(DriverStatus.RESERVED);

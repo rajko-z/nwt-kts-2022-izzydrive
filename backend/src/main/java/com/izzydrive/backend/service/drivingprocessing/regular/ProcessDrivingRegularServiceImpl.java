@@ -7,7 +7,7 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.Passenger;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationServiceImpl;
 import com.izzydrive.backend.service.drivingprocessing.regular.validation.DriverAvailabilityRegularValidator;
 import com.izzydrive.backend.service.drivingprocessing.shared.drivingsaver.DrivingSaverFromRequest;

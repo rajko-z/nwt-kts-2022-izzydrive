@@ -20,7 +20,7 @@ public class Validator {
         if(matcherEmail.matches()) return true;
 
         else {
-            throw new BadRequestException(INVALID_EMAIl_FORMAT_MESSAGE, 1001);
+            throw new BadRequestException(INVALID_EMAIL_FORMAT_MESSAGE, 1001);
         }
 
     }

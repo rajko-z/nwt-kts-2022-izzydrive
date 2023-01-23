@@ -1,7 +1,7 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.NotificationDTO;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

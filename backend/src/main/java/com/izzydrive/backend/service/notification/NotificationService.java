@@ -1,4 +1,4 @@
-package com.izzydrive.backend.service;
+package com.izzydrive.backend.service.notification;
 
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Driving;

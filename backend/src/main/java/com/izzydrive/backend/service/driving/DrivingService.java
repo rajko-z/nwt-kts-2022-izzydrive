@@ -31,10 +31,6 @@ public interface DrivingService {
 
     void cancelReservation(Long drivingId);
 
-    DrivingDTOWithLocations getCurrentDriving();
-
-    DrivingDTOWithLocations getNextDriving();
-
     void deleteDriving(Long id);
 
     Driving findByIdWithLocationsAndDriver(Long id);

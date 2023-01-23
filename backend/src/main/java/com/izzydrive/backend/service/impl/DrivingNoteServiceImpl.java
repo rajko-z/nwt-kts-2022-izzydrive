@@ -14,7 +14,7 @@ import com.izzydrive.backend.repository.DrivingNoteRepository;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.AdminRepository;
 import com.izzydrive.backend.service.DrivingNoteService;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
