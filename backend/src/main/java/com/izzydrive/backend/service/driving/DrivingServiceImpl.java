@@ -221,7 +221,6 @@ public class DrivingServiceImpl implements DrivingService {
         if (driving.isPresent()) {
             List<String> passengersToSendNotifications = deleteDrivingFromPassengers2(driving);
             if (driving.get().getDriver() != null) {
-                unlockDriverIfPossible(driving.get().getDriver());
                 releaseDriverFromReservation(driving.get());
             }
 
@@ -232,6 +231,9 @@ public class DrivingServiceImpl implements DrivingService {
             for (String passengerEmail : passengersToSendNotifications) {
                 this.notificationService.sendNotificationCancelDriving(passengerEmail, driving.get());
             }
+            this.notificationService.sendNotificationCancelDriving(driving.get().getDriver().getEmail(), driving.get());
+            this.simpMessagingTemplate.convertAndSend("/driving/loadReservation", new DrivingDTO(driving.get().getDriver().getEmail()));
+
             driving.get().setDeleted(true);
             drivingRepository.save(driving.get());
         }
@@ -330,6 +332,15 @@ public class DrivingServiceImpl implements DrivingService {
         return null;
     }
 
+    @Override
+    public DrivingDTO getReservation() {
+        Driver driver = driverService.getCurrentlyLoggedDriverWithReservation();
+        if (driver.getReservedFromClientDriving() != null) {
+            return findDriving(driver.getReservedFromClientDriving().getId());
+        }
+        return null;
+    }
+
     private DrivingDTO findDriving(Long drivingId) {
         try {
             Driving driving = drivingRepository.findById(drivingId)
@@ -350,7 +361,7 @@ public class DrivingServiceImpl implements DrivingService {
         for (Passenger p : driving.getPassengers()) {
             Passenger passenger = this.passengerService.findByEmailWithCurrentDriving(p.getEmail());
             passenger.setCurrentDriving(null);
-            if(driving.isReservation()){
+            if (driving.isReservation()) {
                 passenger.getDrivings().removeIf(d -> !Objects.equals(d.getId(), driving.getId()));
             }
             passengerService.save(passenger);
@@ -398,6 +409,25 @@ public class DrivingServiceImpl implements DrivingService {
     @Override
     public Driving findByIdWithLocationsAndDriver(Long id) {
         return this.drivingRepository.findByIdWithLocationsAndDriver(id);
+    }
+
+    @Override
+    public List<Driving> getAllReservationWithDriverAndPassengers() {
+        return this.drivingRepository.getAllReservationWithDriverAndPassengers();
+    }
+
+    @Override
+    public void deleteReservation(Driving d) {
+        d.getDriver().setReservedFromClientDriving(null);
+        driverService.save(d.getDriver());
+        for (Passenger p : d.getAllPassengers()) {
+            if (Objects.equals(p.getCurrentDriving().getId(), d.getId())) {
+                p.setCurrentDriving(null);
+            }
+            p.getDrivings().removeIf(driving -> !Objects.equals(d.getId(), driving.getId()));
+            passengerService.save(p);
+        }
+        drivingRepository.delete(d);
     }
 
 }

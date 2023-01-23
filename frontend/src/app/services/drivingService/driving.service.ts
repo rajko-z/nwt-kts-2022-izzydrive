@@ -112,4 +112,8 @@ export class DrivingService {
   deleteDriving(id:number) {
     return this.httpClientService.getT<TextResponse>(environment.apiUrl + `drivings/delete/${id}`);
   }
+
+  getReservation() {
+    return this.httpClientService.get(environment.apiUrl + 'drivings/reservation');
+  }
 }

@@ -7,6 +7,7 @@ import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Notification;
 import com.izzydrive.backend.model.NotificationStatus;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.NotificationRepository;
 import com.izzydrive.backend.service.NotificationService;
@@ -160,6 +161,62 @@ public class NotificationServiceImpl implements NotificationService {
         this.simpMessagingTemplate.convertAndSend("/notification/cancelReservation", notificationDTO);
         createAndSaveNotification(notificationDTO);
 
+    }
+
+    @Override
+    public void sendNotificationReservationReminder(Integer startMinutes, List<User> userForNotification) {
+        for (User u : userForNotification) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage(String.format("You have a reservation for %s minute", startMinutes));
+            notificationDTO.setUserEmail(u.getEmail());
+            notificationDTO.setNotificationStatus(NotificationStatus.RESERVATION_REMINDER);
+            this.simpMessagingTemplate.convertAndSend("/notification/reservationReminder", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
+    }
+
+    @Override
+    public void sendNotificationForPaymentReservation(Driving d) {
+        for (Passenger p : d.getAllPassengers()) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Your reservation starts in 15 minutes, please make the payment");
+            notificationDTO.setDuration(d.getDuration());
+            notificationDTO.setPrice(d.getPrice());
+            notificationDTO.setStartLocation(d.getRoute().getStart().getName());
+            notificationDTO.setEndLocation(d.getRoute().getEnd().getName());
+            List<String> intermediateStationDTO = new ArrayList<>();
+            for (Address intermediateStation : d.getRoute().getIntermediateStations()) {
+                intermediateStationDTO.add(intermediateStation.getName());
+            }
+            notificationDTO.setIntermediateLocations(intermediateStationDTO);
+            notificationDTO.setUserEmail(p.getEmail());
+            notificationDTO.setNotificationStatus(NotificationStatus.PAYMENT_RESERVATION);
+            this.simpMessagingTemplate.convertAndSend("/notification/paymentReservation", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
+    }
+
+    @Override
+    public void sendNotificationForReservationDeleted(Driving d, String message) {
+        List<User> userForNotification = new ArrayList<>(d.getAllPassengers());
+        userForNotification.add(d.getDriver());
+        for(User u : userForNotification){
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage(message);
+            notificationDTO.setDuration(d.getDuration());
+            notificationDTO.setPrice(d.getPrice());
+            notificationDTO.setStartLocation(d.getRoute().getStart().getName());
+            notificationDTO.setEndLocation(d.getRoute().getEnd().getName());
+            List<String> intermediateStationDTO = new ArrayList<>();
+            for (Address intermediateStation : d.getRoute().getIntermediateStations()) {
+                intermediateStationDTO.add(intermediateStation.getName());
+            }
+            notificationDTO.setIntermediateLocations(intermediateStationDTO);
+            notificationDTO.setUserEmail(u.getEmail());
+            notificationDTO.setNotificationStatus(NotificationStatus.PAYMENT_RESERVATION);
+            this.simpMessagingTemplate.convertAndSend("/notification/reservationDeleted", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
     }
 
     @Override

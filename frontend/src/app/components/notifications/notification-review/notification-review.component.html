@@ -10,7 +10,7 @@
           <div class="body-message">
             <img *ngIf="option.notificationStatus === 'NEW_RESERVATION'" src="assets/reservation.png"
                  alt="new reservation" class="icon">
-            <img *ngIf="option.notificationStatus === 'NEW_DRIVING'" src="assets/driving.png" alt="new driving"
+            <img *ngIf="option.notificationStatus === 'NEW_DRIVING' || option.notificationStatus === 'NEW_DRIVING_DRIVER'" src="assets/driving.png" alt="new driving"
                  class="icon">
             <img *ngIf="option.notificationStatus === 'REJECTED_RESERVATION'" src="assets/no_reservation.png"
                  alt="rejected reservation" class="icon">
@@ -22,13 +22,17 @@
                  class="icon">
             <img *ngIf="option.notificationStatus === 'PAYMENT_SUCCESS'" src="assets/payment.png" alt="payment success"
                  class="icon">
+            <img *ngIf="option.notificationStatus === 'RESERVATION_REMINDER' || option.notificationStatus === 'PAYMENT_RESERVATION'" src="assets/notification-bell%20(1).png" alt="payment success"
+                 class="icon">
             <img
               *ngIf="option.notificationStatus === 'PAYMENT_FAILURE' || option.notificationStatus === 'PAYMENT_EXPIRED' "
               src="assets/payment_fail.png" alt="payment faild" class="icon">
             <div class="message-area">
               <p class="message">{{option.message}}</p>
               <div
-                *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE' && option.notificationStatus !== 'PAYMENT_EXPIRED'">
+                *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE'
+                && option.notificationStatus !== 'PAYMENT_EXPIRED' && option.notificationStatus !== 'NEW_DRIVING_DRIVER'
+                 && option.notificationStatus !== 'RESERVATION_REMINDER' && option.notificationStatus !== 'RESERVATION_DELETE'">
                 <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
                 <p class="text">Price: {{option.price}} $</p>
                 <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
