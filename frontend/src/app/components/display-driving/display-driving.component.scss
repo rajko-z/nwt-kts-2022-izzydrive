@@ -51,5 +51,15 @@ p {
     padding: 1%;
     margin: 0 2%;
   }
+
+  .disabled-button {
+    @include buttonStyle();
+    @include size(13%, auto);
+    padding: 1%;
+    margin: 0 2%;
+    background-color: $light1;
+    color: grey;
+    border: solid thin gray;
+  }
 }
 

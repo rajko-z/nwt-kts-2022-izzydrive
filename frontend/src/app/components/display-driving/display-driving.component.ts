@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Driving} from "../../model/driving/driving";
+import {Driving, DrivingWithLocations} from "../../model/driving/driving";
 import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
 
@@ -11,20 +11,15 @@ import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dial
 export class DisplayDrivingComponent implements OnInit {
 
   @Input()
-  time: string;
+  currDrivingStatus?: string;
 
   @Input()
-  driving?: Driving;
-  formatStartDate: string;
-
+  driving?: DrivingWithLocations;
 
   constructor(public dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
-    let startDate = this.driving?.startDate;
-    this.formatStartDate = `${startDate?.getHours()}:${startDate?.getMinutes()}  ${startDate?.getDay()}-${startDate?.getMonth()}-${startDate?.getFullYear()}`;
-  }
+  ngOnInit(): void {}
 
   cancelDriving() {
     this.dialog.open(ExplanationDialogComponent, {data: this.driving.id});

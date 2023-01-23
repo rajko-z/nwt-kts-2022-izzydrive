@@ -5,6 +5,7 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.payment.data.PaymentDataService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
@@ -16,13 +17,13 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class PaymentValidationServiceImpl implements PaymentValidationService {
 
-    private final DrivingService drivingService;
-
     private final DrivingValidationService drivingValidationService;
 
     private final PassengerService passengerService;
 
     private final PaymentDataService paymentDataService;
+
+    private final DrivingRejectionService drivingRejectionService;
 
     @Override
     public boolean validateForPaymentSessionExpiration(Driving driving) {
@@ -34,7 +35,7 @@ public class PaymentValidationServiceImpl implements PaymentValidationService {
             }
         } else {
             if (drivingValidationService.drivingExpiredForPayment(driving)) {
-                this.drivingService.removeDrivingPaymentSessionExpired(driving.getId());
+                drivingRejectionService.removeDrivingPaymentSessionExpired(driving.getId());
                 return false;
             }
         }

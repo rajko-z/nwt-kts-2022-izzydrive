@@ -3,6 +3,7 @@ package com.izzydrive.backend.service;
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Driving;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface NotificationService {
@@ -11,7 +12,7 @@ public interface NotificationService {
 
     void sendNotificationNewDriving(String passengerEmail, Driving driving);
 
-    void sendNotificationRejectDriving(String passengerEmail, String startLocation, String endLocation);
+    void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation);
 
     void sendNotificationRejectDrivingFromDriver(String adminEmail, Driving driving, String driverEmail,  String reason);
 
@@ -24,6 +25,8 @@ public interface NotificationService {
     void sendNotificationCancelDriving(String passengerEmail, Driving driving);
 
     void sendNotificationNewDrivingDriver(String driverEmail);
+
+    void sendNotificationDriverArrivedAtStartLocation(Collection<String> passengersToSendNotifications);
 
     List<NotificationDTO> findAll();
 

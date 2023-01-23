@@ -5,9 +5,11 @@ import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
@@ -15,6 +17,7 @@ import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.routes.DrivingRoutesService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
@@ -25,11 +28,9 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +54,8 @@ public class PassengerServiceImpl implements PassengerService {
     private final DrivingService drivingService;
 
     private final CarService carService;
+
+    private final DrivingRoutesService drivingRoutesService;
 
     public void registerPassenger(NewPassengerDTO newPassengerData) {
         validateNewPassengerData(newPassengerData);
@@ -126,7 +129,7 @@ public class PassengerServiceImpl implements PassengerService {
                 return null;
             }
             List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
-            return DrivingConverter.convertWithLocationsAndDriver(currentDriving, locations, carService);
+            return DrivingConverter.convertWithLocationsAndDriver(currentDriving, locations);
         } catch (OptimisticLockingFailureException e) {
             LOG.error(e.getMessage());
         }
@@ -164,5 +167,22 @@ public class PassengerServiceImpl implements PassengerService {
         String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return this.findByEmailWithDrivings(passengerEmail)
                 .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(passengerEmail)));
+    }
+
+    @Override
+    public CalculatedRouteDTO findEstimatedTimeLeftForCurrentDrivingToStart() {
+        Passenger passenger = this.getCurrentlyLoggedPassenger();
+        if (passenger.getCurrentDriving() == null || !passenger.getCurrentDriving().getDrivingState().equals(DrivingState.WAITING)) {
+            throw new BadRequestException(ExceptionMessageConstants.YOU_DO_NOT_HAVE_CURRENT_WAITING_DRIVING);
+        }
+        return drivingRoutesService.getEstimatedRouteLeftToStartOfDriving(passenger.getCurrentDriving().getId());
+    }
+
+    @Transactional
+    @Override
+    public void deleteDrivingFromPassengers(Collection<Passenger> passengers) {
+        for (Passenger passenger : passengers) {
+            passenger.setCurrentDriving(null);
+        }
     }
 }

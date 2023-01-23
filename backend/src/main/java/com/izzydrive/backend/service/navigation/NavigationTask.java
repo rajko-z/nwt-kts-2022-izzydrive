@@ -1,7 +1,10 @@
 package com.izzydrive.backend.service.navigation;
 
 import com.izzydrive.backend.config.SpringContext;
+import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Location;
+import com.izzydrive.backend.service.navigation.tasks.DriverArrivedAtStartLocationTask;
+import com.izzydrive.backend.service.navigation.tasks.UpdateCoordinateForDriverTask;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.Date;
@@ -9,36 +12,38 @@ import java.util.List;
 
 public class NavigationTask implements Runnable{
 
-    private final String driverEmail;
+    private final Driving driving;
+
     private final List<Location> locations;
-    private final double totalDurationInSeconds;
+
+    private final boolean navigationFromDriverToStart;
 
     private ThreadPoolTaskScheduler getThreadPoolTaskScheduler() {
         return SpringContext.getBean(ThreadPoolTaskScheduler.class);
     }
 
-    public NavigationTask(String driverEmail,
-                          List<Location> locations,
-                          double totalDurationInSeconds) {
-        this.driverEmail = driverEmail;
+    public NavigationTask(Driving driving, List<Location> locations, boolean navigationFromDriverToStart) {
+        this.driving = driving;
         this.locations = locations;
-        this.totalDurationInSeconds = totalDurationInSeconds;
+        this.navigationFromDriverToStart = navigationFromDriverToStart;
     }
 
     @Override
     public void run() {
-        if (this.locations.isEmpty()) {
+        double totalDuration = navigationFromDriverToStart ?
+                driving.getDurationFromDriverToStart() : driving.getDuration();
+
+        if (locations.isEmpty()) {
             return;
         }
 
-        int interval = (int)this.totalDurationInSeconds / this.locations.size();
+        int interval = (int)totalDuration / locations.size();
         long intervalInMillis = interval * 1000L;
 
         int counter = 0;
-        for (Location l : this.locations) {
-
+        for (Location l : locations) {
             UpdateCoordinateForDriverTask job = new UpdateCoordinateForDriverTask(
-                    driverEmail,
+                    driving.getDriver().getEmail(),
                     l.getLatitude(),
                     l.getLongitude());
 
@@ -47,6 +52,13 @@ public class NavigationTask implements Runnable{
                     new Date(System.currentTimeMillis() + counter*intervalInMillis)
             );
             counter++;
+        }
+
+        if (navigationFromDriverToStart) {
+            getThreadPoolTaskScheduler().schedule(
+                    new DriverArrivedAtStartLocationTask(driving),
+                    new Date(System.currentTimeMillis() + counter*intervalInMillis)
+            );
         }
     }
 }

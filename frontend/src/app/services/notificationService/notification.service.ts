@@ -131,6 +131,12 @@ export class NotificationService {
     );
   }
 
+  showNotificationDriverArrivedAtStart(stompClient) {
+    stompClient.subscribe('/notification/driverArrivedStart', (message: { body: string }) => {
+      this.showNotificationText(message.body);
+    });
+  }
+
   findAll() {
     return this.httpClientService.get(environment.apiUrl + `notifications`);
   }

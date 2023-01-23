@@ -1,11 +1,9 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
-import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
-import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
-import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
+import com.izzydrive.backend.dto.driving.*;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
@@ -35,6 +33,8 @@ public class DrivingController {
     private final ProcessDrivingRegularService processDrivingRegularService;
 
     private final ProcessDrivingReservationService processDrivingReservationService;
+
+    private final DrivingRejectionService drivingRejectionService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
@@ -87,14 +87,14 @@ public class DrivingController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping(value = "/reject-linked-user")
     public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
-        this.drivingService.rejectDrivingLinkedUser();
+        drivingRejectionService.rejectDrivingLinkedUser();
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/{id}")
     public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id){
-        DrivingDTO driving = drivingService.findById(id);
+        DrivingDTO driving = drivingService.findDrivingDTOById(id);
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 
@@ -121,15 +121,15 @@ public class DrivingController {
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @GetMapping("current-driving")
-    public ResponseEntity<DrivingDTO> getCurrentDriving(){
-        DrivingDTO driving = drivingService.getCurrentDriving();
+    public ResponseEntity<DrivingDTOWithLocations> getCurrentDriving(){
+        DrivingDTOWithLocations driving = drivingService.getCurrentDriving();
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @GetMapping("next-driving")
-    public ResponseEntity<DrivingDTO> getNextDriving(){
-        DrivingDTO driving = drivingService.getNextDriving();
+    public ResponseEntity<DrivingDTOWithLocations> getNextDriving(){
+        DrivingDTOWithLocations driving = drivingService.getNextDriving();
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,15 +72,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationRejectDriving(String passengerEmail, String startLocation, String endLocation) {
-        NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setMessage("The ride was canceled when declined by the linked user");
-        notificationDTO.setStartLocation(startLocation);
-        notificationDTO.setEndLocation(endLocation);
-        notificationDTO.setUserEmail(passengerEmail);
-        notificationDTO.setNotificationStatus(NotificationStatus.REJECTED_DRIVING_PASSENGER);
-        this.simpMessagingTemplate.convertAndSend("/notification/cancelRide", notificationDTO);
-        createAndSaveNotification(notificationDTO);
+    public void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
+        for (String passengerEmail : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("The ride was canceled when declined by the linked user");
+            notificationDTO.setStartLocation(startLocation);
+            notificationDTO.setEndLocation(endLocation);
+            notificationDTO.setUserEmail(passengerEmail);
+            notificationDTO.setNotificationStatus(NotificationStatus.REJECTED_DRIVING_PASSENGER);
+            this.simpMessagingTemplate.convertAndSend("/notification/cancelRide", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
     }
 
     @Override
@@ -159,7 +162,18 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDTO.setNotificationStatus(NotificationStatus.REJECTED_RESERVATION);
         this.simpMessagingTemplate.convertAndSend("/notification/cancelReservation", notificationDTO);
         createAndSaveNotification(notificationDTO);
+    }
 
+    @Override
+    public void sendNotificationDriverArrivedAtStartLocation(Collection<String> passengersToSendNotifications) {
+        for (String passenger : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Your driver arrived at start location");
+            notificationDTO.setUserEmail(passenger);
+            notificationDTO.setNotificationStatus(NotificationStatus.DRIVER_ARRIVED_AT_START);
+            this.simpMessagingTemplate.convertAndSend("/notification/driverArrivedStart", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
     }
 
     @Override

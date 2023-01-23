@@ -1,4 +1,5 @@
 import {Car} from "../car/car";
+import {Location} from "../map/location";
 
 export enum DriverStatus {
   FREE,
@@ -14,4 +15,5 @@ export class Driver {
   phoneNumber: string;
   driverStatus: DriverStatus;
   carData: Car;
+  location?: Location;
 }

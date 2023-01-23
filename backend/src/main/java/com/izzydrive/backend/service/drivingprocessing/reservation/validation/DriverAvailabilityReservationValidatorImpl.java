@@ -3,7 +3,6 @@ package com.izzydrive.backend.service.drivingprocessing.reservation.validation;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationServiceImpl;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -27,10 +26,7 @@ public class DriverAvailabilityReservationValidatorImpl implements DriverAvailab
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
 
-        DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
-                .orElseThrow(()-> new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE));
-
-        if (driverLocker.getPassengerEmail() != null) {
+        if (driverLockerService.driverIsLocked(driver.getEmail())) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
 

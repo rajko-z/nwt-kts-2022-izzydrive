@@ -1,20 +1,18 @@
 package com.izzydrive.backend.service.driving;
 
+import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
-import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.DrivingState;
-import com.izzydrive.backend.model.Evaluation;
-import com.izzydrive.backend.model.Route;
-import com.izzydrive.backend.model.users.*;
+import com.izzydrive.backend.model.*;
+import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.service.EvaluationService;
 import com.izzydrive.backend.service.NotificationService;
-import com.izzydrive.backend.service.navigation.NavigationServiceImpl;
 import com.izzydrive.backend.service.users.driver.DriverService;
-import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import org.slf4j.Logger;
@@ -43,13 +41,9 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final PassengerService passengerService;
 
-    private final DriverLockerService driverLockerService;
-
     private final NotificationService notificationService;
 
     private final EvaluationService evaluationService;
-
-    private final NavigationServiceImpl navigationService;
 
     private final PassengerRepository passengerRepository;
 
@@ -57,13 +51,12 @@ public class DrivingServiceImpl implements DrivingService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, DriverLockerService driverLockerService, NotificationService notificationService, EvaluationService evaluationService, NavigationServiceImpl navigationService, DriverService driverService, PassengerRepository passengerRepository, DriverService driverRepository, SimpMessagingTemplate simpMessagingTemplate) {
+
+    public DrivingServiceImpl(DrivingRepository drivingRepository, @Lazy PassengerService passengerService, NotificationService notificationService, EvaluationService evaluationService, DriverService driverService, PassengerRepository passengerRepository, DriverService driverRepository, SimpMessagingTemplate simpMessagingTemplate) {
         this.drivingRepository = drivingRepository;
         this.passengerService = passengerService;
-        this.driverLockerService = driverLockerService;
         this.notificationService = notificationService;
         this.evaluationService = evaluationService;
-        this.navigationService = navigationService;
         this.driverService = driverService;
         this.passengerRepository = passengerRepository;
         this.driverRepository = driverRepository;
@@ -89,57 +82,6 @@ public class DrivingServiceImpl implements DrivingService {
         this.drivingRepository.save(driving);
     }
 
-    @Transactional
-    @Override
-    public void rejectDrivingLinkedUser() {
-        Passenger passenger = passengerService.getCurrentlyLoggedPassenger();
-        Driving driving = passenger.getCurrentDriving();
-        if (driving == null || !driving.getDrivingState().equals(DrivingState.PAYMENT)) {
-            throw new BadRequestException(ExceptionMessageConstants.YOU_DO_NOT_HAVE_DRIVING_FOR_PAYMENT);
-        }
-
-        String startLocationForNotification = driving.getRoute().getStart().getName();
-        String endLocationForNotification = driving.getRoute().getEnd().getName();
-
-        List<String> passengersToSendNotifications = deleteDrivingFromPassengers(driving);
-
-        this.passengerService.resetPassengersPayingInfo(driving.getPassengers());
-
-        unlockDriverIfPossible(driving.getDriver());
-
-        drivingRepository.delete(driving);
-
-        sendNotificationRejectDriving(passengersToSendNotifications, startLocationForNotification, endLocationForNotification);
-    }
-
-    @Transactional
-    @Override
-    public void removeDrivingPaymentSessionExpired(Long drivingId) {
-        Optional<Driving> driving = drivingRepository.findById(drivingId);
-        if (driving.isPresent()) {
-
-            List<String> passengersToSendNotifications = deleteDrivingFromPassengers(driving.get());
-
-            this.passengerService.resetPassengersPayingInfo(driving.get().getPassengers());
-
-            drivingRepository.delete(driving.get());
-
-            unlockDriverIfPossible(driving.get().getDriver());
-
-            notificationService.sendNotificationForPaymentExpired(passengersToSendNotifications);
-        }
-    }
-
-    private List<String> deleteDrivingFromPassengers(Driving driving) {
-        List<String> passengersToSendNotifications = new ArrayList<>();
-        for (Passenger passenger : driving.getPassengers()) {
-            passengersToSendNotifications.add(passenger.getEmail());
-            passenger.setCurrentDriving(null);
-            passengerService.save(passenger);
-        }
-        return passengersToSendNotifications;
-    }
-
     private List<String> deleteDrivingFromPassengers2(Optional<Driving> driving) {
         List<String> passengersToSendNotifications = new ArrayList<>();
         if (driving.isPresent()) {
@@ -152,14 +94,8 @@ public class DrivingServiceImpl implements DrivingService {
         return passengersToSendNotifications;
     }
 
-    private void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
-        for (String passenger : passengersToSendNotifications) {
-            notificationService.sendNotificationRejectDriving(passenger, startLocation, endLocation);
-        }
-    }
-
     @Override
-    public DrivingDTO findById(Long id) {
+    public DrivingDTO findDrivingDTOById(Long id) {
         Optional<Driving> driving = drivingRepository.findById(id);
         if (driving.isEmpty()) {
             throw new NotFoundException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST);
@@ -221,7 +157,6 @@ public class DrivingServiceImpl implements DrivingService {
         if (driving.isPresent()) {
             List<String> passengersToSendNotifications = deleteDrivingFromPassengers2(driving);
             if (driving.get().getDriver() != null) {
-                unlockDriverIfPossible(driving.get().getDriver());
                 releaseDriverFromReservation(driving.get());
             }
 
@@ -254,20 +189,6 @@ public class DrivingServiceImpl implements DrivingService {
         Driver d = reservation.getDriver();
         d.setReservedFromClientDriving(null);
         driverRepository.save(d);
-    }
-
-    private void unlockDriverIfPossible(Driver driver) {
-        try {
-            DriverLocker driverLocker = this.driverLockerService.findByDriverEmail(driver.getEmail())
-                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE));
-
-            if (driverLocker.getPassengerEmail() != null) {
-                driverLocker.setPassengerEmail(null);
-                driverLockerService.saveAndFlush(driverLocker);
-            }
-        } catch (OptimisticLockingFailureException ex) {
-            throw new BadRequestException(ExceptionMessageConstants.DRIVER_IS_AVAILABLE);
-        }
     }
 
     @Override
@@ -304,39 +225,35 @@ public class DrivingServiceImpl implements DrivingService {
     }
 
     @Override
-    public void cleanUpDrivingAfterFailurePaymentAndSendNotification(Driving driving) {
-        List<String> passengersToSendNotifications = deleteDrivingFromPassengers(driving);
-        unlockDriverIfPossible(driving.getDriver());
-        passengerService.resetPassengersPayingInfo(driving.getPassengers());
-        drivingRepository.delete(driving);
-        notificationService.sendNotificationForPaymentFailure(passengersToSendNotifications);
-    }
-
-    @Override
-    public DrivingDTO getCurrentDriving() {
-        Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
-        if (driver.getCurrentDriving() != null) {
-            return findDriving(driver.getCurrentDriving().getId());
-        }
-        return null;
-    }
-
-    @Override
-    public DrivingDTO getNextDriving() {
-        Driver driver = driverService.getCurrentlyLoggedDriverWithNextDriving();
-        if (driver.getNextDriving() != null) {
-            return findDriving(driver.getNextDriving().getId());
-        }
-        return null;
-    }
-
-    private DrivingDTO findDriving(Long drivingId) {
+    @Transactional
+    public DrivingDTOWithLocations getCurrentDriving() {
         try {
-            Driving driving = drivingRepository.findById(drivingId)
-                    .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST));
-            if (!driving.isRejected()) {
-                return new DrivingDTO(driving);
+            Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
+            if (driver.getCurrentDriving() == null) {
+                return null;
             }
+            if (driver.getCurrentDriving().isRejected()) {
+                return null;
+            }
+            return findDrivingWithLocationsDTOById(driver.getCurrentDriving().getId());
+        } catch (OptimisticLockingFailureException e) {
+            LOG.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public DrivingDTOWithLocations getNextDriving() {
+        try {
+            Driver driver = driverService.getCurrentlyLoggedDriverWithNextDriving();
+            if (driver.getNextDriving() == null) {
+                return null;
+            }
+            if (driver.getNextDriving().isRejected()) {
+                return null;
+            }
+            return findDrivingWithLocationsDTOById(driver.getNextDriving().getId());
         } catch (OptimisticLockingFailureException e) {
             LOG.error(e.getMessage());
         }
@@ -360,37 +277,6 @@ public class DrivingServiceImpl implements DrivingService {
     }
 
     @Override
-    public void setUpDrivingAfterSuccessPaymentAndSendNotification(Driving driving) {
-        driving.setDrivingState(DrivingState.WAITING);
-        driving.setLocked(false);
-        this.saveAndFlush(driving);
-
-        changeDriverStatusAndStartNavigationSystem(driving);
-        passengerService.resetPassengersPayingInfo(driving.getPassengers());
-        unlockDriverIfPossible(driving.getDriver());
-        notificationService.sendNotificationForPaymentSuccess(driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList()));
-        notificationService.sendNotificationNewDrivingDriver(driving.getDriver().getEmail());
-    }
-
-    private void changeDriverStatusAndStartNavigationSystem(Driving driving) {
-        Driver driver = driving.getDriver();
-        if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
-            driver.setDriverStatus(DriverStatus.TAKEN);
-            driver.setCurrentDriving(driving);
-            navigationService.startNavigationForDriver(
-                    driver.getEmail(),
-                    driving.getLocationsFromDriverToStart(),
-                    driving.getDurationFromDriverToStart());
-            this.simpMessagingTemplate.convertAndSend("/driving/loadCurrentDriving", new DrivingDTO(driving));
-        } else {
-            driver.setDriverStatus(DriverStatus.RESERVED);
-            driver.setNextDriving(driving);
-            this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", new DrivingDTO(driving));
-        }
-        driverService.save(driver);
-    }
-
-    @Override
     public void saveAndFlush(Driving driving) {
         this.drivingRepository.saveAndFlush(driving);
     }
@@ -400,4 +286,16 @@ public class DrivingServiceImpl implements DrivingService {
         return this.drivingRepository.findByIdWithLocationsAndDriver(id);
     }
 
+    @Override
+    @Transactional
+    public DrivingDTOWithLocations findDrivingWithLocationsDTOById(Long id) {
+        Driving driving = getDrivingByIdWithDriverRouteAndPassengers(id);
+        List<Location> locations = getDrivingWithLocations(id).getLocations();
+        return DrivingConverter.convertWithLocationsAndDriver(driving, locations);
+    }
+
+    @Override
+    public void delete(Driving driving) {
+        drivingRepository.delete(driving);
+    }
 }

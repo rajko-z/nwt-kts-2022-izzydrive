@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service.driving;
 
 import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.Driving;
 
 import java.util.List;
@@ -14,11 +15,7 @@ public interface DrivingService {
 
     void saveAndFlush(Driving driving);
 
-    void rejectDrivingLinkedUser();
-
-    void removeDrivingPaymentSessionExpired(Long drivingId);
-
-    DrivingDTO findById(Long id);
+    DrivingDTO findDrivingDTOById(Long id);
 
     Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
 
@@ -30,19 +27,19 @@ public interface DrivingService {
 
     boolean allPassengersApprovedDriving(Long drivingId);
 
-    void cleanUpDrivingAfterFailurePaymentAndSendNotification(Driving driving);
-
-    void setUpDrivingAfterSuccessPaymentAndSendNotification(Driving driving);
-
     List<DrivingDTO> getPassengerFutureReservations(Long passengerId);
 
     void cancelReservation(Long drivingId);
 
-    DrivingDTO getCurrentDriving();
+    DrivingDTOWithLocations getCurrentDriving();
 
-    DrivingDTO getNextDriving();
+    DrivingDTOWithLocations getNextDriving();
 
     void deleteDriving(Long id);
 
     Driving findByIdWithLocationsAndDriver(Long id);
+
+    DrivingDTOWithLocations findDrivingWithLocationsDTOById(Long id);
+
+    void delete(Driving driving);
 }

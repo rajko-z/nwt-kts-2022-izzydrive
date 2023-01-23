@@ -15,6 +15,7 @@ import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
     private final DriverService driverService;
 
     @Override
+    @Transactional
     public Driving makeAndSaveDrivingFromRegularRequest(DrivingRequestDTO request,
                                                         Driver driver,
                                                         Passenger passenger,
@@ -58,6 +60,7 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
     }
 
     @Override
+    @Transactional
     public Driving makeAndSaveDrivingFromReservationRequest(DrivingRequestDTO request,
                                                             Driver driver,
                                                             Passenger passenger)

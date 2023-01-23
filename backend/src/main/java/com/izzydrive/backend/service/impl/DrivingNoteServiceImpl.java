@@ -1,7 +1,8 @@
 package com.izzydrive.backend.service.impl;
 
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.DrivingNoteDTO;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
@@ -14,6 +15,7 @@ import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.AdminRepository;
 import com.izzydrive.backend.service.DrivingNoteService;
 import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
@@ -40,6 +42,8 @@ public class DrivingNoteServiceImpl implements DrivingNoteService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    private final DrivingService drivingService;
+
     @Transactional
     @Override
     public void rejectDriving(DrivingNoteDTO drivingNoteDTO) {
@@ -62,6 +66,11 @@ public class DrivingNoteServiceImpl implements DrivingNoteService {
     }
 
     private void updateDriverDrivings(Driver driver, Driving driving) {
+        DrivingDTOWithLocations d = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(driver.getEmail());
+        d.setDriver(driverDTO);
+
         if (Objects.equals(driver.getCurrentDriving().getId(), driving.getId())) {
             if (driver.getNextDriving() != null) {
                 driver.setCurrentDriving(driver.getNextDriving());
@@ -69,14 +78,14 @@ public class DrivingNoteServiceImpl implements DrivingNoteService {
                 driver.setDriverStatus(DriverStatus.TAKEN);
                 this.driverService.save(driver);
 
-                this.simpMessagingTemplate.convertAndSend("/driving/loadCurrentDriving", new DrivingDTO(driver.getCurrentDriving()));
-                this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", new DrivingDTO(driver.getEmail()));
+                this.simpMessagingTemplate.convertAndSend("/driving/loadCurrentDriving", drivingService.findDrivingWithLocationsDTOById(driving.getId()));
+                this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", d);
             } else {
                 driver.setCurrentDriving(null);
                 driver.setDriverStatus(DriverStatus.FREE);
                 this.driverService.save(driver);
 
-                this.simpMessagingTemplate.convertAndSend("/driving/loadCurrentDriving", new DrivingDTO(driver.getEmail()));
+                this.simpMessagingTemplate.convertAndSend("/driving/loadCurrentDriving", d);
             }
         } else {
             if (driver.getCurrentDriving().getStartDate() != null) {
@@ -87,7 +96,7 @@ public class DrivingNoteServiceImpl implements DrivingNoteService {
             driver.setNextDriving(null);
             this.driverService.save(driver);
 
-            this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", new DrivingDTO(driver.getEmail()));
+            this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", d);
         }
     }
 }

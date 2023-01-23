@@ -3,9 +3,11 @@ package com.izzydrive.backend.service.users.passenger;
 import com.izzydrive.backend.dto.NewPassengerDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Passenger;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,4 +40,8 @@ public interface PassengerService {
     List<Driving> getPassengerDrivings(Long passengerId);
 
     Passenger getCurrentlyLoggedPassengerWithDrivings();
+
+    CalculatedRouteDTO findEstimatedTimeLeftForCurrentDrivingToStart();
+
+    void deleteDrivingFromPassengers(Collection<Passenger> passengers);
 }

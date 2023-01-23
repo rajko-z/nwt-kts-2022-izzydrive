@@ -48,7 +48,7 @@ public class PassengerController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/current-driving-left-to-start")
     public ResponseEntity<CalculatedRouteDTO> findEstimatedTimeLeftForCurrentDrivingToStart() {
-        // TODO::
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        CalculatedRouteDTO retVal = passengerService.findEstimatedTimeLeftForCurrentDrivingToStart();
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }

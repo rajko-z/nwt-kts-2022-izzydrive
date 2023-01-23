@@ -25,10 +25,16 @@
             <img
               *ngIf="option.notificationStatus === 'PAYMENT_FAILURE' || option.notificationStatus === 'PAYMENT_EXPIRED' "
               src="assets/payment_fail.png" alt="payment faild" class="icon">
+            <img *ngIf="option.notificationStatus === 'DRIVER_ARRIVED_AT_START'" alt="driver arrived at start" class="icon">
+
             <div class="message-area">
               <p class="message">{{option.message}}</p>
               <div
-                *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE' && option.notificationStatus !== 'PAYMENT_EXPIRED'">
+                *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' &&
+                       option.notificationStatus !== 'PAYMENT_FAILURE' &&
+                       option.notificationStatus !== 'PAYMENT_EXPIRED' &&
+                       option.notificationStatus !== 'DRIVER_ARRIVED_AT_START'"
+              >
                 <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
                 <p class="text">Price: {{option.price}} $</p>
                 <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>

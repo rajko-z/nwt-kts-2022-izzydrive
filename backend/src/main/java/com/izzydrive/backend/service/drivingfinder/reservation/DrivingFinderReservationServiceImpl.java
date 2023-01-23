@@ -9,20 +9,18 @@ import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
 import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverLocker;
-import com.izzydrive.backend.service.users.driver.car.CarService;
-import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.drivingfinder.helper.DrivingFinderHelper;
-import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationServiceImpl;
 import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.users.driver.car.CarService;
+import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
+import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -94,7 +92,7 @@ public class DrivingFinderReservationServiceImpl implements DrivingFinderReserva
             CalculatedRouteDTO driverToStartPath = new CalculatedRouteDTO();
             driverToStartPath.setDuration(0);
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
-                    DriverDTOConverter.convertBasicWithCar(driver, carService),
+                    DriverDTOConverter.convertBasicWithCar(driver),
                     new LocationDTO(driver.getLon(), driver.getLat()),
                     carService.calculatePrice(driver.getCar(), route.getDistance()),
                     route,
@@ -112,8 +110,7 @@ public class DrivingFinderReservationServiceImpl implements DrivingFinderReserva
             if (d.getReservedFromClientDriving() != null) {
                 continue;
             }
-            Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(d.getEmail());
-            if (driverLocker.isEmpty() || driverLocker.get().getPassengerEmail() == null) {
+            if (!driverLockerService.driverIsLocked(d.getEmail())) {
                 retVal.add(d);
             }
         }

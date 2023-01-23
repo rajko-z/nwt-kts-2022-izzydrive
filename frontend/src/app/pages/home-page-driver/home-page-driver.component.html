@@ -2,15 +2,15 @@
   <div class="right-side-home-page">
     <div class="driver-status">
       <p class="status-title">Your current status: </p>
-      <button class="button-status">{{status ? 'active' : 'inactive'}}</button>
+      <button class="button-status">{{driverStatus ? 'active' : 'inactive'}}</button>
     </div>
     <div class="current-driving">
       <h2 class="title">Current driving</h2>
-      <app-display-driving [driving]="currentDriving" [time]="currentStatus"></app-display-driving>
+      <app-display-driving [driving]="currentDriving" [currDrivingStatus]="currDrivingStatus"></app-display-driving>
     </div>
     <div class="next-driving">
       <h2 class="title">Next driving</h2>
-      <app-display-driving [driving]="nextDriving" [time]="'next'"></app-display-driving>
+      <app-display-driving [driving]="nextDriving" [currDrivingStatus]="'next'"></app-display-driving>
     </div>
   </div>
   <div class="left-side-home-page">

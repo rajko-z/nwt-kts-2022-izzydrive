@@ -1,4 +1,4 @@
-package com.izzydrive.backend.service.navigation;
+package com.izzydrive.backend.service.navigation.tasks;
 
 import com.izzydrive.backend.config.SpringContext;
 import com.izzydrive.backend.service.users.driver.DriverService;

@@ -10,6 +10,8 @@ public enum NotificationStatus {
     PAYMENT_SUCCESS,
     PAYMENT_FAILURE,
     PAYMENT_EXPIRED,
-    NEW_DRIVING_DRIVER
+    NEW_DRIVING_DRIVER,
     //obavestenja o rezervaciji na 15, 10, 5 min
+
+    DRIVER_ARRIVED_AT_START
 }

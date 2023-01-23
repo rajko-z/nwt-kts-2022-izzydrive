@@ -6,6 +6,7 @@ import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.payment.process.afterpayment.AfterPaymentService;
 import com.izzydrive.backend.service.payment.process.transfer.PaymentTransferService;
 import com.izzydrive.backend.service.payment.process.validation.PaymentValidationService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
@@ -26,6 +27,8 @@ public class PaymentProcessServiceImpl implements PaymentProcessService {
     private final PassengerService passengerService;
 
     private final DrivingService drivingService;
+
+    private final AfterPaymentService afterPaymentService;
 
     private final PaymentValidationService paymentValidationService;
 
@@ -61,13 +64,13 @@ public class PaymentProcessServiceImpl implements PaymentProcessService {
             drivingService.saveAndFlush(driving);
             boolean result = paymentTransferService.payForAllPassengers(driving);
             if (result) {
-                drivingService.setUpDrivingAfterSuccessPaymentAndSendNotification(driving);
+                afterPaymentService.onSuccess(driving);
             } else {
-                drivingService.cleanUpDrivingAfterFailurePaymentAndSendNotification(driving);
+                afterPaymentService.onFailure(driving);
             }
         } catch (OptimisticLockingFailureException ex) {
-            LOG.info("concurent read for driving service: " + ex.getMessage());
-            throw new BadRequestException("Your request have already been proceseed");
+            LOG.info(String.format("concurrent read for driving service: %s", ex.getMessage()));
+            throw new BadRequestException("Your request have already been processed");
         }
     }
 
