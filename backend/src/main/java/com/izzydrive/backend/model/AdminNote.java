@@ -27,4 +27,7 @@ public class AdminNote {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User admin;
+
+    @Column
+    private Long userId;
 }

@@ -28,6 +28,7 @@ export class ExplanationDialogComponent {
     this.drivingNote.drivingId = this.data;
     this.drivingNote.driverEmail = this.userService.getCurrentUserEmail();
     this.drivingNote.text = this.explanationForm.value.explanation;
+    this.drivingNote.timestamp = new Date();
     this.drivingService.rejectDriving(this.drivingNote).subscribe((res) => {
       this.snackBar.open("You have successfully declined the ride", "Ok", {
         duration: 3000,

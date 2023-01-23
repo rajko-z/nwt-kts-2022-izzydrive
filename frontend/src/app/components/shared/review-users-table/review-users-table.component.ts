@@ -4,6 +4,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {ReviewRideTableComponent} from "../review-ride-table/review-ride-table.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoggedUserService} from "../../../services/loggedUser/logged-user.service";
+import {
+  ReviewAndWriteAdminNotesComponent
+} from "../../review-and-write-admin-notes/review-and-write-admin-notes.component";
 
 @Component({
   selector: 'app-review-users-table',
@@ -22,9 +25,15 @@ export class ReviewUsersTableComponent {
   constructor(private loggedUserService: LoggedUserService, public dialog: MatDialog, public snackBar: MatSnackBar) {
   }
 
-  openDialog(user: User): void {
+  openRideDialog(user: User): void {
     this.dialog.open(ReviewRideTableComponent, {
-      data: {id: user.id, firstName: user.firstName, lastName: user.lastName, role: user.role},
+      data: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        message: 'The user does not have his own ride!'
+      },
     });
   }
 
@@ -54,10 +63,17 @@ export class ReviewUsersTableComponent {
       }
     );
   }
-  emitResponse(response:string):void{
+
+  emitResponse(response: string): void {
     this.dataEvent.emit();
     this.snackBar.open(response, "OK", {
       duration: 2000,
+    });
+  }
+
+  openNoteDialog(user: User): void {
+    this.dialog.open(ReviewAndWriteAdminNotesComponent, {
+      data: {id: user.id},
     });
   }
 }

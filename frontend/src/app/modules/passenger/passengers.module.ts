@@ -10,7 +10,6 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {SharedComponentsModule} from "../shared/shared-components.module";
 import {OrderingRideAdvancedComponent} from "../../components/ordering-ride/advanced/ordering-ride-advanced.component";
 import {RideDataFormComponent} from "../../components/ordering-ride/advanced/ride-data-form/ride-data-form.component";
-import {OtherUsersDialogComponent} from "../../components/other-users-dialog/other-users-dialog.component";
 import {FavoriteRouteDialogComponent} from "../../components/favorite-route-dialog/favorite-route-dialog.component";
 import {
   NewRideLinkedUserComponent
@@ -28,6 +27,9 @@ import { ReservationsListComponent } from "src/app/components/reservations-list/
 import { ConfirmCancelReservationComponent } from "src/app/components/notifications/confirm-cancel-reservation/confirm-cancel-reservation.component";
 import {ReportDriverCheckComponent} from "../../components/report-driver-check/report-driver-check.component";
 import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/favorite-routs.component";
+import {
+  PaymentReservationComponent
+} from "../../components/notifications/payment-reservation/payment-reservation.component";
 
 
 const declaredModules = [
@@ -36,7 +38,6 @@ const declaredModules = [
   PayingInfoComponent,
   OrderingRideAdvancedComponent,
   RideDataFormComponent,
-  OtherUsersDialogComponent,
   FavoriteRouteDialogComponent,
   NewRideLinkedUserComponent,
   DeniedRideLinkedUserComponent,
@@ -47,7 +48,8 @@ const declaredModules = [
   ReservationsListComponent,
   ConfirmCancelReservationComponent,
   ReportDriverCheckComponent,
-  FavouriteRoutsComponent
+  FavouriteRoutsComponent,
+  PaymentReservationComponent
 ];
 
 @NgModule({

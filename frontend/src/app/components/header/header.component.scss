@@ -1,57 +1,53 @@
-$tittle_color: #696F91;
-@import '../shared/shared.scss';
-$dark1: #191A23;
+@import "src/style/styles";
 
-
-
-.header_container{
-    background-color: $dark1;
-    display: flex;
-    height: 10%;
-    flex-direction: row;
-    min-height: 60px;
+.header_container {
+  background-color: $dark1;
+  display: flex;
+  height: 10%;
+  flex-direction: row;
+  min-height: 60px;
 }
 
-.logo{
-    padding: 5px;
-    height: 80%;
+.logo {
+  padding: 5px;
+  height: 80%;
 }
 
-.app_name{
-    font-family: "Inter";
-    font-size: x-large;
-    color: white;
+.app_name {
+  font-family: "Inter";
+  font-size: x-large;
+  color: white;
 }
 
-.sign_button{
-    color: white;
-    font-size: large;
-    font-family: "Inter";
-    text-decoration: none;
-    float: right;
-    padding-top: 5%;
-    margin-right: 5%;
+.sign_button {
+  color: white;
+  font-size: large;
+  font-family: "Inter";
+  text-decoration: none;
+  float: right;
+  padding-top: 5%;
+  margin-right: 5%;
 }
 
 
-.profile_button{
-    float: right;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #E9EAEF;
-    margin-right: 15px;
-    align-self: center;
+.profile_button {
+  float: right;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #E9EAEF;
+  margin-right: 15px;
+  align-self: center;
 }
 
 
-.open_menu_button{
-    background-color: $light2;
-    color: $dark3;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-top: 10px;
-    margin-left: 10px;
-    align-items: center;
+.open_menu_button {
+  background-color: $light2;
+  color: $dark3;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-left: 10px;
+  align-items: center;
 }
