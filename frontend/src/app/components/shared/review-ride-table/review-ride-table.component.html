@@ -8,68 +8,70 @@
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
   <div *ngIf="this.gettingDataFinished">
-    <div *ngIf="this.drivings?.length === 0">
+    <div *ngIf="dataSource?.data.length === 0">
       <div class="notification">
-        <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-        <p class="text-message">The user does not have his own ride!</p></div>
+        <em class="fa-sharp fa-solid fa-circle-xmark"></em>
+        <p class="text-message">{{data.message}}</p></div>
     </div>
-    <div *ngIf="dataSource">
-      <table #matTabel mat-table [dataSource]="dataSource" matSort class="table-users" (matSortChange)="sortData($event)">
-  
+    <div *ngIf="dataSource && dataSource?.data.length > 0">
+      <table #matTabel mat-table [dataSource]="dataSource" matSort class="table-users"
+             (matSortChange)="sortData($event)">
+
         <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <th mat-header-cell *matHeaderCellDef> No.</th>
           <td mat-cell *matCellDef="let i = index">{{i + 1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="startAddress">
           <th mat-sort-header="startAddress" *matHeaderCellDef> start address</th>
           <td mat-cell *matCellDef="let element"> {{element.start.name}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="endAddress">
-          <th mat-sort-header="endAddress" *matHeaderCellDef> end address </th>
+          <th mat-sort-header="endAddress" *matHeaderCellDef> end address</th>
           <td mat-cell *matCellDef="let element"> {{element.end.name}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="startTime">
-          <th mat-sort-header="startTime" *matHeaderCellDef> start time </th>
+          <th mat-sort-header="startTime" *matHeaderCellDef> start time</th>
           <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="endTime">
-          <th mat-sort-header="endTime" *matHeaderCellDef> end time </th>
+          <th mat-sort-header="endTime" *matHeaderCellDef> end time</th>
           <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="price">
-          <th mat-sort-header="price" *matHeaderCellDef> price </th>
+          <th mat-sort-header="price" *matHeaderCellDef> price</th>
           <td mat-cell *matCellDef="let element">{{element.price}}</td>
         </ng-container>
 
         <ng-container matColumnDef="details">
-          <th mat-sort-header *matHeaderCellDef> details </th>
-          <td mat-cell *matCellDef="let element" >
+          <th mat-sort-header *matHeaderCellDef> details</th>
+          <td mat-cell *matCellDef="let element">
             <button class="button-evaluate">DETAILS</button>
           </td>
         </ng-container>
-        
+
         <ng-container matColumnDef="evaluate" *ngIf="isPassenger">
-          <th mat-sort-header *matHeaderCellDef> evaluate </th>
+          <th mat-sort-header *matHeaderCellDef> evaluate</th>
           <td mat-cell *matCellDef="let element">
-            <button *ngIf="element.evaluationAvailable" (click)="openDialog(element)" class="button-evaluate">EVALUATE</button>
+            <button *ngIf="element.evaluationAvailable" (click)="openDialog(element)" class="button-evaluate">EVALUATE
+            </button>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="favorite" *ngIf="isPassenger">
-          <th mat-sort-header *matHeaderCellDef> favorite </th>
-          <td mat-cell *matCellDef="let element" >
+          <th mat-sort-header *matHeaderCellDef> favorite</th>
+          <td mat-cell *matCellDef="let element">
             <button class="button-favorite">
               <mat-icon *ngIf="element.favoriteRoute" (click)="removeFromFavourite(element)">favorite</mat-icon>
-              <mat-icon *ngIf="!element.favoriteRoute" 
+              <mat-icon *ngIf="!element.favoriteRoute"
                         (click)="addToFavourite(element)"
                         #tooltip="matTooltip"
                         matTooltip="Add this route to favorite">
-                        favorite_border
+                favorite_border
               </mat-icon>
             </button>
           </td>
@@ -80,13 +82,13 @@
       </table>
 
     </div>
-   
+
   </div>
   <mat-paginator [pageSizeOptions]="[1, 2, 5]"
-    showFirstLastButtons
-    aria-label="Select page of periodic elements" 
-    #paginator
-    (page)="onPaginateChange($event)">
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements"
+                 #paginator
+                 (page)="onPaginateChange($event)">
   </mat-paginator>
 
 

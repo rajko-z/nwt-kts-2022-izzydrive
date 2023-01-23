@@ -1,7 +1,7 @@
 @import "src/style/styles";
 
 .dialog{
-  @include size(60vw, 60vh);
+  @include size(70%, 60vh);
 }
 .title{
   @include setTitleStyle(55vw);
