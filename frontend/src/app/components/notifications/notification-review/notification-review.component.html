@@ -25,7 +25,9 @@
             <img
               *ngIf="option.notificationStatus === 'PAYMENT_FAILURE' || option.notificationStatus === 'PAYMENT_EXPIRED' "
               src="assets/payment_fail.png" alt="payment faild" class="icon">
-            <img *ngIf="option.notificationStatus === 'DRIVER_ARRIVED_AT_START'" alt="driver arrived at start" class="icon">
+            <img *ngIf="option.notificationStatus === 'DRIVER_ARRIVED_AT_START'" src="assets/carStart.png" alt="driver arrived at start"
+                 class="icon">
+            <img *ngIf="option.notificationStatus === 'REPORT_DRIVER'" alt="report driver" class="icon">
 
             <div class="message-area">
               <p class="message">{{option.message}}</p>

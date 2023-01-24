@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClientService} from "../custom-http/http-client.service";
 import {DrivingWithLocations} from "../../model/driving/driving";
 import {Observable} from "rxjs";
 import {CalculatedRoute} from "../../model/map/calculatedRoute";
-import {CacheCleanModule} from "@angular/cli/src/commands/cache/clean/cli";
+import {TextResponse} from "../../model/response/textresponse";
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,8 @@ export class PassengerService {
     return this.http.getT<CalculatedRoute>(environment.apiUrl + 'passengers/current-driving-left-to-start');
   }
 
+  reportDriver(): Observable<TextResponse> {
+    return this.http.getT<TextResponse>(environment.apiUrl + 'passengers/report-driver');
+  }
 
 }

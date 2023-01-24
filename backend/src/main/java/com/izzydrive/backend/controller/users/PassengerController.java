@@ -1,6 +1,7 @@
 package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.dto.NewPassengerDTO;
+import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
@@ -50,5 +51,12 @@ public class PassengerController {
     public ResponseEntity<CalculatedRouteDTO> findEstimatedTimeLeftForCurrentDrivingToStart() {
         CalculatedRouteDTO retVal = passengerService.findEstimatedTimeLeftForCurrentDrivingToStart();
         return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+    @GetMapping("/report-driver")
+    public ResponseEntity<TextResponse> reportDriver() {
+        passengerService.reportDriver();
+        return new ResponseEntity<>(new TextResponse("Driver is successfully reported."), HttpStatus.OK);
     }
 }

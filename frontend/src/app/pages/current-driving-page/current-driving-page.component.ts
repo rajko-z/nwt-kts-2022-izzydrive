@@ -84,52 +84,6 @@ export class CurrentDrivingPageComponent implements OnInit {
 
   setUpMap(): void {
     this.mapService.resetEverythingOnMap();
-    this.addStartPlace();
-    this.addEndPlace();
-    this.addFirstIntermediate();
-    this.addSecondIntermediate();
-    this.addThirdIntermediate();
-    this.mapService.startTrackingCurrentDriverOnMap(this.currentDriving.driver.email);
-    this.mapService.drawRoute(this.currentDriving.fromDriverToStart.coordinates, "#5715ff");
-    this.mapService.drawRoute(this.currentDriving.fromStartToEnd.coordinates, "#d3081f");
-  }
-
-  addStartPlace() {
-    let startPlace: PlaceOnMap = this.currentDriving.route.start;
-    startPlace.markerType = MarkerType.START;
-    this.mapService.addPlaceOnMap(this.currentDriving.route.start);
-  }
-
-  addEndPlace() {
-    let endPlace: PlaceOnMap = this.currentDriving.route.end;
-    endPlace.markerType = MarkerType.END;
-    this.mapService.addPlaceOnMap(this.currentDriving.route.end);
-  }
-
-  addFirstIntermediate() {
-    let inter: PlaceOnMap[] = this.currentDriving.route.intermediateStations;
-    if (inter.length >= 1) {
-      let place: PlaceOnMap = inter.at(0);
-      place.markerType = MarkerType.FIRST_INTERMEDIATE;
-      this.mapService.addPlaceOnMap(place);
-    }
-  }
-
-  addSecondIntermediate() {
-    let inter: PlaceOnMap[] = this.currentDriving.route.intermediateStations;
-    if (inter.length >= 2) {
-      let place: PlaceOnMap = inter.at(1);
-      place.markerType = MarkerType.SECOND_INTERMEDIATE;
-      this.mapService.addPlaceOnMap(place);
-    }
-  }
-
-  addThirdIntermediate() {
-    let inter: PlaceOnMap[] = this.currentDriving.route.intermediateStations;
-    if (inter.length === 3) {
-      let place: PlaceOnMap = inter.at(2);
-      place.markerType = MarkerType.THIRD_INTERMEDIATE;
-      this.mapService.addPlaceOnMap(place);
-    }
+    this.mapService.addAllFromDriving(this.currentDriving);
   }
 }

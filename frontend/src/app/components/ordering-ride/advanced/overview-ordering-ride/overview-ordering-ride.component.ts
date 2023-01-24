@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DrivingFinderRequest} from "../../../../model/driving/drivingFinderRequest.";
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {HttpClientService} from "../../../../services/custom-http/http-client.service";
@@ -6,7 +6,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {DrivingRequest} from "../../../../model/driving/driving";
 import {Router} from "@angular/router";
-import {ReportDriverCheckComponent} from "../../../report-driver-check/report-driver-check.component";
 
 @Component({
   selector: 'app-overview-ordering-ride',

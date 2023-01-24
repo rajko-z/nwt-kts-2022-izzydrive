@@ -44,4 +44,6 @@ public interface PassengerService {
     CalculatedRouteDTO findEstimatedTimeLeftForCurrentDrivingToStart();
 
     void deleteDrivingFromPassengers(Collection<Passenger> passengers);
+
+    void reportDriver();
 }

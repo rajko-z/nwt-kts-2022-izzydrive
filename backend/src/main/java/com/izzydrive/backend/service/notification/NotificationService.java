@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.notification;
 
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.users.Passenger;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +28,8 @@ public interface NotificationService {
     void sendNotificationNewDrivingDriver(String driverEmail);
 
     void sendNotificationDriverArrivedAtStartLocation(Collection<String> passengersToSendNotifications);
+
+    void reportDriverNotification(Passenger initiator);
 
     List<NotificationDTO> findAll();
 

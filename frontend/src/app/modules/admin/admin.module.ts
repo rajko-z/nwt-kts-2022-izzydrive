@@ -15,6 +15,7 @@ import { ReviewUsersTableComponent } from "src/app/components/shared/review-user
 import {
   RejectRideDriverComponent
 } from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
+import {ReportedDriverComponent} from "../../components/notifications/reported-driver/reported-driver.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
@@ -22,7 +23,8 @@ const declaredModules = [
   ReviewUsersTableComponent,
   HomePageAdminComponent,
   AddDriverComponent,
-  RejectRideDriverComponent
+  RejectRideDriverComponent,
+  ReportedDriverComponent
 ];
 
 @NgModule({

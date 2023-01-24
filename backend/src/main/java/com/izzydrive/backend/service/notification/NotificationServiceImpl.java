@@ -7,9 +7,11 @@ import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Notification;
 import com.izzydrive.backend.model.NotificationStatus;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.NotificationRepository;
 import com.izzydrive.backend.service.users.UserService;
+import com.izzydrive.backend.service.users.admin.AdminService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,6 +32,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
 
     private final UserService userService;
+
+    private final AdminService adminService;
 
     @Override
     public void sendNotificationNewReservationDriving(String email, Driving driving) {
@@ -173,6 +177,26 @@ public class NotificationServiceImpl implements NotificationService {
             this.simpMessagingTemplate.convertAndSend("/notification/driverArrivedStart", notificationDTO);
             createAndSaveNotification(notificationDTO);
         }
+    }
+
+    @Override
+    public void reportDriverNotification(Passenger initiator) {
+        Driving driving = initiator.getCurrentDriving();
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setMessage(String.format("Passenger %s just reported driver %s", initiator.getEmail(), driving.getDriver().getEmail()));
+        notificationDTO.setDuration(driving.getDuration());
+        notificationDTO.setPrice(driving.getPrice());
+        notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
+        notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
+        List<String> intermediateStationDTO = new ArrayList<>();
+        for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
+            intermediateStationDTO.add(intermediateStation.getName());
+        }
+        notificationDTO.setIntermediateLocations(intermediateStationDTO);
+        notificationDTO.setUserEmail(adminService.getAdmin().getEmail());
+        notificationDTO.setNotificationStatus(NotificationStatus.REPORT_DRIVER);
+        this.simpMessagingTemplate.convertAndSend("/notification/reportDriver", notificationDTO);
+        createAndSaveNotification(notificationDTO);
     }
 
     @Override

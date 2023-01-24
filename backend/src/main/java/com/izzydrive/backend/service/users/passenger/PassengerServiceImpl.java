@@ -18,7 +18,7 @@ import com.izzydrive.backend.repository.users.PassengerRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.routes.DrivingRoutesService;
-import com.izzydrive.backend.service.users.driver.car.CarService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -53,9 +53,9 @@ public class PassengerServiceImpl implements PassengerService {
 
     private final DrivingService drivingService;
 
-    private final CarService carService;
-
     private final DrivingRoutesService drivingRoutesService;
+
+    private final NotificationService notificationService;
 
     public void registerPassenger(NewPassengerDTO newPassengerData) {
         validateNewPassengerData(newPassengerData);
@@ -184,5 +184,15 @@ public class PassengerServiceImpl implements PassengerService {
         for (Passenger passenger : passengers) {
             passenger.setCurrentDriving(null);
         }
+    }
+
+    @Transactional
+    @Override
+    public void reportDriver() {
+        Passenger passenger = getCurrentlyLoggedPassenger();
+        if (passenger.getCurrentDriving() == null || !passenger.getCurrentDriving().getDrivingState().equals(DrivingState.ACTIVE)) {
+            throw new BadRequestException(ExceptionMessageConstants.CANT_REPORT_DRIVER_BECAUSE_NOT_ACTIVE_DRIVING);
+        }
+        notificationService.reportDriverNotification(passenger);
     }
 }

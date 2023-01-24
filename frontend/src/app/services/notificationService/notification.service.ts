@@ -15,6 +15,7 @@ import {HttpClientService} from "../custom-http/http-client.service";
 import {
   RejectRideDriverComponent
 } from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
+import {ReportedDriverComponent} from "../../components/notifications/reported-driver/reported-driver.component";
 
 @Injectable({
   providedIn: 'root'
@@ -135,6 +136,13 @@ export class NotificationService {
     stompClient.subscribe('/notification/driverArrivedStart', (message: { body: string }) => {
       this.showNotificationText(message.body);
     });
+  }
+
+  showNotificationReportedDriver(stompClient) {
+    stompClient.subscribe('/notification/reportDriver', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, ReportedDriverComponent);
+      }
+    );
   }
 
   findAll() {

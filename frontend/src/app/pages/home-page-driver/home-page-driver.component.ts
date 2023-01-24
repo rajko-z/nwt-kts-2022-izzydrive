@@ -5,6 +5,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {UserService} from "../../services/userService/user-sevice.service";
 import {DriverService} from "../../services/driverService/driver.service";
+import {MapService} from "../../services/mapService/map.service";
 
 @Component({
   selector: 'app-home-page-driver',
@@ -22,7 +23,8 @@ export class HomePageDriverComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private driverService: DriverService) {
+    private driverService: DriverService,
+    private mapService: MapService) {
   }
 
   ngOnInit(): void {
@@ -65,6 +67,7 @@ export class HomePageDriverComponent implements OnInit {
         if (this.currentDriving.id === null) {
           this.currentDriving = null;
         }
+        this.setUpMap();
       }
     });
   }
@@ -96,8 +99,9 @@ export class HomePageDriverComponent implements OnInit {
   private loadCurrentDriving() {
     this.driverService.getCurrentDriving().subscribe((driving) => {
       if (driving && driving.driver.email === this.userService.getCurrentUserEmail()) {
-        this.currentDriving = driving
+        this.currentDriving = driving;
         this.setCurrDrivingStatus();
+        this.setUpMap();
       }
     });
   }
@@ -123,4 +127,15 @@ export class HomePageDriverComponent implements OnInit {
       }
     }
   }
+
+  private setUpMap(): void {
+    this.mapService.resetEverythingOnMap();
+
+    if (this.currentDriving) {
+      this.mapService.addAllFromDriving(this.currentDriving);
+    }
+  }
+
+
+
 }
