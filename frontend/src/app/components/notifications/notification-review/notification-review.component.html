@@ -64,6 +64,10 @@
               <button class="submit-button" type="button" (click)="onYesClickChangeData(option.driverStr, option.id)">Accept</button>
               <button class="submit-button" type="button" (click)="onNoClickChangeData(option.driverStr, option.id)">Deny</button>
             </div>
+            <div *ngIf="option.notificationStatus === 'CAR_CHANGE_DATA'" >
+              <button class="submit-button" type="button" (click)="onYesClickChangeCarData(option.carStr, option.id)">Accept</button>
+              <button class="submit-button" type="button" (click)="onNoClickChangeCarData(option.carStr, option.id)">Deny</button>
+            </div>
           </div>
         </div>
       </div>

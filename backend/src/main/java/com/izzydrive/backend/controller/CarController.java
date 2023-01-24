@@ -27,7 +27,7 @@ public class CarController {
 
     @PreAuthorize("hasAnyRole('ROLE_DRIVER', 'ROLE_ADMIN')")
     @PutMapping("/edit")
-    public ResponseEntity<TextResponse> editCar(@RequestBody CarDTO carDTO, @RequestParam(defaultValue = "true") boolean saveChanges){
+    public ResponseEntity<TextResponse> editCar(@RequestParam(defaultValue = "true") boolean saveChanges, @RequestBody CarDTO carDTO){
         boolean edited = this.carService.editCar(carDTO,saveChanges);
         if (edited){
             return new ResponseEntity<>(new TextResponse("Successfully changed car data"), HttpStatus.OK);

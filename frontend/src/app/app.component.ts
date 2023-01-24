@@ -74,5 +74,6 @@ export class AppComponent implements OnInit {
     this.notificationService.sendNotificationForReservationDeleted(this.stompClient);
     this.notificationService.sendNotificationToAdimForDriverChangeData(this.stompClient);
     this.notificationService.sendNotificationAdminResponseForChanges(this.stompClient);
+    this.notificationService.sendNotificationToAdimForCarChangeData(this.stompClient)
   }
 }

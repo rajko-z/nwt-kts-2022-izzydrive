@@ -9,6 +9,7 @@ export class Car {
   carType : CarType;
   carAccommodation: CarAccommodation;
   accommodations: string;
+  driverEmail: string;
 }
 
 export const carImageMapper = {

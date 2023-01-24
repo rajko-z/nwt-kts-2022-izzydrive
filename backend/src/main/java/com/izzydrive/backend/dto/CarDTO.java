@@ -20,7 +20,7 @@ public class CarDTO {
 
     private String accommodations;
 
-    private String driverEmal;
+    private String driverEmail;
 
     public CarDTO(Car car){
         this.id = car.getId();
@@ -29,6 +29,6 @@ public class CarDTO {
         this.maxPassengers = car.getMaxNumOfPassengers();
         this.carType = car.getCarType().toString();
         this.accommodations = car.getCarAccommodations();
-        this.driverEmal = car.getDriver().getEmail();
+        this.driverEmail = car.getDriver().getEmail();
     }
 }

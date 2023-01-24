@@ -78,7 +78,7 @@ public class Validator {
 
     public static boolean validateCarType(String carType){
         for (CarType type : CarType.values()) {
-            if (type.name().equalsIgnoreCase(carType)) {
+            if (type.name().toLowerCase().equalsIgnoreCase(carType.toLowerCase())) {
                 return true;
             }
         }

@@ -129,7 +129,6 @@ export class UserService {
 
   changeUserData(user: User):Observable<TextResponse>{
     let saveChanges : boolean = true;
-    console.log(user)
     if (this.getRoleCurrentUserRole()=== Role.ROLE_DRIVER){
       saveChanges = false;
     }

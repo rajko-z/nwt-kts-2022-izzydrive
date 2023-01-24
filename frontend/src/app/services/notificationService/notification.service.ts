@@ -19,6 +19,7 @@ import {
   PaymentReservationComponent
 } from "../../components/notifications/payment-reservation/payment-reservation.component";
 import { DriverChangeInfoComponent } from 'src/app/components/notifications/driver-change-info/driver-change-info.component';
+import { CarChangeInfoComponent } from 'src/app/components/notifications/car-change-info/car-change-info.component';
 
 
 @Injectable({
@@ -174,11 +175,18 @@ export class NotificationService {
       }
     );
   }
-  
+
   sendNotificationAdminResponseForChanges(stompClient){
     stompClient.subscribe('/notification/admin-responses', (message: { body: string }) => {
       this.showNotificationText(message.body);
     }
   );
+  }
+
+  sendNotificationToAdimForCarChangeData(stompClient) {
+    stompClient.subscribe('/notification/carDataChange', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, CarChangeInfoComponent);
+      }
+    );
   }
 }

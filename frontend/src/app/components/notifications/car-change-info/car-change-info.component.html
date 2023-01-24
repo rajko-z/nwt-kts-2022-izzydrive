@@ -1,0 +1,32 @@
+<div>
+    <div class="title">
+      <p class="header">{{data.message.message}}</p>
+      <p>New car data:</p>
+      <div class="label">
+        <mat-icon>short_text</mat-icon>
+        <p>Registration: {{data.message.carData.registration}}</p>
+      </div>
+      <div class="label">
+        <mat-icon>short_text</mat-icon>
+        <p>Model: {{data.message.carData.model}}</p>
+      </div>
+      <div class="label">
+        <mat-icon>alternate_email</mat-icon>
+        <p>Type: {{data.message.carData.carType}}</p>
+      </div>
+      <div class="label">
+        <mat-icon>alternate_email</mat-icon>
+        <p>Max passengers: {{data.message.carData.maxPassengers}}</p>
+      </div>
+      <div class="label">
+        <mat-icon>phone</mat-icon>
+        <p>Accommodations: {{data.message.carData.accomodations}}</p>
+      </div>
+    </div>
+    <p class="question">You can accept or deny changes</p>
+    <div class="button">    
+      <button type="submit" class="submit-button" (click)="onYesClick()">Accept</button>
+      <button type="submit" class="submit-button" (click)="onNoClick()">Deny</button>
+    </div>
+</div>
+  

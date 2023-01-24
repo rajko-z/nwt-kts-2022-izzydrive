@@ -39,7 +39,7 @@
             <label class="car_type_label">Select car type* </label>
             <mat-radio-group formControlName="carType" style="display: flex; flex-direction:row">
               <mat-radio-button value="regular" class="car_type_item">Regular</mat-radio-button>
-              <mat-radio-button value="avarage" class="car_type_item">Avarage</mat-radio-button>
+              <mat-radio-button value="average" class="car_type_item">Average</mat-radio-button>
               <mat-radio-button value="premium" class="car_type_item">Premium</mat-radio-button>
             </mat-radio-group>
             <mat-error *ngIf="this.carForm.controls['carType'].hasError('required')">Required</mat-error>

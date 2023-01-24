@@ -312,8 +312,9 @@ public class NotificationServiceImpl implements NotificationService {
         if (carDTO == null) {
             return "";
         }
-        return  "Registration: " + carDTO.getRegistration() + " Model: " + carDTO.getModel() +
-                " Type: " + carDTO.getCarType() + " max passengers" + carDTO.getMaxPassengers()
-                + " accommodations: " + carDTO.getAccommodations();
+        return  "Registration: |" + carDTO.getRegistration() + "| Model: |" + carDTO.getModel() +
+                "| Type: |" + carDTO.getCarType() + "| max passengers |" + carDTO.getMaxPassengers()
+                + "| accommodations: |" + carDTO.getAccommodations() + "| driver: |" + carDTO.getDriverEmail()
+                + "| id |" + carDTO.getId();
     }
 }

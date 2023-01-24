@@ -100,7 +100,17 @@ public class CarServiceImpl implements CarService {
             car.setModel(carDTO.getModel());
             car.setMaxNumOfPassengers(carDTO.getMaxPassengers());
             car.setRegistration(carDTO.getRegistration());
-            car.setCarAccommodations(this.getCarAccommodationString(carDTO.getCarAccommodation()));
+            if(carDTO.getCarAccommodation() != null){
+                String accommodationsStr = this.getCarAccommodationString(carDTO.getCarAccommodation());
+                carDTO.setAccommodations(accommodationsStr);
+                car.setCarAccommodations(accommodationsStr);
+            }
+            if(!carDTO.getAccommodations().isEmpty()){
+                carDTO.setAccommodations(carDTO.getAccommodations());
+                car.setCarAccommodations(carDTO.getAccommodations());
+            }
+
+
             if (saveChanges) {
                 carRepository.save(car);
                 return true;
@@ -116,7 +126,7 @@ public class CarServiceImpl implements CarService {
 
     private CarType getCarType(String carType){
         for (CarType type : CarType.values()) {
-            if (type.name().equalsIgnoreCase(carType)) {
+            if (type.name().toUpperCase().equalsIgnoreCase(carType.toUpperCase())) {
                 return type;
             }
         }

@@ -34,6 +34,7 @@ export class EditCarComponent implements OnInit {
   onFormSubmit(carForm : FormGroup){
     let car : Car = carForm.value;
     car.id = this.carData.id;
+    car.driverEmail = this.userService.getCurrentUserEmail();
     this.carService.editCarData(car).subscribe({
       next: (response) => {
         this.snackbar.open(response.text, "Ok")
