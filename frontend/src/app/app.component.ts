@@ -10,6 +10,7 @@ import {NotificationService} from "./services/notificationService/notification.s
 import {Role} from './model/user/role';
 import {ChatService} from './services/chat/chat.service';
 import {Router} from "@angular/router";
+import { th } from 'date-fns/locale';
 
 @Component({
   selector: 'app-root',
@@ -70,6 +71,9 @@ export class AppComponent implements OnInit {
     this.notificationService.showNotificationNewRideDriver(this.stompClient);
     this.notificationService.sendNotificationReservationReminder(this.stompClient);
     this.notificationService.sendNotificationForPaymentReservation(this.stompClient);
-    this.notificationService.sendNotificationForReservationDeleted(this.stompClient)
+    this.notificationService.sendNotificationForReservationDeleted(this.stompClient);
+    this.notificationService.sendNotificationToAdimForDriverChangeData(this.stompClient);
+    this.notificationService.sendNotificationAdminResponseForChanges(this.stompClient);
+    this.notificationService.sendNotificationToAdimForCarChangeData(this.stompClient)
   }
 }

@@ -18,7 +18,6 @@ public class Validator {
         Matcher matcherEmail = emailPattern.matcher(email);
 
         if(matcherEmail.matches()) return true;
-
         else {
             throw new BadRequestException(INVALID_EMAIl_FORMAT_MESSAGE, 1001);
         }
@@ -79,7 +78,7 @@ public class Validator {
 
     public static boolean validateCarType(String carType){
         for (CarType type : CarType.values()) {
-            if (type.name().equalsIgnoreCase(carType)) {
+            if (type.name().toLowerCase().equalsIgnoreCase(carType.toLowerCase())) {
                 return true;
             }
         }

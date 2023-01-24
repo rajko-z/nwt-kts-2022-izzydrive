@@ -110,7 +110,7 @@ export class EditProfileComponent implements OnInit {
     console.log(user);
     this.userService.changeUserData(user).subscribe({
       next : (response) => {
-        this.responseMessage.openSuccessMessage("Successfully change your data");
+        this.responseMessage.openSuccessMessage(response.text);
         this.router.navigateByUrl('/logged');
       },
       error : (response) => {

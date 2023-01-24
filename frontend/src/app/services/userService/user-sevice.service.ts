@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import { TextResponse } from 'src/app/model/response/textresponse';
 import { ResetPassword } from 'src/app/model/user/resetPassword';
 import { ProfilePageData } from 'src/app/model/user/profileData';
+import { AdminRespondOnChanges } from 'src/app/model/message/AdminResponseOnChanges';
 
 @Injectable({
   providedIn: 'root'
@@ -126,9 +127,14 @@ export class UserService {
       environment.apiUrl + "users/" + this.getCurrentUserEmail())
   }
 
-  changeUserData(user: User){
-    return this.http.put(
-      environment.apiUrl + "users/change-info", user, {
+  changeUserData(user: User):Observable<TextResponse>{
+    let saveChanges : boolean = true;
+    if (this.getRoleCurrentUserRole()=== Role.ROLE_DRIVER){
+      saveChanges = false;
+    }
+    console.log(saveChanges)
+    return this.http.put<TextResponse>(
+      environment.apiUrl + "users/change-info?saveChanges=" + saveChanges, user, {
         headers: this.createHeader()
       }
     );
@@ -174,6 +180,18 @@ export class UserService {
     profileData.image = user.imageName? this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
     profileData.image = user.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${user.imageName}`) : null;
     return profileData;
-}
+  }
 
+  adminRespondOnChanges(response: AdminRespondOnChanges){
+    console.log(response)
+    console.log(environment.apiUrl + 'users/response-changes');
+    this.http.post(environment.apiUrl + 'users/response-changes', response).subscribe({
+      next: (response) =>{
+        console.log(response)
+      },
+      error: (error) => {
+        console.log(error.error.message);
+      }
+    })
+  }
 }

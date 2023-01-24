@@ -27,12 +27,15 @@
             <img
               *ngIf="option.notificationStatus === 'PAYMENT_FAILURE' || option.notificationStatus === 'PAYMENT_EXPIRED' "
               src="assets/payment_fail.png" alt="payment faild" class="icon">
+            <img *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'" src="assets/reservation.png"
+              alt="new reservation" class="icon">
             <div class="message-area">
               <p class="message">{{option.message}}</p>
               <div
                 *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' && option.notificationStatus !== 'PAYMENT_FAILURE'
                 && option.notificationStatus !== 'PAYMENT_EXPIRED' && option.notificationStatus !== 'NEW_DRIVING_DRIVER'
-                 && option.notificationStatus !== 'RESERVATION_REMINDER' && option.notificationStatus !== 'RESERVATION_DELETE'">
+                 && option.notificationStatus !== 'RESERVATION_REMINDER' && option.notificationStatus !== 'RESERVATION_DELETE'
+                 && option.notificationStatus !== 'DRIVER_CHANGE_DATA' && option.notificationStatus !== 'CAR_CHANGE_DATA' && option.notificationStatus !== 'ADMIN_RESPONSE'">
                 <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
                 <p class="text">Price: {{option.price}} $</p>
                 <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
@@ -40,6 +43,12 @@
                    *ngIf="option.notificationStatus === 'NEW_RESERVATION' || option.notificationStatus === 'REJECTED_RESERVATION'">
                   Reservation
                   time: {{option.reservationTime[3] + ':' + option.reservationTime[4] + ' ' + option.reservationTime[2] + '-' + option.reservationTime[1] + '-' + option.reservationTime[0]}}</p>
+              </div>
+              <div *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'">
+                <p class="text">{{option.driverStr}}</p>
+              </div>
+              <div *ngIf="option.notificationStatus === 'CAR_CHANGE_DATA'">
+                <p class="text">{{option.carStr}}</p>
               </div>
             </div>
           </div>
@@ -50,6 +59,14 @@
             <div *ngIf="option.notificationStatus === 'REJECTED_DRIVING_DRIVER'">
               <button class="submit-button" type="button" (click)="onYesClick(option.drivingId, option.id)">Yes</button>
               <button class="submit-button" type="button" (click)="onNoClick(option.drivingId, option.id)">No</button>
+            </div>
+            <div *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'" >
+              <button class="submit-button" type="button" (click)="onYesClickChangeData(option.driverStr, option.id)">Accept</button>
+              <button class="submit-button" type="button" (click)="onNoClickChangeData(option.driverStr, option.id)">Deny</button>
+            </div>
+            <div *ngIf="option.notificationStatus === 'CAR_CHANGE_DATA'" >
+              <button class="submit-button" type="button" (click)="onYesClickChangeCarData(option.carStr, option.id)">Accept</button>
+              <button class="submit-button" type="button" (click)="onNoClickChangeCarData(option.carStr, option.id)">Deny</button>
             </div>
           </div>
         </div>

@@ -18,6 +18,8 @@ import {
 import {
   PaymentReservationComponent
 } from "../../components/notifications/payment-reservation/payment-reservation.component";
+import { DriverChangeInfoComponent } from 'src/app/components/notifications/driver-change-info/driver-change-info.component';
+import { CarChangeInfoComponent } from 'src/app/components/notifications/car-change-info/car-change-info.component';
 
 
 @Injectable({
@@ -35,6 +37,7 @@ export class NotificationService {
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
+    console.log(notification)
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.openFromComponent(component, {
         data: {
@@ -164,5 +167,26 @@ export class NotificationService {
 
   deleteNotificationFromAdmin(id: number) {
     return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/admin/${id}`);
+  }
+
+  sendNotificationToAdimForDriverChangeData(stompClient) {
+    stompClient.subscribe('/notification/driverChangeData', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, DriverChangeInfoComponent);
+      }
+    );
+  }
+
+  sendNotificationAdminResponseForChanges(stompClient){
+    stompClient.subscribe('/notification/admin-responses', (message: { body: string }) => {
+      this.showNotificationText(message.body);
+    }
+  );
+  }
+
+  sendNotificationToAdimForCarChangeData(stompClient) {
+    stompClient.subscribe('/notification/carDataChange', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, CarChangeInfoComponent);
+      }
+    );
   }
 }

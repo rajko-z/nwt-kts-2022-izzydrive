@@ -1,13 +1,11 @@
 package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.converters.UserDTOConverter;
-import com.izzydrive.backend.dto.NewPasswordDTO;
-import com.izzydrive.backend.dto.ResetPasswordDTO;
-import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.*;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.service.ImageService;
+import com.izzydrive.backend.service.NotificationService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
@@ -29,6 +27,8 @@ public class UserController {
     private final UserService userService;
 
     private final ImageService imageService;
+
+    private final NotificationService notificationService;
 
     @GetMapping()
     public ResponseEntity<List<UserDTO>> findAll(){
@@ -80,8 +80,16 @@ public class UserController {
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER', 'ROLE_PASSENGER')")
     @PutMapping("/change-info")
-    public ResponseEntity<UserDTO> changeBasicUserInfo(@RequestBody UserDTO userDTO){
-        return ResponseEntity.ok(userService.changeUserInfo(userDTO));
+    public ResponseEntity<TextResponse> changeBasicUserInfo(@RequestParam(defaultValue = "true") boolean saveChanges, @RequestBody UserDTO userDTO){
+        boolean edited = userService.changeUserInfo(userDTO, saveChanges);
+        if (edited){
+            return ResponseEntity.ok(new TextResponse("Successfully edited data"));
+        }
+        else{
+            this.notificationService.sendNotificationToAdminForDriverChangeData(userDTO);
+            return ResponseEntity.ok(new TextResponse("Admin will verify your change"));
+        }
+
     }
 
     @PostMapping("/reset-password-email")
@@ -96,4 +104,9 @@ public class UserController {
         return ResponseEntity.ok(new TextResponse("Successfully reset password "));
     }
 
+    @PostMapping("/response-changes")
+    public ResponseEntity<TextResponse> responseDriverChanges(@RequestBody AdminResponseOnChanges response){
+        this.notificationService.sendNotificationAdminResponseForChanges(response.getDriverEmail(), response.getResponse());
+        return new ResponseEntity(new TextResponse("success"), HttpStatus.OK);
+    }
 }

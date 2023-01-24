@@ -1,5 +1,6 @@
 package com.izzydrive.backend.service.users.admin;
 
+import com.izzydrive.backend.model.users.Admin;
 import com.izzydrive.backend.repository.users.AdminRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,4 +10,9 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+
+    @Override
+    public Admin findAdmin() {
+        return adminRepository.findAll().get(0);
+    }
 }

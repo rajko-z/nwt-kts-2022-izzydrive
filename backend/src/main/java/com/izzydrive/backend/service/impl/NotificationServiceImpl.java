@@ -1,7 +1,9 @@
 package com.izzydrive.backend.service.impl;
 
 
+import com.izzydrive.backend.dto.CarDTO;
 import com.izzydrive.backend.dto.NotificationDTO;
+import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
@@ -12,6 +14,7 @@ import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.NotificationRepository;
 import com.izzydrive.backend.service.NotificationService;
 import com.izzydrive.backend.service.users.UserService;
+import com.izzydrive.backend.service.users.admin.AdminService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -31,6 +34,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
 
     private final UserService userService;
+
+    private final AdminService adminService;
 
     @Override
     public void sendNotificationNewReservationDriving(String email, Driving driving) {
@@ -220,6 +225,42 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void sendNotificationToAdminForDriverChangeData(UserDTO driverDTO) {
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setUserEmail(adminService.findAdmin().getEmail());
+        notificationDTO.setDriverData(driverDTO);
+        notificationDTO.setNotificationStatus(NotificationStatus.DRIVER_CHANGE_DATA);
+        notificationDTO.setMessage("Driver change profile data");
+        Notification notification = createAndSaveNotification(notificationDTO);
+        notificationDTO.setId(notification.getId());
+        this.simpMessagingTemplate.convertAndSend("/notification/driverChangeData", notificationDTO);
+    }
+
+    @Override
+    public void sendNotificationToAdminForCarChangeData(CarDTO carDTO) {
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setUserEmail(adminService.findAdmin().getEmail());
+        notificationDTO.setCarData(carDTO);
+        notificationDTO.setNotificationStatus(NotificationStatus.CAR_CHANGE_DATA);
+        notificationDTO.setMessage("Driver change car data");
+        Notification notification = createAndSaveNotification(notificationDTO);
+        notificationDTO.setId(notification.getId());
+        this.simpMessagingTemplate.convertAndSend("/notification/carDataChange", notificationDTO);
+
+    }
+
+    @Override
+    public void sendNotificationAdminResponseForChanges(String driverEmail, String response ) {
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setUserEmail(driverEmail);
+        notificationDTO.setMessage("Admin " + response + " your changes");
+        notificationDTO.setNotificationStatus(NotificationStatus.ADMIN_RESPONSE);
+        Notification notification = createAndSaveNotification(notificationDTO);
+        notificationDTO.setId(notification.getId());
+        this.simpMessagingTemplate.convertAndSend("/notification/admin-responses", notificationDTO);
+    }
+
+    @Override
     public List<NotificationDTO> findAll() {
         User user = userService.getCurrentlyLoggedUser();
         return notificationRepository.findAllByUserEmail(user.getEmail())
@@ -242,7 +283,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.delete(notification);
     }
 
-    private void createAndSaveNotification(NotificationDTO notificationDTO) {
+    private Notification createAndSaveNotification(NotificationDTO notificationDTO) {
         Notification notification = new Notification();
         notification.setPrice(notificationDTO.getPrice());
         notification.setReservationDate(notificationDTO.getReservationTime());
@@ -254,6 +295,26 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setUserEmail(notificationDTO.getUserEmail());
         notification.setCreationDate(LocalDateTime.now());
         notification.setDrivingId(notificationDTO.getDrivingId());
-        notificationRepository.save(notification);
+        notification.setDrivarStr(getDriverData(notificationDTO.getDriverData()));
+        notification.setCarStr(getCarData(notificationDTO.getCarData()));
+        return notificationRepository.save(notification);
+    }
+
+    private String getDriverData(UserDTO driverDTO){
+        if (driverDTO == null) {
+            return "";
+        }
+         return  "First name |" + driverDTO.getFirstName() + "| Last name: |" + driverDTO.getLastName() +
+                "| Email: |" + driverDTO.getEmail() + "| Phone number: |" + driverDTO.getPhoneNumber();
+    }
+
+    private String getCarData(CarDTO carDTO){
+        if (carDTO == null) {
+            return "";
+        }
+        return  "Registration: |" + carDTO.getRegistration() + "| Model: |" + carDTO.getModel() +
+                "| Type: |" + carDTO.getCarType() + "| max passengers |" + carDTO.getMaxPassengers()
+                + "| accommodations: |" + carDTO.getAccommodations() + "| driver: |" + carDTO.getDriverEmail()
+                + "| id |" + carDTO.getId();
     }
 }

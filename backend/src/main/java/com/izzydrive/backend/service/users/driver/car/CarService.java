@@ -15,5 +15,5 @@ public interface CarService {
 
     CarDTO findByDriverid(Long id);
 
-    void editCar(CarDTO carDTO);
+    boolean editCar(CarDTO carDTO, boolean saveChanges);
 }

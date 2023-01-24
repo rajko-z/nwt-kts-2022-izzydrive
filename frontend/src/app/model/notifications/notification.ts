@@ -1,3 +1,5 @@
+import { Car } from "../car/car";
+import { Driver } from "../driver/driver";
 import {NotificationStatus} from "./notificationStatus";
 
 export class NotificationM {
@@ -13,4 +15,8 @@ export class NotificationM {
   notificationStatus: NotificationStatus;
   creationDate: Date;
   drivingId?:number;
+  driverData: Driver;
+  carData: Car;
+  driverStr: string;
+  carStr: string;
 }

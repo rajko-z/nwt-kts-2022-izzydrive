@@ -25,7 +25,7 @@ public interface UserService extends UserDetailsService {
     void blockUser(Long id);
 
     void unblockUser(Long id);
-    UserDTO changeUserInfo(UserDTO userDTO);
+    boolean changeUserInfo(UserDTO userDTO,boolean saveChanges);
 
     User disconnectFromChat(String email);
 
@@ -34,4 +34,6 @@ public interface UserService extends UserDetailsService {
     void sendEmailForResetPassword(String email);
 
     void resetPassword(ResetPasswordDTO resetPasswordDTO);
+
+
 }
