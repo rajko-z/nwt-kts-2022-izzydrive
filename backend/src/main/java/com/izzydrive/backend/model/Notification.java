@@ -51,4 +51,10 @@ public class Notification {
 
     @Column
     private Long drivingId;
+
+    @Column
+    private String drivarStr;
+
+    @Column
+    private String carStr;
 }

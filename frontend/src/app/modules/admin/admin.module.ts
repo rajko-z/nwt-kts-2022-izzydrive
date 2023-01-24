@@ -18,6 +18,7 @@ import {
 import {
   ReviewAndWriteAdminNotesComponent
 } from "../../components/review-and-write-admin-notes/review-and-write-admin-notes.component";
+import { DriverChangeInfoComponent } from "src/app/components/notifications/driver-change-info/driver-change-info.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
@@ -26,7 +27,8 @@ const declaredModules = [
   HomePageAdminComponent,
   AddDriverComponent,
   RejectRideDriverComponent,
-  ReviewAndWriteAdminNotesComponent
+  ReviewAndWriteAdminNotesComponent,
+  DriverChangeInfoComponent
 ];
 
 @NgModule({

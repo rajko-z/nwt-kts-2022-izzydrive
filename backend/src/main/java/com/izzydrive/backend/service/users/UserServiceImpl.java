@@ -2,7 +2,6 @@ package com.izzydrive.backend.service.users;
 
 import com.izzydrive.backend.confirmationToken.ConfirmationToken;
 import com.izzydrive.backend.confirmationToken.ConfirmationTokenService;
-import com.izzydrive.backend.converters.UserDTOConverter;
 import com.izzydrive.backend.dto.NewPasswordDTO;
 import com.izzydrive.backend.dto.ResetPasswordDTO;
 import com.izzydrive.backend.dto.UserDTO;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -115,23 +113,28 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public UserDTO changeUserInfo(UserDTO userDTO) {
+    @Override
+    public boolean changeUserInfo(UserDTO userDTO, boolean saveChanges) {
         User user = userRepository.findByEmail(userDTO.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(userDTO.getEmail())));
 
-        if (validateNewUserData(userDTO)) {
-            user.setEmail(userDTO.getEmail());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setPhoneNumber(userDTO.getPhoneNumber());
+        validateNewUserData(userDTO);
+        user.setEmail(userDTO.getEmail());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
 
-            if (userDTO.getImageName() != null) {
-                imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
-            }
-            userRepository.save(user);
-            return UserDTOConverter.convertBase(user);
+        if (userDTO.getImageName() != null) {
+            imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
         }
-        return null;
+        if(saveChanges){
+            userRepository.save(user);
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     @Override
@@ -197,11 +200,11 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    private boolean validateNewUserData(UserDTO userDTO) {
-        return Validator.validateEmail(userDTO.getEmail()) &&
-                Validator.validateFirstName(userDTO.getFirstName()) &&
-                Validator.validateLastName(userDTO.getLastName()) &&
-                Validator.validatePhoneNumber(userDTO.getPhoneNumber());
+    private void validateNewUserData(UserDTO userDTO) {
+        Validator.validateEmail(userDTO.getEmail());
+        Validator.validateFirstName(userDTO.getFirstName());
+        Validator.validateLastName(userDTO.getLastName());
+        Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
 
 

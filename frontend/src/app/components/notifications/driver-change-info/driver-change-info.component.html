@@ -1,32 +1,28 @@
 <div>
     <div class="title">
-      <p>REASON: {{data.message.message}}</p>
-      <div class="location">
-        <em class="fa-solid fa-location-dot"></em>
-        <p class="location-title">Start location: {{data.message.startLocation}}</p>
+      <p class="header">{{data.message.message}}</p>
+      <p>New driver data:</p>
+      <div class="label">
+        <mat-icon>short_text</mat-icon>
+        <p>First name: {{data.message.driverData.firstName}}</p>
       </div>
-      <div class="location">
-        <em class="fa-solid fa-location-dot"></em>
-        <p class="location-title">End location: {{data.message.endLocation}}</p>
+      <div class="label">
+        <mat-icon>short_text</mat-icon>
+        <p>Last name: {{data.message.driverData.lastName}}</p>
       </div>
-      <div class="intermediate-station" *ngFor="let station of data.message.intermediateLocations">
-        <em class='fas fa-map-location-dot'></em>
-        <p class="intermediate-title">Intermediate station: <span>{{station}}</span></p>
+      <div class="label">
+        <mat-icon>alternate_email</mat-icon>
+        <p>Email: {{data.message.driverData.email}}</p>
       </div>
-      <div class="price-info">
-        <em class="fa-solid fa-tags"></em>
-        <p class="price-title">Price: {{data.message.price}} $</p>
+      <div class="label">
+        <mat-icon>phone</mat-icon>
+        <p>Phone number: {{data.message.driverData.phoneNumber}}</p>
       </div>
-      <div class="time-info">
-        <em class="fa-solid fa-clock"></em>
-        <p class="time-title">Driving duration: {{this.minute}} min</p>
-      </div>
-  
     </div>
-    <div class="button">
-      <p class="question">Do you want to choose a new driver?</p>
-      <button type="submit" class="submit-button" (click)="onYesClick()">Yes</button>
-      <button type="submit" class="submit-button" (click)="onNoClick()">No</button>
+    <p class="question">You can accept or deny changes</p>
+    <div class="button">    
+      <button type="submit" class="submit-button" (click)="onYesClick()">Accept</button>
+      <button type="submit" class="submit-button" (click)="onNoClick()">Deny</button>
     </div>
-  </div>
+</div>
   

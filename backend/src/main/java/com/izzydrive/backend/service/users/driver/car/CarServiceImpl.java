@@ -5,10 +5,12 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.*;
 import com.izzydrive.backend.repository.CarRepository;
+import com.izzydrive.backend.service.NotificationService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +21,8 @@ import static com.izzydrive.backend.utils.ExceptionMessageConstants.ALREADY_EXIS
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
+
+    private final NotificationService notificationService;
 
     public Car createNewCar(CarDTO carData){
         Optional<Car> existingCar = carRepository.findByRegistration(carData.getRegistration());
@@ -79,6 +83,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public CarDTO findByDriverid(Long id) {
         Car car = this.carRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
         CarDTO carDTO =  new CarDTO(car);
@@ -87,7 +92,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void editCar(CarDTO carDTO) {
+    public boolean editCar(CarDTO carDTO, boolean saveChanges) {
         if (Validator.validateCarRegistration(carDTO.getRegistration()) &&
         Validator.validateCarType(carDTO.getCarType())){
             Car car = this.carRepository.findById(carDTO.getId()).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
@@ -96,8 +101,16 @@ public class CarServiceImpl implements CarService {
             car.setMaxNumOfPassengers(carDTO.getMaxPassengers());
             car.setRegistration(carDTO.getRegistration());
             car.setCarAccommodations(this.getCarAccommodationString(carDTO.getCarAccommodation()));
-            carRepository.save(car);
+            if (saveChanges) {
+                carRepository.save(car);
+                return true;
+            }
+            else{
+                this.notificationService.sendNotificationToAdminForCarChangeData(carDTO);
+                return false;
+            }
         }
+        return false;
 
     }
 

@@ -1,6 +1,9 @@
 package com.izzydrive.backend.service;
 
+import com.izzydrive.backend.dto.CarDTO;
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.NotificationDTO;
+import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.User;
 
@@ -37,4 +40,10 @@ public interface NotificationService {
     void sendNotificationForPaymentReservation(Driving d);
 
     void sendNotificationForReservationDeleted(Driving d, String message);
+
+    void sendNotificationToAdminForDriverChangeData(UserDTO driverDTO);
+
+    void sendNotificationToAdminForCarChangeData(CarDTO carDTO);
+
+    void sendNotificationAdminResponseForChanges(String driverEmail, String response);
 }

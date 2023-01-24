@@ -25,10 +25,15 @@ public class CarController {
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @PreAuthorize("hasAnyRole('ROLE_DRIVER', 'ROLE_ADMIN')")
     @PutMapping("/edit")
-    public ResponseEntity<TextResponse> editCar(@RequestBody CarDTO carDTO){
-        this.carService.editCar(carDTO);
-        return new ResponseEntity<>(new TextResponse("Successfully changed car data"), HttpStatus.OK);
+    public ResponseEntity<TextResponse> editCar(@RequestBody CarDTO carDTO, @RequestParam(defaultValue = "true") boolean saveChanges){
+        boolean edited = this.carService.editCar(carDTO,saveChanges);
+        if (edited){
+            return new ResponseEntity<>(new TextResponse("Successfully changed car data"), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(new TextResponse("Admin will verify your changes"), HttpStatus.OK);
+        }
     }
 }

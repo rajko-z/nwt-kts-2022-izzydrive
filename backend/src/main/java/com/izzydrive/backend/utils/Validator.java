@@ -18,7 +18,6 @@ public class Validator {
         Matcher matcherEmail = emailPattern.matcher(email);
 
         if(matcherEmail.matches()) return true;
-
         else {
             throw new BadRequestException(INVALID_EMAIl_FORMAT_MESSAGE, 1001);
         }

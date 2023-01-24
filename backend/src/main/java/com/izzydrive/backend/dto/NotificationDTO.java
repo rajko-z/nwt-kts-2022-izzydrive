@@ -32,6 +32,14 @@ public class NotificationDTO {
     private String driverEmail;
     private Long drivingId;
 
+    private UserDTO driverData;
+
+    private CarDTO carData;
+
+    private String driverStr;
+
+    private String carStr;
+
     public NotificationDTO(Notification notification) {
         this.id = notification.getId();
         this.userEmail = notification.getUserEmail();
@@ -45,5 +53,7 @@ public class NotificationDTO {
         this.notificationStatus = notification.getNotificationStatus();
         this.driverEmail = notification.getDriverEmail();
         this.drivingId = notification.getDrivingId();
+        this.carStr = notification.getCarStr();
+        this.driverStr = notification.getDrivarStr();
     }
 }
