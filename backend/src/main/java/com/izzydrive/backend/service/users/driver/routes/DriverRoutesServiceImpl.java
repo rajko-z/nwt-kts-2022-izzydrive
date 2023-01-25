@@ -13,6 +13,8 @@ import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,7 @@ public class DriverRoutesServiceImpl implements DriverRoutesService {
     private final MapService mapService;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CalculatedRouteDTO getCalculatedRouteFromDriverToStart(String driverEmail, AddressOnMapDTO startLocation){
         Driver driver = this.driverService.findByEmailWithCurrentNextAndReservedDriving(driverEmail)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));

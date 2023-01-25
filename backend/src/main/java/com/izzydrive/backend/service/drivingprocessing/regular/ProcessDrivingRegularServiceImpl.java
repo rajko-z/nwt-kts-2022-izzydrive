@@ -58,7 +58,7 @@ public class ProcessDrivingRegularServiceImpl implements ProcessDrivingRegularSe
 
         Driving driving = drivingSaverFromRequest
                 .makeAndSaveDrivingFromRegularRequest(
-                        request, driver, passenger, fromDriverToStart);
+                        request, driver, passenger);
 
         sendNotificationLinkedPassengers(request, driving);
     }

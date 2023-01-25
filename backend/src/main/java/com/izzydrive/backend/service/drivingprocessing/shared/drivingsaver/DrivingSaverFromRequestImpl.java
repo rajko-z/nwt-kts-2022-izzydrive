@@ -2,8 +2,6 @@ package com.izzydrive.backend.service.drivingprocessing.shared.drivingsaver;
 
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
-import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
@@ -18,10 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,20 +37,15 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
     @Transactional
     public Driving makeAndSaveDrivingFromRegularRequest(DrivingRequestDTO request,
                                                         Driver driver,
-                                                        Passenger passenger,
-                                                        CalculatedRouteDTO fromDriverToStart)
+                                                        Passenger passenger)
     {
         Set<Passenger> passengers = new HashSet<>();
         passengers.add(passenger);
         passengers.addAll(processingDrivingHelper.getPassengersWithCurrentDrivingFromEmails(request.getDrivingFinderRequest().getLinkedPassengersEmails()));
 
-        List<Location> locations = getLocationsNeededForRegularDriving(fromDriverToStart, request.getDrivingOption().getStartToEndPath());
-
-        Driving driving = createBaseDriving(request, driver, passengers, locations);
+        Driving driving = createBaseDriving(request, driver, passengers);
         driving.setReservation(false);
         driving.setDrivingState(DrivingState.PAYMENT);
-        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
-        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
 
         drivingService.save(driving);
         updatePassengersCurrentDriving(passengers, passenger, driving);
@@ -69,9 +62,7 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
         passengers.add(passenger);
         passengers.addAll(processingDrivingHelper.getPassengersWithDrivingsFromEmails(request.getDrivingFinderRequest().getLinkedPassengersEmails()));
 
-        List<Location> locations = getLocationsNeededForReservedDriving(request.getDrivingOption().getStartToEndPath());
-
-        Driving driving = createBaseDriving(request, driver, passengers, locations);
+        Driving driving = createBaseDriving(request, driver, passengers);
         driving.setReservation(true);
         driving.setDrivingState(DrivingState.INITIAL);
         driving.setReservationDate(request.getDrivingFinderRequest().getScheduleTime());
@@ -85,10 +76,14 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
 
     private Driving createBaseDriving(DrivingRequestDTO request,
                                       Driver driver,
-                                      Set<Passenger> passengers,
-                                      List<Location> locations)
+                                      Set<Passenger> passengers)
     {
         DrivingOptionDTO option = request.getDrivingOption();
+        List<Location> fromStartToEndLocations =
+                option.getStartToEndPath().getCoordinates()
+                .stream()
+                .map(l -> new Location(l.getLat(), l.getLon(), true))
+                .collect(Collectors.toList());
 
         Driving driving = new Driving();
         driving.setCreationDate(LocalDateTime.now());
@@ -98,7 +93,7 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
         driving.setRejected(false);
         driving.setRoute(processingDrivingHelper.getRouteFromRequest(request.getDrivingFinderRequest()));
         driving.setPassengers(passengers);
-        driving.setLocations(locations);
+        driving.setLocations(fromStartToEndLocations);
         driving.setDriver(driver);
         return driving;
     }
@@ -111,24 +106,5 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
             p.setCurrentDriving(driving);
             passengerService.save(p);
         }
-    }
-
-    private List<Location> getLocationsNeededForRegularDriving(CalculatedRouteDTO fromDriverToStart, CalculatedRouteDTO fromStartToEnd) {
-        List<Location> locations = new ArrayList<>();
-        for (LocationDTO l : fromDriverToStart.getCoordinates()) {
-            locations.add(new Location(l.getLat(), l.getLon(), false));
-        }
-        for (LocationDTO l : fromStartToEnd.getCoordinates()) {
-            locations.add(new Location(l.getLat(), l.getLon(), true));
-        }
-        return locations;
-    }
-
-    private List<Location> getLocationsNeededForReservedDriving(CalculatedRouteDTO fromStartToEnd) {
-        List<Location> locations = new ArrayList<>();
-        for (LocationDTO l : fromStartToEnd.getCoordinates()) {
-            locations.add(new Location(l.getLat(), l.getLon(), true));
-        }
-        return locations;
     }
 }
