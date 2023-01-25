@@ -3,9 +3,9 @@ package com.izzydrive.backend.service.driving;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.Driving;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DrivingService {
     List<DrivingDTO> findAllByDriverId(Long driverId);
@@ -39,4 +39,6 @@ public interface DrivingService {
     DrivingDTOWithLocations findDrivingWithLocationsDTOById(Long id);
 
     void delete(Driving driving);
+
+    Optional<Driving> findById(Long drivingId);
 }

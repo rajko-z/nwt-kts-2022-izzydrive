@@ -249,4 +249,9 @@ public class DrivingServiceImpl implements DrivingService {
     public void delete(Driving driving) {
         drivingRepository.delete(driving);
     }
+
+    @Override
+    public Optional<Driving> findById(Long drivingId) {
+        return drivingRepository.findById(drivingId);
+    }
 }

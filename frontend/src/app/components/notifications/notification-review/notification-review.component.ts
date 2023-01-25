@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationM} from "../../../model/notifications/notification";
 import {NotificationService} from "../../../services/notificationService/notification.service";
-import {DrivingService} from "../../../services/drivingService/driving.service";
 
 @Component({
   selector: 'app-notification-review',
@@ -12,7 +11,7 @@ export class NotificationReviewComponent implements OnInit {
 
   notifications: NotificationM[];
 
-  constructor(private notificationService: NotificationService, private drivingService: DrivingService) {
+  constructor(private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
@@ -29,16 +28,5 @@ export class NotificationReviewComponent implements OnInit {
     this.notificationService.deleteNotification(id).subscribe((res) => {
       this.loadData();
     })
-  }
-
-  onYesClick(drivingId: number, id: number) {
-
-  }
-
-  onNoClick(drivingId: number, id: number) {
-    this.drivingService.deleteDriving(drivingId).subscribe((res) => {
-
-    });
-    this.deleteNotification(id);
   }
 }

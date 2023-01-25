@@ -145,15 +145,20 @@ export class NotificationService {
     );
   }
 
+  showNotificationCancelDrivingFromDriverToPassengers(stompClient) {
+    const callBackFn = () => {
+      this.router.navigateByUrl('/passenger/order-now');
+    }
+    stompClient.subscribe('/notification/regularDrivingCanceledPassenger', (message: { body: string }) => {
+      this.showNotificationText(message.body, callBackFn);
+    });
+  }
+
   findAll() {
     return this.httpClientService.get(environment.apiUrl + `notifications`);
   }
 
   deleteNotification(id: number) {
     return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/${id}`);
-  }
-
-  deleteNotificationFromAdmin(id: number) {
-    return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/admin/${id}`);
   }
 }

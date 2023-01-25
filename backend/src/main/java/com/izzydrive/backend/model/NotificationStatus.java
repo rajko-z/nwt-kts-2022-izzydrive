@@ -13,5 +13,6 @@ public enum NotificationStatus {
     NEW_DRIVING_DRIVER,
     //obavestenja o rezervaciji na 15, 10, 5 min
 
-    DRIVER_ARRIVED_AT_START
+    DRIVER_ARRIVED_AT_START,
+    REGULAR_DRIVING_CANCELED_TO_PASSENGER
 }

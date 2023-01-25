@@ -34,11 +34,4 @@ public class NotificationController {
         notificationService.deleteNotification(id);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
-
-    @DeleteMapping(value = "admin/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> deleteNotificationFromAdmin(@PathVariable Long id){
-        notificationService.deleteNotificationFromAdmin(id);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
-    }
 }

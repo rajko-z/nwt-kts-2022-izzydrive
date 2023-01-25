@@ -89,7 +89,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationRejectDrivingFromDriver(String adminEmail, Driving driving, String driverEmail, String reason) {
+    public void sendNotificationRejectDrivingFromDriverToAdmin(String adminEmail, Driving driving, String driverEmail, String reason) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage(reason);
         notificationDTO.setDuration(driving.getDuration());
@@ -200,6 +200,18 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void sendNotificationRejectDrivingFromDriverToPassengers(List<String> passengersToSendNotifications) {
+        for (String passenger : passengersToSendNotifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setMessage("Your driving is canceled by driver.");
+            notificationDTO.setUserEmail(passenger);
+            notificationDTO.setNotificationStatus(NotificationStatus.REGULAR_DRIVING_CANCELED_TO_PASSENGER);
+            this.simpMessagingTemplate.convertAndSend("/notification/regularDrivingCanceledPassenger", notificationDTO);
+            createAndSaveNotification(notificationDTO);
+        }
+    }
+
+    @Override
     public List<NotificationDTO> findAll() {
         User user = userService.getCurrentlyLoggedUser();
         return notificationRepository.findAllByUserEmail(user.getEmail())
@@ -210,14 +222,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void deleteNotification(Long id) {
         Notification notification = this.notificationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
-        notificationRepository.delete(notification);
-    }
-
-    @Override
-    public void deleteNotificationFromAdmin(Long drivingId) {
-        User user = userService.getCurrentlyLoggedUser();
-        Notification notification = this.notificationRepository.findByDrivingIdAndUserEmail(drivingId, user.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
         notificationRepository.delete(notification);
     }

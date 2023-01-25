@@ -70,5 +70,6 @@ export class AppComponent implements OnInit {
     this.notificationService.showNotificationNewRideDriver(this.stompClient);
     this.notificationService.showNotificationDriverArrivedAtStart(this.stompClient);
     this.notificationService.showNotificationReportedDriver(this.stompClient);
+    this.notificationService.showNotificationCancelDrivingFromDriverToPassengers(this.stompClient);
   }
 }

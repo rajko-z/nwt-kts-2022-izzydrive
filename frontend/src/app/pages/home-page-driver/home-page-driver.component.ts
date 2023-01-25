@@ -135,7 +135,4 @@ export class HomePageDriverComponent implements OnInit {
       this.mapService.addAllFromDriving(this.currentDriving);
     }
   }
-
-
-
 }

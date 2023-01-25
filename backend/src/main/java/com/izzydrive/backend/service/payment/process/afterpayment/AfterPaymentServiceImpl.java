@@ -70,28 +70,20 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
         Driver driver = driving.getDriver();
         driverService.refresh(driver);
 
-        Address start = driving.getRoute().getStart();
-        AddressOnMapDTO startLocation = new AddressOnMapDTO(start.getLongitude(), start.getLatitude(), start.getName());
-        CalculatedRouteDTO fromDriverToStart =
-                driverRoutesService.getCalculatedRouteFromDriverToStart(driving.getDriver().getEmail(), startLocation);
-
-        List<Location> updatedCoordinatesForDriving = getListOfUpdatedCoordinatesForDriving(driving, fromDriverToStart.getCoordinates());
-        driving.setLocations(updatedCoordinatesForDriving);
-        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
-        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
+        setFromDriverToStartPathForDriving(driving);
 
         if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
             driver.setDriverStatus(DriverStatus.TAKEN);
             driver.setCurrentDriving(driving);
 
-            DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, updatedCoordinatesForDriving);
+            DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, driving.getLocations());
             navigationService.startNavigationForDriver(data, true);
             driverNotificationService.sendCurrentDrivingToDriver(data);
         } else {
             driver.setDriverStatus(DriverStatus.RESERVED);
             driver.setNextDriving(driving);
 
-            DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, updatedCoordinatesForDriving);
+            DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, driving.getLocations());
             driverNotificationService.sendNextDrivingToDriver(data);
         }
     }
@@ -105,6 +97,20 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
         drivingRejectionService.rejectDriving(driving);
         notificationService.sendNotificationForPaymentFailure(passengersToSendNotifications);
     }
+
+    private void setFromDriverToStartPathForDriving(Driving driving) {
+        Address start = driving.getRoute().getStart();
+        AddressOnMapDTO startLocation = new AddressOnMapDTO(start.getLongitude(), start.getLatitude(), start.getName());
+        CalculatedRouteDTO fromDriverToStart =
+                driverRoutesService.getCalculatedRouteFromDriverToStart(driving.getDriver().getEmail(), startLocation);
+
+        List<Location> updatedCoordinatesForDriving = getListOfUpdatedCoordinatesForDriving(driving, fromDriverToStart.getCoordinates());
+
+        driving.setLocations(updatedCoordinatesForDriving);
+        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
+        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
+    }
+
 
     private List<Location> getListOfUpdatedCoordinatesForDriving(Driving driving, List<LocationDTO> fromDriverToStartLocationsDTOs) {
         List<Location> fromDriverToStartLocations = fromDriverToStartLocationsDTOs.stream()

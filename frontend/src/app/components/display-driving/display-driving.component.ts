@@ -4,7 +4,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-check.component";
 import {FinishDrivingCheckComponent} from "../finish-driving-check/finish-driving-check.component";
 
 @Component({

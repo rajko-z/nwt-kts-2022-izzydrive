@@ -1,5 +1,6 @@
 package com.izzydrive.backend.controller;
 
+import com.izzydrive.backend.dto.CancellationReasonDTO;
 import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
@@ -7,6 +8,7 @@ import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.cancelation.DrivingCancellationService;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
 import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
@@ -41,6 +43,8 @@ public class DrivingController {
     private final DrivingRejectionService drivingRejectionService;
 
     private final DrivingExecutionService drivingExecutionService;
+
+    private final DrivingCancellationService drivingCancellationService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
@@ -144,5 +148,12 @@ public class DrivingController {
     public ResponseEntity<TextResponse> endDriving() {
         drivingExecutionService.endDriving();
         return new ResponseEntity<>(new TextResponse("Driving successfully ended"), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @PostMapping("/reject-regular-driver")
+    public ResponseEntity<TextResponse> rejectRegularDrivingDriver(@RequestBody CancellationReasonDTO cancellationReasonDTO) {
+        drivingCancellationService.cancelRegularDriving(cancellationReasonDTO);
+        return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 }

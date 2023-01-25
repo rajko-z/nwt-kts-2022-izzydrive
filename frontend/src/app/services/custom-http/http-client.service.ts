@@ -55,13 +55,6 @@ export class HttpClientService {
     });
   }
 
-  postWithText(url, data) {
-    return this.http.post(url, data, {
-      headers: this.createHeader(),
-      responseType: 'text'
-    });
-  }
-
   deleteWithText(url) {
     return this.http.delete(url, {
       headers: this.createHeader(),

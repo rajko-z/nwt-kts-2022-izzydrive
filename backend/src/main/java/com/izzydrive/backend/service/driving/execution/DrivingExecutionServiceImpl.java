@@ -88,16 +88,18 @@ public class DrivingExecutionServiceImpl implements DrivingExecutionService{
         passengerService.deleteCurrentDrivingFromPassengers(driving.getPassengers());
         passengerService.addNewDrivingToPassengersDrivings(driving.getPassengers(), driving);
 
-        navigationService.stopNavigationForDriver(driver.getEmail());
-
-        changeDriverStatusAndStartNavigationIfNeeded(driver);
+        stopCurrentDrivingAndMoveToNextIfExist(driver);
 
         passengerNotificationService.sendSignalThatRideHasEnded(
                 driving.getPassengers().stream().map(Passenger::getEmail).collect(Collectors.toList())
         );
     }
 
-    private void changeDriverStatusAndStartNavigationIfNeeded(Driver driver) {
+    @Override
+    @Transactional
+    public void stopCurrentDrivingAndMoveToNextIfExist(Driver driver) {
+        navigationService.stopNavigationForDriver(driver.getEmail());
+
         if (driver.getNextDriving() == null) {
             driver.setDriverStatus(DriverStatus.FREE);
             driver.setCurrentDriving(null);

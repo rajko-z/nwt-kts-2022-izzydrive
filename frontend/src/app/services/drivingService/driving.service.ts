@@ -27,8 +27,8 @@ export class DrivingService {
     return this.httpClientService.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
   }
 
-  rejectDriving(explanation) {
-    return this.httpClientService.postWithText(environment.apiUrl + `driving-notes/reject`, explanation);
+  rejectRegularDrivingDriver(explanation) {
+    return this.httpClientService.postT<TextResponse>(environment.apiUrl + `drivings/reject-regular-driver`, explanation);
   }
 
   getSimpleDrivingOptions(payload: PlaceOnMap[]): Observable<DrivingOption[]> {
