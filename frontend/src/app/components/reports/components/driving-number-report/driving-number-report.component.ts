@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { th } from 'date-fns/locale';
 import {
 ChartComponent,
 ApexAxisChartSeries,
@@ -29,15 +30,18 @@ export class DrivingNumberReportComponent implements OnInit {
 
   @Input() XAxisValues : string[];
   @Input() SourceValue: number[];
-  @Input() title: string;
+   @Input() title: string;
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngOnInit()
+
+}
 
   ngOnInit(): void {
-    console.log(this.SourceValue);
     this.chartOptions = {
       colors: ["#6B2167"],
       series: [
         {
-          name: "Number of drivings",
           data: [...this.SourceValue]
         }
       ],
@@ -59,7 +63,8 @@ export class DrivingNumberReportComponent implements OnInit {
         align: "left",
         style: {
           color: "#191A23",
-          fontWeight: 400
+          fontWeight: 500,
+          fontSize: "16px"
         }
       },
       grid: {

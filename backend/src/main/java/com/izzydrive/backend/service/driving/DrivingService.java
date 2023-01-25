@@ -54,5 +54,6 @@ public interface DrivingService {
 
     void deleteReservation(Driving d);
 
-    DrivingReportDTO getDrivingNumberReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    DrivingReportDTO getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    DrivingReportDTO getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

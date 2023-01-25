@@ -43,6 +43,12 @@
     height: fit-content;
 }
 
+.header{
+    @include setFont(14px);
+    color: $dark3;
+    font-weight: 500;
+}
+
 ::ng-deep .md-icon-button + .md-datepicker-input-container {
     float: left !important;
     margin-top:7px !important;

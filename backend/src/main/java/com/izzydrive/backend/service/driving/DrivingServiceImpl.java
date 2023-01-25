@@ -439,10 +439,37 @@ public class DrivingServiceImpl implements DrivingService {
     }
 
     @Override
-    public DrivingReportDTO getDrivingNumberReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+    public DrivingReportDTO getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
         startDate = startDate.plusHours(1);
-        endDate = endDate.plusHours(1);
-        List<Driving> filteredDrivings = this.drivingRepository.getDrivingNumberReportForPassenger(userId, startDate, endDate);
+        endDate = endDate.plusHours(24);
+        List<Driving> filteredDrivings = this.drivingRepository.getDrivingReportForPassenger(userId, startDate, endDate);
+        return this.crateReportData(filteredDrivings, startDate, endDate);
+    }
+
+    @Override
+    public DrivingReportDTO getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        startDate = startDate.plusHours(1);
+        endDate = endDate.plusHours(24);
+        List<Driving> filteredDrivings = this.drivingRepository.getDrivingReportForDriver(userId, startDate, endDate);
+        return this.crateReportData(filteredDrivings, startDate, endDate);
+    }
+
+    private void addMissingDates(ArrayList<DrivingPriceReportItem> priceReportItems,
+                                             ArrayList<DrivingDistanceReportItem> distanceReportItems,
+                                             ArrayList<DrivingNumberReportItem> drivingNumberReportItems,
+                                             LocalDateTime startDate, LocalDateTime endDate){
+        for (LocalDate date = startDate.toLocalDate(); date.isBefore(endDate.toLocalDate()); date = date.plusDays(1))
+        {
+            DrivingPriceReportItem priceReportItem = new DrivingPriceReportItem(Helper.convertDate(date), 0.0);
+            DrivingDistanceReportItem distanceReportItem = new DrivingDistanceReportItem(0.0, Helper.convertDate(date));
+            DrivingNumberReportItem drivingNumberReportItem = new DrivingNumberReportItem(0, Helper.convertDate(date));
+            priceReportItems.add(priceReportItem);
+            drivingNumberReportItems.add(drivingNumberReportItem);
+            distanceReportItems.add(distanceReportItem);
+        }
+    }
+
+    private DrivingReportDTO crateReportData(List<Driving> filteredDrivings, LocalDateTime startDate, LocalDateTime endDate){
         ArrayList<DrivingPriceReportItem> priceReportItems = new ArrayList<DrivingPriceReportItem>();
         ArrayList<DrivingDistanceReportItem> distanceReportItems = new ArrayList<DrivingDistanceReportItem>();
         ArrayList<DrivingNumberReportItem> drivingNumberReportItems = new ArrayList<DrivingNumberReportItem>();
@@ -489,7 +516,6 @@ public class DrivingServiceImpl implements DrivingService {
             addMissingDates(priceReportItems,distanceReportItems, drivingNumberReportItems, nextDay, endDate.plusDays(1));
         }
 
-
         DrivingReportDTO report = new DrivingReportDTO();
         report.setDrivingsNumber(drivingNumberReportItems);
         report.setDrivingPrices(priceReportItems);
@@ -501,21 +527,6 @@ public class DrivingServiceImpl implements DrivingService {
         report.setAverageDrivingPrice(sumPrice/numberOfDays);
         report.setSumDrivingPrice(sumPrice);
         return report;
-    }
-
-    private void addMissingDates(ArrayList<DrivingPriceReportItem> priceReportItems,
-                                             ArrayList<DrivingDistanceReportItem> distanceReportItems,
-                                             ArrayList<DrivingNumberReportItem> drivingNumberReportItems,
-                                             LocalDateTime startDate, LocalDateTime endDate){
-        for (LocalDate date = startDate.toLocalDate(); date.isBefore(endDate.toLocalDate()); date = date.plusDays(1))
-        {
-            DrivingPriceReportItem priceReportItem = new DrivingPriceReportItem(Helper.convertDate(date), 0.0);
-            DrivingDistanceReportItem distanceReportItem = new DrivingDistanceReportItem(0.0, Helper.convertDate(date));
-            DrivingNumberReportItem drivingNumberReportItem = new DrivingNumberReportItem(0, Helper.convertDate(date));
-            priceReportItems.add(priceReportItem);
-            drivingNumberReportItems.add(drivingNumberReportItem);
-            distanceReportItems.add(distanceReportItem);
-        }
     }
 
 }

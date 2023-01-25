@@ -52,5 +52,11 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             "where d.deleted = false and d.startDate >= ?2 and d.endDate <= ?3 " +
             "and p.id = ?1 and d.drivingState = 'FINISHED' " +
             "order by  d.startDate")
-    List<Driving> getDrivingNumberReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Driving> getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("select d from Driving d where d.driver.id = ?1  " +
+            "and d.deleted = false and d.startDate >= ?2 and d.endDate <= ?3 " +
+            "and d.drivingState = 'FINISHED' " +
+            "order by  d.startDate")
+    List<Driving> getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -148,8 +148,14 @@ public class DrivingController {
     }
 
     @PostMapping("/reports-passenger")
-    public ResponseEntity<DrivingReportDTO> generateDrivingNumberReportForPaseenger(@RequestBody ReportRequestDTO reportRequestDTO){
-        DrivingReportDTO report =this.drivingService.getDrivingNumberReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPaseenger(@RequestBody ReportRequestDTO reportRequestDTO){
+        DrivingReportDTO report =this.drivingService.getDrivingReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+        return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+
+    @PostMapping("/reports-driver")
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForDriver(@RequestBody ReportRequestDTO reportRequestDTO){
+        DrivingReportDTO report =this.drivingService.getDrivingReportForDriver(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
 }

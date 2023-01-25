@@ -42,22 +42,43 @@
     </div>
     <div class="reports-contaienr" *ngIf="reportDataLoaded">
         <mat-horizontal-stepper  class="stepper" [linear]="ture" #stepper="matHorizontalStepper">
+            <ng-template matStepperIcon="edit">
+                <mat-icon>show_chart</mat-icon>
+            </ng-template>
             <mat-step style="width: 100%;">
+                <p  class="header">
+                    Avarage number of drivings per day: {{reportData.averageDrivingsNumber}}
+                </p>
+                <p  class="header">
+                    Total number of drivings: {{reportData.sumDrivingsNumber}}
+                </p>
                 <app-driving-number-report 
-                [XAxisValues]="reportX" 
-                [SourceValue]="drivingNumbersValues"
+                [XAxisValues]="this.reportX" 
+                [SourceValue]="this.drivingNumbersValues"
                 [title]="drivingNumbersReportTitle"></app-driving-number-report>
             </mat-step>
             <mat-step>
+                <p class="header">
+                    Avarage price for driving per day: {{reportData.averageDrivingPrice}} din
+                </p>
+                <p  class="header">
+                    Total cost of drivings: {{reportData.sumDrivingPrice}} din
+                </p>
                 <app-driving-number-report 
-                [XAxisValues]="reportX" 
-                [SourceValue]="priceReportValues"
+                [XAxisValues]="this.reportX" 
+                [SourceValue]="this.priceReportValues"
                 [title]="drivingPriceReportTitle"></app-driving-number-report>
             </mat-step>
             <mat-step>
+                <p  class="header">
+                    Avarage distance for driving per day: {{reportData.averageDrivingDistance}} m
+                </p>
+                <p  class="header">
+                    Total distance: {{reportData.sumDrivingDistance}} m
+                </p>
                 <app-driving-number-report 
-                [XAxisValues]="reportX" 
-                [SourceValue]="distancereportValues"
+                [XAxisValues]="this.reportX" 
+                [SourceValue]="this.distancereportValues"
                 [title]="drivingDistanceReportTitle"></app-driving-number-report>
             </mat-step>
           </mat-horizontal-stepper>
