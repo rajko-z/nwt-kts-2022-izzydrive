@@ -49,6 +49,12 @@
         <app-driver-menu></app-driver-menu>
       </div>
       <div class="menu_item">
+        <mat-icon class="menu_item_icon">timeline</mat-icon>
+        <mat-list-option (click)="onReports()">
+            <p class="menu_item_text">Reports</p>
+        </mat-list-option>
+      </div>
+      <div class="menu_item">
         <mat-icon class="menu_item_icon">notifications</mat-icon>
         <mat-list-option (click)="openNotificationReview()">
           Notifications

@@ -1,0 +1,66 @@
+<div style="display: flex; flex-direction: row;">
+    <div class="date-picker-container">
+        <p class="title">Choose start and end date for report</p>
+        <form class="date-form" [formGroup]="this.dateForm"
+          (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" 
+                    required
+                    formControlName="startDate"
+                    [max]="maxDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="this.dateForm.controls.startDate.hasError('required')">Start Date is required</mat-error>
+                <mat-error *ngIf="this.dateForm.controls.startDate.hasError('matDatepickerMax')">Max date is tooday</mat-error>
+                  
+        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker1" 
+                        required
+                        formControlName="endDate"
+                        [max]="maxDate"
+                        [min]="this.dateForm.controls.startDate.value">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                <mat-error *ngIf="this.dateForm.controls.endDate.hasError('required')">Enc Date is required</mat-error>
+                <mat-error *ngIf="this.dateForm.controls.endDate.hasError('matDatepickerMax')">Max date is tooday</mat-error>
+                <mat-error *ngIf="this.dateForm.controls.endDate.hasError('matDatepickerMin')">Min date is start date</mat-error>
+                                   
+                
+            </mat-form-field>
+          
+            <div class="button-container">
+            <button mat-button [disabled]="this.dateForm.invalid"
+                    [ngClass] = "{'disabled_large_btn': this.dateForm.invalid,  'large_button': !this.dateForm.invalid}"
+                    type="submit">Get report</button>
+          </div>
+        </form>
+    </div>
+    <div class="reports-contaienr" *ngIf="reportDataLoaded">
+        <mat-horizontal-stepper  class="stepper" [linear]="ture" #stepper="matHorizontalStepper">
+            <mat-step style="width: 100%;">
+                <app-driving-number-report 
+                [XAxisValues]="reportX" 
+                [SourceValue]="drivingNumbersValues"
+                [title]="drivingNumbersReportTitle"></app-driving-number-report>
+            </mat-step>
+            <mat-step>
+                <app-driving-number-report 
+                [XAxisValues]="reportX" 
+                [SourceValue]="priceReportValues"
+                [title]="drivingPriceReportTitle"></app-driving-number-report>
+            </mat-step>
+            <mat-step>
+                <app-driving-number-report 
+                [XAxisValues]="reportX" 
+                [SourceValue]="distancereportValues"
+                [title]="drivingDistanceReportTitle"></app-driving-number-report>
+            </mat-step>
+          </mat-horizontal-stepper>
+    </div>
+</div>
+

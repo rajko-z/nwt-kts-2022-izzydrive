@@ -20,6 +20,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 // If you have any additional modules to be shared add them to the list
@@ -45,11 +47,14 @@ const materialModules = [
   MatSortModule,
   MatPaginatorModule,
   MatButtonToggleModule,
-  MatCardModule
+  MatCardModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 ];
 
 @NgModule({
   imports: [...materialModules],
   exports: materialModules,
+  providers: [MatDatepickerModule]
 })
 export class AngularMaterialModule {}

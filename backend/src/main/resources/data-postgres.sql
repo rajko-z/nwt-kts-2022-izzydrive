@@ -133,12 +133,22 @@ INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, deleted)
 VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, 11000.3, false, '2023-01-13 22:00:00', 4, null, 2, null, false, 1, 0, 0, false);
 
+INSERT INTO public.driving(
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, deleted)
+VALUES (2000.9, 'FINISHED', 313.7, '2023-01-13 12:10:00', false, null, 15000.3, false, '2023-01-13 12:00:00', 4, null, 2, null, false, 1, 0, 0, false);
+
+INSERT INTO public.driving(
+    distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, driving_note_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, deleted)
+VALUES (2000.9, 'FINISHED', 313.7, '2023-01-13 15:10:00', false, null, 15000.3, false, '2023-01-13 15:00:00', 4, null, 2, null, false, 1, 0, 0, false);
+
 
 INSERT INTO passengers_drivings (passenger_id, driving_id)
 VALUES
     (10, 4),
     (10, 5),
     (10,6),
+    (10,7),
+    (10,8),
     (11,2);
 
 INSERT INTO favourite_routes (passenger_id, route_id)

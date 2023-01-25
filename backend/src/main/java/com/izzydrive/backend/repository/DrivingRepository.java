@@ -4,6 +4,7 @@ import com.izzydrive.backend.model.Driving;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,4 +47,10 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             "LEFT JOIN FETCH dr.currentDriving " +
             "LEFT JOIN FETCH dr.nextDriving WHERE d.isReservation = true")
     List<Driving> getAllReservationWithDriverAndPassengers();
+
+    @Query("select d from Driving d join fetch d.allPassengers p " +
+            "where d.deleted = false and d.startDate >= ?2 and d.endDate <= ?3 " +
+            "and p.id = ?1 and d.drivingState = 'FINISHED' " +
+            "order by  d.startDate")
+    List<Driving> getDrivingNumberReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }
