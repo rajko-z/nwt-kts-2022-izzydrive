@@ -12,7 +12,7 @@ $light4: #B4BCDF;
 .menu-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; 
+  height: 88%; 
   font-family: 'Inter';
   border-right: solid thin $light5;
   min-width: 230px;
@@ -23,6 +23,11 @@ $light4: #B4BCDF;
   position: relative;
   background-color: $dark4;
   max-width: 15%;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 @keyframes fadeInAnimation {

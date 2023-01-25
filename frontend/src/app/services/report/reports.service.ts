@@ -23,7 +23,7 @@ export class ReportsService {
     getDriverReportData(startDate: Date, endDate: Date): Observable<DrivingReport>{
       let userId : number = this.userService.getCurrentUserId();
       console.log(userId)
-    let reportRequest : ReportRequest = new ReportRequest(userId, startDate, endDate);
+      let reportRequest : ReportRequest = new ReportRequest(userId, startDate, endDate);
       return this.http.postT<DrivingReport>(environment.apiUrl + `drivings/reports-driver`, reportRequest);
     }
 
