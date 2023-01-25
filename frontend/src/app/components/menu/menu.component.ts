@@ -68,4 +68,8 @@ export class MenuComponent implements OnInit {
   openProfilePage(){
     this.router.navigateByUrl("/user/profile-page")
   }
+
+  onReports(){
+    this.router.navigateByUrl("/user/reports")
+  }
 }

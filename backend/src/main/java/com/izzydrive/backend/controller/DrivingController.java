@@ -1,11 +1,10 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
-import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
-import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
-import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
+import com.izzydrive.backend.dto.driving.*;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.dto.reports.DrivingReportDTO;
+import com.izzydrive.backend.dto.reports.ReportRequestDTO;
 import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -145,5 +145,17 @@ public class DrivingController {
     public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id){
         drivingService.deleteDriving(id);
         return new ResponseEntity<>(new TextResponse("Successfully delete driving"), HttpStatus.OK);
+    }
+
+    @PostMapping("/reports-passenger")
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPaseenger(@RequestBody ReportRequestDTO reportRequestDTO){
+        DrivingReportDTO report =this.drivingService.getDrivingReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+        return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+
+    @PostMapping("/reports-driver")
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForDriver(@RequestBody ReportRequestDTO reportRequestDTO){
+        DrivingReportDTO report =this.drivingService.getDrivingReportForDriver(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+        return new ResponseEntity<>(report, HttpStatus.OK);
     }
 }
