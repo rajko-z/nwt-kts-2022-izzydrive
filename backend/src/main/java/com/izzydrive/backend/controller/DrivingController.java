@@ -138,4 +138,11 @@ public class DrivingController {
         drivingExecutionService.startDriving();
         return new ResponseEntity<>(new TextResponse("Driving successfully started"), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("/end")
+    public ResponseEntity<TextResponse> endDriving() {
+        drivingExecutionService.endDriving();
+        return new ResponseEntity<>(new TextResponse("Driving successfully ended"), HttpStatus.OK);
+    }
 }

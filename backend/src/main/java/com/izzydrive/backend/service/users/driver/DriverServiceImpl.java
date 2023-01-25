@@ -11,7 +11,7 @@ import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
-import com.izzydrive.backend.repository.users.DriverRepository;
+import com.izzydrive.backend.repository.users.driver.DriverRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
@@ -148,13 +148,6 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public Driver getCurrentlyLoggedDriver() {
-        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.driverRepository.findByEmail(driverEmail)
-                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
-    }
-
-    @Override
     public Driver getCurrentlyLoggedDriverWithCurrentDriving(){
         String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return this.driverRepository.findByEmailWithCurrentDriving(driverEmail)
@@ -202,5 +195,10 @@ public class DriverServiceImpl implements DriverService {
             LOG.error(e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public void refresh(Driver driver) {
+        driverRepository.refresh(driver);
     }
 }

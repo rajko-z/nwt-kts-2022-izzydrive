@@ -77,7 +77,7 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
         driving.setReservationDate(request.getDrivingFinderRequest().getScheduleTime());
 
         drivingService.save(driving);
-        updatePassengersReservationDrivings(passengers, driving);
+        passengerService.addNewDrivingToPassengersDrivings(passengers, driving);
         driver.setReservedFromClientDriving(driving);
         driverService.save(driver);
         return driving;
@@ -122,15 +122,6 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
             locations.add(new Location(l.getLat(), l.getLon(), true));
         }
         return locations;
-    }
-
-    private void updatePassengersReservationDrivings(Set<Passenger> linkedPassengers, Driving driving) {
-        Passenger[] pass = linkedPassengers.toArray(Passenger[]::new);
-
-        for (Passenger p : pass) {
-            p.getDrivings().add(driving);
-            passengerService.save(p);
-        }
     }
 
     private List<Location> getLocationsNeededForReservedDriving(CalculatedRouteDTO fromStartToEnd) {

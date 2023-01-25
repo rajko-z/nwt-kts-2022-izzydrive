@@ -180,7 +180,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Transactional
     @Override
-    public void deleteDrivingFromPassengers(Collection<Passenger> passengers) {
+    public void deleteCurrentDrivingFromPassengers(Collection<Passenger> passengers) {
         for (Passenger passenger : passengers) {
             passenger.setCurrentDriving(null);
         }
@@ -194,5 +194,16 @@ public class PassengerServiceImpl implements PassengerService {
             throw new BadRequestException(ExceptionMessageConstants.CANT_REPORT_DRIVER_BECAUSE_NOT_ACTIVE_DRIVING);
         }
         notificationService.reportDriverNotification(passenger);
+    }
+
+    @Override
+    @Transactional
+    public void addNewDrivingToPassengersDrivings(Collection<Passenger> passengers, Driving driving) {
+        Passenger[] pass = passengers.toArray(Passenger[]::new);
+
+        for (Passenger p : pass) {
+            p.getDrivings().add(driving);
+            save(p);
+        }
     }
 }

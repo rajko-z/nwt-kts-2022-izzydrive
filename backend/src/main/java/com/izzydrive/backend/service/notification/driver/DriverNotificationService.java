@@ -8,4 +8,8 @@ public interface DriverNotificationService {
     void sendCurrentDrivingToDriver(DrivingDTOWithLocations drivingDTOWithLocations);
 
     void sendNextDrivingToDriver(DrivingDTOWithLocations drivingDTOWithLocations);
+
+    void deleteCurrentDrivingSignal(String driverEmail);
+
+    void deleteNextDrivingSignal(String driverEmail);
 }

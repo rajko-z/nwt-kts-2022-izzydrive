@@ -3,7 +3,6 @@ import {DrivingFinderRequest} from "./drivingFinderRequest.";
 import {DrivingOption} from "./drivingOption";
 import {RouteDTO} from "../route/route";
 import {Driver} from "../driver/driver";
-import {Location} from "../map/location";
 import {CalculatedRoute} from "../map/calculatedRoute";
 
 

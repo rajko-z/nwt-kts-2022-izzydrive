@@ -62,7 +62,7 @@ public class DrivingRejectionServiceImpl implements DrivingRejectionService {
     @Override
     @Transactional
     public void rejectDriving(Driving driving) {
-        passengerService.deleteDrivingFromPassengers(driving.getPassengers());
+        passengerService.deleteCurrentDrivingFromPassengers(driving.getPassengers());
         passengerService.resetPassengersPayingInfo(driving.getPassengers());
         driverLockerService.unlockDriver(driving.getDriver().getEmail());
         drivingService.delete(driving);

@@ -19,7 +19,7 @@
           <p class="users-title">Passengers: <span>{{pass}}</span></p>
         </div>
       </div>
-      <div class="report-info" *ngIf="drivingActive">
+      <div class="report-info" *ngIf="drivingActive && !finished">
         <button type="button" class="report-button" (click)="reportDriver()">Report</button>
       </div>
       <div class="report-info" *ngIf="!drivingActive && waitingForRideToStart">

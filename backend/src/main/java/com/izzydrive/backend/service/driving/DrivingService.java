@@ -3,6 +3,7 @@ package com.izzydrive.backend.service.driving;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.Driving;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

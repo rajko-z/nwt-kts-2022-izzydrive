@@ -2,18 +2,21 @@ package com.izzydrive.backend.service.payment.process.afterpayment;
 
 import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.DriverStatus;
 import com.izzydrive.backend.model.users.Passenger;
-import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.navigation.NavigationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
+import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,8 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
 
     private final DrivingRejectionService drivingRejectionService;
 
+    private final DriverService driverService;
+
     @Override
     @Transactional
     public void onSuccess(Driving driving) {
@@ -55,20 +60,24 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
     }
 
     private void changeDriverStatusAndStartNavigationSystem(Driving driving) {
-        Driver driver = driving.getDriver();
+        Driver driver = driverService.findByEmail(driving.getDriver().getEmail())
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driving.getDriver().getEmail())));
+        driverService.refresh(driver);
+
         Driving drivingWithLocations = drivingService.getDrivingWithLocations(driving.getId());
 
         if (driver.getDriverStatus().equals(DriverStatus.FREE)) {
             driver.setDriverStatus(DriverStatus.TAKEN);
             driver.setCurrentDriving(driving);
+            driving.setDriver(driver);
 
             DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, drivingWithLocations.getLocations());
-
             navigationService.startNavigationForDriver(data, true);
             driverNotificationService.sendCurrentDrivingToDriver(data);
         } else {
             driver.setDriverStatus(DriverStatus.RESERVED);
             driver.setNextDriving(driving);
+            driving.setDriver(driver);
 
             DrivingDTOWithLocations data = DrivingConverter.convertWithLocationsAndDriver(driving, drivingWithLocations.getLocations());
             driverNotificationService.sendNextDrivingToDriver(data);

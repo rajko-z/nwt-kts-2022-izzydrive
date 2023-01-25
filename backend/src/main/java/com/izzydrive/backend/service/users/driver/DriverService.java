@@ -35,9 +35,6 @@ public interface DriverService {
 
     Optional<Driver> findByEmailWithCurrentNextAndReservedDriving(String email);
 
-
-    Driver getCurrentlyLoggedDriver();
-
     Driver getCurrentlyLoggedDriverWithCurrentDriving();
 
     Driver getCurrentlyLoggedDriverWithNextDriving();
@@ -45,4 +42,6 @@ public interface DriverService {
     DrivingDTOWithLocations getCurrentDriving();
 
     DrivingDTOWithLocations getNextDriving();
+
+    void refresh(Driver driver);
 }

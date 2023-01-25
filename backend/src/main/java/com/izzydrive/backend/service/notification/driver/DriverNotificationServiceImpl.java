@@ -1,5 +1,6 @@
 package com.izzydrive.backend.service.notification.driver;
 
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,5 +25,23 @@ public class DriverNotificationServiceImpl implements DriverNotificationService 
     @Override
     public void sendNextDrivingToDriver(DrivingDTOWithLocations payload) {
         this.simpMessagingTemplate.convertAndSend("/driving/loadNextDriving", payload);
+    }
+
+    @Override
+    public void deleteCurrentDrivingSignal(String driverEmail) {
+        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(driverEmail);
+        payload.setDriver(driverDTO);
+        sendCurrentDrivingToDriver(payload);
+    }
+
+    @Override
+    public void deleteNextDrivingSignal(String driverEmail) {
+        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(driverEmail);
+        payload.setDriver(driverDTO);
+        sendNextDrivingToDriver(payload);
     }
 }

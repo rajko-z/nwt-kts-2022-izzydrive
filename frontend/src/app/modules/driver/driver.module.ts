@@ -8,12 +8,14 @@ import {HomePageDriverComponent} from "../../pages/home-page-driver/home-page-dr
 import {DisplayDrivingComponent} from "../../components/display-driving/display-driving.component";
 import {ExplanationDialogComponent} from "../../components/explanation-dialog/explanation-dialog.component";
 import {ReservationPageDriverComponent} from "../../pages/reservation-page-driver/reservation-page-driver.component";
+import {FinishDrivingCheckComponent} from "../../components/finish-driving-check/finish-driving-check.component";
 
 const declaredModules = [
   HomePageDriverComponent,
   DisplayDrivingComponent,
   ExplanationDialogComponent,
-  ReservationPageDriverComponent
+  ReservationPageDriverComponent,
+  FinishDrivingCheckComponent
 ];
 
 @NgModule({

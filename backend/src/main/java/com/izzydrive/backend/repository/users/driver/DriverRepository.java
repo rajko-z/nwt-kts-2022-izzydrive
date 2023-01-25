@@ -1,4 +1,4 @@
-package com.izzydrive.backend.repository.users;
+package com.izzydrive.backend.repository.users.driver;
 
 import com.izzydrive.backend.model.users.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface DriverRepository extends JpaRepository<Driver, Long> {
+public interface DriverRepository extends JpaRepository<Driver, Long>, DriverRepositoryCustom {
 
     Optional<Driver> findByEmail(String email);
 
@@ -34,7 +34,11 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
                                     @Param("lat") double lat,
                                     @Param("lon") double lon);
 
-    @Query("select d from Driver d left join fetch d.currentDriving cd where d.email = ?1")
+    @Query("select d from Driver d" +
+            " left join fetch d.currentDriving cd" +
+            " left join fetch cd.passengers pp" +
+            " left join fetch d.nextDriving nd" +
+            " where d.email = ?1")
     Optional<Driver> findByEmailWithCurrentDriving(String email);
 
     @Query("select d from Driver d left join fetch d.nextDriving nd where d.email = ?1")

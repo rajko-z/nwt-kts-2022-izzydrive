@@ -49,6 +49,7 @@ public final class ExceptionMessageConstants {
     public static final String YOU_DO_NOT_HAVE_CURRENT_WAITING_DRIVING_TO_START = "You don't have current waiting driving to start";
     public static final String CANT_START_DRIVING_NOT_AT_LOCATION = "You can't start driving because you didn't arrived at start location";
     public static final String CANT_REPORT_DRIVER_BECAUSE_NOT_ACTIVE_DRIVING = "You can't report driver because you do not have currently active driving";
+    public static final String CANT_FINISH_DRIVING_THAT_NOT_ACTIVE = "You don't have active drivings to finish";
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);

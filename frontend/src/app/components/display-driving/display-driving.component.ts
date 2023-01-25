@@ -4,6 +4,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-check.component";
+import {FinishDrivingCheckComponent} from "../finish-driving-check/finish-driving-check.component";
 
 @Component({
   selector: 'app-display-driving',
@@ -24,14 +26,23 @@ export class DisplayDrivingComponent implements OnInit {
     private drivingService: DrivingService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   cancelDriving() {
     this.dialog.open(ExplanationDialogComponent, {data: this.driving.id});
   }
 
   endDriving() {
-
+    this.snackBar.openFromComponent(FinishDrivingCheckComponent, {
+      data: {
+        preClose: () => {
+          this.snackBar.dismiss()
+        }
+      },
+      verticalPosition: 'bottom',
+      horizontalPosition: 'right',
+    });
   }
 
   startDriving() {
@@ -49,7 +60,7 @@ export class DisplayDrivingComponent implements OnInit {
       );
   }
 
-  cancelReservation(){
+  cancelReservation() {
 
   }
 }

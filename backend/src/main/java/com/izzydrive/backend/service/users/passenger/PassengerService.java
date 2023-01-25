@@ -43,7 +43,9 @@ public interface PassengerService {
 
     CalculatedRouteDTO findEstimatedTimeLeftForCurrentDrivingToStart();
 
-    void deleteDrivingFromPassengers(Collection<Passenger> passengers);
+    void deleteCurrentDrivingFromPassengers(Collection<Passenger> passengers);
 
     void reportDriver();
+
+    void addNewDrivingToPassengersDrivings(Collection<Passenger> passengers, Driving driving);
 }
