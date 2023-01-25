@@ -1,30 +1,34 @@
 @import "src/style/styles";
 
 .horizontal-group {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-shrink: 1;
-    width: 100%;
-    position: relative;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+}
+
+.field-form {
+  width: 25vw;
+  margin-right: 1%;
+  min-width: 100px;
 }
 
 .item {
-    position: relative;
+  position: relative;
 }
 
-
-.name_field{
-    display: inline-block;
-    vertical-align: top;
+.name_field {
+  display: inline-block;
+  vertical-align: top;
 }
 
-.form_tittle{
-    color: $tittle_color;
-    font-weight: bold;
-    font-size: xx-large;
-    font-family: 'Inter';
-    margin-bottom: 15%;
+.form_tittle {
+  color: $tittle_color;
+  font-weight: bold;
+  font-size: xx-large;
+  font-family: $font;
+  margin-bottom: 15%;
+}
 
+.submit-button {
+  margin-top: 15%;
+  width: 25vw;
 }

@@ -16,26 +16,26 @@ export class BaseUserDataFormComponent implements OnInit {
   isRegistration: boolean = this.userService.getRoleCurrentUserRole() === null; //show pasword if user is not loged in
 
   registerForm = new FormGroup({
-    firstName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
-    lastName: new FormControl('',[Validators.required, Validators.pattern(this.name_regexp)]),
+    firstName: new FormControl('', [Validators.required, Validators.pattern(this.name_regexp)]),
+    lastName: new FormControl('', [Validators.required, Validators.pattern(this.name_regexp)]),
     email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl(''),
+    password: new FormControl('',),
     repeatedPassword: new FormControl(''),
-    phoneNumber: new FormControl('',[Validators.required, Validators.pattern("^[+][0-9]{11,12}$")]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern("^[+][0-9]{11,12}$")]),
   });
 
 
   @Output() register = new EventEmitter<FormGroup>();
 
   constructor(private userService: UserService) {
-      if(this.isRegistration){
-        this.registerForm.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
-        this.registerForm.controls.repeatedPassword.setValidators([Validators.required, Validators.minLength(8)]);
-      }
-    }
+
+  }
 
   ngOnInit(): void {
-
+    if (this.isRegistration) {
+      this.registerForm.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
+      this.registerForm.controls.repeatedPassword.setValidators([Validators.required, Validators.minLength(8)]);
+    }
   }
 
 

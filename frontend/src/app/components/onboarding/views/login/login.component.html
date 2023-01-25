@@ -23,7 +23,7 @@
           ngModel
           formControlName="password">
         <button [disabled]="this.loginForm.controls.password.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hide= !hide"
-          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error>Password is required</mat-error>
