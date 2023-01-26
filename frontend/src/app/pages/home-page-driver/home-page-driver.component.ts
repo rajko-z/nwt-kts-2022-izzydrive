@@ -6,6 +6,13 @@ import * as SockJS from 'sockjs-client';
 import {UserService} from "../../services/userService/user-sevice.service";
 import {DriverService} from "../../services/driverService/driver.service";
 import {MapService} from "../../services/mapService/map.service";
+import {FavoriteRouteDialogComponent} from "../../components/favorite-route-dialog/favorite-route-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  ChangeDriverStatusCheckComponent
+} from "../../components/change-driver-status-check/change-driver-status-check.component";
+import {ReportDriverCheckComponent} from "../../components/report-driver-check/report-driver-check.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-home-page-driver',
@@ -16,7 +23,7 @@ export class HomePageDriverComponent implements OnInit {
 
   currentDriving?: DrivingWithLocations;
   nextDriving?: DrivingWithLocations;
-  driverStatus: boolean;
+  driverStatus?: boolean;
   currDrivingStatus: string;
 
   private stompClient: any;
@@ -24,13 +31,13 @@ export class HomePageDriverComponent implements OnInit {
   constructor(
     private userService: UserService,
     private driverService: DriverService,
+    private dialog: MatDialog,
     private mapService: MapService) {
   }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
     this.loadData();
-    this.driverStatus = true;
   }
 
   initializeWebSocketConnection() {
@@ -84,8 +91,15 @@ export class HomePageDriverComponent implements OnInit {
   }
 
   loadData() {
+    this.loadDriverStatus();
     this.loadCurrentDriving();
     this.loadNextDriving();
+  }
+
+  private loadDriverStatus() {
+    this.driverService.getDriverStatus().subscribe((status) => {
+      this.driverStatus = status.text === 'active';
+    });
   }
 
   private loadNextDriving() {
@@ -134,5 +148,17 @@ export class HomePageDriverComponent implements OnInit {
     if (this.currentDriving) {
       this.mapService.addAllFromDriving(this.currentDriving);
     }
+  }
+
+  changeDriverStatusClicked() {
+    const dialogRef = this.dialog.open(ChangeDriverStatusCheckComponent, {
+      data: !this.driverStatus,
+    });
+
+    dialogRef.afterClosed().subscribe(yesClicked => {
+      if (yesClicked === true) {
+        this.driverStatus = !this.driverStatus;
+      }
+    });
   }
 }

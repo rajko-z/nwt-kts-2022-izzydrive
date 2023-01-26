@@ -7,6 +7,7 @@ import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
+import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.User;
@@ -112,8 +113,15 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public Optional<Driver> findByEmailWithWorkingIntervals(String email) {
-        return this.driverRepository.findByEmailWithWorkingIntervals(email);
+    public Driver findLoggedDriverWithWorkingIntervals() {
+        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.driverRepository.findByEmailWithWorkingIntervals(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+    }
+
+    @Override
+    public Optional<Driver> findByEmailWithWorkingIntervals(String driverEmail) {
+        return this.driverRepository.findByEmailWithWorkingIntervals(driverEmail);
     }
 
     @Override

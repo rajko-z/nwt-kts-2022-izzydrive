@@ -1,16 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { LoginResponse } from 'src/app/model/response/loginResponse';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Role } from 'src/app/model/user/role';
-import { User } from 'src/app/model/user/user';
-import {Router} from "@angular/router";
-import { TextResponse } from 'src/app/model/response/textresponse';
-import { ResetPassword } from 'src/app/model/user/resetPassword';
-import { ProfilePageData } from 'src/app/model/user/profileData';
-import { AdminRespondOnChanges } from 'src/app/model/message/AdminResponseOnChanges';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {LoginResponse} from 'src/app/model/response/loginResponse';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Role} from 'src/app/model/user/role';
+import {User} from 'src/app/model/user/user';
+import {TextResponse} from 'src/app/model/response/textresponse';
+import {ResetPassword} from 'src/app/model/user/resetPassword';
+import {ProfilePageData} from 'src/app/model/user/profileData';
+import {AdminRespondOnChanges} from 'src/app/model/message/AdminResponseOnChanges';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +18,7 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private _sanitizer: DomSanitizer,
-    private router: Router,
-  )
+    private _sanitizer: DomSanitizer)
   { }
 
   createHeader(){
@@ -30,11 +27,6 @@ export class UserService {
        'Authorization': "Bearer "+ this.getCurrentUserToken()
     });
     return headers;
-  }
-  logOut() {
-    // TODO:: check if driver has current or future drivings, and dont allow to log out
-    this.router.navigate(['anon/login']);
-    sessionStorage.removeItem('currentUser');
   }
 
   isUserLoggedIn(): boolean {
@@ -154,7 +146,7 @@ export class UserService {
         error : (error) => {
             console.log(error.error.message);
         }
-      })       
+      })
     return "";
   }
 

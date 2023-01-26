@@ -57,6 +57,7 @@ p {
     @include size(13%, auto);
     padding: 1%;
     margin: 0 2%;
+    cursor: default;
     background-color: $light1;
     color: grey;
     border: solid thin gray;

@@ -2,7 +2,7 @@
   <div class="right-side-home-page">
     <div class="driver-status">
       <p class="status-title">Your current status: </p>
-      <button class="button-status">{{driverStatus ? 'active' : 'inactive'}}</button>
+      <button class="button-status" (click)="changeDriverStatusClicked()">{{driverStatus ? 'active' : 'inactive'}}</button>
     </div>
     <div class="current-driving">
       <h2 class="title">Current driving</h2>

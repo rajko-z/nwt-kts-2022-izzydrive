@@ -1,5 +1,5 @@
 <div>
-  <div class="container" *ngIf="paymentStatus?.passengerApproved === false">
+  <div class="container" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === false">
     <div>
       <span class="text">To pay: &nbsp;&nbsp;</span>
       <span class="text"><strong>{{paymentStatus?.priceInRSD}} RSD -> {{paymentStatus?.priceInETH}} ETH</strong></span>
@@ -73,13 +73,10 @@
   </div>
   <div class="submit-items" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === true">
     <div class="submit-item">
-      <span><strong>Processing request...</strong></span>
+      <span><strong>Processing request...Please wait</strong></span>
       <button mat-button>
         <mat-spinner diameter="50"></mat-spinner>
       </button>
     </div>
   </div>
-
-
-
 </div>

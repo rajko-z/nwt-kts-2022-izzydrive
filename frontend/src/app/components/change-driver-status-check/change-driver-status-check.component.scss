@@ -1,0 +1,19 @@
+@import "src/style/styles";
+
+.title {
+  text-align: center;
+  font-size: 18px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  height: 3vh;
+  margin: 1% 0 0 0;
+
+  .submit-button {
+    @include buttonStyle();
+    margin-left: 5px;
+    width: 20%;
+  }
+}

@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 import {MatDialog} from "@angular/material/dialog";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
 import {PayingInfoComponent} from "../paying-info/paying-info.component";
+import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
 
 @Component({
   selector: 'app-menu',
@@ -20,7 +21,12 @@ export class MenuComponent implements OnInit {
   email: string = this.userService.getCurrentUserEmail();
   name: string = '';
 
-  constructor(private userService: UserService, private router: Router, private matDialog: MatDialog) { }
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private matDialog: MatDialog,
+    private userLoggedService: LoggedUserService
+  ) { }
 
   ngOnInit(): void {
     this.colapseMenu();
@@ -58,7 +64,7 @@ export class MenuComponent implements OnInit {
   }
 
   logOut() {
-    this.userService.logOut();
+    this.userLoggedService.logOut();
   }
 
   openNotificationReview() {

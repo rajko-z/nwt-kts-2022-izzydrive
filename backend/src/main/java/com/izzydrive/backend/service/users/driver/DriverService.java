@@ -21,7 +21,9 @@ public interface DriverService {
 
     List<DriverLocationDTO> findAllActiveDriversLocation();
 
-    Optional<Driver> findByEmailWithWorkingIntervals(String email);
+    Driver findLoggedDriverWithWorkingIntervals();
+
+    Optional<Driver> findByEmailWithWorkingIntervals(String driverEmail);
 
     void save(Driver driver);
 

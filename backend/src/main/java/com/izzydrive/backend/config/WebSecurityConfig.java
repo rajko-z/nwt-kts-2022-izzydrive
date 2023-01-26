@@ -100,7 +100,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/drivers/current-locations",
                 "/confirmation",
                 "/confirmation/reset-password",
-                "/working-intervals/get-minutes/**",
                 "/socket/**",
                 "/**/*.css",
                 "/**/*.js"

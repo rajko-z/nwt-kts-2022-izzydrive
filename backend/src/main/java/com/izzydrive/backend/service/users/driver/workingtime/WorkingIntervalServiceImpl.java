@@ -5,33 +5,41 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.WorkingInterval;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class WorkingIntervalServiceImpl implements WorkingIntervalService {
 
-
     private final DriverService driverService;
 
-    public WorkingIntervalServiceImpl(@Lazy DriverService driverService) {
+    private final DriverLockerService driverLockerService;
+
+    public WorkingIntervalServiceImpl(@Lazy DriverService driverService, DriverLockerService driverLockerService) {
         this.driverService = driverService;
+        this.driverLockerService = driverLockerService;
     }
 
     @Override
     public Long getNumberOfMinutesDriverHasWorkedInLast24Hours(String driverEmail) {
-        Optional<Driver> driver = driverService.findByEmailWithWorkingIntervals(driverEmail);
-        if (driver.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail));
-        }
-        return calculateSumInMinutesFromWorkingIntervals(driver.get().getWorkingIntervals());
+        Driver driver = driverService.findByEmailWithWorkingIntervals(driverEmail)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
+        return calculateSumInMinutesFromWorkingIntervals(driver.getWorkingIntervals());
+    }
+
+    @Override
+    public Long getNumberOfMinutesLoggedDriverHasWorkedInLast24Hours() {
+        Driver driver = driverService.findLoggedDriverWithWorkingIntervals();
+        return calculateSumInMinutesFromWorkingIntervals(driver.getWorkingIntervals());
     }
 
     private Long calculateSumInMinutesFromWorkingIntervals(List<WorkingInterval> intervals) {
@@ -53,15 +61,11 @@ public class WorkingIntervalServiceImpl implements WorkingIntervalService {
     }
 
     @Override
+    @Transactional
     public void setCurrentLoggedDriverStatusToActive() {
-        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
 
-        Optional<Driver> driver = driverService.findByEmailWithWorkingIntervals(driverEmail);
-        if (driver.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail));
-        }
-
-        Optional<WorkingInterval> workingInterval = this.getLastWorkingIntervalFromDriver(driver.get());
+        Optional<WorkingInterval> workingInterval = this.getLastWorkingIntervalFromDriver(driver);
         if (workingInterval.isPresent() && workingInterval.get().getEndTime() == null) {
             return;
         }
@@ -69,29 +73,29 @@ public class WorkingIntervalServiceImpl implements WorkingIntervalService {
         WorkingInterval wt = new WorkingInterval();
         wt.setStartTime(LocalDateTime.now());
         wt.setEndTime(null);
-        driver.get().getWorkingIntervals().add(wt);
-        driver.get().setActive(true);
-        driverService.save(driver.get());
+        driver.getWorkingIntervals().add(wt);
+        driver.setActive(true);
+        driverService.save(driver);
     }
 
     @Override
+    @Transactional
     public void setCurrentLoggedDriverStatusToInActive() {
-        String driverEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Driver driver = driverService.findLoggedDriverWithWorkingIntervals();
 
-        Optional<Driver> driver = driverService.findByEmailWithWorkingIntervals(driverEmail);
-        if (driver.isEmpty()) {
-            throw new BadRequestException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail));
-        }
+        checkDriverCurrentDrivings(driver.getEmail());
 
-        checkDriverCurrentDrivings(driverEmail);
-
-        Optional<WorkingInterval> workingInterval = this.getLastWorkingIntervalFromDriver(driver.get());
+        Optional<WorkingInterval> workingInterval = this.getLastWorkingIntervalFromDriver(driver);
         workingInterval.ifPresent(interval -> interval.setEndTime(LocalDateTime.now()));
-        driver.get().setActive(false);
-        driverService.save(driver.get());
+        driver.setActive(false);
+        driverService.save(driver);
     }
 
     private void checkDriverCurrentDrivings(String email) {
+        if (driverLockerService.driverIsLocked(email)) {
+            throw new BadRequestException(ExceptionMessageConstants.CANT_CHANGE_DS_TO_INACTIVE_CAUSE_DRIVINGS_EXISTS);
+        }
+
         Driver driver = driverService.findByEmailWithAllDrivings(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(email)));
 
@@ -110,6 +114,13 @@ public class WorkingIntervalServiceImpl implements WorkingIntervalService {
         if (driver.getWorkingIntervals().isEmpty()) {
             return Optional.empty();
         }
+        driver.getWorkingIntervals().sort(Comparator.comparing(WorkingInterval::getStartTime));
+
         return Optional.of(driver.getWorkingIntervals().get(driver.getWorkingIntervals().size() - 1));
+    }
+
+    @Override
+    public boolean isLoggedDriverActive() {
+        return driverService.getCurrentlyLoggedDriverWithCurrentDriving().isActive();
     }
 }

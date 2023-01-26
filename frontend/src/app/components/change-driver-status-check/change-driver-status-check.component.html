@@ -1,0 +1,16 @@
+<div>
+  <div class="title">
+    <p *ngIf="this.toSetActive">
+      Are you sure you want to set your status to active?
+      You will be immediately available for new rides if you didn't exceed your work time
+    </p>
+    <p *ngIf="!this.toSetActive">
+      Are you sure you want to set your status to inactive?
+      You won't be available for new rides
+    </p>
+  </div>
+  <div class="button">
+    <button type="submit" class="submit-button" (click)="yesClick()">Yes</button>
+    <button type="submit" class="submit-button" (click)="closeDialog(false)">No</button>
+  </div>
+</div>

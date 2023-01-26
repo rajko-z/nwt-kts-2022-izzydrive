@@ -12,6 +12,10 @@ import {ProfilePageCarComponent} from "src/app/components/profile/profile-page-c
 import {UsersModule} from "../user/users.module";
 import {EditCarComponent} from "src/app/components/profile/edit-car/edit-car.component";
 import {FinishDrivingCheckComponent} from "../../components/finish-driving-check/finish-driving-check.component";
+import {WorkTimeComponent} from "../../components/worktime/work-time.component";
+import {
+  ChangeDriverStatusCheckComponent
+} from "../../components/change-driver-status-check/change-driver-status-check.component";
 
 const declaredModules = [
   HomePageDriverComponent,
@@ -20,7 +24,9 @@ const declaredModules = [
   ReservationPageDriverComponent,
   ProfilePageCarComponent,
   EditCarComponent,
-  FinishDrivingCheckComponent
+  FinishDrivingCheckComponent,
+  WorkTimeComponent,
+  ChangeDriverStatusCheckComponent
 ];
 
 @NgModule({

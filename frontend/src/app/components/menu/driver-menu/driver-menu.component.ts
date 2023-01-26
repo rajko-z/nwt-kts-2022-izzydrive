@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {MatDialog} from "@angular/material/dialog";
+import {WorkTimeComponent} from "../../worktime/work-time.component";
 
 @Component({
   selector: 'app-driver-menu',
@@ -8,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class DriverMenuComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private matDialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -27,5 +29,9 @@ export class DriverMenuComponent implements OnInit {
 
   onCarInfo(){
     this.router.navigateByUrl("/driver/car-data")
+  }
+
+  onWorkTimeClick() {
+    this.matDialog.open(WorkTimeComponent);
   }
 }
