@@ -13,7 +13,7 @@ public interface CarService {
 
     double calculatePrice(Car car, double distance);
 
-    CarDTO findByDriverid(Long id);
+    CarDTO findByDriverId(Long id);
 
     boolean editCar(CarDTO carDTO, boolean saveChanges);
 }

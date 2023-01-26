@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
-        ConfirmationToken token  = confirmationTokenService.fingByToken(resetPasswordDTO.getToken());
+        ConfirmationToken token  = confirmationTokenService.findByToken(resetPasswordDTO.getToken());
         User user = token.getUser();
         if (user != null &&
                 Validator.validateMatchingPassword(resetPasswordDTO.getPassword(), resetPasswordDTO.getRepeatedPassword()) &&

@@ -14,6 +14,7 @@ export class NotificationM {
   reservationTime?: Date;
   notificationStatus: NotificationStatus;
   creationDate: Date;
+  driverEmail?:string;
   drivingId?:number;
   driverData: Driver;
   carData: Car;

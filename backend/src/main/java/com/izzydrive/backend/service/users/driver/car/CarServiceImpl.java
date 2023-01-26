@@ -5,7 +5,7 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.*;
 import com.izzydrive.backend.repository.CarRepository;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,6 @@ public class CarServiceImpl implements CarService {
        else{
            throw new BadRequestException(ALREADY_EXISTING_CAR_MESSAGE, 1008);
         }
-
     }
 
     @Override
@@ -84,7 +83,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public CarDTO findByDriverid(Long id) {
+    public CarDTO findByDriverId(Long id) {
         Car car = this.carRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NO_CAR_FOR_USER));
         CarDTO carDTO =  new CarDTO(car);
         carDTO.setCarAccommodation(this.getCarAccommodationFromString(car.getCarAccommodations()));
@@ -109,8 +108,6 @@ public class CarServiceImpl implements CarService {
                 carDTO.setAccommodations(carDTO.getAccommodations());
                 car.setCarAccommodations(carDTO.getAccommodations());
             }
-
-
             if (saveChanges) {
                 carRepository.save(car);
                 return true;
@@ -126,7 +123,7 @@ public class CarServiceImpl implements CarService {
 
     private CarType getCarType(String carType){
         for (CarType type : CarType.values()) {
-            if (type.name().toUpperCase().equalsIgnoreCase(carType.toUpperCase())) {
+            if (type.name().equalsIgnoreCase(carType)) {
                 return type;
             }
         }

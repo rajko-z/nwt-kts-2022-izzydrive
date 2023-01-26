@@ -5,7 +5,7 @@ import com.izzydrive.backend.dto.*;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.service.ImageService;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
@@ -36,8 +36,6 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // if you want to get user with image, call it like /{email}?image=true
-    // default value is set to false, so it will return user without image
     @GetMapping("/{email}")
     public ResponseEntity<UserDTO> findUserByEmail(@PathVariable String email,
                                                    @RequestParam(defaultValue = "false") boolean image) {
@@ -89,7 +87,6 @@ public class UserController {
             this.notificationService.sendNotificationToAdminForDriverChangeData(userDTO);
             return ResponseEntity.ok(new TextResponse("Admin will verify your change"));
         }
-
     }
 
     @PostMapping("/reset-password-email")
@@ -107,6 +104,6 @@ public class UserController {
     @PostMapping("/response-changes")
     public ResponseEntity<TextResponse> responseDriverChanges(@RequestBody AdminResponseOnChanges response){
         this.notificationService.sendNotificationAdminResponseForChanges(response.getDriverEmail(), response.getResponse());
-        return new ResponseEntity(new TextResponse("success"), HttpStatus.OK);
+        return new ResponseEntity<>(new TextResponse("success"), HttpStatus.OK);
     }
 }

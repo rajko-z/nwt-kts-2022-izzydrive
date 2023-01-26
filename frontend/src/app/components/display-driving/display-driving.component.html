@@ -4,19 +4,19 @@
       <div>
         <em class="fa-solid fa-location-dot"></em>
         <span class="bold-style">Start location: </span>
-        {{driving.start.name}}
+        {{driving.route.start.name}}
       </div>
-      <div *ngIf="driving?.intermediateStations?.length > 0">
-        <div *ngFor="let station of driving.intermediateStations">
+      <div *ngIf="driving?.route.intermediateStations?.length > 0">
+        <div *ngFor="let station of driving.route.intermediateStations">
           <em class='fas fa-map-location-dot'></em>
           <span class="bold-style">Station:</span>
-          {{station}}
+          {{station.name}}
         </div>
       </div>
       <div>
         <em class="fa-solid fa-location-dot"></em>
         <span class="bold-style">End location: </span>
-        {{driving.end.name}}
+        {{driving.route.end.name}}
       </div>
     </div>
     <div class="passenger-info">
@@ -31,17 +31,26 @@
       <span class="bold-style">Price: </span> {{driving.price}} $
     </div>
   </div>
-  <div *ngIf="time === 'start'" class="options">
+
+  <div *ngIf="currDrivingStatus === 'waiting'" class="options">
+    <button class="disabled-button">Start</button>
+    <button class="active-button" (click)="cancelDriving()">Cancel</button>
+  </div>
+
+  <div *ngIf="currDrivingStatus === 'start'" class="options">
     <button class="active-button" (click)="startDriving()">Start</button>
     <button class="active-button" (click)="cancelDriving()">Cancel</button>
   </div>
-  <div *ngIf="time === 'current'" class="options">
+
+  <div *ngIf="currDrivingStatus === 'active' || currDrivingStatus === 'finish'" class="options">
     <button class="active-button" (click)="endDriving()">Finish</button>
   </div>
-  <div *ngIf="time === 'next'" class="options">
+
+  <div *ngIf="currDrivingStatus === 'next'" class="options">
     <button class="active-button" (click)="cancelDriving()">Cancel</button>
   </div>
-  <div *ngIf="time === 'reservation'" class="options">
+
+  <div *ngIf="currDrivingStatus === 'reservation'" class="options">
     <button class="active-button" (click)="cancelReservation()">Cancel</button>
   </div>
 </div>

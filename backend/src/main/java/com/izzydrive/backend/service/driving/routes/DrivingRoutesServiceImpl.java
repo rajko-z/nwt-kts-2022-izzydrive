@@ -35,18 +35,22 @@ public class DrivingRoutesServiceImpl implements DrivingRoutesService {
             if (driver.getLon() == coordinates.get(i).getLon() && driver.getLat() == coordinates.get(i).getLat()) {
                 coordinatesPassed = i;
                 coordinatesLeft = coordinates.subList(i+1, coordinates.size());
+                break;
             }
         }
 
         if (coordinatesPassed == 0) {
-            return new CalculatedRouteDTO(new ArrayList<>(), 0, 0);
+            return fromDriverToStart;
         }
 
         double proportion = coordinates.size() * 1.0 / coordinatesPassed;
 
-        double estimatedDuration = fromDriverToStart.getDuration() / proportion;
-        double estimatedDistance = fromDriverToStart.getDistance() / proportion;
+        double durationPassed = fromDriverToStart.getDuration() / proportion;
+        double distancePassed = fromDriverToStart.getDistance() / proportion;
 
-        return new CalculatedRouteDTO(coordinatesLeft, estimatedDistance, estimatedDuration);
+        double durationLeft = fromDriverToStart.getDuration() - durationPassed;
+        double distanceLeft = fromDriverToStart.getDistance() - distancePassed;
+
+        return new CalculatedRouteDTO(coordinatesLeft, distanceLeft, durationLeft);
     }
 }

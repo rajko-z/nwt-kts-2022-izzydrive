@@ -1,7 +1,6 @@
 package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.CarDTO;
-import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.service.users.driver.car.CarService;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public class CarController {
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @GetMapping
     public ResponseEntity<CarDTO> getDriverById(@RequestParam Long id) {
-        CarDTO car = carService.findByDriverid(id);
+        CarDTO car = carService.findByDriverId(id);
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 

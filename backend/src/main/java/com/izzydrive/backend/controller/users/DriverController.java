@@ -2,6 +2,7 @@ package com.izzydrive.backend.controller.users;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,19 @@ public class DriverController {
     public ResponseEntity<List<DriverLocationDTO>> findAllActiveDriversLocation() {
         List<DriverLocationDTO> locations = driverService.findAllActiveDriversLocation();
         return new ResponseEntity<>(locations, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("current-driving")
+    public ResponseEntity<DrivingDTOWithLocations> getCurrentDriving(){
+        DrivingDTOWithLocations driving = driverService.getCurrentDriving();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("next-driving")
+    public ResponseEntity<DrivingDTOWithLocations> getNextDriving(){
+        DrivingDTOWithLocations driving = driverService.getNextDriving();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 }

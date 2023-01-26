@@ -2,6 +2,7 @@ package com.izzydrive.backend.jobs;
 
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class PaymentSessionExpiredTask {
 
     private final DrivingValidationService drivingValidationService;
 
+    private final DrivingRejectionService drivingRejectionService;
+
     @Scheduled(cron = "${payment-session-expired-job.cron}")
     public void cancelDrivingForExpiredPaymentSession() {
         LOG.info("> job started");
@@ -37,7 +40,7 @@ public class PaymentSessionExpiredTask {
         for (Driving d : drivings) {
             if (drivingValidationService.drivingExpiredForPayment(d) && !d.isLocked()) {
                 try {
-                    drivingService.removeDrivingPaymentSessionExpired(d.getId());
+                    drivingRejectionService.removeDrivingPaymentSessionExpired(d.getId());
                     LOG.info(String.format("> driving with id:%d successfully removed", d.getId()));
                 } catch (OptimisticLockingFailureException e) {
                     LOG.error(e.getMessage());

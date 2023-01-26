@@ -18,9 +18,11 @@ import {
 import {
   PaymentReservationComponent
 } from "../../components/notifications/payment-reservation/payment-reservation.component";
-import { DriverChangeInfoComponent } from 'src/app/components/notifications/driver-change-info/driver-change-info.component';
-import { CarChangeInfoComponent } from 'src/app/components/notifications/car-change-info/car-change-info.component';
-
+import {
+  DriverChangeInfoComponent
+} from 'src/app/components/notifications/driver-change-info/driver-change-info.component';
+import {CarChangeInfoComponent} from 'src/app/components/notifications/car-change-info/car-change-info.component';
+import {ReportedDriverComponent} from "../../components/notifications/reported-driver/reported-driver.component";
 
 @Injectable({
   providedIn: 'root'
@@ -145,7 +147,19 @@ export class NotificationService {
 
   sendNotificationForPaymentReservation(stompClient) {
     stompClient.subscribe('/notification/paymentReservation', (message: { body: string }) => {
-        this.showNotificationComponent(message.body, PaymentReservationComponent);
+      this.showNotificationComponent(message.body, PaymentReservationComponent);
+    });
+  }
+
+  showNotificationDriverArrivedAtStart(stompClient) {
+    stompClient.subscribe('/notification/driverArrivedStart', (message: { body: string }) => {
+      this.showNotificationText(message.body);
+    });
+  }
+
+  showNotificationReportedDriver(stompClient) {
+    stompClient.subscribe('/notification/reportDriver', (message: { body: string }) => {
+        this.showNotificationComponent(message.body, ReportedDriverComponent);
       }
     );
   }
@@ -157,16 +171,21 @@ export class NotificationService {
     );
   }
 
+  showNotificationCancelDrivingFromDriverToPassengers(stompClient) {
+    const callBackFn = () => {
+      this.router.navigateByUrl('/passenger/order-now');
+    }
+    stompClient.subscribe('/notification/regularDrivingCanceledPassenger', (message: { body: string }) => {
+      this.showNotificationText(message.body, callBackFn);
+    });
+  }
+
   findAll() {
     return this.httpClientService.get(environment.apiUrl + `notifications`);
   }
 
   deleteNotification(id: number) {
     return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/${id}`);
-  }
-
-  deleteNotificationFromAdmin(id: number) {
-    return this.httpClientService.deleteWithText(environment.apiUrl + `notifications/admin/${id}`);
   }
 
   sendNotificationToAdimForDriverChangeData(stompClient) {

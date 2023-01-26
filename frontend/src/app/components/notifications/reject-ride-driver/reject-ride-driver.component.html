@@ -1,5 +1,6 @@
 <div>
   <div class="title">
+    <p>{{data.message.driverEmail}} just canceled ride</p>
     <p>REASON: {{data.message.message}}</p>
     <div class="location">
       <em class="fa-solid fa-location-dot"></em>
@@ -21,11 +22,8 @@
       <em class="fa-solid fa-clock"></em>
       <p class="time-title">Driving duration: {{this.minute}} min</p>
     </div>
-
   </div>
   <div class="button">
-    <p class="question">Do you want to choose a new driver?</p>
-    <button type="submit" class="submit-button" (click)="onYesClick()">Yes</button>
-    <button type="submit" class="submit-button" (click)="onNoClick()">No</button>
+    <button type="submit" class="submit-button" (click)="okClicked()">Ok</button>
   </div>
 </div>

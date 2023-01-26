@@ -6,6 +6,8 @@ import {environment} from "../../../environments/environment";
 import {Location} from "../../model/map/location";
 import {DrawnRoute} from "../../model/map/drawnRoute";
 import {DriverLocation} from "../../model/driver/driverLocation";
+import {DrivingWithLocations} from "../../model/driving/driving";
+import {MarkerType} from "../../model/map/markerType";
 
 @Injectable({
   providedIn: 'root'
@@ -61,4 +63,35 @@ export class MapService {
   resetEverythingOnMap() {
     this.toResetMapViewBS.next();
   }
+
+  addAllFromDriving(driving: DrivingWithLocations) {
+    let startPlace: PlaceOnMap = driving.route.start;
+    startPlace.markerType = MarkerType.START;
+    this.addPlaceOnMap(driving.route.start);
+
+    let endPlace: PlaceOnMap = driving.route.end;
+    endPlace.markerType = MarkerType.END;
+    this.addPlaceOnMap(driving.route.end);
+
+    let inter: PlaceOnMap[] = driving.route.intermediateStations;
+    if (inter.length >= 1) {
+      let place: PlaceOnMap = inter.at(0);
+      place.markerType = MarkerType.FIRST_INTERMEDIATE;
+      this.addPlaceOnMap(place);
+    }
+    if (inter.length >= 2) {
+      let place: PlaceOnMap = inter.at(1);
+      place.markerType = MarkerType.SECOND_INTERMEDIATE;
+      this.addPlaceOnMap(place);
+    }
+    if (inter.length === 3) {
+      let place: PlaceOnMap = inter.at(2);
+      place.markerType = MarkerType.THIRD_INTERMEDIATE;
+      this.addPlaceOnMap(place);
+    }
+    this.startTrackingCurrentDriverOnMap(driving.driver.email);
+    this.drawRoute(driving.fromDriverToStart.coordinates, "#5715ff");
+    this.drawRoute(driving.fromStartToEnd.coordinates, "#d3081f");
+  }
+
 }

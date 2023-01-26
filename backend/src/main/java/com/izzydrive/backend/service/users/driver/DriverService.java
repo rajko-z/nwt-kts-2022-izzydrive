@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.users.driver;
 
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
 import com.izzydrive.backend.model.users.Driver;
 
@@ -34,12 +35,15 @@ public interface DriverService {
 
     Optional<Driver> findByEmailWithCurrentNextAndReservedDriving(String email);
 
-
-    Driver getCurrentlyLoggedDriver();
-
     Driver getCurrentlyLoggedDriverWithCurrentDriving();
 
     Driver getCurrentlyLoggedDriverWithNextDriving();
 
     Driver getCurrentlyLoggedDriverWithReservation();
+
+    DrivingDTOWithLocations getCurrentDriving();
+
+    DrivingDTOWithLocations getNextDriving();
+
+    void refresh(Driver driver);
 }

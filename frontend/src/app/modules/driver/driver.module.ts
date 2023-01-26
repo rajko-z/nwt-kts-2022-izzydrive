@@ -8,10 +8,10 @@ import {HomePageDriverComponent} from "../../pages/home-page-driver/home-page-dr
 import {DisplayDrivingComponent} from "../../components/display-driving/display-driving.component";
 import {ExplanationDialogComponent} from "../../components/explanation-dialog/explanation-dialog.component";
 import {ReservationPageDriverComponent} from "../../pages/reservation-page-driver/reservation-page-driver.component";
-import { ProfilePageCarComponent } from "src/app/components/profile/profile-page-car/profile-page-car.component";
-import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
-import { UsersModule } from "../user/users.module";
-import { EditCarComponent } from "src/app/components/profile/edit-car/edit-car.component";
+import {ProfilePageCarComponent} from "src/app/components/profile/profile-page-car/profile-page-car.component";
+import {UsersModule} from "../user/users.module";
+import {EditCarComponent} from "src/app/components/profile/edit-car/edit-car.component";
+import {FinishDrivingCheckComponent} from "../../components/finish-driving-check/finish-driving-check.component";
 
 const declaredModules = [
   HomePageDriverComponent,
@@ -19,7 +19,8 @@ const declaredModules = [
   ExplanationDialogComponent,
   ReservationPageDriverComponent,
   ProfilePageCarComponent,
-  EditCarComponent
+  EditCarComponent,
+  FinishDrivingCheckComponent
 ];
 
 @NgModule({

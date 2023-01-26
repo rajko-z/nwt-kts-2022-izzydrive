@@ -11,15 +11,18 @@ import {HomePageAdminComponent} from "../../pages/home-page-admin/home-page-admi
 import {AddDriverComponent} from "../../components/profile/add-driver/add-driver.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ChatModule} from "../../components/chat/chat.module";
-import { ReviewUsersTableComponent } from "src/app/components/shared/review-users-table/review-users-table.component";
+import {ReviewUsersTableComponent} from "src/app/components/shared/review-users-table/review-users-table.component";
 import {
   RejectRideDriverComponent
 } from "../../components/notifications/reject-ride-driver/reject-ride-driver.component";
 import {
   ReviewAndWriteAdminNotesComponent
 } from "../../components/review-and-write-admin-notes/review-and-write-admin-notes.component";
-import { DriverChangeInfoComponent } from "src/app/components/notifications/driver-change-info/driver-change-info.component";
-import { CarChangeInfoComponent } from "src/app/components/notifications/car-change-info/car-change-info.component";
+import {
+  DriverChangeInfoComponent
+} from "src/app/components/notifications/driver-change-info/driver-change-info.component";
+import {CarChangeInfoComponent} from "src/app/components/notifications/car-change-info/car-change-info.component";
+import {ReportedDriverComponent} from "../../components/notifications/reported-driver/reported-driver.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
@@ -30,7 +33,8 @@ const declaredModules = [
   RejectRideDriverComponent,
   ReviewAndWriteAdminNotesComponent,
   DriverChangeInfoComponent,
-  CarChangeInfoComponent
+  CarChangeInfoComponent,
+  ReportedDriverComponent
 ];
 
 @NgModule({

@@ -19,12 +19,18 @@
           <p class="users-title">Passengers: <span>{{pass}}</span></p>
         </div>
       </div>
-<!--            <div class="report-info">-->
-<!--              <button type="button" class="report-button" (click)="reportDriver()">Report</button>-->
-<!--            </div>-->
-      <div class="time-info">
+      <div class="report-info" *ngIf="drivingActive && !finished">
+        <button type="button" class="report-button" (click)="reportDriver()">Report</button>
+      </div>
+      <div class="report-info" *ngIf="!drivingActive && waitingForRideToStart">
+        <span><strong>Waiting for ride to start...</strong></span>
+        <button mat-button>
+          <mat-spinner diameter="50"></mat-spinner>
+        </button>
+      </div>
+      <div class="time-info" *ngIf="!drivingActive && !waitingForRideToStart">
         <p class="time-title">Driver comes for:</p>
-        <p class="minutes">{{currentDriving.fromDriverToStart.duration * 1000 | date:'m'}}min</p>
+        <p class="minutes">{{minLeft}}min</p>
       </div>
     </div>
     <div class="second-line">

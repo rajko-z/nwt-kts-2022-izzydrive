@@ -6,16 +6,16 @@ import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.User;
-import com.izzydrive.backend.service.users.driver.car.CarService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DrivingConverter {
+
     private DrivingConverter() {}
 
-    public static DrivingDTOWithLocations convertWithLocationsAndDriver(Driving driving, List<Location> locations, CarService carService) {
+    public static DrivingDTOWithLocations convertWithLocationsAndDriver(Driving driving, List<Location> locations) {
         List<LocationDTO> fromDriverToStartLoc = new ArrayList<>();
         List<LocationDTO> fromStartToEndLoc = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class DrivingConverter {
                 fromDriverToStartLoc.add(new LocationDTO(l.getLongitude(), l.getLatitude()));
             }
         }
-        CalculatedRouteDTO fromDriverToStart = new CalculatedRouteDTO(fromDriverToStartLoc, 0, 0);
+        CalculatedRouteDTO fromDriverToStart = new CalculatedRouteDTO(fromDriverToStartLoc, driving.getDistanceFromDriverToStart(), driving.getDurationFromDriverToStart());
         CalculatedRouteDTO fromStartToEnd = new CalculatedRouteDTO(fromStartToEndLoc, driving.getDistance(), driving.getDuration());
 
         return DrivingDTOWithLocations.builder()
@@ -39,7 +39,7 @@ public class DrivingConverter {
                 .passengers(driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList()))
                 .isReservation(driving.isReservation())
                 .drivingState(driving.getDrivingState())
-                .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver(), carService))
+                .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver()))
                 .fromDriverToStart(fromDriverToStart)
                 .fromStartToEnd(fromStartToEnd)
                 .build();

@@ -1,7 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DrivingWithLocations} from "../../model/driving/driving";
+import {Driving, DrivingState, DrivingWithLocations} from "../../model/driving/driving";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-check.component";
+import {PassengerService} from "../../services/passengerService/passenger.service";
+import {environment} from "../../../environments/environment";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import {UserService} from "../../services/userService/user-sevice.service";
+import {EvaluationComponent} from "../driving-history/evaluation/evaluation.component";
+import {MatDialog} from "@angular/material/dialog";
+import {FavoriteRouteDialogComponent} from "../favorite-route-dialog/favorite-route-dialog.component";
+import {FavoriteRoute} from "../../model/route/favoriteRoute";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-current-driving-passenger',
@@ -10,18 +20,138 @@ import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-c
 })
 export class CurrentDrivingPassengerComponent implements OnInit {
 
-  @Input() currentDriving: DrivingWithLocations;
+  @Input() currentDriving?: DrivingWithLocations;
 
   minLeft: number;
+  interval;
 
-  constructor( private snackBar: MatSnackBar) {
+  drivingActive: boolean = false;
+
+  finished: boolean = false;
+
+  waitingForRideToStart: boolean = false;
+
+  private stompClient: any;
+
+  constructor(
+    private snackBar: MatSnackBar,
+    private passengerService: PassengerService,
+    private dialog: MatDialog,
+    private userService: UserService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
+    this.initializeWebSocketConnection();
+  }
+
+  ngOnChanges(): void {
+    if (this.currentDriving !== undefined) {
+      if (this.currentDriving.drivingState === DrivingState.ACTIVE) {
+        this.drivingActive = true;
+      } else {
+        this.fetchNewTimePeriodically();
+      }
+    }
+  }
+
+  initializeWebSocketConnection() {
+    let ws = new SockJS(environment.socket);
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
+    let that = this;
+    this.stompClient.connect({}, function () {
+      that.openDrivingSocket();
+    });
+  }
+
+  openDrivingSocket() {
+    this.onRideStart();
+    this.onRideEnd();
+    this.onDriverArrivedAtStart();
+  }
+
+  private onRideStart() {
+    this.stompClient.subscribe('/driving/rideStarted', (message: { body: string }) => {
+      console.log(message.body);
+      const emails: string[] = JSON.parse(message.body);
+      for (const email of emails) {
+        if (email === this.userService.getCurrentUserEmail()) {
+          this.drivingActive = true;
+        }
+      }
+    });
+  }
+
+  private onDriverArrivedAtStart() {
+    this.stompClient.subscribe('/notification/driverArrivedStart', (message: { body: string }) => {
+      const email = message.body;
+      if (email === this.userService.getCurrentUserEmail()) {
+        this.waitingForRideToStart = true;
+      }
+    });
+  }
+
+  private onRideEnd() {
+    this.stompClient.subscribe('/driving/rideEnded', (message: { body: string }) => {
+      const emails: string[] = JSON.parse(message.body);
+      for (const email of emails) {
+        if (email === this.userService.getCurrentUserEmail()) {
+          this.finished = true;
+          this.openEvaluationComponent();
+          this.openFavouriteRouteDialog();
+          this.router.navigateByUrl("/passenger/order-now");
+        }
+      }
+    });
+  }
+
+  openEvaluationComponent(): void {
+    let driving: Driving = new Driving();
+    driving.id = this.currentDriving.id;
+    driving.evaluationAvailable = true;
+
+    this.dialog.open(EvaluationComponent, {
+      data: driving
+    });
+  }
+
+  openFavouriteRouteDialog() {
+    let passengerId: number = this.userService.getCurrentUserId();
+    let startLocation: string = this.currentDriving.route.start.name;
+    let endLocation: string = this.currentDriving.route.end.name;
+    let intermediate: string[] = this.currentDriving.route.intermediateStations.map(p => p.name);
+    let route: FavoriteRoute = new FavoriteRoute(passengerId, null, startLocation, endLocation, intermediate);
+
+    this.dialog.open(FavoriteRouteDialogComponent, {
+      data: route
+    });
   }
 
 
+  fetchNewTimePeriodically() {
+    this.fetchNewTimeAndUpdateTimeLeft();
+    this.interval = setInterval(() => this.fetchNewTimeAndUpdateTimeLeft(), 15000);
+  }
 
+  fetchNewTimeAndUpdateTimeLeft() {
+    this.passengerService.getEstimatedRouteLeftToStartOfDriving()
+      .subscribe({
+          next: (route) => {
+            if (route.coordinates.length == 0) {
+              clearInterval(this.interval);
+              this.waitingForRideToStart = true;
+            } else {
+              this.minLeft = this.convertSecToMin(route.duration);
+            }
+          }
+        }
+      );
+  }
+
+  convertSecToMin(seconds: number): number {
+    return Math.ceil(seconds / 60);
+  }
 
   reportDriver() {
     this.snackBar.openFromComponent(ReportDriverCheckComponent, {

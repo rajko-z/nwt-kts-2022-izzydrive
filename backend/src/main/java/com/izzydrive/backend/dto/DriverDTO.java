@@ -1,5 +1,6 @@
 package com.izzydrive.backend.dto;
 
+import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.users.DriverStatus;
 import lombok.*;
 
@@ -15,4 +16,5 @@ public class DriverDTO {
     private String phoneNumber;
     private DriverStatus driverStatus;
     private CarDTO carData;
+    private LocationDTO location;
 }

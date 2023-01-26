@@ -9,5 +9,5 @@ public interface ConfirmationTokenService {
 
     void createVerificationToken(User user, String token);
 
-    ConfirmationToken fingByToken(String token);
+    ConfirmationToken findByToken(String token);
 }

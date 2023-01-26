@@ -9,7 +9,6 @@ import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
 import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverLocker;
 import com.izzydrive.backend.model.users.DriverStatus;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.drivingfinder.helper.DrivingFinderHelper;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static com.izzydrive.backend.utils.Helper.getDurationInMinutesFromSeconds;
 
@@ -114,7 +112,7 @@ public class DrivingFinderRegularServiceImpl implements DrivingFinderRegularServ
         List<DrivingOptionDTO> retVal = new ArrayList<>();
         for (CalculatedRouteDTO route : fromStartToEndRoutes) {
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
-                    DriverDTOConverter.convertBasicWithCar(driver, carService),
+                    DriverDTOConverter.convertBasicWithCar(driver),
                     new LocationDTO(driver.getLon(), driver.getLat()),
                     getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
                     carService.calculatePrice(driver.getCar(), route.getDistance()),
@@ -143,8 +141,7 @@ public class DrivingFinderRegularServiceImpl implements DrivingFinderRegularServ
             if (d.getDriverStatus().equals(DriverStatus.RESERVED)) {
                 continue;
             }
-            Optional<DriverLocker> driverLocker = this.driverLockerService.findByDriverEmail(d.getEmail());
-            if (driverLocker.isEmpty() || driverLocker.get().getPassengerEmail() == null) {
+            if (!driverLockerService.driverIsLocked(d.getEmail())) {
                 retVal.add(d);
             }
         }

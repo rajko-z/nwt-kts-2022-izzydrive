@@ -1,7 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Driving} from "../../model/driving/driving";
+import {DrivingWithLocations} from "../../model/driving/driving";
 import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
+import {DrivingService} from "../../services/drivingService/driving.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FinishDrivingCheckComponent} from "../finish-driving-check/finish-driving-check.component";
 
 @Component({
   selector: 'app-display-driving',
@@ -11,19 +14,18 @@ import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dial
 export class DisplayDrivingComponent implements OnInit {
 
   @Input()
-  time: string;
+  currDrivingStatus?: string;
 
   @Input()
-  driving?: Driving;
-  formatStartDate: string;
+  driving?: DrivingWithLocations;
 
-
-  constructor(public dialog: MatDialog) {
+  constructor(
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private drivingService: DrivingService) {
   }
 
   ngOnInit(): void {
-    let startDate = this.driving?.startDate;
-    this.formatStartDate = `${startDate?.getHours()}:${startDate?.getMinutes()}  ${startDate?.getDay()}-${startDate?.getMonth()}-${startDate?.getFullYear()}`;
   }
 
   cancelDriving() {
@@ -31,14 +33,33 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   endDriving() {
-
+    this.snackBar.openFromComponent(FinishDrivingCheckComponent, {
+      data: {
+        preClose: () => {
+          this.snackBar.dismiss()
+        }
+      },
+      verticalPosition: 'bottom',
+      horizontalPosition: 'right',
+    });
   }
 
   startDriving() {
-
+    this.drivingService.startDriving()
+      .subscribe({
+          next: (_) => {
+            this.currDrivingStatus = 'active';
+          },
+          error: (error) => {
+            this.snackBar.open(error.error.message, "ERROR", {
+              duration: 5000,
+            })
+          }
+        }
+      );
   }
 
-  cancelReservation(){
+  cancelReservation() {
 
   }
 }

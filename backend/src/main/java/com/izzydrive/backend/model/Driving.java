@@ -73,9 +73,6 @@ public class Driving {
     private List<Evaluation> evaluation = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    private DrivingNote drivingNote;
-
-    @OneToOne(fetch = FetchType.LAZY)
     private Driver driver;
 
     @OneToMany(mappedBy = "currentDriving", fetch = FetchType.LAZY)

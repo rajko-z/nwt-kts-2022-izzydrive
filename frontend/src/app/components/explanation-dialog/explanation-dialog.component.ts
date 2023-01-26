@@ -3,7 +3,7 @@ import {DrivingService} from "../../services/drivingService/driving.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserService} from "../../services/userService/user-sevice.service";
-import {DrivingNote} from "../../model/driving/drivingNote";
+import {CancellationReason} from "../../model/driving/cancelationReason";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -15,7 +15,7 @@ export class ExplanationDialogComponent {
   explanationForm = new FormGroup({
     explanation: new FormControl('')
   });
-  drivingNote: DrivingNote = {text: '', driverEmail: '', timestamp: new Date(), fromPassenger: false, drivingId: 0};
+  cancellationReason: CancellationReason;
 
   constructor(private drivingService: DrivingService,
               private userService: UserService,
@@ -25,17 +25,28 @@ export class ExplanationDialogComponent {
   }
 
   onSubmit() {
-    this.drivingNote.drivingId = this.data;
-    this.drivingNote.driverEmail = this.userService.getCurrentUserEmail();
-    this.drivingNote.text = this.explanationForm.value.explanation;
-    this.drivingNote.timestamp = new Date();
-    this.drivingService.rejectDriving(this.drivingNote).subscribe((res) => {
-      this.snackBar.open("You have successfully declined the ride", "Ok", {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'right',
-      })
-    });
+    this.cancellationReason = new CancellationReason();
+    this.cancellationReason.drivingId = this.data;
+    this.cancellationReason.text = this.explanationForm.value.explanation;
+
+    this.drivingService.rejectRegularDrivingDriver(this.cancellationReason)
+      .subscribe({
+          next: (_) => {
+            this.snackBar.open("You have successfully declined the ride", "Ok", {
+              duration: 5000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'right',
+            })
+          },
+          error: (error) => {
+            this.snackBar.open(error.error.message, "ERROR", {
+              duration: 5000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'right',
+            })
+          }
+        }
+      );
     this.closeDialog();
   }
 

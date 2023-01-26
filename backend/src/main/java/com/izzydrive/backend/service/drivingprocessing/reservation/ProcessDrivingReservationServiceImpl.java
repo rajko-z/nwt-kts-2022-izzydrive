@@ -8,7 +8,7 @@ import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
-import com.izzydrive.backend.service.NotificationService;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.drivingprocessing.reservation.validation.DriverAvailabilityReservationValidator;
 import com.izzydrive.backend.service.drivingprocessing.shared.drivingsaver.DrivingSaverFromRequest;
 import com.izzydrive.backend.service.users.driver.DriverService;

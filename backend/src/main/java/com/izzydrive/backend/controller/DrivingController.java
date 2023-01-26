@@ -1,15 +1,22 @@
 package com.izzydrive.backend.controller;
 
+import com.izzydrive.backend.dto.CancellationReasonDTO;
 import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.driving.*;
+import com.izzydrive.backend.dto.driving.DrivingDTO;
+import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
+import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
+import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.reports.DrivingReportDTO;
 import com.izzydrive.backend.dto.reports.ReportRequestDTO;
-import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.driving.cancelation.DrivingCancellationService;
+import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
+import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
+import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
+import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
 import com.izzydrive.backend.service.drivingprocessing.reservation.ProcessDrivingReservationService;
-import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -35,6 +41,12 @@ public class DrivingController {
     private final ProcessDrivingRegularService processDrivingRegularService;
 
     private final ProcessDrivingReservationService processDrivingReservationService;
+
+    private final DrivingRejectionService drivingRejectionService;
+
+    private final DrivingExecutionService drivingExecutionService;
+
+    private final DrivingCancellationService drivingCancellationService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
@@ -87,14 +99,14 @@ public class DrivingController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping(value = "/reject-linked-user")
     public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
-        this.drivingService.rejectDrivingLinkedUser();
+        drivingRejectionService.rejectDrivingLinkedUser();
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/{id}")
     public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id){
-        DrivingDTO driving = drivingService.findById(id);
+        DrivingDTO driving = drivingService.findDrivingDTOById(id);
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 
@@ -120,17 +132,17 @@ public class DrivingController {
     }
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("current-driving")
-    public ResponseEntity<DrivingDTO> getCurrentDriving(){
-        DrivingDTO driving = drivingService.getCurrentDriving();
-        return new ResponseEntity<>(driving, HttpStatus.OK);
+    @GetMapping("/start")
+    public ResponseEntity<TextResponse> startDriving() {
+        drivingExecutionService.startDriving();
+        return new ResponseEntity<>(new TextResponse("Driving successfully started"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("next-driving")
-    public ResponseEntity<DrivingDTO> getNextDriving(){
-        DrivingDTO driving = drivingService.getNextDriving();
-        return new ResponseEntity<>(driving, HttpStatus.OK);
+    @GetMapping("/end")
+    public ResponseEntity<TextResponse> endDriving() {
+        drivingExecutionService.endDriving();
+        return new ResponseEntity<>(new TextResponse("Driving successfully ended"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
@@ -142,13 +154,19 @@ public class DrivingController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("delete/{id}")
-    public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id){
+    public ResponseEntity<TextResponse> deleteDriving(@PathVariable Long id) {
         drivingService.deleteDriving(id);
         return new ResponseEntity<>(new TextResponse("Successfully delete driving"), HttpStatus.OK);
     }
 
+    @PostMapping("/reject-regular-driver")
+    public ResponseEntity<TextResponse> rejectRegularDrivingDriver(@RequestBody CancellationReasonDTO cancellationReasonDTO) {
+        drivingCancellationService.cancelRegularDriving(cancellationReasonDTO);
+        return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
+    }
+
     @PostMapping("/reports-passenger")
-    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPaseenger(@RequestBody ReportRequestDTO reportRequestDTO){
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPassenger(@RequestBody ReportRequestDTO reportRequestDTO){
         DrivingReportDTO report =this.drivingService.getDrivingReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
         return new ResponseEntity<>(report, HttpStatus.OK);
     }

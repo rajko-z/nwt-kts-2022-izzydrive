@@ -1,19 +1,10 @@
-$dark3: #696F91;
-$dark4: #4C506C;
-$dark5: #191A23;
-$light2: #D9DBF1;
-$light1: #E9EAEF;
-$light5: #858DB5;
-$light4: #B4BCDF;
-
-
-@import '../../../style/styles.scss';
+@import 'src/style/styles.scss';
 
 .menu-container {
   display: flex;
   flex-direction: column;
-  height: 88%; 
-  font-family: 'Inter';
+  height: 90vh;
+  font-family: $font;
   border-right: solid thin $light5;
   min-width: 230px;
   animation: fadeInAnimation ease 1s;
@@ -24,10 +15,10 @@ $light4: #B4BCDF;
   background-color: $dark4;
   max-width: 15%;
   overflow-y: auto;
-}
 
-::-webkit-scrollbar{
-  display: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes fadeInAnimation {
@@ -116,7 +107,7 @@ $light4: #B4BCDF;
 
 .mat-list-option{
     font-size: 14px;
-    height: 38px !important; 
+    height: 38px !important;
     color: $light2;
 }
 

@@ -27,8 +27,8 @@ export class DrivingService {
     return this.httpClientService.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
   }
 
-  rejectDriving(explanation) {
-    return this.httpClientService.postWithText(environment.apiUrl + `driving-notes/reject`, explanation);
+  rejectRegularDrivingDriver(explanation) {
+    return this.httpClientService.postT<TextResponse>(environment.apiUrl + `drivings/reject-regular-driver`, explanation);
   }
 
   getSimpleDrivingOptions(payload: PlaceOnMap[]): Observable<DrivingOption[]> {
@@ -101,16 +101,16 @@ export class DrivingService {
     return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
   }
 
-  getCurrentDriving() {
-    return this.httpClientService.get(environment.apiUrl + 'drivings/current-driving');
-  }
-
-  getNextDriving() {
-    return this.httpClientService.get(environment.apiUrl + 'drivings/next-driving');
-  }
-
   deleteDriving(id:number) {
     return this.httpClientService.getT<TextResponse>(environment.apiUrl + `drivings/delete/${id}`);
+  }
+
+  startDriving() {
+    return this.httpClientService.getT<TextResponse>(environment.apiUrl + 'drivings/start');
+  }
+
+  endDriving() {
+    return this.httpClientService.getT<TextResponse>(environment.apiUrl + 'drivings/end');
   }
 
   getReservation() {

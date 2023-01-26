@@ -2,12 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {NotificationM} from "../../../model/notifications/notification";
 import {NotificationService} from "../../../services/notificationService/notification.service";
 import {DrivingService} from "../../../services/drivingService/driving.service";
-import { UserService } from 'src/app/services/userService/user-sevice.service';
-import { AdminRespondOnChanges } from 'src/app/model/message/AdminResponseOnChanges';
-import { Driver } from 'src/app/model/driver/driver';
-import { Car } from 'src/app/model/car/car';
-import { getCarType } from 'src/app/model/car/carType';
-import { CarService } from 'src/app/services/carService/car.service';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
+import {AdminRespondOnChanges} from 'src/app/model/message/AdminResponseOnChanges';
+import {Driver} from 'src/app/model/driver/driver';
+import {Car} from 'src/app/model/car/car';
+import {getCarType} from 'src/app/model/car/carType';
+import {CarService} from 'src/app/services/carService/car.service';
 
 @Component({
   selector: 'app-notification-review',
@@ -18,11 +18,12 @@ export class NotificationReviewComponent implements OnInit {
 
   notifications: NotificationM[];
 
-  constructor(private notificationService: NotificationService, 
+  constructor (
+    private notificationService: NotificationService,
     private drivingService: DrivingService,
     private userService: UserService,
-    private carService: CarService) {
-  }
+    private carService: CarService
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -39,17 +40,6 @@ export class NotificationReviewComponent implements OnInit {
     this.notificationService.deleteNotification(id).subscribe((res) => {
       this.loadData();
     })
-  }
-
-  onYesClick(drivingId: number, id: number) {
-
-  }
-
-  onNoClick(drivingId: number, id: number) {
-    this.drivingService.deleteDriving(drivingId).subscribe((res) => {
-
-    });
-    this.deleteNotification(id);
   }
 
   onYesClickChangeData(driverData : String, id: number){

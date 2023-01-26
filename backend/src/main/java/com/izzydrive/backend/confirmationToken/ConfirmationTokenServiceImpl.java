@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Optional;
 
-import static com.izzydrive.backend.utils.ExceptionMessageConstants.AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE;
+import static com.izzydrive.backend.utils.ExceptionMessageConstants.ALREADY_SEND_REGISTRATION_REQUEST_MESSAGE;
 
 @Service
 @AllArgsConstructor
@@ -74,15 +74,13 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
             confirmationTokenRepository.save(verificationToken);
         }
         catch(Exception exception) {
-            exception.printStackTrace();
-            throw new BadRequestException(AlREADY_SEND_REGISTRATION_REQUEST_MESSAGE);
+            throw new BadRequestException(ALREADY_SEND_REGISTRATION_REQUEST_MESSAGE);
         }
     }
 
     @Override
-    public ConfirmationToken fingByToken(String token) {
-        ConfirmationToken confirmationToken = confirmationTokenRepository.findFirstByToken(token).
-                orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.INVALID_RESET_PASSWORD_TOKEN));;
-        return confirmationToken;
+    public ConfirmationToken findByToken(String token) {
+        return confirmationTokenRepository.findFirstByToken(token).
+                orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.INVALID_RESET_PASSWORD_TOKEN));
     }
 }

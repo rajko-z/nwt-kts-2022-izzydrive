@@ -10,4 +10,6 @@ public interface DriverRoutesService {
     CalculatedRouteDTO getEstimatedRouteLeftForCurrentDriving(String driverEmail);
 
     CalculatedRouteDTO getRouteFromEndLocationToStartOfFutureDriving(AddressOnMapDTO endLocation, Driver driver);
+
+    CalculatedRouteDTO getCurrentRouteFromDriverLocationToStart(Driver driver, AddressOnMapDTO startLocation);
 }
