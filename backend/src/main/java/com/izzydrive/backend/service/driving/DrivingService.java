@@ -53,4 +53,8 @@ public interface DrivingService {
     void delete(Driving driving);
 
     Optional<Driving> findById(Long drivingId);
+
+    List<Driving> findAllCurrentDrivings();
+
+    DrivingDTOWithLocations findDrivingWithLocationsById(Long drivingId);
 }

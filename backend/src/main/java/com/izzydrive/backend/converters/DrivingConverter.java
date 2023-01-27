@@ -59,4 +59,19 @@ public class DrivingConverter {
         }
         return new CalculatedRouteDTO(coordinates,driving.getDistance(), driving.getDuration());
     }
+
+    public static DrivingDTOWithLocations convertBasicWithDriver(Driving driving) {
+        return DrivingDTOWithLocations.builder()
+                .id(driving.getId())
+                .price(driving.getPrice())
+                .startDate(driving.getStartDate())
+                .endDate(driving.getEndDate())
+                .creationTime(driving.getCreationDate())
+                .route(RouteDTOConverter.convert(driving.getRoute()))
+                .passengers(driving.getPassengers().stream().map(User::getEmail).collect(Collectors.toList()))
+                .isReservation(driving.isReservation())
+                .drivingState(driving.getDrivingState())
+                .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver()))
+                .build();
+    }
 }

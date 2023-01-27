@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {DrivingOption} from "../../model/driving/drivingOption";
 import {DrivingFinderRequest} from "../../model/driving/drivingFinderRequest.";
 import {HttpClient} from "@angular/common/http";
-import {Driving, DrivingRequest} from "../../model/driving/driving";
+import {Driving, DrivingRequest, DrivingWithLocations} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
 import {Sort} from '@angular/material/sort';
@@ -115,5 +115,17 @@ export class DrivingService {
 
   getReservation() {
     return this.httpClientService.get(environment.apiUrl + 'drivings/reservation');
+  }
+
+  getAllCurrent() {
+    return this.httpClientService.getT<DrivingWithLocations[]>(environment.apiUrl + 'drivings/all-current');
+  }
+
+  getAllCurrentBySearchTerm(term: string) {
+    return this.httpClientService.getT<DrivingWithLocations[]>(environment.apiUrl + `drivings/all-current/${term}`);
+  }
+
+  findDrivingWithLocationsById(id: number) {
+    return this.httpClientService.getT<DrivingWithLocations>(environment.apiUrl + `drivings/with-locations/${id}`);
   }
 }

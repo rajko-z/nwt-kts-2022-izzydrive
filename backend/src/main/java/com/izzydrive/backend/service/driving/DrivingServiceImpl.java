@@ -398,4 +398,20 @@ public class DrivingServiceImpl implements DrivingService {
     public Optional<Driving> findById(Long drivingId) {
         return drivingRepository.findById(drivingId);
     }
+
+    @Override
+    public List<Driving> findAllCurrentDrivings() {
+        return drivingRepository.findAllCurrentDrivings();
+    }
+
+    @Override
+    @Transactional
+    public DrivingDTOWithLocations findDrivingWithLocationsById(Long drivingId) {
+        Driving currentDriving = getDrivingByIdWithDriverRouteAndPassengers(drivingId);
+        if (currentDriving != null) {
+            List<Location> locations = getDrivingWithLocations(drivingId).getLocations();
+            return DrivingConverter.convertWithLocationsAndDriver(currentDriving, locations);
+        }
+        throw new NotFoundException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST);
+    }
 }

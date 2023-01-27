@@ -1,1 +1,97 @@
-<h1>ZA sada proba videti posle sta staviti</h1>
+<div class="home-page">
+  <div class="right-side-home-page">
+    <div class="searchBox">
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Search term</mat-label>
+          <input matInput
+                 placeholder="Search by user name or email..."
+                 type="text"
+                 [formControl]="searchTerm"
+          >
+        </mat-form-field>
+      </div>
+      <button class="submit-button" mat-button (click)="onSearch()">Search</button>
+    </div>
+    <p class="resultsFoundText"><strong>{{drivings?.length}}</strong> drivings found</p>
+    <div *ngIf="drivings?.length === 0">
+      <h2>No current drivings</h2>
+    </div>
+    <div class="ride-area" *ngIf="drivings?.length > 0">
+      <div class="ride-summary" *ngFor="let driving of drivings"
+        (click)="showDrivingOnMap(driving.id)"
+        [ngClass]="{'selected-ride-info': selectedDrivingId === driving.id}"
+      >
+        <div class="first-line">
+          <div class="destination-info">
+            <div class="location">
+              <em class="fa-solid fa-location-dot"></em>
+              <p class="location-title">{{driving.route.start.name}}</p>
+            </div>
+            <div class="location">
+              <em class="fa-solid fa-location-dot"></em>
+              <p class="location-title">{{driving.route.end.name}}</p>
+            </div>
+            <div class="intermediate-station" *ngFor="let station of driving.route.intermediateStations">
+              <em class='fas fa-map-location-dot'></em>
+              <p class="intermediate-title">Intermediate station: <span>{{station.name}}</span></p>
+            </div>
+            <div class="other-users" *ngFor="let pass of driving.passengers">
+              <em class='fas fa-users'></em>
+              <p class="users-title">Passengers: <span>{{pass}}</span></p>
+            </div>
+          </div>
+          <div class="time-info">
+            <p class="minutes">{{driving.drivingState}}</p>
+          </div>
+        </div>
+        <div class="second-line">
+          <div class="driver-info">
+            <div class="tooltip">
+              <img *ngIf="driving.driver.carData.carType === 'REGULAR'" src="../../../assets/car.png"
+                   alt="car"
+                   class="driver-img">
+              <img *ngIf="driving.driver.carData.carType === 'AVERAGE'"
+                   src="../../../assets/avarageCar.png"
+                   alt="car" class="driver-img">
+              <img *ngIf="driving.driver.carData.carType === 'PREMIUM'"
+                   src="../../../assets/premiumCar.png"
+                   alt="car" class="driver-img">
+              <span class="tooltiptext">{{driving.driver.carData.carType}}</span>
+            </div>
+            <div class="driver-title">
+              <p>Driver: <span
+                class="driver">{{driving.driver.firstName}} {{driving.driver.lastName}}</span>
+              </p>
+              <p class="registration">Registration: <span
+                class="number">{{driving.driver.carData.registration}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="additional-options-info">
+            <div class="tooltip" *ngIf="driving.driver.carData.carAccommodation.baggage">
+              <img src="../../../assets/koferi.png" alt="baggage" class="additional-option">
+              <span class="tooltiptext">Baggage</span>
+            </div>
+            <div class="tooltip" *ngIf="driving.driver.carData.carAccommodation.pet">
+              <img src="../../../assets/zivotinje.png" alt="pet" class="additional-option">
+              <span class="tooltiptext">Pet</span>
+            </div>
+            <div class="tooltip" *ngIf="driving.driver.carData.carAccommodation.food">
+              <img src="../../../assets/hrana.png" alt="food" class="additional-option">
+              <span class="tooltiptext">Food</span>
+            </div>
+            <div class="tooltip" *ngIf="driving.driver.carData.carAccommodation.baby">
+              <img src="../../../assets/beba.png" alt="baby" class="additional-option">
+              <span class="tooltiptext">Baby</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="left-side-home-page">
+    <app-map></app-map>
+  </div>
+</div>
+

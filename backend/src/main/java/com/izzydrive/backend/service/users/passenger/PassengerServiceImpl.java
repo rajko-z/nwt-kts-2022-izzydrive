@@ -8,7 +8,6 @@ import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;

@@ -2,10 +2,7 @@ package com.izzydrive.backend.controller;
 
 import com.izzydrive.backend.dto.CancellationReasonDTO;
 import com.izzydrive.backend.dto.TextResponse;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
-import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
-import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
-import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
+import com.izzydrive.backend.dto.driving.*;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.reports.DrivingReportDTO;
 import com.izzydrive.backend.dto.reports.ReportRequestDTO;
@@ -13,6 +10,7 @@ import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.cancelation.DrivingCancellationService;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
 import com.izzydrive.backend.service.driving.rejection.DrivingRejectionService;
+import com.izzydrive.backend.service.driving.searchcurrent.CurrentDrivingsSearch;
 import com.izzydrive.backend.service.drivingfinder.regular.DrivingFinderRegularService;
 import com.izzydrive.backend.service.drivingfinder.reservation.DrivingFinderReservationService;
 import com.izzydrive.backend.service.drivingprocessing.regular.ProcessDrivingRegularService;
@@ -47,6 +45,8 @@ public class DrivingController {
     private final DrivingExecutionService drivingExecutionService;
 
     private final DrivingCancellationService drivingCancellationService;
+
+    private final CurrentDrivingsSearch currentDrivingsSearch;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
@@ -175,5 +175,26 @@ public class DrivingController {
     public ResponseEntity<DrivingReportDTO> generateDrivingReportForDriver(@RequestBody ReportRequestDTO reportRequestDTO){
         DrivingReportDTO report =this.drivingService.getDrivingReportForDriver(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
         return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/all-current")
+    public ResponseEntity<List<DrivingDTOWithLocations>> getAllCurrentDrivings() {
+        List<DrivingDTOWithLocations> retVal = currentDrivingsSearch.getAllCurrentDrivings();
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/all-current/{term}")
+    public ResponseEntity<List<DrivingDTOWithLocations>> getAllCurrentDrivingsBySearchTerm(@PathVariable String term) {
+        List<DrivingDTOWithLocations> retVal = currentDrivingsSearch.getAllCurrentDrivingsBySearchTerm(term);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/with-locations/{id}")
+    public ResponseEntity<DrivingDTOWithLocations> findDrivingWithLocationsById(@PathVariable Long id) {
+        DrivingDTOWithLocations driving = drivingService.findDrivingWithLocationsById(id);
+        return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 }

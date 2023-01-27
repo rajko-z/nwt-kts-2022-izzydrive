@@ -2,9 +2,7 @@ package com.izzydrive.backend.repository;
 
 import com.izzydrive.backend.model.Driving;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,4 +59,13 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             "and d.drivingState = 'FINISHED' " +
             "order by  d.startDate")
     List<Driving> getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+
+
+    @Query("select distinct d from Driving d" +
+            " left join fetch d.driver dr" +
+            " left join fetch d.passengers pp" +
+            " left join fetch d.route ro" +
+            " left join fetch ro.intermediateStations i" +
+            " where d.drivingState = 'ACTIVE' or d.drivingState ='WAITING'")
+    List<Driving> findAllCurrentDrivings();
 }
