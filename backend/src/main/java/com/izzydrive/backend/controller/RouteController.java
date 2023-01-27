@@ -22,9 +22,9 @@ public class RouteController {
     private final RouteService routeService;
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @PostMapping("addFavorite")
-    public ResponseEntity<TextResponse> addFavoriteRoute(@RequestBody @Valid NewFavoriteRouteDTO favoriteRouteDTO){
-        routeService.addFavoriteRoute(favoriteRouteDTO);
+    @PostMapping("add-favorite/{id}")
+    public ResponseEntity<TextResponse> addFavoriteRoute(@PathVariable Long id){
+        routeService.addFavoriteRoute(id);
         return new ResponseEntity<>(new TextResponse("You have successfully saved the route as a favorite"), HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class RouteController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PostMapping("add-new")
     public ResponseEntity<TextResponse> addToFavoriteRoute(@RequestBody NewFavoriteRouteDTO favoriteRouteDTO){
-        routeService.addToFavoriteRoute(favoriteRouteDTO.getRouteId(), favoriteRouteDTO.getPassengerId());
+        routeService.addFavoriteRoute(favoriteRouteDTO.getRouteId());
         return new ResponseEntity<>(new TextResponse("You have successfully saved the route as a favorite"), HttpStatus.OK);
     }
 

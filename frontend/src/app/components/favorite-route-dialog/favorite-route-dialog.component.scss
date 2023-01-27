@@ -1,24 +1,40 @@
 @import "src/style/styles";
 
-.route{
+.route {
   @include setFont(18px);
 }
 
-.options{
+.options {
   display: flex;
   justify-content: center;
   margin: 5% 2% 0 2%;
 
-  .option-yes{
+  .option-yes {
     @include buttonStyle();
     @include size(10%, auto);
     padding: 1%;
     margin: 0 5%;
   }
-  .option-no{
+
+  .option-no {
     @include buttonStyle();
     @include size(10%, auto);
     padding: 1%;
     margin: 0 5%;
   }
 }
+
+.location, .intermediate-station, .other-users {
+  display: flex;
+  justify-content: flex-start;
+  margin: 2%;
+
+  .location-title, .intermediate-title, .users-title {
+    margin-left: 2%;
+  }
+}
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+

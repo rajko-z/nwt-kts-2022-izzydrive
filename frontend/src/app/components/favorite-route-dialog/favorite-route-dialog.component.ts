@@ -19,11 +19,11 @@ export class FavoriteRouteDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: FavoriteRoute,
     private dialogRef: MatDialogRef<FavoriteRouteDialogComponent>,
     public snackBar: MatSnackBar
-  ) {}
+  ) {
+  }
 
   saveFavoriteRoute() {
-    this.data.passengerId = this.userService.getCurrentUserId();
-    this.routeService.addFavoriteRoute(this.data).subscribe((response:TextResponse) => {
+    this.routeService.addFavoriteRoute(this.data.routeId).subscribe((response: TextResponse) => {
         this.snackBar.open(response.text, "OK", {
           duration: 2000,
         })
