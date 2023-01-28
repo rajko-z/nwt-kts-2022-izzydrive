@@ -8,7 +8,7 @@ import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.*;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.users.PassengerRepository;

@@ -1,7 +1,7 @@
 package com.izzydrive.backend.repository.users.driver;
 
 
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

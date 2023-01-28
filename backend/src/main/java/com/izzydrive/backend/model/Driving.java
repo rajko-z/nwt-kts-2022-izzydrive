@@ -1,6 +1,6 @@
 package com.izzydrive.backend.model;
 
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import lombok.*;
 
@@ -83,6 +83,7 @@ public class Driving {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="driving_id")
+    @OrderColumn(name = "locations_order")
     private List<Location> locations = new ArrayList<>();
 
     @ManyToMany(mappedBy = "drivings", fetch = FetchType.LAZY)

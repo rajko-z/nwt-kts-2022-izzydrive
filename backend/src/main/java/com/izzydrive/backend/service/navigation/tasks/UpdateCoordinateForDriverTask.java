@@ -1,8 +1,8 @@
 package com.izzydrive.backend.service.navigation.tasks;
 
 import com.izzydrive.backend.config.SpringContext;
-import com.izzydrive.backend.service.users.driver.DriverService;
-import com.izzydrive.backend.service.users.driver.DriverServiceImpl;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationServiceImpl;
 
 public class UpdateCoordinateForDriverTask implements Runnable{
 
@@ -10,8 +10,8 @@ public class UpdateCoordinateForDriverTask implements Runnable{
     private final double lat;
     private final double lon;
 
-    private DriverService getDriverService() {
-        return SpringContext.getBean(DriverServiceImpl.class);
+    private DriverLocationService getDriverLocationService() {
+        return SpringContext.getBean(DriverLocationServiceImpl.class);
     }
 
     public UpdateCoordinateForDriverTask(String driverEmail, double lat, double lon) {
@@ -22,6 +22,6 @@ public class UpdateCoordinateForDriverTask implements Runnable{
 
     @Override
     public void run() {
-        getDriverService().updateCoordinatesForDriver(driverEmail, lat, lon);
+        getDriverLocationService().updateCoordinatesForDriver(driverEmail, lat, lon);
     }
 }

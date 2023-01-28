@@ -5,7 +5,7 @@ import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.notification.NotificationService;

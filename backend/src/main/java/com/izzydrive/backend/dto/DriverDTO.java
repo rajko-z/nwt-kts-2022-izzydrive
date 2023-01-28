@@ -1,7 +1,7 @@
 package com.izzydrive.backend.dto;
 
 import com.izzydrive.backend.dto.map.LocationDTO;
-import com.izzydrive.backend.model.users.DriverStatus;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
 import lombok.*;
 
 @AllArgsConstructor

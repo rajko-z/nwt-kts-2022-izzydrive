@@ -3,7 +3,7 @@ package com.izzydrive.backend.service.impl;
 import com.google.common.collect.Iterables;
 import com.izzydrive.backend.dto.reports.*;
 import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.service.ReportService;
 import com.izzydrive.backend.service.driving.DrivingService;

@@ -4,18 +4,18 @@ import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.DriverLocationDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.Car;
-import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.driver.DriverRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -51,6 +51,8 @@ public class DriverServiceImpl implements DriverService {
     private final EmailSender emailSender;
 
     private final DrivingService drivingService;
+
+    private final DriverLocationService driverLocationService;
 
     @Override
     public Optional<Driver> findByEmail(String email) {
@@ -108,7 +110,12 @@ public class DriverServiceImpl implements DriverService {
     public List<DriverLocationDTO> findAllActiveDriversLocation() {
         return findAllActiveDrivers()
                 .stream()
-                .map(d -> new DriverLocationDTO(d.getEmail(), d.getDriverStatus(), new LocationDTO(d.getLon(), d.getLat())))
+                .map(d -> new DriverLocationDTO(
+                        d.getEmail(),
+                        d.getDriverStatus(),
+                        driverLocationService.getDriverLocation(d.getEmail())
+                        )
+                )
                 .collect(Collectors.toList());
     }
 
@@ -137,12 +144,6 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Optional<Driver> findByEmailWithCurrentDrivingAndLocations(String email) {
         return this.driverRepository.findByEmailWithCurrentDrivingAndLocations(email);
-    }
-
-    @Override
-    @Transactional
-    public void updateCoordinatesForDriver(String driverEmail, double lat, double lon) {
-        this.driverRepository.updateCoordinatesForDriver(driverEmail, lat, lon);
     }
 
     @Override

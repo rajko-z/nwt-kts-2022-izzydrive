@@ -130,14 +130,14 @@ export class CurrentDrivingPassengerComponent implements OnInit {
 
   fetchNewTimePeriodically() {
     this.fetchNewTimeAndUpdateTimeLeft();
-    this.interval = setInterval(() => this.fetchNewTimeAndUpdateTimeLeft(), 15000);
+    this.interval = setInterval(() => this.fetchNewTimeAndUpdateTimeLeft(), 10000);
   }
 
   fetchNewTimeAndUpdateTimeLeft() {
     this.passengerService.getEstimatedRouteLeftToStartOfDriving()
       .subscribe({
           next: (route) => {
-            if (route.coordinates.length == 0) {
+            if (route.coordinates.length <= 2) {
               clearInterval(this.interval);
               this.waitingForRideToStart = true;
             } else {

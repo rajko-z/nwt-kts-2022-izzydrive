@@ -3,7 +3,7 @@ package com.izzydrive.backend.service.users.driver.workingtime;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.WorkingInterval;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;

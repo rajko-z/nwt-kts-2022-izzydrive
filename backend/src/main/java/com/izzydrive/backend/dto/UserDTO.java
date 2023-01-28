@@ -1,7 +1,7 @@
 package com.izzydrive.backend.dto;
 
 import com.izzydrive.backend.model.Address;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
 import lombok.*;

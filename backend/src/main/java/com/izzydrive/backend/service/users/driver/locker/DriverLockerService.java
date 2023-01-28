@@ -1,6 +1,6 @@
 package com.izzydrive.backend.service.users.driver.locker;
 
-import com.izzydrive.backend.model.users.DriverLocker;
+import com.izzydrive.backend.model.users.driver.DriverLocker;
 
 import java.util.Optional;
 

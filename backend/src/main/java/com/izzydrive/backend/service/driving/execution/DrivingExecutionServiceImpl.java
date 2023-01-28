@@ -7,8 +7,8 @@ import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
-import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverStatus;
+import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.navigation.NavigationService;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,8 +70,8 @@ public class DrivingExecutionServiceImpl implements DrivingExecutionService{
         LocationDTO expectedCoordinate = coordinates.get(coordinates.size() - 1);
         LocationDTO driverCoordinate = driving.getDriver().getLocation();
 
-        return expectedCoordinate.getLat() == driverCoordinate.getLat() &&
-               expectedCoordinate.getLon() == driverCoordinate.getLon();
+        return (expectedCoordinate.getLat() == driverCoordinate.getLat() &&
+               expectedCoordinate.getLon() == driverCoordinate.getLon()) || coordinates.size() <= 2;
     }
 
     @Override
@@ -128,11 +129,12 @@ public class DrivingExecutionServiceImpl implements DrivingExecutionService{
     private Driving getDrivingWithRefreshedDriverToStartRoute(Long drivingId, CalculatedRouteDTO refreshedDriverToStartRoute) {
         Driving driving = drivingService.getDrivingWithLocations(drivingId);
 
-        List<Location> refreshedLocations = driving.getLocationsFromStartToEnd();
-        refreshedLocations.addAll(refreshedDriverToStartRoute.getCoordinates().stream()
+        List<Location> newLocations = new ArrayList<>();
+        newLocations.addAll(refreshedDriverToStartRoute.getCoordinates().stream()
                 .map(l -> new Location(l.getLat(), l.getLon(), false)).collect(Collectors.toList()));
+        newLocations.addAll(driving.getLocationsFromStartToEnd());
 
-        driving.setLocations(refreshedLocations);
+        driving.setLocations(newLocations);
         driving.setDurationFromDriverToStart(refreshedDriverToStartRoute.getDuration());
         driving.setDistance(refreshedDriverToStartRoute.getDistance());
 

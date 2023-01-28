@@ -1,6 +1,6 @@
 package com.izzydrive.backend.dto.map;
 
-import com.izzydrive.backend.model.users.DriverStatus;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

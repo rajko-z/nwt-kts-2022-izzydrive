@@ -2,7 +2,7 @@ package com.izzydrive.backend.service.users.driver.workingtime.validation;
 
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.users.driver.workingtime.WorkingIntervalService;
 import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import com.izzydrive.backend.utils.Constants;

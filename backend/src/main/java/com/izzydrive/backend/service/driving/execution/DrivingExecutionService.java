@@ -1,6 +1,6 @@
 package com.izzydrive.backend.service.driving.execution;
 
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 
 public interface DrivingExecutionService {
 

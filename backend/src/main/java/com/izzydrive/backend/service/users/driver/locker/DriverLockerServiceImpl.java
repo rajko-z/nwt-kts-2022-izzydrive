@@ -2,7 +2,7 @@ package com.izzydrive.backend.service.users.driver.locker;
 
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
-import com.izzydrive.backend.model.users.DriverLocker;
+import com.izzydrive.backend.model.users.driver.DriverLocker;
 import com.izzydrive.backend.repository.DriverLockerRepository;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;

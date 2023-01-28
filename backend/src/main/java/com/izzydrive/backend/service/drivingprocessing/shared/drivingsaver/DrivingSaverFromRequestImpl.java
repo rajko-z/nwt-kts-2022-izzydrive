@@ -5,7 +5,7 @@ import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.drivingprocessing.shared.helper.ProcessingDrivingHelper;

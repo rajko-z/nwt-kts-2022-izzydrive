@@ -3,7 +3,7 @@ package com.izzydrive.backend.service.driving.searchcurrent;
 import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
 import lombok.AllArgsConstructor;

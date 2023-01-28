@@ -1,4 +1,4 @@
-package com.izzydrive.backend.model.users;
+package com.izzydrive.backend.model.users.driver;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

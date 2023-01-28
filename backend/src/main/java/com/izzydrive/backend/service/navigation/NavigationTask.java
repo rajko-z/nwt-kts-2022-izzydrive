@@ -39,6 +39,15 @@ public class NavigationTask implements Runnable{
             locations = driving.getFromStartToEnd().getCoordinates();
         }
 
+        if (navigationFromDriverToStart && (locations.size() <= 2)) {
+            ScheduledFuture<?> futureTask = getThreadPoolTaskScheduler().schedule(
+                    new DriverArrivedAtStartLocationTask(driving),
+                    new Date(System.currentTimeMillis() + 1000L)
+            );
+            this.scheduledTasks.put(0, futureTask);
+            return;
+        }
+
         if (locations.isEmpty()) {
             return;
         }

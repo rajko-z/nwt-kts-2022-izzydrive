@@ -1,7 +1,6 @@
 package com.izzydrive.backend.model.car;
 
-import com.izzydrive.backend.model.Image;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import lombok.*;
 
 import javax.persistence.*;

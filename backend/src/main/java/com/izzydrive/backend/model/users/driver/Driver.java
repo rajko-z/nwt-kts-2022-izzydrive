@@ -1,8 +1,9 @@
-package com.izzydrive.backend.model.users;
+package com.izzydrive.backend.model.users.driver;
 
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.WorkingInterval;
 import com.izzydrive.backend.model.car.Car;
+import com.izzydrive.backend.model.users.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +20,6 @@ public class Driver extends User {
 
     @Column(nullable = false)
     private boolean active;
-
-    @Column
-    private double lat;
-
-    @Column
-    private double lon;
 
     @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;

@@ -5,14 +5,14 @@ import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.drivingfinder.helper.DrivingFinderHelper;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationServiceImpl;
 import lombok.AllArgsConstructor;
@@ -37,6 +37,8 @@ public class DrivingFinderReservationServiceImpl implements DrivingFinderReserva
     private final DriverWorkTimeValidationServiceImpl driverWorkTimeValidationServiceImpl;
 
     private final DrivingFinderHelper drivingFinderHelper;
+
+    private final DriverLocationService driverLocationService;
 
     @Override
     public List<DrivingOptionDTO> getScheduleDrivingOptions(DrivingFinderRequestDTO request) {
@@ -93,7 +95,7 @@ public class DrivingFinderReservationServiceImpl implements DrivingFinderReserva
             driverToStartPath.setDuration(0);
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
                     DriverDTOConverter.convertBasicWithCar(driver),
-                    new LocationDTO(driver.getLon(), driver.getLat()),
+                    driverLocationService.getDriverLocation(driver.getEmail()),
                     carService.calculatePrice(driver.getCar(), route.getDistance()),
                     route,
                     driverToStartPath, true

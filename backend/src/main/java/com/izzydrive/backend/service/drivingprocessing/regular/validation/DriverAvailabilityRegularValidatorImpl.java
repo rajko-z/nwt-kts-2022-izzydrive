@@ -7,8 +7,9 @@ import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Address;
-import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverStatus;
+import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
 import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationServiceImpl;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,8 @@ import java.util.List;
 public class DriverAvailabilityRegularValidatorImpl implements DriverAvailabilityRegularValidator {
 
     private final DriverWorkTimeValidationServiceImpl driverWorkTimeValidationServiceImpl;
+
+    private final DriverLocationService driverLocationService;
 
     @Override
     public void checkIfDriverIsStillAvailable(DrivingRequestDTO request, Driver driver, CalculatedRouteDTO fromDriverToStart) {
@@ -96,7 +99,7 @@ public class DriverAvailabilityRegularValidatorImpl implements DriverAvailabilit
     }
 
     private boolean driverCurrentLocationNotInLocations(Driver driver, List<LocationDTO> locations) {
-        LocationDTO currLoc = new LocationDTO(driver.getLon(), driver.getLat());
+        LocationDTO currLoc = driverLocationService.getDriverLocation(driver.getEmail());
         return !locationPresentInLocations(currLoc, locations);
     }
 
@@ -113,7 +116,7 @@ public class DriverAvailabilityRegularValidatorImpl implements DriverAvailabilit
     }
 
     private boolean driverIsNoLongerActiveOnCurrentDriving(Driver driver, List<LocationDTO> locations) {
-        LocationDTO currLoc = new LocationDTO(driver.getLon(), driver.getLat());
+        LocationDTO currLoc = driverLocationService.getDriverLocation(driver.getEmail());
         Address endAddress = driver.getCurrentDriving().getRoute().getEnd();
         LocationDTO endLoc = new LocationDTO(endAddress.getLongitude(), endAddress.getLatitude());
 

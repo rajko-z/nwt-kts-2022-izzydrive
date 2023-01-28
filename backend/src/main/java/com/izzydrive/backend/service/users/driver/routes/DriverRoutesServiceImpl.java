@@ -3,13 +3,15 @@ package com.izzydrive.backend.service.users.driver.routes;
 import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
+import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,14 +30,17 @@ public class DriverRoutesServiceImpl implements DriverRoutesService {
 
     private final MapService mapService;
 
+    private final DriverLocationService driverLocationService;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CalculatedRouteDTO getCalculatedRouteFromDriverToStart(String driverEmail, AddressOnMapDTO startLocation){
         Driver driver = this.driverService.findByEmailWithCurrentNextAndReservedDriving(driverEmail)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(driverEmail)));
 
+        LocationDTO driverLoc = driverLocationService.getDriverLocation(driver.getEmail());
         if (driver.getCurrentDriving() == null) {
-            AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+            AddressOnMapDTO driverLocation = new AddressOnMapDTO(driverLoc.getLon(), driverLoc.getLat());
             return mapService.getCalculatedRoutesFromPoints(Arrays.asList(driverLocation, startLocation)).get(0);
         }
 
@@ -91,7 +96,8 @@ public class DriverRoutesServiceImpl implements DriverRoutesService {
     }
 
     private CalculatedRouteDTO getEstimatedRouteLeftForDrivingThatDidNotStartYet(Driver driver) {
-        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+        LocationDTO driverLoc = driverLocationService.getDriverLocation(driver.getEmail());
+        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driverLoc.getLon(), driverLoc.getLat());
         Address tmp = driver.getCurrentDriving().getRoute().getStart();
         AddressOnMapDTO startLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
 
@@ -106,7 +112,8 @@ public class DriverRoutesServiceImpl implements DriverRoutesService {
     }
 
     private CalculatedRouteDTO getEstimatedRouteLeftForActiveDriving(Driver driver) {
-        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+        LocationDTO driverLoc = driverLocationService.getDriverLocation(driver.getEmail());
+        AddressOnMapDTO driverLocation = new AddressOnMapDTO(driverLoc.getLon(), driverLoc.getLat());
         Address tmp = driver.getCurrentDriving().getRoute().getEnd();
         AddressOnMapDTO endLocation = new AddressOnMapDTO(tmp.getLongitude(), tmp.getLatitude());
 
@@ -123,7 +130,8 @@ public class DriverRoutesServiceImpl implements DriverRoutesService {
 
     @Override
     public CalculatedRouteDTO getCurrentRouteFromDriverLocationToStart(Driver driver, AddressOnMapDTO startLocation) {
-        AddressOnMapDTO firstPoint = new AddressOnMapDTO(driver.getLon(), driver.getLat());
+        LocationDTO driverLoc = driverLocationService.getDriverLocation(driver.getEmail());
+        AddressOnMapDTO firstPoint = new AddressOnMapDTO(driverLoc.getLon(), driverLoc.getLat());
         return mapService.getCalculatedRoutesFromPoints(List.of(firstPoint, startLocation)).get(0);
     }
 }

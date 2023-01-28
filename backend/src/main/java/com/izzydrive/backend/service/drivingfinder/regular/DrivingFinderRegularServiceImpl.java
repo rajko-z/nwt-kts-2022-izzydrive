@@ -5,15 +5,15 @@ import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
-import com.izzydrive.backend.model.users.Driver;
-import com.izzydrive.backend.model.users.DriverStatus;
+import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
 import com.izzydrive.backend.service.drivingfinder.helper.DrivingFinderHelper;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
+import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
 import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import com.izzydrive.backend.service.users.driver.workingtime.validation.DriverWorkTimeValidationService;
@@ -43,6 +43,8 @@ public class DrivingFinderRegularServiceImpl implements DrivingFinderRegularServ
     private final DriverWorkTimeValidationService driverWorkTimeValidationService;
 
     private final DrivingFinderHelper drivingFinderHelper;
+
+    private final DriverLocationService driverLocationService;
 
 
     @Override
@@ -113,7 +115,7 @@ public class DrivingFinderRegularServiceImpl implements DrivingFinderRegularServ
         for (CalculatedRouteDTO route : fromStartToEndRoutes) {
             DrivingOptionDTO drivingOptionDTO = new DrivingOptionDTO(
                     DriverDTOConverter.convertBasicWithCar(driver),
-                    new LocationDTO(driver.getLon(), driver.getLat()),
+                    driverLocationService.getDriverLocation(driver.getEmail()),
                     getDurationInMinutesFromSeconds(fromDriverToStart.getDuration()),
                     carService.calculatePrice(driver.getCar(), route.getDistance()),
                     fromDriverToStart,

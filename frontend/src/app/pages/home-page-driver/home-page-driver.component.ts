@@ -127,6 +127,8 @@ export class HomePageDriverComponent implements OnInit {
       const driverCoordinate = this.currentDriving.driver.location;
       if (driverCoordinate.lat === lastCoordinate.lat && driverCoordinate.lon === lastCoordinate.lon) {
         this.currDrivingStatus = "start";
+      } else if (coordinates.length <= 2) {
+        this.currDrivingStatus = "start";
       } else {
         this.currDrivingStatus = "waiting";
       }

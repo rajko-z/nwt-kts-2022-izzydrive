@@ -2,7 +2,7 @@ package com.izzydrive.backend.service.drivingprocessing.regular.validation;
 
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.model.users.Driver;
+import com.izzydrive.backend.model.users.driver.Driver;
 
 public interface DriverAvailabilityRegularValidator {
 
