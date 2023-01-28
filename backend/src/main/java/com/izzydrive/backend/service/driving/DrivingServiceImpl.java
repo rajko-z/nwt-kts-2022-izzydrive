@@ -2,8 +2,10 @@ package com.izzydrive.backend.service.driving;
 
 import com.google.common.collect.Iterables;
 import com.izzydrive.backend.converters.DrivingConverter;
+import com.izzydrive.backend.dto.EvaluationDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
 import com.izzydrive.backend.dto.reports.DrivingDistanceReportItem;
 import com.izzydrive.backend.dto.reports.DrivingNumberReportItem;
 import com.izzydrive.backend.dto.reports.DrivingPriceReportItem;
@@ -413,5 +415,16 @@ public class DrivingServiceImpl implements DrivingService {
             return DrivingConverter.convertWithLocationsAndDriver(currentDriving, locations);
         }
         throw new NotFoundException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST);
+    }
+
+    @Override
+    @Transactional
+    public FinishedDrivingDetailsDTO findFinishedDrivingDetailsById(Long drivingId) {
+        Driving driving = drivingRepository.findFinishedDrivingWithPassengersRouteAndDriver(drivingId)
+                .orElseThrow(() -> new BadRequestException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST));
+
+        List<EvaluationDTO> evaluations = evaluationService.findAllByDrivingId(drivingId);
+        List<Location> fromStartToEndLocations = getDrivingWithLocations(drivingId).getLocationsFromStartToEnd();
+        return DrivingConverter.convertToFinishedDrivingDetailsDTO(driving, fromStartToEndLocations, evaluations);
     }
 }

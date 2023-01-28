@@ -68,4 +68,12 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             " left join fetch ro.intermediateStations i" +
             " where d.drivingState = 'ACTIVE' or d.drivingState ='WAITING'")
     List<Driving> findAllCurrentDrivings();
+
+    @Query("select d from Driving d" +
+            " left join fetch d.allPassengers pp" +
+            " left join d.route r" +
+            " left join r.intermediateStations i" +
+            " left join fetch d.driver dr" +
+            " where d.id = ?1")
+    Optional<Driving> findFinishedDrivingWithPassengersRouteAndDriver(Long id);
 }

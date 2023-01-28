@@ -1,6 +1,8 @@
 package com.izzydrive.backend.converters;
 
+import com.izzydrive.backend.dto.EvaluationDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.Driving;
@@ -8,6 +10,7 @@ import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +75,25 @@ public class DrivingConverter {
                 .isReservation(driving.isReservation())
                 .drivingState(driving.getDrivingState())
                 .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver()))
+                .build();
+    }
+
+    public static FinishedDrivingDetailsDTO convertToFinishedDrivingDetailsDTO(Driving driving, List<Location> fromStartToEndLocations, List<EvaluationDTO> evaluations) {
+        CalculatedRouteDTO fromStartToEnd = new CalculatedRouteDTO(
+                fromStartToEndLocations.stream().map(l -> new LocationDTO(l.getLongitude(), l.getLatitude())).collect(Collectors.toList()),
+                driving.getDistance(),
+                driving.getDuration()
+        );
+        return FinishedDrivingDetailsDTO.builder()
+                .id(driving.getId())
+                .price(driving.getPrice())
+                .startDate(driving.getStartDate())
+                .endDate(driving.getEndDate())
+                .route(RouteDTOConverter.convert(driving.getRoute()))
+                .passengers(driving.getAllPassengers().stream().map(User::getEmail).collect(Collectors.toSet()))
+                .driver(DriverDTOConverter.convertBasicWithCar(driving.getDriver()))
+                .fromStartToEnd(fromStartToEnd)
+                .evaluations(new HashSet<>(evaluations))
                 .build();
     }
 }

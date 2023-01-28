@@ -124,6 +124,13 @@ UPDATE drivers SET current_driving_id=3 WHERE id=3;
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, deleted)
 VALUES (2900.9, 'FINISHED', 313.7, '2023-01-16 18:10:00', false, null, 250, false, '2023-01-16 18:00:00', 2, 3, null, false, 1, 0, 0, false);
+
+INSERT INTO evaluations(driver_rate, text, timestamp, vehicle_grade, driving_id)
+values
+(4.5, 'It was a good ride', '2023-01-16 18:10:00', '2.3', 4),
+(4.1, 'Vozac je vozio vrlo prijatno i oslobodjeno, u sustini, zurio samm je rekao, ali nisam bezao ako na to mislite, ja sam zurio kad sam izasao', '2023-01-20 18:10:00', '2.0', 4),
+(4.0, 'Mozda su stakla bila zamagljena....Visee', '2023-01-20 18:10:00', '4.8', 4);
+
 -- 5.
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, rejected, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, deleted)

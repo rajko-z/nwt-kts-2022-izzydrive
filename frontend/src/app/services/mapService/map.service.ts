@@ -64,16 +64,17 @@ export class MapService {
     this.toResetMapViewBS.next();
   }
 
-  addAllFromDriving(driving: DrivingWithLocations) {
-    let startPlace: PlaceOnMap = driving.route.start;
-    startPlace.markerType = MarkerType.START;
-    this.addPlaceOnMap(driving.route.start);
+  addStartPlace(place: PlaceOnMap) {
+    place.markerType = MarkerType.START;
+    this.addPlaceOnMap(place);
+  }
 
-    let endPlace: PlaceOnMap = driving.route.end;
-    endPlace.markerType = MarkerType.END;
-    this.addPlaceOnMap(driving.route.end);
+  addEndPlace(place: PlaceOnMap) {
+    place.markerType = MarkerType.END;
+    this.addPlaceOnMap(place);
+  }
 
-    let inter: PlaceOnMap[] = driving.route.intermediateStations;
+  addIntermediateLocations(inter: PlaceOnMap[]) {
     if (inter.length >= 1) {
       let place: PlaceOnMap = inter.at(0);
       place.markerType = MarkerType.FIRST_INTERMEDIATE;
@@ -89,6 +90,13 @@ export class MapService {
       place.markerType = MarkerType.THIRD_INTERMEDIATE;
       this.addPlaceOnMap(place);
     }
+  }
+
+
+  addAllFromDriving(driving: DrivingWithLocations) {
+    this.addStartPlace(driving.route.start);
+    this.addEndPlace(driving.route.end);
+    this.addIntermediateLocations(driving.route.intermediateStations);
     this.startTrackingCurrentDriverOnMap(driving.driver.email);
     this.drawRoute(driving.fromDriverToStart.coordinates, "#5715ff");
     this.drawRoute(driving.fromStartToEnd.coordinates, "#d3081f");

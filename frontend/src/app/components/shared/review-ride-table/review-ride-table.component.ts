@@ -12,6 +12,7 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {FavoriteRoute} from 'src/app/model/route/favoriteRoute';
 import {RouteService} from 'src/app/services/routeService/route.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {DetailRideViewComponent} from "../../detail-ride-view/detail-ride-view.component";
 
 
 @Component({
@@ -137,4 +138,9 @@ export class ReviewRideTableComponent implements AfterViewInit {
     })
   }
 
+  detailsClicked(driving: Driving) {
+    this.dialog.open(DetailRideViewComponent, {
+      data: driving.id,
+    });
+  }
 }

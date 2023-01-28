@@ -2,6 +2,7 @@ package com.izzydrive.backend.service.driving;
 
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
 import com.izzydrive.backend.dto.reports.DrivingReportDTO;
 import com.izzydrive.backend.model.Driving;
 
@@ -57,4 +58,6 @@ public interface DrivingService {
     List<Driving> findAllCurrentDrivings();
 
     DrivingDTOWithLocations findDrivingWithLocationsById(Long drivingId);
+
+    FinishedDrivingDetailsDTO findFinishedDrivingDetailsById(Long drivingId);
 }

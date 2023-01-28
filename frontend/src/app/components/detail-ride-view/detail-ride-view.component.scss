@@ -1,0 +1,128 @@
+@import "src/style/styles";
+
+.home-page{
+  @include size(100%, 80vh);
+  display: flex;
+  justify-content: start;
+}
+.right-side-home-page{
+  @include size(60vw, 80vh);
+  margin: 5px 10px 10px 10px;
+  font-size: 15px;
+}
+.left-side-home-page{
+  @include size(55vw, 80vh);
+}
+
+.ride-summary {
+  @include size(100%, 80vh);
+  @include setFont(16px);
+  overflow-y: auto;
+  margin-top: 2%;
+  font-weight: initial;
+  color: $dark3;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+
+.first-line {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $dark3;
+}
+
+.reviewBox {
+  border-bottom: 1px solid $dark3;
+
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.location, .intermediate-station, .other-users {
+  display: flex;
+  justify-content: flex-start;
+  margin: 2%;
+
+  .location-title, .intermediate-title, .users-title {
+    margin-left: 2%;
+  }
+}
+
+.second-line {
+  border-bottom: 1px solid $dark3;
+
+  .driver-info {
+    display: flex;
+
+    .driver-img {
+      @include size(50px, 50px);
+      margin-top: 2%;
+    }
+
+    .driver-title {
+      margin: 1% 2%;
+    }
+  }
+
+  .driver-image{
+    margin-top: 1%;
+    margin-left: 33%;
+    .profile-image{
+      @include size(65px, 65px);
+    }
+  }
+
+  .additional-options-info {
+    display: flex;
+    justify-content: flex-start;
+
+    .additional-option {
+      margin: 0 2% 4% 0;
+    }
+  }
+}
+
+.third-line {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2% 3% 0 0;
+
+  .price-title{
+    @include setFont(24px);
+    color: $dark3;
+    font-weight: bold;
+  }
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin: 1% 2% 2% 0;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 70px;
+  font-size: 10px;
+  background-color: $dark3;
+  color: $light1;
+  opacity: 0.95;
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 0;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 20%;
+  margin-left: -5px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}

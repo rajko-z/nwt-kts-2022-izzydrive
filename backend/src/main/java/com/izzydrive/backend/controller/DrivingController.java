@@ -197,4 +197,11 @@ public class DrivingController {
         DrivingDTOWithLocations driving = drivingService.findDrivingWithLocationsById(id);
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER', 'ROLE_DRIVER')")
+    @GetMapping("/finished/{id}")
+    public ResponseEntity<FinishedDrivingDetailsDTO> findFinishedDrivingDetailsById(@PathVariable Long id) {
+        FinishedDrivingDetailsDTO driving = drivingService.findFinishedDrivingDetailsById(id);
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
 }

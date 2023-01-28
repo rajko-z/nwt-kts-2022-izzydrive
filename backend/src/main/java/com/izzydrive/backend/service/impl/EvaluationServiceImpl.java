@@ -4,7 +4,6 @@ import com.izzydrive.backend.dto.EvaluationDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.Evaluation;
-import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.DrivingRepository;
 import com.izzydrive.backend.repository.EvaluationRepository;
 import com.izzydrive.backend.service.EvaluationService;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,5 +33,12 @@ public class EvaluationServiceImpl implements EvaluationService {
         Driving driving = drivingRepository.findById(evalutionDTO.getDrivingId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.DRIVING_DOESNT_EXIST));
         evaluationRepository.save(new Evaluation(evalutionDTO.getText(), LocalDateTime.now(), evalutionDTO.getDriverRate(), evalutionDTO.getVehicleGrade(), driving));
+    }
+
+    @Override
+    public List<EvaluationDTO> findAllByDrivingId(Long drivingId) {
+        return evaluationRepository.findAllByDrivingId(drivingId).stream()
+                .map(e -> new EvaluationDTO(e.getText(), e.getDriving().getId(), e.getDriverRate(), e.getVehicleGrade(), e.getTimestamp()))
+                .collect(Collectors.toList());
     }
 }

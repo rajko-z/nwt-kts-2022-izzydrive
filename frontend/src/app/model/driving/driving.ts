@@ -4,6 +4,7 @@ import {DrivingOption} from "./drivingOption";
 import {RouteDTO} from "../route/route";
 import {Driver} from "../driver/driver";
 import {CalculatedRoute} from "../map/calculatedRoute";
+import {Evaluation} from "../evaluation/evaluation";
 
 
 export enum OptimalDrivingType {
@@ -60,4 +61,16 @@ export enum DrivingState {
   WAITING="WAITING",
   ACTIVE="ACTIVE",
   FINISHED="FINISHED"
+}
+
+export class FinishedDrivingDetails {
+  id: number;
+  price: number;
+  startDate: string;
+  endDate: string;
+  route: RouteDTO;
+  passengers: string[];
+  driver: Driver;
+  fromStartToEnd: CalculatedRoute;
+  evaluations: Evaluation[];
 }

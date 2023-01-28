@@ -10,4 +10,6 @@ public interface EvaluationService {
     List<Evaluation> findAll();
 
     void addEvaluation(EvaluationDTO evalutionDTO);
+
+    List<EvaluationDTO> findAllByDrivingId(Long drivingId);
 }
