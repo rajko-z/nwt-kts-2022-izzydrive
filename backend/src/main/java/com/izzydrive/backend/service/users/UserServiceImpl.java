@@ -8,7 +8,9 @@ import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.users.Role;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.ImageService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -42,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private final EmailSender emailSender;
 
     private final ConfirmationTokenService confirmationTokenService;
+
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -206,8 +210,4 @@ public class UserServiceImpl implements UserService {
         Validator.validateLastName(userDTO.getLastName());
         Validator.validatePhoneNumber(userDTO.getPhoneNumber());
     }
-
-
-
-
 }

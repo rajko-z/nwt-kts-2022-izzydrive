@@ -29,15 +29,15 @@ const declaredModules = [
 
 @NgModule({
   declarations: declaredModules,
-  imports: [
-    CommonModule,
-    FormsModule,
-    AngularMaterialModule,
-    UsersRoutingModule,
-    ReactiveFormsModule,
-    SharedComponentsModule,
-    NgApexchartsModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        AngularMaterialModule,
+        UsersRoutingModule,
+        ReactiveFormsModule,
+        SharedComponentsModule,
+        NgApexchartsModule
+    ],
   exports: declaredModules
 })
 export class UsersModule {}
