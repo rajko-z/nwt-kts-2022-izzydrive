@@ -1,15 +1,10 @@
 package com.izzydrive.backend.service.driving;
 
-import com.google.common.collect.Iterables;
 import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.EvaluationDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
-import com.izzydrive.backend.dto.reports.DrivingDistanceReportItem;
-import com.izzydrive.backend.dto.reports.DrivingNumberReportItem;
-import com.izzydrive.backend.dto.reports.DrivingPriceReportItem;
-import com.izzydrive.backend.dto.reports.DrivingReportDTO;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.*;
@@ -22,14 +17,12 @@ import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
-import com.izzydrive.backend.utils.Helper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -306,97 +299,6 @@ public class DrivingServiceImpl implements DrivingService {
         drivingRepository.delete(d);
     }
 
-    @Override
-    public DrivingReportDTO getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
-        startDate = startDate.plusHours(1);
-        endDate = endDate.plusHours(24);
-        List<Driving> filteredDrivings = this.drivingRepository.getDrivingReportForPassenger(userId, startDate, endDate);
-        return this.crateReportData(filteredDrivings, startDate, endDate);
-    }
-
-    @Override
-    public DrivingReportDTO getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
-        startDate = startDate.plusHours(1);
-        endDate = endDate.plusHours(24);
-        List<Driving> filteredDrivings = this.drivingRepository.getDrivingReportForDriver(userId, startDate, endDate);
-        return this.crateReportData(filteredDrivings, startDate, endDate);
-    }
-
-    private void addMissingDates(ArrayList<DrivingPriceReportItem> priceReportItems,
-                                             ArrayList<DrivingDistanceReportItem> distanceReportItems,
-                                             ArrayList<DrivingNumberReportItem> drivingNumberReportItems,
-                                             LocalDateTime startDate, LocalDateTime endDate){
-        for (LocalDate date = startDate.toLocalDate(); date.isBefore(endDate.toLocalDate()); date = date.plusDays(1))
-        {
-            DrivingPriceReportItem priceReportItem = new DrivingPriceReportItem(Helper.convertDate(date), 0.0);
-            DrivingDistanceReportItem distanceReportItem = new DrivingDistanceReportItem(0.0, Helper.convertDate(date));
-            DrivingNumberReportItem drivingNumberReportItem = new DrivingNumberReportItem(0, Helper.convertDate(date));
-            priceReportItems.add(priceReportItem);
-            drivingNumberReportItems.add(drivingNumberReportItem);
-            distanceReportItems.add(distanceReportItem);
-        }
-    }
-
-    private DrivingReportDTO crateReportData(List<Driving> filteredDrivings, LocalDateTime startDate, LocalDateTime endDate){
-        ArrayList<DrivingPriceReportItem> priceReportItems = new ArrayList<DrivingPriceReportItem>();
-        ArrayList<DrivingDistanceReportItem> distanceReportItems = new ArrayList<DrivingDistanceReportItem>();
-        ArrayList<DrivingNumberReportItem> drivingNumberReportItems = new ArrayList<DrivingNumberReportItem>();
-        int sumDrivingNumber =  0;
-        double sumPrice = 0.0;
-        double sumDistance = 0.0;
-        double numberOfDays = Helper.getDistanceBetweenDays(startDate, endDate);
-        LocalDate previousDate = null;
-        LocalDateTime nextDay = startDate;
-
-        for (Driving d : filteredDrivings){
-            if (nextDay.toLocalDate().isBefore(d.getStartDate().toLocalDate())){
-                addMissingDates(priceReportItems,distanceReportItems, drivingNumberReportItems, nextDay, d.getStartDate());
-                nextDay = d.getStartDate();
-            }
-            if (previousDate != null && d.getStartDate().toLocalDate().isEqual(previousDate)){
-                DrivingPriceReportItem priceReportItem = Iterables.getLast(priceReportItems);
-                priceReportItem.setPrice(priceReportItem.getPrice() + d.getPrice());
-                DrivingNumberReportItem drivingNumberReportItem = Iterables.getLast(drivingNumberReportItems);
-                drivingNumberReportItem.setNumberOfDrivings(drivingNumberReportItem.getNumberOfDrivings() + 1);
-                DrivingDistanceReportItem distanceReportItem = Iterables.getLast(distanceReportItems);
-                distanceReportItem.setDistance(distanceReportItem.getDistance() + d.getDistance());
-                sumPrice += d.getPrice();
-                sumDistance += d.getDistance();
-                sumDrivingNumber += 1;
-                nextDay = d.getStartDate().plusDays(1);
-            }
-            else{
-                DrivingPriceReportItem priceReportItem = new DrivingPriceReportItem(Helper.convertDate(d.getStartDate().toLocalDate()), d.getPrice());
-                sumPrice += d.getPrice();
-                DrivingDistanceReportItem distanceReportItem = new DrivingDistanceReportItem(d.getDistance(), Helper.convertDate(d.getStartDate().toLocalDate()));
-                sumDistance += d.getDistance();
-                DrivingNumberReportItem drivingNumberReportItem = new DrivingNumberReportItem(1, Helper.convertDate(d.getStartDate().toLocalDate()));
-                sumDrivingNumber += 1;
-                priceReportItems.add(priceReportItem);
-                drivingNumberReportItems.add(drivingNumberReportItem);
-                distanceReportItems.add(distanceReportItem);
-                nextDay = d.getStartDate().plusDays(1);
-            }
-            previousDate = d.getStartDate().toLocalDate();
-        }
-
-        if(nextDay.toLocalDate().isBefore(endDate.toLocalDate())){
-            addMissingDates(priceReportItems,distanceReportItems, drivingNumberReportItems, nextDay, endDate.plusDays(1));
-        }
-
-        DrivingReportDTO report = new DrivingReportDTO();
-        report.setDrivingsNumber(drivingNumberReportItems);
-        report.setDrivingPrices(priceReportItems);
-        report.setDrivingsDistances(distanceReportItems);
-        report.setAverageDrivingsNumber(sumDrivingNumber/numberOfDays);
-        report.setSumDrivingsNumber(sumDrivingNumber);
-        report.setAverageDrivingDistance(sumDistance/numberOfDays);
-        report.setSumDrivingDistance(sumDistance);
-        report.setAverageDrivingPrice(sumPrice/numberOfDays);
-        report.setSumDrivingPrice(sumPrice);
-        return report;
-    }
-
     public Optional<Driving> findById(Long drivingId) {
         return drivingRepository.findById(drivingId);
     }
@@ -426,5 +328,14 @@ public class DrivingServiceImpl implements DrivingService {
         List<EvaluationDTO> evaluations = evaluationService.findAllByDrivingId(drivingId);
         List<Location> fromStartToEndLocations = getDrivingWithLocations(drivingId).getLocationsFromStartToEnd();
         return DrivingConverter.convertToFinishedDrivingDetailsDTO(driving, fromStartToEndLocations, evaluations);
+    }
+
+    public List<Driving> getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        return this.drivingRepository.getDrivingReportForPassenger(userId, startDate, endDate);
+    }
+
+    @Override
+    public List<Driving> getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        return this.drivingRepository.getDrivingReportForDriver(userId, startDate, endDate);
     }
 }

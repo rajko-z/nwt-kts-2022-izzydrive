@@ -1,10 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {UserService} from "../../services/userService/user-sevice.service";
 import {FinishedDrivingDetails} from "../../model/driving/driving";
 import {MapService} from "../../services/mapService/map.service";
+import {RouteDTO} from "../../model/route/route";
+import {RouteService} from "../../services/routeService/route.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-detail-ride-view',
@@ -17,17 +20,23 @@ export class DetailRideViewComponent implements OnInit {
 
   isDriverView?: boolean;
 
+  isPassengerView?: boolean;
+
   constructor(
+    private dialogRef: MatDialogRef<FinishedDrivingDetails>,
     @Inject(MAT_DIALOG_DATA) public drivingId : number,
     private snackBar: MatSnackBar,
     private drivingService: DrivingService,
     private userService: UserService,
-    private mapService: MapService
+    private mapService: MapService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     if (this.userService.getRoleCurrentUserRole() === 'ROLE_DRIVER') {
       this.isDriverView = true;
+    } else if (this.userService.getRoleCurrentUserRole() === 'ROLE_PASSENGER') {
+      this.isPassengerView = true;
     }
 
     this.drivingService.findFinishedDrivingDetailsById(this.drivingId)
@@ -51,6 +60,22 @@ export class DetailRideViewComponent implements OnInit {
     this.mapService.addEndPlace(this.driving.route.end);
     this.mapService.addIntermediateLocations(this.driving.route.intermediateStations);
     this.mapService.drawRoute(this.driving.fromStartToEnd.coordinates, "#d3081f");
+  }
+
+  getRide(route : RouteDTO, forNow: boolean){
+    if (RouteService.selectedFavouriteRides){
+      RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()] = route;
+    }
+    else {
+      let id : number = this.userService.getCurrentUserId();
+      RouteService.selectedFavouriteRides = { [id]: route }
+    }
+    if (forNow) {
+      this.router.navigateByUrl("/passenger/order-now");
+    } else {
+      this.router.navigateByUrl("/passenger/order-for-later");
+    }
+    this.dialogRef.close();
   }
 
 }

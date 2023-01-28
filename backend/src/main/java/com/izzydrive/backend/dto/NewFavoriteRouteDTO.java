@@ -13,9 +13,6 @@ import java.util.List;
 @Builder
 public class NewFavoriteRouteDTO {
 
-    @NotNull
-    private Long passengerId;
-
     @NotBlank
     private String startLocation;
 

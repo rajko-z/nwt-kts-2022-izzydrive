@@ -11,6 +11,12 @@
             <em class="fa-solid fa-hourglass-end"></em>
             <p class="location-title">End date: {{driving.endDate}}</p>
           </div>
+          <div *ngIf="this.isPassengerView">
+            <button class="ride-button" mat-button (click)="getRide(driving.route, true)">Get ride now</button>
+          </div>
+          <div *ngIf="this.isPassengerView">
+            <button class="ride-button" mat-button (click)="getRide(driving.route, false)">Get ride later</button>
+          </div>
         </div>
         <div class="first-line">
           <div class="destination-info">

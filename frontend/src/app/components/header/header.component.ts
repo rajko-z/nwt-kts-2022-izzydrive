@@ -13,25 +13,19 @@ export class HeaderComponent implements OnInit {
   sign_up_clicked: boolean = false;
   sign_in_clicked: boolean = true;
 
-  profilePhotoPath : SafeResourceUrl = '/assets/dark_logo.png'; //IZMENITI DA BUDE PRAVA SLIKA
-  constructor(private userService : UserService, private router: Router, private _sanitizer: DomSanitizer) {
+  constructor(private userService: UserService, private router: Router, private _sanitizer: DomSanitizer) {
 
   }
 
   ngOnInit(): void {
-   }
-
-
-  isUserLoggedIn() : boolean{
-    return this.userService.getCurrentUserToken()? true : false;
   }
 
-  getPhoto() {
-    return this.userService.getProfilePhotoCurrentUser();
+
+  isUserLoggedIn(): boolean {
+    return this.userService.getCurrentUserToken() ? true : false;
   }
 
-  openProfile(): void{
-    this.router.navigateByUrl('/profile');
+  openHome() {
+    this.router.navigateByUrl('/');
   }
-
 }

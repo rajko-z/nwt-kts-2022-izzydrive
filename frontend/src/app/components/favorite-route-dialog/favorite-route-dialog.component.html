@@ -1,7 +1,16 @@
 <div>
   <h1 class="title">Do you want to mark this route as a favorite?</h1>
-  <div>
-    <p class="route">Route: {{this.data.startLocation}} - {{this.data.endLocation}}</p>
+  <div class="location">
+    <em class="fa-solid fa-location-dot"></em>
+    <p class="location-title">Start: {{data.startLocation}}</p>
+  </div>
+  <div class="location">
+    <em class="fa-solid fa-location-dot"></em>
+    <p class="location-title">End: {{data.endLocation}}</p>
+  </div>
+  <div class="intermediate-station" *ngFor="let station of data.intermediateLocations">
+    <em class='fas fa-map-location-dot'></em>
+    <p class="intermediate-title">Intermediate station: <span>{{station}}</span></p>
   </div>
   <div class="options">
     <button class="option-yes" (click)="saveFavoriteRoute()">Yes</button>

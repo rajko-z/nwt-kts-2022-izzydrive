@@ -22,6 +22,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatSelectModule} from "@angular/material/select";
 
 
 // If you have any additional modules to be shared add them to the list
@@ -43,13 +44,14 @@ const materialModules = [
   MatExpansionModule,
   MatTooltipModule,
   NgxMaterialTimepickerModule,
-  MatTooltipModule, 
+  MatTooltipModule,
   MatSortModule,
   MatPaginatorModule,
   MatButtonToggleModule,
   MatCardModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatSelectModule,
 ];
 
 @NgModule({

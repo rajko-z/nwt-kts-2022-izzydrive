@@ -6,6 +6,7 @@ import com.izzydrive.backend.dto.driving.*;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.reports.DrivingReportDTO;
 import com.izzydrive.backend.dto.reports.ReportRequestDTO;
+import com.izzydrive.backend.service.ReportService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.cancelation.DrivingCancellationService;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
@@ -48,16 +49,18 @@ public class DrivingController {
 
     private final CurrentDrivingsSearch currentDrivingsSearch;
 
+    private final ReportService reportService;
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @GetMapping("driver/{driverId}")
-    public ResponseEntity<List<DrivingDTO>> findAllByDriverId(@PathVariable Long driverId){
+    public ResponseEntity<List<DrivingDTO>> findAllByDriverId(@PathVariable Long driverId) {
         List<DrivingDTO> drivings = drivingService.findAllByDriverId(driverId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("passenger/{passengerId}")
-    public ResponseEntity<List<DrivingDTO>> findAllByPassengerId(@PathVariable Long passengerId){
+    public ResponseEntity<List<DrivingDTO>> findAllByPassengerId(@PathVariable Long passengerId) {
         List<DrivingDTO> drivings = drivingService.findAllByPassengerId(passengerId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
@@ -98,35 +101,35 @@ public class DrivingController {
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping(value = "/reject-linked-user")
-    public ResponseEntity<TextResponse> rejectDrivingLinkedUser(){
+    public ResponseEntity<TextResponse> rejectDrivingLinkedUser() {
         drivingRejectionService.rejectDrivingLinkedUser();
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/{id}")
-    public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id){
+    public ResponseEntity<DrivingDTO> findDrivingById(@PathVariable Long id) {
         DrivingDTO driving = drivingService.findDrivingDTOById(id);
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER')")
     @GetMapping("passenger/history/{passengerId}")
-    public ResponseEntity<List<DrivingDTO>> getPassengerDrivingHistory(@PathVariable Long passengerId){
+    public ResponseEntity<List<DrivingDTO>> getPassengerDrivingHistory(@PathVariable Long passengerId) {
         List<DrivingDTO> drivings = drivingService.getPassengerDrivingHistory(passengerId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("passenger/reservations/{passengerId}")
-    public ResponseEntity<List<DrivingDTO>> getPassengerFutureReservations(@PathVariable Long passengerId){
+    public ResponseEntity<List<DrivingDTO>> getPassengerFutureReservations(@PathVariable Long passengerId) {
         List<DrivingDTO> drivings = drivingService.getPassengerFutureReservations(passengerId);
         return new ResponseEntity<>(drivings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @DeleteMapping("passenger/cancel-reservation/{drivingId}")
-    public ResponseEntity<TextResponse> cancelReservation(@PathVariable Long drivingId){
+    public ResponseEntity<TextResponse> cancelReservation(@PathVariable Long drivingId) {
         drivingService.cancelReservation(drivingId);
         return new ResponseEntity<>(new TextResponse("Successfully canceled reservation"), HttpStatus.OK);
     }
@@ -147,7 +150,7 @@ public class DrivingController {
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @GetMapping("reservation")
-    public ResponseEntity<DrivingDTO> getReservation(){
+    public ResponseEntity<DrivingDTO> getReservation() {
         DrivingDTO driving = drivingService.getReservation();
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
@@ -165,15 +168,24 @@ public class DrivingController {
         return new ResponseEntity<>(new TextResponse("Successfully denied driving"), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER')")
     @PostMapping("/reports-passenger")
-    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPassenger(@RequestBody ReportRequestDTO reportRequestDTO){
-        DrivingReportDTO report =this.drivingService.getDrivingReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForPassenger(@RequestBody ReportRequestDTO reportRequestDTO) {
+        DrivingReportDTO report = this.reportService.getDrivingReportForPassenger(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER')")
     @PostMapping("/reports-driver")
-    public ResponseEntity<DrivingReportDTO> generateDrivingReportForDriver(@RequestBody ReportRequestDTO reportRequestDTO){
-        DrivingReportDTO report =this.drivingService.getDrivingReportForDriver(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForDriver(@RequestBody ReportRequestDTO reportRequestDTO) {
+        DrivingReportDTO report = this.reportService.getDrivingReportForDriver(reportRequestDTO.getUserId(), reportRequestDTO.getStartDate(), reportRequestDTO.getEndDate());
+        return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/reports-admin")
+    public ResponseEntity<DrivingReportDTO> generateDrivingReportForAdmin(@RequestBody ReportRequestDTO reportRequestDTO) {
+        DrivingReportDTO report = this.reportService.getDrivingReportForAdmin(reportRequestDTO);
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
 

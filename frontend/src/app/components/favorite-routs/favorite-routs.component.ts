@@ -13,8 +13,8 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 })
 export class FavouriteRoutsComponent implements OnInit {
 
-  constructor(private routeService : RouteService, 
-              private userService : UserService, 
+  constructor(private routeService : RouteService,
+              private userService : UserService,
               private router : Router,
               private snackbar: MatSnackBar) { }
 
@@ -31,15 +31,19 @@ export class FavouriteRoutsComponent implements OnInit {
     })
   }
 
-  getRide(route : RouteDTO){
+  getRide(route : RouteDTO, forNow: boolean){
     if (RouteService.selectedFavouriteRides){
       RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()] = route;
     }
     else {
       let id : number = this.userService.getCurrentUserId();
       RouteService.selectedFavouriteRides = { [id]: route }
-    } 
-    this.router.navigateByUrl("/passenger/order-now")
+    }
+    if (forNow) {
+      this.router.navigateByUrl("/passenger/order-now")
+    } else {
+      this.router.navigateByUrl("/passenger/order-for-later")
+    }
   }
 
   removeFromFavorites(route : RouteDTO){

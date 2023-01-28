@@ -1,20 +1,21 @@
 <div class="header_container">
-        <img src="/assets/dark_logo.png" class="logo">
-        <div style=" flex-grow: 4; flex-shrink: 2; align-self: center;">
-            <p class="app_name">IzzyDrive</p>
-        </div>
-        <div *ngIf="!isUserLoggedIn()" style="flex-grow: 2;">
-            <a routerLink="/anon/login"
-                class="sign_button"
-                (click)="this.sign_up_clicked = true; this.sign_in_clicked = false "
-                [ngStyle]="{color: this.sign_up_clicked ? '#B4BCDF' : 'white'}">
-                Sign in
-            </a>
-            <a routerLink="/anon/register" class="sign_button"
-                (click)="this.sign_up_clicked = false; this.sign_in_clicked = true "
-                [ngStyle]="{color: this.sign_in_clicked ? '#B4BCDF' : 'white'}">
-                Sign up
-            </a>
-        </div>
-
+  <div class="home" (click)="openHome()">
+    <img src="/assets/dark_logo.png" class="logo" alt="logo">
+    <div style=" flex-grow: 4; flex-shrink: 2; align-self: center;">
+      <p class="app_name">IzzyDrive</p>
+    </div>
+  </div>
+  <div *ngIf="!isUserLoggedIn()" style="flex-grow: 2;">
+    <a routerLink="/anon/login"
+       class="sign_button"
+       (click)="this.sign_up_clicked = true; this.sign_in_clicked = false "
+       [ngStyle]="{color: this.sign_up_clicked ? '#B4BCDF' : 'white'}">
+      Sign in
+    </a>
+    <a routerLink="/anon/register" class="sign_button"
+       (click)="this.sign_up_clicked = false; this.sign_in_clicked = true "
+       [ngStyle]="{color: this.sign_in_clicked ? '#B4BCDF' : 'white'}">
+      Sign up
+    </a>
+  </div>
 </div>

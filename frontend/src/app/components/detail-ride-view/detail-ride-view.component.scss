@@ -27,6 +27,10 @@
   }
 }
 
+.ride-button {
+  @include buttonStyle();
+}
+
 .fas, .fa-solid {
   color: $dark3;
 }

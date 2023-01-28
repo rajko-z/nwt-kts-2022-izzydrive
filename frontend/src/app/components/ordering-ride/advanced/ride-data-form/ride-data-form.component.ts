@@ -41,11 +41,12 @@ export class RideDataFormComponent {
 
   intermediatePanelOpened: boolean = false;
 
-  timeNow = new Date();
+  timeMax = new Date();
+  minuteMax = this.timeMax.getMinutes();
+  hourMax = addHours(this.timeMax, 5).getHours();
+  timeNow = addMinutes(new Date(), 30);
+  minuteNow =this.timeNow.getMinutes();
   hourNow = this.timeNow.getHours();
-  minuteMax = this.timeNow.getMinutes();
-  hourMax = addHours(this.timeNow, 5).getHours();
-  minuteNow = addMinutes(this.timeNow, 30).getMinutes();
   startStr = `${this.hourNow}:${this.minuteNow}`;
   endStr = `${this.hourMax}:${this.minuteMax}`;
 
@@ -54,6 +55,7 @@ export class RideDataFormComponent {
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
   users: User [];
+
 
   routeForm = new FormGroup({
     optimalDriving: new FormControl(''),
@@ -65,7 +67,6 @@ export class RideDataFormComponent {
     userEmailFriendsFirst: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsSecond: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
     userEmailFriendsThird: new FormControl('', [Validators.email, this.checkEmailWithCurrentUser(), this.checkUserHasAccount()]),
-    scheduleRideControl: new FormControl(true),
     scheduleTime: new FormControl('')
   });
 
@@ -88,7 +89,6 @@ export class RideDataFormComponent {
   }
 
   checkIsOrderedFromFavoriteRides(){
-    console.log(RouteService.selectedFavouriteRides)
     if (RouteService.selectedFavouriteRides && this.userService.getCurrentUserId() in RouteService.selectedFavouriteRides){
       let route : RouteDTO = RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()]
       this.startPlaceSelected(route.start)
@@ -179,7 +179,7 @@ export class RideDataFormComponent {
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
     drivingFinderRequest.reservation = this.scheduleRide;
-    if (drivingFinderRequest.reservation) {
+    if (this.scheduleRide) {
         drivingFinderRequest.scheduleTime = this.getScheduleTime();
     }
     return drivingFinderRequest;
@@ -219,6 +219,13 @@ export class RideDataFormComponent {
   }
 
   private checkTime(): boolean {
+    if (!this.routeForm.value.scheduleTime ||
+        this.routeForm.value.scheduleTime === '' ||
+        !this.routeForm.value.scheduleTime.includes(":") ) {
+      this.openErrorMessage("Please specify time when you want to schedule ride");
+      return false;
+    }
+
     const time = this.routeForm.value.scheduleTime.split(':');
     const date = new Date();
     const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), +time[0], +time[1]);
