@@ -3,9 +3,21 @@
         <p class="title">Choose start and end date for report</p>
         <form class="date-form" [formGroup]="this.dateForm"
           (ngSubmit)="onSubmit()">
+
+          <mat-form-field appearance="fill" *ngIf="isAdmin">
+            <mat-label>Users:</mat-label>
+            <mat-select [(value)]="value">
+              <mat-option [value]="null">
+                --All users--
+              </mat-option>
+              <mat-option *ngFor="let user of users" [value]="user">
+                {{user.email}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" 
+            <input matInput [matDatepicker]="picker"
                     required
                     formControlName="startDate"
                     [max]="maxDate">
@@ -14,11 +26,11 @@
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="this.dateForm.controls.startDate.hasError('required')">Start Date is required</mat-error>
                 <mat-error *ngIf="this.dateForm.controls.startDate.hasError('matDatepickerMax')">Max date is tooday</mat-error>
-                  
+
         </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Choose a date</mat-label>
-                <input matInput [matDatepicker]="picker1" 
+                <input matInput [matDatepicker]="picker1"
                         required
                         formControlName="endDate"
                         [max]="maxDate"
@@ -29,10 +41,7 @@
                 <mat-error *ngIf="this.dateForm.controls.endDate.hasError('required')">Enc Date is required</mat-error>
                 <mat-error *ngIf="this.dateForm.controls.endDate.hasError('matDatepickerMax')">Max date is tooday</mat-error>
                 <mat-error *ngIf="this.dateForm.controls.endDate.hasError('matDatepickerMin')">Min date is start date</mat-error>
-                                   
-                
             </mat-form-field>
-          
             <div class="button-container">
             <button mat-button [disabled]="this.dateForm.invalid"
                     [ngClass] = "{'disabled_large_btn': this.dateForm.invalid,  'large_button': !this.dateForm.invalid}"
@@ -52,8 +61,8 @@
                 <p  class="header">
                     Total number of drivings: {{reportData.sumDrivingsNumber}}
                 </p>
-                <app-driving-number-report 
-                [XAxisValues]="this.reportX" 
+                <app-driving-number-report
+                [XAxisValues]="this.reportX"
                 [SourceValue]="this.drivingNumbersValues"
                 [title]="drivingNumbersReportTitle"></app-driving-number-report>
             </mat-step>
@@ -64,8 +73,8 @@
                 <p  class="header">
                     Total cost of drivings: {{reportData.sumDrivingPrice}} din
                 </p>
-                <app-driving-number-report 
-                [XAxisValues]="this.reportX" 
+                <app-driving-number-report
+                [XAxisValues]="this.reportX"
                 [SourceValue]="this.priceReportValues"
                 [title]="drivingPriceReportTitle"></app-driving-number-report>
             </mat-step>
@@ -76,8 +85,8 @@
                 <p  class="header">
                     Total distance: {{reportData.sumDrivingDistance}} m
                 </p>
-                <app-driving-number-report 
-                [XAxisValues]="this.reportX" 
+                <app-driving-number-report
+                [XAxisValues]="this.reportX"
                 [SourceValue]="this.distancereportValues"
                 [title]="drivingDistanceReportTitle"></app-driving-number-report>
             </mat-step>

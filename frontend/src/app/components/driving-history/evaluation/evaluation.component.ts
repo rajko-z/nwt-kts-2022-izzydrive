@@ -39,7 +39,8 @@ export class EvaluationComponent implements OnInit {
       this.snackbar.open("Must select at least one option", "OK");
     }
     else{
-      let evaluation : Evaluation = new Evaluation(this.evaluationForm.value.comment,  this.data.id, this.selectedDriverGrade, this.selectedVehicleGrade);
+      console.log(this.data);
+      const evaluation : Evaluation = new Evaluation(this.evaluationForm.value.comment,  this.data.id, this.selectedDriverGrade, this.selectedVehicleGrade);
       this.evaluationService.addNewEvaluation(evaluation).subscribe({
         next: (response)=>{
           this.snackbar.open(response.text, "OK")

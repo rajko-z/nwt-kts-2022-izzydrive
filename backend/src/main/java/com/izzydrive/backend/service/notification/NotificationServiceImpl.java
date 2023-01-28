@@ -52,6 +52,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDTO.setIntermediateLocations(intermediateStationDTO);
         notificationDTO.setReservationTime(driving.getReservationDate());
         notificationDTO.setUserEmail(email);
+        notificationDTO.setDrivingId(driving.getId());
         notificationDTO.setNotificationStatus(NotificationStatus.NEW_RESERVATION);
         this.simpMessagingTemplate.convertAndSend("/notification/newReservationDriving", notificationDTO);
         createAndSaveNotification(notificationDTO);
@@ -240,6 +241,7 @@ public class NotificationServiceImpl implements NotificationService {
             }
             notificationDTO.setIntermediateLocations(intermediateStationDTO);
             notificationDTO.setUserEmail(p.getEmail());
+            notificationDTO.setDrivingId(d.getId());
             notificationDTO.setNotificationStatus(NotificationStatus.PAYMENT_RESERVATION);
             this.simpMessagingTemplate.convertAndSend("/notification/paymentReservation", notificationDTO);
             createAndSaveNotification(notificationDTO);

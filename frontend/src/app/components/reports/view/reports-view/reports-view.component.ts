@@ -1,14 +1,14 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { isThisSecond } from 'date-fns';
-import { DrivingDistanceReportItem } from 'src/app/model/reports/DrivingDistanceReportItem';
-import { DrivingPriceReportItem } from 'src/app/model/reports/DrivingPriceReportItem';
-import { DrivingReport } from 'src/app/model/reports/DrivingReport';
-import { DrivingsNumberReportItem } from 'src/app/model/reports/DrivingsNumberReportItem';
-import { Role } from 'src/app/model/user/role';
-import { ReportsService } from 'src/app/services/report/reports.service';
-import { UserService } from 'src/app/services/userService/user-sevice.service';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {DrivingDistanceReportItem} from 'src/app/model/reports/DrivingDistanceReportItem';
+import {DrivingPriceReportItem} from 'src/app/model/reports/DrivingPriceReportItem';
+import {DrivingReport} from 'src/app/model/reports/DrivingReport';
+import {DrivingsNumberReportItem} from 'src/app/model/reports/DrivingsNumberReportItem';
+import {Role} from 'src/app/model/user/role';
+import {ReportsService} from 'src/app/services/report/reports.service';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
+import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
+import {User} from "../../../../model/user/user";
 
 @Component({
   selector: 'app-reports-view',
@@ -23,8 +23,8 @@ export class ReportsViewComponent implements OnInit {
     endDate: new FormControl<Date | null>(null),
   });
 
-  reportX : string[] = [];
-  drivingNumbersY : number[] = [];
+  reportX: string[] = [];
+  drivingNumbersY: number[] = [];
   priceReportY: number[] = [];
   distancereportY: number[] = [];
   reportData: DrivingReport;
@@ -32,33 +32,49 @@ export class ReportsViewComponent implements OnInit {
   priceReportValues: number[] = [];
   distancereportValues: number[] = [];
 
+  isAdmin: boolean = this.userService.getRoleCurrentUserRole() === Role.ROLE_ADMIN;
+  users: User[];
+  value: User;
+
   reportDataLoaded: boolean = false;
 
   drivingNumbersReportTitle: string = "Number of drivings per day for selected period";
   drivingPriceReportTitle: string = "Prices of drivings per day for selected period";
   drivingDistanceReportTitle: string = "Distance of drivings per day for selected period";
 
-  constructor(private reportService :ReportsService, private userService: UserService) { }
+  constructor(private reportService: ReportsService, private userService: UserService, private loggedUserService: LoggedUserService) {
+  }
 
   ngOnInit(): void {
-  console.log(this.maxDate);
-
+    if (this.userService.getRoleCurrentUserRole() === Role.ROLE_ADMIN) {
+      this.loadUsers();
+    }
   }
 
-  onSubmit(){
-    if (this.userService.getRoleCurrentUserRole() === Role.ROLE_PASSENGER){
-      this.getPassengerReport();
-    }
-    else if (this.userService.getRoleCurrentUserRole() === Role.ROLE_DRIVER){
-      this.getDriverReport()
-    }
-   
+  loadUsers() {
+    this.loggedUserService.getAllUsers().subscribe({
+      next: (response) => {
+        this.users = response.filter((user: User) => user.role !== Role.ROLE_ADMIN) as User[];
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
   }
 
-  getPassengerReport(){
-    this.reportService.getPassengerReportData(this.dateForm.value.startDate, this.dateForm.value.endDate).subscribe({
-      next : (response) => {
-        console.log(response);
+  onSubmit() {
+    if (this.userService.getRoleCurrentUserRole() === Role.ROLE_PASSENGER) {
+      this.getPassengerReport(this.userService.getCurrentUserId());
+    } else if (this.userService.getRoleCurrentUserRole() === Role.ROLE_DRIVER) {
+      this.getDriverReport(this.userService.getCurrentUserId())
+    } else if (this.userService.getRoleCurrentUserRole() === Role.ROLE_ADMIN) {
+      this.chooseAdminReport()
+    }
+  }
+
+  getPassengerReport(userId: number) {
+    this.reportService.getPassengerReportData(this.dateForm.value.startDate, this.dateForm.value.endDate, userId).subscribe({
+      next: (response) => {
         this.reportData = response;
         this.getChartDataForDrivingNumberReport(response);
         this.reportDataLoaded = true;
@@ -69,10 +85,9 @@ export class ReportsViewComponent implements OnInit {
     });
   }
 
-  getDriverReport(){
-    this.reportService.getDriverReportData(this.dateForm.value.startDate, this.dateForm.value.endDate).subscribe({
-      next : (response) => {
-        console.log(response);
+  getDriverReport(userId: number) {
+    this.reportService.getDriverReportData(this.dateForm.value.startDate, this.dateForm.value.endDate, userId).subscribe({
+      next: (response) => {
         this.reportData = response;
         this.getChartDataForDrivingNumberReport(response);
         this.reportDataLoaded = true;
@@ -83,10 +98,10 @@ export class ReportsViewComponent implements OnInit {
     });
   }
 
-  getChartDataForDrivingNumberReport(reportData: DrivingReport){
+  getChartDataForDrivingNumberReport(reportData: DrivingReport) {
     this.priceReportValues = []
     this.reportX = []
-    reportData.drivingPrices.forEach((item : DrivingPriceReportItem) => {
+    reportData.drivingPrices.forEach((item: DrivingPriceReportItem) => {
       this.priceReportValues.push(item.price);
       this.reportX.push(item.date);
     })
@@ -101,4 +116,30 @@ export class ReportsViewComponent implements OnInit {
 
   }
 
+  private chooseAdminReport() {
+    console.log(this.value);
+    if (this.value) {
+      if (this.value.role === Role.ROLE_DRIVER) {
+        this.getDriverReport(this.value?.id);
+      }
+      if (this.value.role === Role.ROLE_PASSENGER) {
+        this.getPassengerReport(this.value?.id);
+      }
+    } else {
+      this.getAdminReport();
+    }
+  }
+
+  private getAdminReport() {
+    this.reportService.getAdminReportData(this.dateForm.value.startDate, this.dateForm.value.endDate).subscribe({
+      next: (response) => {
+        this.reportData = response;
+        this.getChartDataForDrivingNumberReport(response);
+        this.reportDataLoaded = true;
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    });
+  }
 }

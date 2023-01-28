@@ -122,8 +122,7 @@ export class ReviewRideTableComponent implements AfterViewInit {
 
   addToFavourite(driving: Driving) {
     console.log(driving.routeId)
-    let newFavoriteRide = new FavoriteRoute(this.userService.getCurrentUserId(),
-      driving.routeId);
+    let newFavoriteRide = new FavoriteRoute(driving.routeId);
     this.routeService.addNewFavoriteRoute(newFavoriteRide).subscribe({
       next: (response) => {
         driving.favoriteRoute = true

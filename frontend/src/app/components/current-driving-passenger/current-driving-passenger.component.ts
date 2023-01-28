@@ -56,7 +56,7 @@ export class CurrentDrivingPassengerComponent implements OnInit {
   }
 
   initializeWebSocketConnection() {
-    let ws = new SockJS(environment.socket);
+    const ws = new SockJS(environment.socket);
     this.stompClient = Stomp.over(ws);
     this.stompClient.debug = null;
     let that = this;
@@ -73,7 +73,6 @@ export class CurrentDrivingPassengerComponent implements OnInit {
 
   private onRideStart() {
     this.stompClient.subscribe('/driving/rideStarted', (message: { body: string }) => {
-      console.log(message.body);
       const emails: string[] = JSON.parse(message.body);
       for (const email of emails) {
         if (email === this.userService.getCurrentUserEmail()) {
@@ -95,7 +94,7 @@ export class CurrentDrivingPassengerComponent implements OnInit {
   private onRideEnd() {
     this.stompClient.subscribe('/driving/rideEnded', (message: { body: string }) => {
       const emails: string[] = JSON.parse(message.body);
-      for (const email of emails) {
+      for (let email of emails) {
         if (email === this.userService.getCurrentUserEmail()) {
           this.finished = true;
           this.openEvaluationComponent();
@@ -107,8 +106,8 @@ export class CurrentDrivingPassengerComponent implements OnInit {
   }
 
   openEvaluationComponent(): void {
-    let driving: Driving = new Driving();
-    driving.id = this.currentDriving.id;
+    const driving: Driving = new Driving();
+    driving.id = this.currentDriving?.id;
     driving.evaluationAvailable = true;
 
     this.dialog.open(EvaluationComponent, {
@@ -117,11 +116,11 @@ export class CurrentDrivingPassengerComponent implements OnInit {
   }
 
   openFavouriteRouteDialog() {
-    let passengerId: number = this.userService.getCurrentUserId();
-    let startLocation: string = this.currentDriving.route.start.name;
-    let endLocation: string = this.currentDriving.route.end.name;
-    let intermediate: string[] = this.currentDriving.route.intermediateStations.map(p => p.name);
-    let route: FavoriteRoute = new FavoriteRoute(passengerId, null, startLocation, endLocation, intermediate);
+    const routeId = this.currentDriving.route.id;
+    const startLocation: string = this.currentDriving.route.start.name;
+    const endLocation: string = this.currentDriving.route.end.name;
+    const intermediate: string[] = this.currentDriving.route.intermediateStations.map(p => p.name);
+    const route: FavoriteRoute = new FavoriteRoute( routeId, startLocation, endLocation, intermediate);
 
     this.dialog.open(FavoriteRouteDialogComponent, {
       data: route

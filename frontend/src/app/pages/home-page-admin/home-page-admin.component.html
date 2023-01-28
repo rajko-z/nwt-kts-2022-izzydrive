@@ -1,7 +1,7 @@
 <div class="home-page">
   <div class="right-side-home-page">
     <div class="searchBox">
-      <div>
+      <div class="search-input">
         <mat-form-field appearance="outline">
           <mat-label>Search term</mat-label>
           <input matInput
@@ -11,9 +11,9 @@
           >
         </mat-form-field>
       </div>
-      <button class="submit-button" mat-button (click)="onSearch()">Search</button>
+      <button class="search-button" mat-button (click)="onSearch()">Search</button>
     </div>
-    <p class="resultsFoundText"><strong>{{drivings?.length}}</strong> drivings found</p>
+    <p class="results-found-text"><strong>{{drivings?.length}}</strong> drivings found</p>
     <div *ngIf="drivings?.length === 0">
       <h2>No current drivings</h2>
     </div>

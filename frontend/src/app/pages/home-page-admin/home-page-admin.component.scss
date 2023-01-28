@@ -1,16 +1,18 @@
 @import "src/style/styles";
 
-.home-page{
+.home-page {
   @include size(100vw, 100vh);
   display: flex;
   justify-content: start;
 }
-.right-side-home-page{
+
+.right-side-home-page {
   @include size(48vw, 100vh);
   margin: 5px 10px 10px 60px;
   font-size: 15px;
 }
-.left-side-home-page{
+
+.left-side-home-page {
   @include size(52vw, 100vh);
 }
 
@@ -23,14 +25,26 @@
   flex-direction: row;
 }
 
+.search-button {
+  @include buttonStyle();
+  height: 5vh;
+  width: 15%;
+  margin: 1% 0 0 2%;
+}
+
+.search-input{
+  margin-left: 2%;
+}
+
 .submit-button {
   @include buttonStyle();
   height: 5vh;
   width: 15%;
 }
 
-.resultsFoundText {
+.results-found-text {
   margin-bottom: 2%;
+  margin-left: 3%;
 }
 
 .ride-area {
@@ -48,7 +62,7 @@
 
 
 .ride-summary {
-  @include size(100%, 50vh);
+  @include size(100%, auto);
   @include setFont(16px);
   overflow-y: auto;
   margin: 1% 2% 4% 1%;
@@ -104,7 +118,6 @@
 }
 
 .second-line {
-  border-bottom: 1px solid $dark3;
 
   .driver-info {
     display: flex;

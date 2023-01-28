@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
+import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {DrivingService} from "../../../services/drivingService/driving.service";
 import {UserService} from "../../../services/userService/user-sevice.service";
@@ -17,7 +17,8 @@ export class NewReservationComponent implements OnInit {
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data,
               private router: Router,
               private drivingService: DrivingService,
-              private userService: UserService) {
+              private userService: UserService,
+              private snackbar: MatSnackBar) {
     this.user = userService.getRoleCurrentUserRole();
     const date = new Date(data.message.reservationTime);
     this.time = `${date.getHours()}:${date.getMinutes()}  ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}.`
@@ -37,13 +38,13 @@ export class NewReservationComponent implements OnInit {
 
   cancelReservationClick() {
     //reject reservation
-    this.drivingService.cancelReservation(this.data.drivingId).subscribe({
+    this.drivingService.cancelReservation(this.data.message.drivingId).subscribe({
       next: (response) => {
-        this.router.navigateByUrl('/passenger');
+        this.router.navigateByUrl('/passenger/order-now');
         // this.snackbar.open(response.text, "OK")
       },
       error: (error) => {
-        // this.snackbar.open(error.error.message, "OK")
+        this.snackbar.open(error.error.message, "OK")
       }
     })
     this.data.preClose();

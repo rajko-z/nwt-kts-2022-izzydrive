@@ -15,11 +15,9 @@ export class RouteService {
 
   constructor(private http: HttpClientService ) { }
 
-  addFavoriteRoute(favoriteRoute: FavoriteRoute): Observable<TextResponse>{
+  addFavoriteRoute(id: number): Observable<TextResponse>{
     return this.http.postT<TextResponse>(
-      environment.apiUrl + "routes/addFavorite",
-      favoriteRoute
-    )
+      environment.apiUrl + `routes/add-favorite/${id}`, {})
   }
 
   getPassengerFavouriteRides(passengerId : number) : Observable<RouteDTO[]>{

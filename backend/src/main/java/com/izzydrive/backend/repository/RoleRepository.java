@@ -1,6 +1,5 @@
 package com.izzydrive.backend.repository;
 
-import com.izzydrive.backend.model.users.Driver;
 import com.izzydrive.backend.model.users.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
