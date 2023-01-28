@@ -129,7 +129,7 @@
         </li>
       </ol>
     </mat-expansion-panel>
-    <div class="ride-for-later" *ngIf="scheduleRide === true">
+    <div class="ride-for-later" >
       <div>
         <p class="option-title">You can schedule a ride for later:</p>
         <p class="explanation">*it is possible to schedule a ride for a minimum of half an hour and a maximum of 5 hours</p>
@@ -148,12 +148,11 @@
             <ngx-material-timepicker-toggle [for]="fullTime"></ngx-material-timepicker-toggle>
           </div>
           <ngx-material-timepicker #fullTime></ngx-material-timepicker>
-
         </div>
       </div>
       <div>
         <section class="option-schedule">
-          <mat-checkbox [checked]="scheduleRide" [disabled]="true" formControlName="scheduleRideControl">Schedule</mat-checkbox>
+          <mat-checkbox [checked]="scheduleRide" [disabled]="scheduleRide === true" formControlName="scheduleRideControl">Schedule</mat-checkbox>
         </section>
       </div>
     </div>

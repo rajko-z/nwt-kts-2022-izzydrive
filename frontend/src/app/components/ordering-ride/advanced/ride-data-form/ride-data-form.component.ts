@@ -41,11 +41,12 @@ export class RideDataFormComponent {
 
   intermediatePanelOpened: boolean = false;
 
-  timeNow = new Date();
+  timeMax = new Date();
+  minuteMax = this.timeMax.getMinutes();
+  hourMax = addHours(this.timeMax, 5).getHours();
+  timeNow = addMinutes(new Date(), 30);
+  minuteNow =this.timeNow.getMinutes();
   hourNow = this.timeNow.getHours();
-  minuteMax = this.timeNow.getMinutes();
-  hourMax = addHours(this.timeNow, 5).getHours();
-  minuteNow = addMinutes(this.timeNow, 30).getMinutes();
   startStr = `${this.hourNow}:${this.minuteNow}`;
   endStr = `${this.hourMax}:${this.minuteMax}`;
 
@@ -54,6 +55,7 @@ export class RideDataFormComponent {
   @Output() drivingFinderRequestEvent = new EventEmitter<DrivingFinderRequest>();
 
   users: User [];
+
 
   routeForm = new FormGroup({
     optimalDriving: new FormControl(''),
@@ -88,7 +90,6 @@ export class RideDataFormComponent {
   }
 
   checkIsOrderedFromFavoriteRides(){
-    console.log(RouteService.selectedFavouriteRides)
     if (RouteService.selectedFavouriteRides && this.userService.getCurrentUserId() in RouteService.selectedFavouriteRides){
       let route : RouteDTO = RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()]
       this.startPlaceSelected(route.start)
@@ -110,7 +111,7 @@ export class RideDataFormComponent {
       return;
     }
 
-    if (this.scheduleRide && !this.checkTime()) {
+    if (this.routeForm.value.scheduleRideControl && !this.checkTime()) {
       return;
     }
 
@@ -118,7 +119,7 @@ export class RideDataFormComponent {
 
     console.log(drivingFinderRequest);
 
-    if (this.scheduleRide) {
+    if (this.routeForm.value.scheduleRideControl) {
       this.getScheduleDrivingOptions(drivingFinderRequest);
     } else {
       this.getAdvancedDrivingOptions(drivingFinderRequest);
@@ -179,7 +180,7 @@ export class RideDataFormComponent {
     drivingFinderRequest.carAccommodation = this.getCarAccommodation();
     drivingFinderRequest.linkedPassengersEmails = this.getLinkedPassengers();
     drivingFinderRequest.reservation = this.scheduleRide;
-    if (drivingFinderRequest.reservation) {
+    if (this.routeForm.value.scheduleRideControl) {
         drivingFinderRequest.scheduleTime = this.getScheduleTime();
     }
     return drivingFinderRequest;
