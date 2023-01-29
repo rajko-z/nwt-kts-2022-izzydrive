@@ -27,17 +27,9 @@ public class PaymentValidationServiceImpl implements PaymentValidationService {
 
     @Override
     public boolean validateForPaymentSessionExpiration(Driving driving) {
-        if (driving.isReservation()) {
-            if (drivingValidationService.reservationExpiredForPayment(driving)) {
-                // TODO:: isti posao kao i iz joba, obrisati rezervaciju
-                // i poslati notifikacije o istekloj sesiji za placanje
-                return false;
-            }
-        } else {
-            if (drivingValidationService.drivingExpiredForPayment(driving)) {
-                drivingRejectionService.removeDrivingPaymentSessionExpired(driving.getId());
-                return false;
-            }
+        if (drivingValidationService.drivingExpiredForPayment(driving)) {
+            drivingRejectionService.removeDrivingPaymentSessionExpired(driving.getId());
+            return false;
         }
         return true;
     }

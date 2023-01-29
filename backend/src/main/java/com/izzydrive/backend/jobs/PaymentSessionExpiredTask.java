@@ -28,14 +28,6 @@ public class PaymentSessionExpiredTask {
     @Scheduled(cron = "${payment-session-expired-job.cron}")
     public void cancelDrivingForExpiredPaymentSession() {
         LOG.info("> job started");
-        /**
-         * Putnik ima pravo da pravi od 15 - 10 min pre pocetka voznje
-         * TODO:: proveriti ako se radi o rezervaciji i ako je ostalo manje od 10 min
-         * do pocetka onda je potrebno obrisati rezervaciju i baciti svim putnicima, your
-         * payment session expired, canceling reserved driving.
-         * Obrisati driving, i skinuti reserved from client reservation na driveru
-         * i reservation na putniku
-         * */
         List<Driving> drivings = drivingService.getAllDrivingsInStatusPayment();
         for (Driving d : drivings) {
             if (drivingValidationService.drivingExpiredForPayment(d) && !d.isLocked()) {

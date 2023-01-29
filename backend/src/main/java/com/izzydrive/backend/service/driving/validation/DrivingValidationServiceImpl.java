@@ -59,12 +59,6 @@ public class DrivingValidationServiceImpl implements DrivingValidationService {
                 >= Constants.MAX_NUMBER_OF_MINUTES_TO_COMPLETE_PAYMENT;
     }
 
-    @Override
-    public boolean reservationExpiredForPayment(Driving driving) {
-        return ChronoUnit.MINUTES.between(LocalDateTime.now(), driving.getReservationDate())
-                < Constants.MIN_MINUTES_LEFT_FOR_RESERVATION_TO_EXPIRE_FOR_PAYMENT;
-    }
-
     private void validateAllLocationsFromDrivingFinderRequest(DrivingFinderRequestDTO request) {
         List<AddressOnMapDTO> locations = new ArrayList<>();
         locations.add(request.getStartLocation());

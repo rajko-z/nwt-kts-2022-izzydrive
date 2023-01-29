@@ -15,6 +15,4 @@ public interface DrivingValidationService {
     void validateAllLocationsForSimpleRequest(List<AddressOnMapDTO> locations);
 
     boolean drivingExpiredForPayment(Driving driving);
-
-    boolean reservationExpiredForPayment(Driving driving);
 }
