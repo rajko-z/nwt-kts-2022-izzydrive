@@ -81,7 +81,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation) {
         for (String passengerEmail : passengersToSendNotifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setMessage("The ride was canceled when declined by the linked user");
+            notificationDTO.setMessage("The ride was canceled by passenger");
             notificationDTO.setStartLocation(startLocation);
             notificationDTO.setEndLocation(endLocation);
             notificationDTO.setUserEmail(passengerEmail);
@@ -218,7 +218,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotificationReservationReminder(Integer startMinutes, List<User> userForNotification) {
         for (User u : userForNotification) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setMessage(String.format("You have a reservation for %s minute", startMinutes));
+            notificationDTO.setMessage(String.format("The expected reservation time is in %s minutes, if the driver and passengers are ready, it can start even earlier.", startMinutes));
             notificationDTO.setUserEmail(u.getEmail());
             notificationDTO.setNotificationStatus(NotificationStatus.RESERVATION_REMINDER);
             this.simpMessagingTemplate.convertAndSend("/notification/reservationReminder", notificationDTO);

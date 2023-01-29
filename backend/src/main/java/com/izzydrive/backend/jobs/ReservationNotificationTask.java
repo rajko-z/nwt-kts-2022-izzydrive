@@ -1,12 +1,13 @@
 package com.izzydrive.backend.jobs;
 
-import com.izzydrive.backend.dto.map.AddressOnMapDTO;
-import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
-import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.model.*;
+import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.ReservationNotification;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.ReservationNotificationService;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.notification.NotificationService;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.izzydrive.backend.utils.Constants.*;
@@ -82,9 +84,13 @@ public class ReservationNotificationTask {
     }
 
     private boolean checkNotifyInterval(Driving d, Integer startMinutes, Integer endMinutes) {
-        int minutes = (int) ChronoUnit.MINUTES.between(LocalDateTime.now(), d.getReservationDate());
+        Driving driving = drivingService.getDrivingByIdWithDriverRouteAndPassengers(d.getId());
+        if (driving.getDrivingState() == DrivingState.ACTIVE) {
+            return true;
+        }
+        int minutes = (int) ChronoUnit.MINUTES.between(LocalDateTime.now(), driving.getReservationDate());
         if (endMinutes < minutes && minutes <= startMinutes) {
-            List<User> userForNotification = new ArrayList<>(d.getAllPassengers());
+            List<User> userForNotification = new ArrayList<>(driving.getPassengers());
             userForNotification.add(d.getDriver());
             this.notificationService.sendNotificationReservationReminder(startMinutes, userForNotification);
             return true;
@@ -111,7 +117,9 @@ public class ReservationNotificationTask {
     }
 
     private void checkDriverIsActive(Driving d) {
-        if (!d.getDriver().isActive()) {
+        Driver driver = driverService.findByEmailWithAllDrivings(d.getDriver().getEmail())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(d.getDriver().getEmail())));
+        if (!driver.isActive() || driver.getNextDriving() != null) {
             notificationService.sendNotificationForReservationDeleted(d, "The reservation was canceled because the selected driver is no longer active");
             drivingService.deleteReservation(d);
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
@@ -119,19 +127,9 @@ public class ReservationNotificationTask {
     }
 
     private void updateDriving(Driving d) {
-        Driving driving = drivingService.getDrivingWithLocations(d.getId());
-        driving.setDrivingState(DrivingState.PAYMENT);
-
-        Address startLocation = driving.getRoute().getStart();
-        AddressOnMapDTO address = new AddressOnMapDTO(startLocation.getLongitude(), startLocation.getLatitude(), startLocation.getName());
-        CalculatedRouteDTO fromDriverToStart = driverRoutesService.getCalculatedRouteFromDriverToStart(d.getDriver().getEmail(), address);
-
-        driving.setDistanceFromDriverToStart(fromDriverToStart.getDistance());
-        driving.setDurationFromDriverToStart(fromDriverToStart.getDuration());
-        List<Location> locationFromDriverToStart = getLocationsNeededForDriverToStart(fromDriverToStart);
-        driving.getLocations().addAll(locationFromDriverToStart);
-
-        drivingService.save(driving);
+        d.setDrivingState(DrivingState.PAYMENT);
+        d.setCreationDate(LocalDateTime.now());
+        drivingService.save(d);
     }
 
     private void deleteReservationFromDriver(Driving d) {
@@ -146,16 +144,11 @@ public class ReservationNotificationTask {
                 drivingService.deleteReservation(d);
                 throw new BadRequestException(ExceptionMessageConstants.PASSENGER_NO_LONGER_AVAILABLE);
             }
-            p.setCurrentDriving(d);
-            passengerService.save(p);
+            Passenger passenger = passengerService.findByEmailWithDrivings(p.getEmail())
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(p.getEmail())));
+            passenger.setCurrentDriving(d);
+            passenger.getDrivings().removeIf(driving -> Objects.equals(d.getId(), driving.getId()));
+            passengerService.save(passenger);
         }
-    }
-
-    private List<Location> getLocationsNeededForDriverToStart(CalculatedRouteDTO fromStartToEnd) {
-        List<Location> locations = new ArrayList<>();
-        for (LocationDTO l : fromStartToEnd.getCoordinates()) {
-            locations.add(new Location(l.getLat(), l.getLon(), false));
-        }
-        return locations;
     }
 }
