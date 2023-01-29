@@ -9,6 +9,10 @@ public interface DriverNotificationService {
 
     void sendNextDrivingToDriver(DrivingDTOWithLocations drivingDTOWithLocations);
 
+    void sendReservationToDriver(DrivingDTOWithLocations drivingDTOWithLocations);
+
+    void deleteReservationSignal(String driverEmail);
+
     void deleteCurrentDrivingSignal(String driverEmail);
 
     void deleteNextDrivingSignal(String driverEmail);

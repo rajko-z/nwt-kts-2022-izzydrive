@@ -69,4 +69,9 @@ public class DriverLockerServiceImpl implements DriverLockerService {
         Optional<DriverLocker> driverLocker = findByDriverEmail(driverEmail);
         return driverLocker.isPresent() && driverLocker.get().getPassengerEmail() != null;
     }
+
+    @Override
+    public void save(DriverLocker driverLocker) {
+        driverLockerRepository.save(driverLocker);
+    }
 }

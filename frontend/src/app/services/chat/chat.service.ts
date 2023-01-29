@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Injectable} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import firebase from 'firebase/compat/app'
-import { Channel } from 'src/app/model/channel/channel';
-import { Message } from 'src/app/model/message/message';
-import { Role } from 'src/app/model/user/role';
-import { UserService } from '../userService/user-sevice.service';
+import {Channel} from 'src/app/model/channel/channel';
+import {Message} from 'src/app/model/message/message';
+import {Role} from 'src/app/model/user/role';
+import {UserService} from '../userService/user-sevice.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,31 +17,22 @@ export class ChatService {
 
   snapshotToArray(snapshot: firebase.database.DataSnapshot){ //ovo izdvojiti
     const returnArr = [];
-  
+
     snapshot.forEach((childSnapshot: any) => {
         const item = childSnapshot.val();
         item.key = childSnapshot.key;
         returnArr.push(item);
     });
-  
+
     return returnArr;
   };
-
-  setOpenChatByuser(open:boolean, channelId : any):void{
-    this.firebaseChannels.orderByChild('id').equalTo(channelId).once('value', (response : any) => {
-      let channels = this.snapshotToArray(response);
-      channels.forEach((channel: Channel) => {
-        this.firebaseChannels.child(channel.key).update({open_by_user: open})
-       });  
-    })
-  }
 
   closeAllAdminChat(): void{
     this.firebaseChannels.once('value', (response : any) => {
       let channels = this.snapshotToArray(response);
       channels.forEach((channel : Channel) => {
         this.firebaseChannels.child(channel.key).update({open_by_admin: false})
-       });  
+       });
     })
   }
 
@@ -49,7 +40,7 @@ export class ChatService {
     this.firebaseChannels.orderByChild('id').equalTo(message.channel).once('value', (response : any) => {
       let channels = this.snapshotToArray(response);
       channels.forEach((channel : Channel) => {
-      if(this.userService.getRoleCurrentUserRole() == "ROLE_ADMIN"){ 
+      if(this.userService.getRoleCurrentUserRole() == "ROLE_ADMIN"){
             if (channel.open_by_user) {
               this.firebaseChannels.child(channel.key).update({unread_messages_by_user: false})
             }
@@ -87,7 +78,7 @@ export class ChatService {
           this.snackBar.open("You have new message", "OK");
         }
       })
-    }) 
+    })
   }
 
   checkNewMessagesForAdmin(){

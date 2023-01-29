@@ -5,10 +5,11 @@ import {Observable} from "rxjs";
 import {DrivingOption} from "../../model/driving/drivingOption";
 import {DrivingFinderRequest} from "../../model/driving/drivingFinderRequest.";
 import {HttpClient} from "@angular/common/http";
-import {Driving, DrivingRequest, DrivingWithLocations, FinishedDrivingDetails} from "../../model/driving/driving";
+import {Driving, DrivingDetails, DrivingRequest, DrivingWithLocations} from "../../model/driving/driving";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
 import {TextResponse} from "../../model/response/textresponse";
 import {Sort} from '@angular/material/sort';
+import {CancellationReason} from "../../model/driving/cancelationReason";
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,6 @@ export class DrivingService {
 
   findAllByDriverId(driverId) {
     return this.httpClientService.get(environment.apiUrl + `drivings/driver/${driverId}`);
-  }
-
-  findAllByPassengerId(passengerId) {
-    return this.httpClientService.get(environment.apiUrl + `drivings/passenger/${passengerId}`);
   }
 
   rejectRegularDrivingDriver(explanation) {
@@ -45,10 +42,6 @@ export class DrivingService {
 
   rejectDrivingLinkedPassenger() {
     return this.httpClientService.get(environment.apiUrl + 'drivings/reject-linked-user');
-  }
-
-  findById(id: number) {
-    return this.httpClientService.get(environment.apiUrl + `drivings/${id}`);
   }
 
   getScheduleDrivingOptions(payload: DrivingFinderRequest): Observable<DrivingOption[]> {
@@ -76,9 +69,9 @@ export class DrivingService {
         case 'endAddress':
           return this.compare(a.end.name, b.end.name, isAsc);
         case 'startTime':
-          return this.compare(a.startDate, b.startDate, isAsc);
+          return this.compare(Date.parse(a.startDate), Date.parse(b.startDate), isAsc);
         case 'endTime':
-          return this.compare(a.endDate, b.endDate, isAsc);
+          return this.compare(Date.parse(a.endDate), Date.parse(b.endDate), isAsc);
         case 'price':
           return this.compare(a.price, b.price, isAsc);
         default:
@@ -102,20 +95,12 @@ export class DrivingService {
     return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
   }
 
-  deleteDriving(id:number) {
-    return this.httpClientService.getT<TextResponse>(environment.apiUrl + `drivings/delete/${id}`);
-  }
-
   startDriving() {
     return this.httpClientService.getT<TextResponse>(environment.apiUrl + 'drivings/start');
   }
 
   endDriving() {
     return this.httpClientService.getT<TextResponse>(environment.apiUrl + 'drivings/end');
-  }
-
-  getReservation() {
-    return this.httpClientService.get(environment.apiUrl + 'drivings/reservation');
   }
 
   getAllCurrent() {
@@ -130,7 +115,11 @@ export class DrivingService {
     return this.httpClientService.getT<DrivingWithLocations>(environment.apiUrl + `drivings/with-locations/${id}`);
   }
 
-  findFinishedDrivingDetailsById(id: number) {
-    return this.httpClientService.getT<FinishedDrivingDetails>(environment.apiUrl + `drivings/finished/${id}`);
+  findDrivingDetailsById(id: number) {
+    return this.httpClientService.getT<DrivingDetails>(environment.apiUrl + `drivings/details/${id}`);
+  }
+
+  rejectReservationDrivingDriver(explanation: CancellationReason) {
+    return this.httpClientService.postT<TextResponse>(environment.apiUrl + `drivings/reject-reservation-driver`, explanation);
   }
 }

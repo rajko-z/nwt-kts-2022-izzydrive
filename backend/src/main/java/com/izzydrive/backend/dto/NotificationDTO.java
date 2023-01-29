@@ -1,10 +1,14 @@
 package com.izzydrive.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.izzydrive.backend.model.Notification;
 import com.izzydrive.backend.model.NotificationStatus;
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,9 +29,17 @@ public class NotificationDTO {
     private List<String> intermediateLocations;
     private double duration;
     private double price;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime reservationTime;
     @NotBlank
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime creationDate;
+    
     private NotificationStatus notificationStatus;
     private String driverEmail;
     private Long drivingId;

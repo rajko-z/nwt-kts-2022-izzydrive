@@ -92,7 +92,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationRejectDrivingFromDriverToAdmin(String adminEmail, Driving driving, String driverEmail, String reason) {
+    public void sendNotificationCancelDrivingFromDriverToAdmin(String adminEmail, Driving driving, String driverEmail, String reason) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage(reason);
         notificationDTO.setDuration(driving.getDuration());
@@ -149,7 +149,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationNewDrivingDriver(String driverEmail) {
+    public void sendNotificationForNewDrivingToDriver(String driverEmail) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage("You have been assigned a new ride.");
         notificationDTO.setUserEmail(driverEmail);
@@ -159,12 +159,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationCancelDriving(String passengerEmail, Driving driving) {
+    public void sendNotificationForCanceledReservation(String userEmail, Driving driving) {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setMessage("You reservations is canceled");
         notificationDTO.setStartLocation(driving.getRoute().getStart().getName());
         notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
-        notificationDTO.setUserEmail(passengerEmail);
+        notificationDTO.setUserEmail(userEmail);
         notificationDTO.setNotificationStatus(NotificationStatus.REJECTED_RESERVATION);
         this.simpMessagingTemplate.convertAndSend("/notification/cancelReservation", notificationDTO);
         createAndSaveNotification(notificationDTO);
@@ -203,7 +203,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotificationRejectDrivingFromDriverToPassengers(List<String> passengersToSendNotifications) {
+    public void sendNotificationCancelDrivingFromDriverToPassengers(List<String> passengersToSendNotifications) {
         for (String passenger : passengersToSendNotifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setMessage("Your driving is canceled by driver.");
@@ -318,14 +318,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void deleteNotification(Long id) {
         Notification notification = this.notificationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
-        notificationRepository.delete(notification);
-    }
-
-    @Override
-    public void deleteNotificationFromAdmin(Long drivingId) {
-        User user = userService.getCurrentlyLoggedUser();
-        Notification notification = this.notificationRepository.findByDrivingIdAndUserEmail(drivingId, user.getEmail())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.NOTIFICATION_DOESNT_EXIST));
         notificationRepository.delete(notification);
     }

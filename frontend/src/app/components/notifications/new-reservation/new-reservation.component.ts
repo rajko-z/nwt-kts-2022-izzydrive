@@ -20,8 +20,7 @@ export class NewReservationComponent implements OnInit {
               private userService: UserService,
               private snackbar: MatSnackBar) {
     this.user = userService.getRoleCurrentUserRole();
-    const date = new Date(data.message.reservationTime);
-    this.time = `${date.getHours()}:${date.getMinutes()}  ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}.`
+    this.time = data.message.reservationTime;
   }
 
   ngOnInit(): void {

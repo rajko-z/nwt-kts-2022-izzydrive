@@ -28,18 +28,18 @@
     </div>
     <div class="price">
       <em class="fa-solid fa-tags"></em>
-      <span class="bold-style">Price: </span> {{driving.price}} $
+      <span class="bold-style">Price: </span> {{driving.price}} RSD
     </div>
   </div>
 
   <div *ngIf="currDrivingStatus === 'waiting'" class="options">
     <button class="disabled-button">Start</button>
-    <button class="active-button" (click)="cancelDriving()">Cancel</button>
+    <button class="active-button" (click)="cancelDriving(false)">Cancel</button>
   </div>
 
   <div *ngIf="currDrivingStatus === 'start'" class="options">
     <button class="active-button" (click)="startDriving()">Start</button>
-    <button class="active-button" (click)="cancelDriving()">Cancel</button>
+    <button class="active-button" (click)="cancelDriving(false)">Cancel</button>
   </div>
 
   <div *ngIf="currDrivingStatus === 'active' || currDrivingStatus === 'finish'" class="options">
@@ -47,10 +47,10 @@
   </div>
 
   <div *ngIf="currDrivingStatus === 'next'" class="options">
-    <button class="active-button" (click)="cancelDriving()">Cancel</button>
+    <button class="active-button" (click)="cancelDriving(false)">Cancel</button>
   </div>
 
   <div *ngIf="currDrivingStatus === 'reservation'" class="options">
-    <button class="active-button" (click)="cancelReservation()">Cancel</button>
+    <button class="active-button" (click)="cancelDriving(true)">Cancel</button>
   </div>
 </div>

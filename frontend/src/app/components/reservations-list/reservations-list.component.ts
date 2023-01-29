@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
@@ -11,6 +11,8 @@ import { DrivingService } from 'src/app/services/drivingService/driving.service'
 import { NotificationService } from 'src/app/services/notificationService/notification.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ConfirmCancelReservationComponent } from '../notifications/confirm-cancel-reservation/confirm-cancel-reservation.component';
+import {DetailRideViewComponent} from "../detail-ride-view/detail-ride-view.component";
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-reservations-list',
@@ -23,16 +25,18 @@ export class ReservationsListComponent implements OnInit {
   gettingDataFinished : boolean =  false;
   dataSource : MatTableDataSource<Driving>;
   curretnUser : User;
-  
+
   @ViewChild('paginator') paginator: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
-  constructor(private drivingService:DrivingService, 
-              private userService: UserService,  
-              public datepipe: DatePipe, 
+  constructor(private drivingService:DrivingService,
+              private userService: UserService,
+              public datepipe: DatePipe,
+              @Inject(MAT_DIALOG_DATA) public data,
+              public dialog: MatDialog,
               public snackbar : MatSnackBar,
               private router : Router) {
       this.userService.getCurrentUserData().subscribe({
@@ -45,15 +49,15 @@ export class ReservationsListComponent implements OnInit {
           console.log(error);
         }
       })
-  } 
+  }
 
   ngOnInit(): void {
-    
+
   }
 
   setDrivings(){
       this.drivingService.findPassengerReservations(this.curretnUser.id).subscribe((res) => {
-        this.setDataSource(res as Driving[])    
+        this.setDataSource(res as Driving[])
       });
   }
 
@@ -101,5 +105,11 @@ export class ReservationsListComponent implements OnInit {
        this.snackbar.open(error.error.message, "OK")
       }
    })
+  }
+
+  detailsClicked(driving: Driving) {
+    this.dialog.open(DetailRideViewComponent, {
+      data: driving.id,
+    });
   }
 }

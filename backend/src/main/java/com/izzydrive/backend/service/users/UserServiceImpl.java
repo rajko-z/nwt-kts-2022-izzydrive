@@ -8,7 +8,6 @@ import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
-import com.izzydrive.backend.model.users.Role;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
@@ -70,7 +69,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -166,17 +164,6 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new BadRequestException(USER_DOESNT_EXISTS);
         }
-    }
-
-    @Override
-    public User disconnectFromChat(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            return null;
-        }
-
-        user.get().setConnected(false);
-        return userRepository.save(user.get());
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.izzydrive.backend.service.driving;
 
 import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
-import com.izzydrive.backend.dto.driving.FinishedDrivingDetailsDTO;
+import com.izzydrive.backend.dto.driving.DrivingDetailsDTO;
 import com.izzydrive.backend.model.Driving;
 
 import java.time.LocalDateTime;
@@ -12,13 +12,9 @@ import java.util.Optional;
 public interface DrivingService {
     List<DrivingDTO> findAllByDriverId(Long driverId);
 
-    List<DrivingDTO> findAllByPassengerId(Long passengerId);
-
     void save(Driving driving);
 
     void saveAndFlush(Driving driving);
-
-    DrivingDTO findDrivingDTOById(Long id);
 
     Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
 
@@ -32,12 +28,6 @@ public interface DrivingService {
 
     List<DrivingDTO> getPassengerFutureReservations(Long passengerId);
 
-    void cancelReservation(Long drivingId);
-
-    DrivingDTO getReservation();
-
-    void deleteDriving(Long id);
-
     Driving findByIdWithLocationsAndDriver(Long id);
 
     List<Driving> getAllReservationWithDriverAndPassengers();
@@ -45,6 +35,8 @@ public interface DrivingService {
     void deleteReservation(Driving d);
 
     DrivingDTOWithLocations findDrivingWithLocationsDTOById(Long id);
+
+    DrivingDTOWithLocations findReservationDrivingWithLocationsDTOById(Long id);
 
     void delete(Driving driving);
 
@@ -54,7 +46,7 @@ public interface DrivingService {
 
     DrivingDTOWithLocations findDrivingWithLocationsById(Long drivingId);
 
-    FinishedDrivingDetailsDTO findFinishedDrivingDetailsById(Long drivingId);
+    DrivingDetailsDTO findDrivingDetailsById(Long drivingId);
 
     List<Driving> getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 

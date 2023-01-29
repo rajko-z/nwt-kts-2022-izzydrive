@@ -1,21 +1,21 @@
 package com.izzydrive.backend.service.drivingprocessing.reservation;
 
+import com.izzydrive.backend.converters.DrivingConverter;
 import com.izzydrive.backend.dto.DriverDTO;
-import com.izzydrive.backend.dto.driving.DrivingDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.Driving;
-import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.driving.validation.DrivingValidationService;
-import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.drivingprocessing.reservation.validation.DriverAvailabilityReservationValidator;
 import com.izzydrive.backend.service.drivingprocessing.shared.drivingsaver.DrivingSaverFromRequest;
+import com.izzydrive.backend.service.notification.NotificationService;
+import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
 
     private final DrivingSaverFromRequest drivingSaverFromRequest;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final DriverNotificationService driverNotificationService;
 
     @Transactional
     @Override
@@ -53,7 +53,7 @@ public class ProcessDrivingReservationServiceImpl implements ProcessDrivingReser
         notificationService.sendNotificationNewReservationDriving(driver.getEmail(), driving);
         notificationService.sendNotificationNewReservationDriving(passenger.getEmail(), driving);
         sendNotificationLinkedPassengers(request, driving);
-        this.simpMessagingTemplate.convertAndSend("/driving/loadReservation", new DrivingDTO(driving));
+        driverNotificationService.sendReservationToDriver(DrivingConverter.convertBasicWithDriver(driving));
     }
 
     private void sendNotificationLinkedPassengers(DrivingRequestDTO request, Driving driving) {

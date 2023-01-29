@@ -92,7 +92,6 @@ export class MapService {
     }
   }
 
-
   addAllFromDriving(driving: DrivingWithLocations) {
     this.addStartPlace(driving.route.start);
     this.addEndPlace(driving.route.end);
@@ -101,5 +100,4 @@ export class MapService {
     this.drawRoute(driving.fromDriverToStart.coordinates, "#5715ff");
     this.drawRoute(driving.fromStartToEnd.coordinates, "#d3081f");
   }
-
 }

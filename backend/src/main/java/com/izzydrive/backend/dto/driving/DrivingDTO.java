@@ -1,5 +1,10 @@
 package com.izzydrive.backend.dto.driving;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.izzydrive.backend.dto.AddressDTO;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
@@ -20,7 +25,15 @@ import java.util.stream.Collectors;
 public class DrivingDTO {
     private Long id;
     private double price;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime startDate;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime endDate;
     private List<String> passengers = new ArrayList<>();
     private AddressDTO start;
@@ -28,6 +41,10 @@ public class DrivingDTO {
     private boolean isFavoriteRoute;
     private boolean evaluationAvailable;
     private DrivingState drivingState;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime reservationDate;
     private String driverEmail;
     private Long routeId;

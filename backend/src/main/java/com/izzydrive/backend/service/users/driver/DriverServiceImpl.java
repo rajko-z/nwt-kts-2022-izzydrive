@@ -10,12 +10,15 @@ import com.izzydrive.backend.exception.NotFoundException;
 import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.users.User;
 import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverLocation;
+import com.izzydrive.backend.model.users.driver.DriverLocker;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.driver.DriverRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.users.UserService;
 import com.izzydrive.backend.service.users.driver.car.CarService;
 import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
+import com.izzydrive.backend.service.users.driver.locker.DriverLockerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -54,12 +57,15 @@ public class DriverServiceImpl implements DriverService {
 
     private final DriverLocationService driverLocationService;
 
+    private final DriverLockerService driverLockerService;
+
     @Override
     public Optional<Driver> findByEmail(String email) {
         return this.driverRepository.findByEmail(email);
     }
 
     @Override
+    @Transactional
     public void addNewDriver(DriverDTO driverDTO) {
         validateNewDriver(driverDTO);
 
@@ -78,6 +84,11 @@ public class DriverServiceImpl implements DriverService {
             Driver savedDriver = driverRepository.save(newDriver);
             car.setDriver(savedDriver);
             carService.saveCar(car);
+
+            DriverLocation driverLocation = new DriverLocation(driverDTO.getEmail(), 45.2647343, 19.8294979);
+            driverLocationService.save(driverLocation);
+            DriverLocker driverLocker = new DriverLocker(driverDTO.getEmail(), null, 0);
+            driverLockerService.save(driverLocker);
 
             emailSender.sendDriverRegistrationMail(driverDTO.getEmail(), password);
         }
@@ -185,9 +196,6 @@ public class DriverServiceImpl implements DriverService {
             if (driver.getCurrentDriving() == null) {
                 return null;
             }
-            if (driver.getCurrentDriving().isRejected()) {
-                return null;
-            }
             return drivingService.findDrivingWithLocationsDTOById(driver.getCurrentDriving().getId());
         } catch (OptimisticLockingFailureException e) {
             LOG.error(e.getMessage());
@@ -203,9 +211,6 @@ public class DriverServiceImpl implements DriverService {
             if (driver.getNextDriving() == null) {
                 return null;
             }
-            if (driver.getNextDriving().isRejected()) {
-                return null;
-            }
             return drivingService.findDrivingWithLocationsDTOById(driver.getNextDriving().getId());
         } catch (OptimisticLockingFailureException e) {
             LOG.error(e.getMessage());
@@ -216,5 +221,19 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public void refresh(Driver driver) {
         driverRepository.refresh(driver);
+    }
+
+    @Override
+    public DrivingDTOWithLocations getReservation() {
+        try {
+            Driver driver = getCurrentlyLoggedDriverWithReservation();
+            if (driver.getReservedFromClientDriving() == null) {
+                return null;
+            }
+            return drivingService.findReservationDrivingWithLocationsDTOById(driver.getReservedFromClientDriving().getId());
+        } catch (OptimisticLockingFailureException e) {
+            LOG.error(e.getMessage());
+        }
+        return null;
     }
 }

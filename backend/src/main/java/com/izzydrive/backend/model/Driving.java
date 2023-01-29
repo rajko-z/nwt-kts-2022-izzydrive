@@ -46,9 +46,6 @@ public class Driving {
     private String note;
 
     @Column
-    private boolean rejected;
-
-    @Column
     private boolean locked;
 
     @Version
@@ -88,9 +85,6 @@ public class Driving {
 
     @ManyToMany(mappedBy = "drivings", fetch = FetchType.LAZY)
     private List<Passenger> allPassengers = new ArrayList<>();
-
-    @Column
-    private boolean  deleted = false;
 
     public List<Location> getLocations() {
         return locations;

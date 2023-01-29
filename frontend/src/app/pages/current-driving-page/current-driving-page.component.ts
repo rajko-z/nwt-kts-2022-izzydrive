@@ -45,7 +45,6 @@ export class CurrentDrivingPageComponent implements OnInit {
   }
 
   openDrivingSocket() {
-    this.onDeleteCurrentDriving();
     this.onRefreshedCurrentDriving();
   }
 
@@ -57,19 +56,6 @@ export class CurrentDrivingPageComponent implements OnInit {
           this.currentDriving = driving;
           this.setUpMap();
         }
-      }
-    });
-  }
-
-  private onDeleteCurrentDriving() {
-    this.stompClient.subscribe('/driving/deleteDriving', (message: { body: string }) => {
-      if (message.body === this.userService.getCurrentUserEmail()) {
-        this.router.navigateByUrl('/passenger/order-now');
-        this.snackBar.open("The ride was canceled by the driver", "Ok", {
-          duration: 5000,
-          verticalPosition: 'bottom',
-          horizontalPosition: 'right',
-        })
       }
     });
   }

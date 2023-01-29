@@ -26,8 +26,8 @@ export class DrivingRequest {
 export class Driving {
   id: number;
   price: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
   passengers: Array<String>;
   start: Address;
   end: Address;
@@ -63,11 +63,15 @@ export enum DrivingState {
   FINISHED="FINISHED"
 }
 
-export class FinishedDrivingDetails {
+export class DrivingDetails {
   id: number;
   price: number;
   startDate: string;
   endDate: string;
+
+  scheduleDate: string;
+
+  reservation: boolean;
   route: RouteDTO;
   passengers: string[];
   driver: Driver;

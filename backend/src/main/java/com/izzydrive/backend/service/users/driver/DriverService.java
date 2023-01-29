@@ -46,4 +46,6 @@ public interface DriverService {
     DrivingDTOWithLocations getNextDriving();
 
     void refresh(Driver driver);
+
+    DrivingDTOWithLocations getReservation();
 }

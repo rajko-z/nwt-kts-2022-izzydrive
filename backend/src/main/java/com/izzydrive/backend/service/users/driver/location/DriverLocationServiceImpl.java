@@ -24,4 +24,9 @@ public class DriverLocationServiceImpl implements DriverLocationService {
         DriverLocation location = driverLocationRepository.findByEmail(driverEmail);
         return new LocationDTO(location.getLon(), location.getLat());
     }
+
+    @Override
+    public void save(DriverLocation driverLocation) {
+        driverLocationRepository.save(driverLocation);
+    }
 }

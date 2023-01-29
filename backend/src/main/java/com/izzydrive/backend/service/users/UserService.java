@@ -28,8 +28,6 @@ public interface UserService extends UserDetailsService {
     void unblockUser(Long id);
     boolean changeUserInfo(UserDTO userDTO,boolean saveChanges);
 
-    User disconnectFromChat(String email);
-
     User getCurrentlyLoggedUser();
 
     void sendEmailForResetPassword(String email);

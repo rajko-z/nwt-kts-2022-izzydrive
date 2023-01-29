@@ -26,4 +26,10 @@ public class DriverLocation {
 
     @Column
     private double lon;
+
+    public DriverLocation(String email, double lat, double lon) {
+        this.email = email;
+        this.lat = lat;
+        this.lon = lon;
+    }
 }

@@ -1,24 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Car, carImageMapper } from 'src/app/model/car/car';
-import { CarType } from 'src/app/model/car/carType';
-import { TextResponse } from 'src/app/model/response/textresponse';
-import { ProfilePageData } from 'src/app/model/user/profileData';
-import { Role } from 'src/app/model/user/role';
-import { environment } from 'src/environments/environment';
-import { HttpClientService } from '../custom-http/http-client.service';
-import { UserService } from '../userService/user-sevice.service';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Car, carImageMapper} from 'src/app/model/car/car';
+import {TextResponse} from 'src/app/model/response/textresponse';
+import {ProfilePageData} from 'src/app/model/user/profileData';
+import {Role} from 'src/app/model/user/role';
+import {environment} from 'src/environments/environment';
+import {HttpClientService} from '../custom-http/http-client.service';
+import {UserService} from '../userService/user-sevice.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarService {
 
-  carTypes = {
-    
-  }
-
-  constructor(private http: HttpClientService, 
+  constructor(private http: HttpClientService,
               private userService: UserService) { }
 
   getCarByDriverId(id: number): Observable<Car>{
@@ -28,7 +23,7 @@ export class CarService {
   public getProfilePageDataFromCar(car : Car) : ProfilePageData{
     let profileData = new ProfilePageData();
     profileData.title = `${car.model}`;
-    profileData.subtitle = car.registration;    
+    profileData.subtitle = car.registration;
     profileData.otherAttributes = {} as Record<string,any>;
     profileData.otherAttributes["max passengers"] = car.maxPassengers;
     profileData.otherAttributes["type"] = car.carType;
@@ -45,4 +40,3 @@ editCarData(car : Car) : Observable<TextResponse>{
   return this.http.putT<TextResponse>(environment.apiUrl + "cars/edit?saveChanges=" + saveChanges, car);
 }
 }
- 

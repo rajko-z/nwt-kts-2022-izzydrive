@@ -28,8 +28,13 @@ export class DisplayDrivingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  cancelDriving() {
-    this.dialog.open(ExplanationDialogComponent, {data: this.driving.id});
+  cancelDriving(reservation: boolean) {
+    this.dialog.open(ExplanationDialogComponent, {
+      data: {
+        drivingId: this.driving.id,
+        reservation: reservation
+      }
+    });
   }
 
   endDriving() {
@@ -60,6 +65,5 @@ export class DisplayDrivingComponent implements OnInit {
   }
 
   cancelReservation() {
-
   }
 }

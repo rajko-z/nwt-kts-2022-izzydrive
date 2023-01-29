@@ -1,7 +1,7 @@
-package com.izzydrive.backend.service.driving.cancelation;
+package com.izzydrive.backend.service.driving.cancelation.regular;
 
 import com.izzydrive.backend.dto.CancellationReasonDTO;
 
-public interface DrivingCancellationService {
+public interface RegularDrivingCancellationService {
     void cancelRegularDriving(CancellationReasonDTO cancellationReasonDTO);
 }

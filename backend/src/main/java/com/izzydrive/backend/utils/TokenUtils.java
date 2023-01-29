@@ -59,7 +59,7 @@ public class TokenUtils {
     }
 
     private Date generateExpirationDate() {
-        return new Date(new Date().getTime() + jwtConfig.jwtExpiresIn());
+        return new Date(System.currentTimeMillis() + jwtConfig.jwtExpiresIn());
     }
 
 }

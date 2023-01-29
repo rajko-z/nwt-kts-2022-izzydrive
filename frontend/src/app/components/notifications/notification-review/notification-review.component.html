@@ -43,7 +43,7 @@
                 <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
                 <p class="text" *ngIf="option.notificationStatus === 'NEW_RESERVATION' || option.notificationStatus === 'REJECTED_RESERVATION'">
                   Reservation
-                  time: {{option.reservationTime[3] + ':' + option.reservationTime[4] + ' ' + option.reservationTime[2] + '-' + option.reservationTime[1] + '-' + option.reservationTime[0]}}
+                  time: {{option.reservationTime}}
                 </p>
               </div>
 
@@ -57,9 +57,7 @@
           </div>
           <div class="submit-item">
             <button class="submit-button" type="button" (click)="deleteNotification(option.id)">X</button>
-            <p
-              class="time">{{option.creationDate[3] + ':' + option.creationDate[4] + ' ' + option.creationDate[2] + '-' + option.creationDate[1] + '-' + option.creationDate[0]}}
-            </p>
+            <p class="time">{{option.creationDate}}</p>
             <div *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'" >
               <button class="submit-button" type="button" (click)="onYesClickChangeData(option.driverStr, option.id)">Accept</button>
               <button class="submit-button" type="button" (click)="onNoClickChangeData(option.driverStr, option.id)">Deny</button>

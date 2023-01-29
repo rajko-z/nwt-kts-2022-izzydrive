@@ -1,4 +1,4 @@
-package com.izzydrive.backend.service.driving.cancelation;
+package com.izzydrive.backend.service.driving.cancelation.regular;
 
 import com.izzydrive.backend.dto.CancellationReasonDTO;
 import com.izzydrive.backend.exception.BadRequestException;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class DrivingCancellationServiceImpl implements DrivingCancellationService {
+public class RegularDrivingCancellationServiceImpl implements RegularDrivingCancellationService {
 
     private final DriverService driverService;
 
@@ -59,9 +59,9 @@ public class DrivingCancellationServiceImpl implements DrivingCancellationServic
 
         if (cancellationPossible) {
             passengerService.deleteCurrentDrivingFromPassengers(driving.getPassengers());
-            drivingService.deleteDriving(driving.getId());
-            notificationService.sendNotificationRejectDrivingFromDriverToAdmin(adminService.findAdmin().getEmail(), driving, driver.getEmail(), cancellationReasonDTO.getText());
-            notificationService.sendNotificationRejectDrivingFromDriverToPassengers(driving.getPassengers().stream().map(Passenger::getEmail).collect(Collectors.toList()));
+            drivingService.delete(driving);
+            notificationService.sendNotificationCancelDrivingFromDriverToAdmin(adminService.findAdmin().getEmail(), driving, driver.getEmail(), cancellationReasonDTO.getText());
+            notificationService.sendNotificationCancelDrivingFromDriverToPassengers(driving.getPassengers().stream().map(Passenger::getEmail).collect(Collectors.toList()));
         } else {
             throw new BadRequestException(ExceptionMessageConstants.CANT_FIND_DRIVING_TO_CANCEL);
         }

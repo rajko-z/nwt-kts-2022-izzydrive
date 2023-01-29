@@ -125,9 +125,6 @@ public class PassengerServiceImpl implements PassengerService {
         }
         try {
             Driving currentDriving = this.drivingService.getDrivingByIdWithDriverRouteAndPassengers(passenger.getCurrentDriving().getId());
-            if (currentDriving.isRejected()) {
-                return null;
-            }
             List<Location> locations = this.drivingService.getDrivingWithLocations(passenger.getCurrentDriving().getId()).getLocations();
             return DrivingConverter.convertWithLocationsAndDriver(currentDriving, locations);
         } catch (OptimisticLockingFailureException e) {

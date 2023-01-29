@@ -22,13 +22,16 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
     @Query("select d from Driving d left join fetch d.passengers p left join fetch d.driver dr left join fetch d.route r left join fetch r.intermediateStations i where d.id = ?1")
     Driving getDrivingByIdWithDriverRouteAndPassengers(Long id);
 
+    @Query("select d from Driving d left join fetch d.allPassengers p left join fetch d.driver dr left join fetch d.route r left join fetch r.intermediateStations i where d.id = ?1")
+    Driving getReservationDrivingByIdWithDriverRouteAndPassengers(Long id);
+
     @Query("select d from Driving d left join fetch d.locations l where d.id = ?1")
     Driving getDrivingWithLocations(Long id);
 
     @Query("select d from Driving d where d.drivingState = 'PAYMENT'")
     List<Driving> getAllDrivingsInStatusPayment();
 
-    @Query("select d from Driving d join fetch d.allPassengers p where d.isReservation = true and d.deleted = false and p.id = ?1")
+    @Query("select d from Driving d join fetch d.allPassengers p where d.isReservation = true and p.id = ?1")
     List<Driving> getPassengerReservations(Long passengerId);
 
     @Query("select d from Driving d left join fetch d.passengers p where d.id = ?1")
@@ -49,13 +52,13 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
     List<Driving> getAllReservationWithDriverAndPassengers();
 
     @Query("select d from Driving d join fetch d.allPassengers p " +
-            "where d.deleted = false and d.startDate >= ?2 and d.endDate <= ?3 " +
+            "where d.startDate >= ?2 and d.endDate <= ?3 " +
             "and p.id = ?1 and d.drivingState = 'FINISHED' " +
             "order by  d.startDate")
     List<Driving> getDrivingReportForPassenger(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("select d from Driving d where d.driver.id = ?1  " +
-            "and d.deleted = false and d.startDate >= ?2 and d.endDate <= ?3 " +
+            "and d.startDate >= ?2 and d.endDate <= ?3 " +
             "and d.drivingState = 'FINISHED' " +
             "order by  d.startDate")
     List<Driving> getDrivingReportForDriver(Long userId, LocalDateTime startDate, LocalDateTime endDate);
@@ -75,5 +78,5 @@ public interface DrivingRepository extends JpaRepository<Driving, Long> {
             " left join r.intermediateStations i" +
             " left join fetch d.driver dr" +
             " where d.id = ?1")
-    Optional<Driving> findFinishedDrivingWithPassengersRouteAndDriver(Long id);
+    Optional<Driving> findFinishedOrReservedDrivingWithPassengersRouteAndDriver(Long id);
 }

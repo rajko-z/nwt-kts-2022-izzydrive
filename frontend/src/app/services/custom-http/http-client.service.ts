@@ -24,12 +24,6 @@ export class HttpClientService {
     });
   }
 
-  delete(url) {
-    return this.http.delete(url, {
-      headers: this.createHeader(),
-    });
-  }
-
   post(url, data) {
     return this.http.post(url, data, {
       headers: this.createHeader()
@@ -59,12 +53,6 @@ export class HttpClientService {
     return this.http.delete(url, {
       headers: this.createHeader(),
       responseType: 'text'
-    });
-  }
-
-  put(url, data) {
-    return this.http.put(url, data, {
-      headers: this.createHeader()
     });
   }
 

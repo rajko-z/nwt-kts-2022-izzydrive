@@ -28,5 +28,4 @@ export class PassengerService {
   reportDriver(): Observable<TextResponse> {
     return this.http.getT<TextResponse>(environment.apiUrl + 'passengers/report-driver');
   }
-
 }

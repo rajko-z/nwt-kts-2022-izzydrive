@@ -20,7 +20,7 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
-public class FinishedDrivingDetailsDTO {
+public class DrivingDetailsDTO {
     private Long id;
     private double price;
 
@@ -34,6 +34,12 @@ public class FinishedDrivingDetailsDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime endDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime scheduleDate;
+
+    private boolean reservation;
     private RouteDTO route;
     private Set<String> passengers;
     private DriverDTO driver;

@@ -88,26 +88,6 @@ export class UserService {
     )
   }
 
-  getProfilePhoto(username: string){
-    return this.http.get<string>(
-      environment.apiUrl + "users/profile-img/" +  username, environment.header
-    )
-  }
-
-  getProfilePhotoCurrentUser(){
-    let id: number = this.getCurrentUserId();
-    this.http.get(
-      environment.apiUrl + `users/profile-img/${id}`, {responseType: 'text'}
-    ).subscribe({
-      next: (response) =>{
-          return this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + response);
-      },
-      error: (response) =>{
-          return "/assets/404-error.png"
-      }
-    })
-  }
-
   getCurrrentUserDataWithImg(): Observable<User>{ //:Observable<User>
     return this.http.get<User>( //<User>
       environment.apiUrl + "users/" + this.getCurrentUserEmail() + "?image=true", environment.header
@@ -135,19 +115,6 @@ export class UserService {
   getUserData(email : string): Observable<User>{
     return this.http.get<User>(
       environment.apiUrl + "users/" + email)
-  }
-
-  getUserFirstAndLastName(email:string) : string {
-    this.http.get<User>(
-      environment.apiUrl + "users/" + this.getCurrentUserEmail()).subscribe({
-        next : (response) => {
-            return response.firstName + " " + response.lastName
-        },
-        error : (error) => {
-            console.log(error.error.message);
-        }
-      })
-    return "";
   }
 
   sendResetPasswordEmail(email : string):Observable<TextResponse>{

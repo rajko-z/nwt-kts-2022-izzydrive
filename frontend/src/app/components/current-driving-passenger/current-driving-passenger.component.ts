@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Driving, DrivingState, DrivingWithLocations} from "../../model/driving/driving";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ReportDriverCheckComponent} from "../report-driver-check/report-driver-check.component";
@@ -18,7 +18,7 @@ import {Router} from "@angular/router";
   templateUrl: './current-driving-passenger.component.html',
   styleUrls: ['./current-driving-passenger.component.scss']
 })
-export class CurrentDrivingPassengerComponent implements OnInit {
+export class CurrentDrivingPassengerComponent implements OnInit, OnDestroy {
 
   @Input() currentDriving?: DrivingWithLocations;
 
@@ -43,6 +43,12 @@ export class CurrentDrivingPassengerComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
+  }
+
+  ngOnDestroy(): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
 
   ngOnChanges(): void {

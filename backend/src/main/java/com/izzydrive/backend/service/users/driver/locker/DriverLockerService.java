@@ -14,4 +14,6 @@ public interface DriverLockerService {
     void lockDriverIfPossible(String driverEmail, String passengerEmail);
 
     boolean driverIsLocked(String driverEmail);
+
+    void save(DriverLocker driverLocker);
 }

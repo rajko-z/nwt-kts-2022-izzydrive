@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {UserService} from "../../services/userService/user-sevice.service";
-import {FinishedDrivingDetails} from "../../model/driving/driving";
+import {DrivingDetails} from "../../model/driving/driving";
 import {MapService} from "../../services/mapService/map.service";
 import {RouteDTO} from "../../model/route/route";
 import {RouteService} from "../../services/routeService/route.service";
@@ -16,14 +16,14 @@ import {Router} from "@angular/router";
 })
 export class DetailRideViewComponent implements OnInit {
 
-  driving?: FinishedDrivingDetails;
+  driving?: DrivingDetails;
 
   isDriverView?: boolean;
 
   isPassengerView?: boolean;
 
   constructor(
-    private dialogRef: MatDialogRef<FinishedDrivingDetails>,
+    private dialogRef: MatDialogRef<DrivingDetails>,
     @Inject(MAT_DIALOG_DATA) public drivingId : number,
     private snackBar: MatSnackBar,
     private drivingService: DrivingService,
@@ -39,10 +39,11 @@ export class DetailRideViewComponent implements OnInit {
       this.isPassengerView = true;
     }
 
-    this.drivingService.findFinishedDrivingDetailsById(this.drivingId)
+    this.drivingService.findDrivingDetailsById(this.drivingId)
       .subscribe({
           next: (response) => {
             this.driving = response;
+            console.log(response);
             this.showOnMap();
           },
           error: (error) => {

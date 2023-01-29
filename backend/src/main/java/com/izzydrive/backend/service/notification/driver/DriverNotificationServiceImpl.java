@@ -28,6 +28,11 @@ public class DriverNotificationServiceImpl implements DriverNotificationService 
     }
 
     @Override
+    public void sendReservationToDriver(DrivingDTOWithLocations payload) {
+        this.simpMessagingTemplate.convertAndSend("/driving/loadReservation", payload);
+    }
+
+    @Override
     public void deleteCurrentDrivingSignal(String driverEmail) {
         DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
         DriverDTO driverDTO = new DriverDTO();
@@ -43,5 +48,14 @@ public class DriverNotificationServiceImpl implements DriverNotificationService 
         driverDTO.setEmail(driverEmail);
         payload.setDriver(driverDTO);
         sendNextDrivingToDriver(payload);
+    }
+
+    @Override
+    public void deleteReservationSignal(String driverEmail) {
+        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(driverEmail);
+        payload.setDriver(driverDTO);
+        sendReservationToDriver(payload);
     }
 }

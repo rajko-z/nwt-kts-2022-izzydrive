@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { HttpClientService } from '../custom-http/http-client.service';
+import {Injectable} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {HttpClientService} from '../custom-http/http-client.service';
 import {DrivingWithLocations} from "../../model/driving/driving";
 import {TextResponse} from "../../model/response/textresponse";
 
@@ -44,5 +44,9 @@ export class DriverService {
 
   setDriverStatusToInactive() {
     return this.httpClientService.putT<TextResponse>(environment.apiUrl + 'working-intervals/set-driver-inactive',null);
+  }
+
+  getReservation() {
+    return this.httpClientService.getT<DrivingWithLocations>(environment.apiUrl + 'drivers/reservation');
   }
 }

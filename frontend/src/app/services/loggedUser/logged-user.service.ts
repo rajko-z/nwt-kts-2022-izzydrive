@@ -32,9 +32,7 @@ export class LoggedUserService {
   changePassword(payload: NewPassword) {
     return this.httpClientService.postT<TextResponse>(environment.apiUrl + 'users/change-password', payload);
   }
-  checkUserHasAccount(userEmail: string) {
-    return this.httpClientService.getWithText(environment.apiUrl);
-  }
+
   getAllUsers(){
     return this.httpClientService.getT<User[]>(environment.apiUrl + 'users');
   }

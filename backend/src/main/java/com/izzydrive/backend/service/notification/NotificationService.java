@@ -18,7 +18,7 @@ public interface NotificationService {
 
     void sendNotificationRejectDriving(List<String> passengersToSendNotifications, String startLocation, String endLocation);
 
-    void sendNotificationRejectDrivingFromDriverToAdmin(String adminEmail, Driving driving, String driverEmail, String reason);
+    void sendNotificationCancelDrivingFromDriverToAdmin(String adminEmail, Driving driving, String driverEmail, String reason);
 
     void sendNotificationForPaymentExpired(List<String> passengersToSendNotifications);
 
@@ -26,21 +26,19 @@ public interface NotificationService {
 
     void sendNotificationForPaymentSuccess(List<String> passengersToSendNotifications);
 
-    void sendNotificationCancelDriving(String passengerEmail, Driving driving);
+    void sendNotificationForCanceledReservation(String userEmail, Driving driving);
 
-    void sendNotificationNewDrivingDriver(String driverEmail);
+    void sendNotificationForNewDrivingToDriver(String driverEmail);
 
     void sendNotificationDriverArrivedAtStartLocation(Collection<String> passengersToSendNotifications);
 
     void reportDriverNotification(Passenger initiator);
 
-    void sendNotificationRejectDrivingFromDriverToPassengers(List<String> passengersToSendNotifications);
+    void sendNotificationCancelDrivingFromDriverToPassengers(List<String> passengersToSendNotifications);
 
     List<NotificationDTO> findAll();
 
     void deleteNotification(Long id);
-
-    void deleteNotificationFromAdmin(Long drivingId);
 
     void sendNotificationReservationReminder(Integer startMinutes, List<User> userForNotification);
 

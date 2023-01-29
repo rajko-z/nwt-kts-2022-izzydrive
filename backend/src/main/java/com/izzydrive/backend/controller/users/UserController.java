@@ -51,11 +51,6 @@ public class UserController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    @GetMapping("/profile-img/{id}")
-    public ResponseEntity<String> getUserProfileImage(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getProfileImage(id));
-    }
-
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DRIVER', 'ROLE_PASSENGER')")
     @PostMapping("/change-password")
     public ResponseEntity<TextResponse> changePassword(@RequestBody @Valid NewPasswordDTO newPasswordDTO) {

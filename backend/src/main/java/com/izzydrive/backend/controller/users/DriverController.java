@@ -54,4 +54,12 @@ public class DriverController {
         DrivingDTOWithLocations driving = driverService.getNextDriving();
         return new ResponseEntity<>(driving, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @GetMapping("reservation")
+    public ResponseEntity<DrivingDTOWithLocations> getReservation(){
+        DrivingDTOWithLocations driving = driverService.getReservation();
+        return new ResponseEntity<>(driving, HttpStatus.OK);
+    }
+
 }

@@ -2,7 +2,7 @@
   <div class="right-side-home-page">
     <div *ngIf="driving !== undefined">
       <div class="ride-summary">
-        <div class="first-line">
+        <div class="first-line" *ngIf="!driving?.reservation">
           <div class="location">
             <em class="fa-solid fa-hourglass-start"></em>
             <p class="location-title">Start date: {{driving.startDate}}</p>
@@ -16,6 +16,12 @@
           </div>
           <div *ngIf="this.isPassengerView">
             <button class="ride-button" mat-button (click)="getRide(driving.route, false)">Get ride later</button>
+          </div>
+        </div>
+        <div class="first-line" *ngIf="driving?.reservation">
+          <div class="location">
+            <em class="fa-solid fa-hourglass-start"></em>
+            <p class="location-title">Schedule time: {{driving.scheduleDate}}</p>
           </div>
         </div>
         <div class="first-line">
@@ -34,7 +40,7 @@
             </div>
             <div class="other-users" *ngFor="let pass of driving.passengers">
               <em class='fas fa-users'></em>
-              <p class="users-title">Passengers: <span>{{pass}}</span></p>
+              <p class="users-title">Passenger: <span>{{pass}}</span></p>
             </div>
             <div class="location">
               <em class="fa-solid fa-long-arrow-right"></em>
@@ -83,16 +89,18 @@
         <div class="third-line">
           <p class="price-title">= <span class="price">{{driving.price}} RSD</span></p>
         </div>
-        <div>
-          <p><strong>Reviews</strong></p>
-          <p *ngIf="driving.evaluations?.length == 0">
-            There are no reviews for this ride
-          </p>
-        </div>
-        <div class="reviewBox" *ngFor="let e of driving.evaluations">
-          <p *ngIf="e.driverRate">Driver rate: {{e.driverRate}}</p>
-          <p *ngIf="e.driverRate">Vehicle rate: {{e.vehicleGrade}}</p>
-          <p>Comment: {{e.text}}</p>
+        <div *ngIf="!driving?.reservation">
+          <div>
+            <p><strong>Reviews</strong></p>
+            <p *ngIf="driving.evaluations?.length == 0">
+              There are no reviews for this ride
+            </p>
+          </div>
+          <div class="reviewBox" *ngFor="let e of driving.evaluations">
+            <p *ngIf="e.driverRate">Driver rate: {{e.driverRate}}</p>
+            <p *ngIf="e.driverRate">Vehicle rate: {{e.vehicleGrade}}</p>
+            <p>Comment: {{e.text}}</p>
+          </div>
         </div>
       </div>
     </div>

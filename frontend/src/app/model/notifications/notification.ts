@@ -11,9 +11,9 @@ export class NotificationM {
   intermediateLocations?: string[];
   duration?: number;
   price?: number;
-  reservationTime?: Date;
+  reservationTime?: string;
   notificationStatus: NotificationStatus;
-  creationDate: Date;
+  creationDate: string;
   driverEmail?:string;
   drivingId?:number;
   driverData: Driver;

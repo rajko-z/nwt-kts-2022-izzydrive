@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {Driving} from "../../model/driving/driving";
+import {Component, OnInit} from '@angular/core';
+import {Driving, DrivingWithLocations} from "../../model/driving/driving";
 import {environment} from "../../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import {DrivingService} from "../../services/drivingService/driving.service";
 import {UserService} from "../../services/userService/user-sevice.service";
+import {DriverService} from "../../services/driverService/driver.service";
+import {MapService} from "../../services/mapService/map.service";
 
 @Component({
   selector: 'app-reservation-page-driver',
@@ -12,10 +13,14 @@ import {UserService} from "../../services/userService/user-sevice.service";
   styleUrls: ['./reservation-page-driver.component.scss']
 })
 export class ReservationPageDriverComponent implements OnInit {
-  reservation?: Driving;
+  reservation?: DrivingWithLocations;
   private stompClient: any;
 
-  constructor(private drivingService: DrivingService, private userService: UserService) { }
+  constructor(
+    private driverService: DriverService,
+    private userService: UserService,
+    private mapService: MapService
+  ) { }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
@@ -38,22 +43,32 @@ export class ReservationPageDriverComponent implements OnInit {
 
   private onReservation() {
     this.stompClient.subscribe('/driving/loadReservation', (message: { body: string }) => {
-      const driving = JSON.parse(message.body);
-      if (driving.driverEmail === this.userService.getCurrentUserEmail()) {
+      const driving: DrivingWithLocations = JSON.parse(message.body);
+      if (driving.driver.email === this.userService.getCurrentUserEmail()) {
         this.reservation = driving
         if (this.reservation.id === null) {
           this.reservation = null;
         }
+        this.setUpMap();
       }
     });
   }
 
   private loadData() {
-    this.drivingService.getReservation().subscribe((res) => {
-      const driving: Driving = res as Driving;
-      if (driving.driverEmail === this.userService.getCurrentUserEmail()) {
+    this.driverService.getReservation().subscribe((driving) => {
+      if (driving && driving.driver.email === this.userService.getCurrentUserEmail()) {
         this.reservation = driving;
+        this.setUpMap();
       }
     });
   }
+
+  private setUpMap(): void {
+    this.mapService.resetEverythingOnMap();
+
+    if (this.reservation) {
+      this.mapService.addAllFromDriving(this.reservation);
+    }
+  }
+
 }

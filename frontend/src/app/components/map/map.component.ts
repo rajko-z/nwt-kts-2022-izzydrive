@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {geoJson, latLng, LayerGroup, Marker, marker, tileLayer} from "leaflet";
 import {MapService} from "../../services/mapService/map.service";
 import {PlaceOnMap} from "../../model/map/placeOnMap";
@@ -17,7 +17,9 @@ import {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
+
+  interval;
 
   options = {
     layers: [
@@ -53,6 +55,12 @@ export class MapComponent implements OnInit {
     this.mapService.toResetMapView.subscribe(_ =>  this.removeEverything());
   }
 
+  ngOnDestroy(): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  }
+
   private removeEverything() {
     delete this.startMarkerLayer;
     delete this.endMarkerLayer;
@@ -72,8 +80,7 @@ export class MapComponent implements OnInit {
   }
 
   private fetchNewDriverLocationsPeriodically() {
-    setInterval(() => this.fetchNewDriverLocationsAndAddToMap(), 2000);
-    //this.fetchNewDriverLocationsAndAddToMap();
+    this.interval = setInterval(() => this.fetchNewDriverLocationsAndAddToMap(), 2000);
   }
 
   private fetchNewDriverLocationsAndAddToMap() {

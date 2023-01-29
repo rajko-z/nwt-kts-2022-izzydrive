@@ -90,7 +90,6 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
         driving.setDistance(option.getStartToEndPath().getDistance());
         driving.setDuration(option.getStartToEndPath().getDuration());
         driving.setPrice(option.getPrice());
-        driving.setRejected(false);
         driving.setRoute(processingDrivingHelper.getRouteFromRequest(request.getDrivingFinderRequest()));
         driving.setPassengers(passengers);
         driving.setLocations(fromStartToEndLocations);

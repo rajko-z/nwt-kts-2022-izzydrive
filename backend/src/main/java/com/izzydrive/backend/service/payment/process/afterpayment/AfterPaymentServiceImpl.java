@@ -63,7 +63,7 @@ public class AfterPaymentServiceImpl implements AfterPaymentService {
         driverLockerService.unlockDriver(driving.getDriver().getEmail());
 
         notificationService.sendNotificationForPaymentSuccess(driving.getPassengers().stream().map(Passenger::getEmail).collect(Collectors.toList()));
-        notificationService.sendNotificationNewDrivingDriver(driving.getDriver().getEmail());
+        notificationService.sendNotificationForNewDrivingToDriver(driving.getDriver().getEmail());
     }
 
     private void changeDriverStatusAndStartNavigationSystem(Driving driving) {

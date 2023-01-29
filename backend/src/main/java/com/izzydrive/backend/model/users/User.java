@@ -59,9 +59,6 @@ public abstract class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column( nullable = false)
-    private Boolean connected = false;
-
     public Provider getProvider() {
         return provider;
     }

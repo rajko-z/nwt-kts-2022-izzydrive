@@ -194,7 +194,6 @@ export class RideDataFormComponent {
         dateTime.setDate(date.getDate() + 1);
       }
     }
-    console.log(this.formatDate(dateTime));
     return this.formatDate(dateTime);
   }
 
