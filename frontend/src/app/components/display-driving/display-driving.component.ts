@@ -63,7 +63,4 @@ export class DisplayDrivingComponent implements OnInit {
         }
       );
   }
-
-  cancelReservation() {
-  }
 }

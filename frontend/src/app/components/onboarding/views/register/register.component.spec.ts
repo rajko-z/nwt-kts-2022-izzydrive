@@ -8,6 +8,16 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {UserService} from "../../../../services/userService/user-sevice.service";
 
+
+function fillFormValid(component: BaseUserDataFormComponent) {
+  component.registerForm.controls['firstName'].setValue('Mila');
+  component.registerForm.controls['lastName'].setValue('Milovanovic');
+  component.registerForm.controls['email'].setValue('mila@gmail.com');
+  component.registerForm.controls['password'].setValue('12345678');
+  component.registerForm.controls['repeatedPassword'].setValue('12345678');
+  component.registerForm.controls['phoneNumber'].setValue('+381652228789');
+}
+
 fdescribe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
@@ -18,7 +28,7 @@ fdescribe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
+      declarations: [RegisterComponent, BaseUserDataFormComponent],
       imports: [HttpClientTestingModule, ReactiveFormsModule, MatSnackBarModule],
     }).compileComponents();
 
@@ -31,11 +41,12 @@ fdescribe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should be called with whatever the counter change emits', () => {
-  //   spyOn(component, 'onSubmit');
-  //   const counter = fixture.debugElement.query(By.directive(BaseUserDataFormComponent));
-  //   const cmp = counter.componentInstance;
-  //   cmp.onSubmit.emit(null);
-  //   expect(component.onSubmit).toHaveBeenCalledTimes(1);
-  // });
+  it('onSubmit should be called', () => {
+    spyOn(component, 'onSubmit');
+    const counter = fixture.debugElement.query(By.directive(BaseUserDataFormComponent));
+    const cmp = counter.componentInstance;
+    fillFormValid(cmp);
+    cmp.register.emit(cmp.registerForm); //register emit fromGroup
+    expect(component.onSubmit).toHaveBeenCalledTimes(1);
+  });
 });
