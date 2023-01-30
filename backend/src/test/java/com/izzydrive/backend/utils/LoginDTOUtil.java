@@ -6,7 +6,7 @@ import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.constants.UserConst;
 import com.izzydrive.backend.dto.LoginDTO;
 
-public class LoginDTOFactory {
+public class LoginDTOUtil {
 
     public static LoginDTO getDriverMika() {
         return new LoginDTO(DriverConst.D_MIKA_EMAIL, UserConst.PASSWORD);
@@ -19,4 +19,6 @@ public class LoginDTOFactory {
     public static LoginDTO getAdmin() {
         return new LoginDTO(AdminConst.ADMIN_EMAIL, UserConst.PASSWORD);
     }
+
+    public static LoginDTO getLoggedUserByEmail(String userEmail) {return new LoginDTO(userEmail, UserConst.PASSWORD);}
 }
