@@ -25,8 +25,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(registerForm: FormGroup): void {
     this.userService.registration(registerForm.value).subscribe(
       ({
-        next: (responce) => {
-          console.log(responce)
+        next: _ => {
         },
         error: (error) => {
           this.handleError(error.error, registerForm);
@@ -36,7 +35,7 @@ export class RegisterComponent implements OnInit {
   }
 
   handleError(errorData: { statusCode: number, message: string, timestamp: Date, errorField: number }, registerForm: FormGroup): void {
-    let errorLabel = this.errorHandler.customErrorCode[errorData.errorField]
+    const errorLabel = this.errorHandler.customErrorCode[errorData.errorField]
     if (errorLabel !== "other") {
       registerForm.controls[errorLabel].setErrors({'incorrect': true})
     } else {

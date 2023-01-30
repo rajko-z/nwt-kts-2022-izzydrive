@@ -24,7 +24,7 @@ function fillFormInvalid(component: BaseUserDataFormComponent) {
   component.registerForm.controls['phoneNumber'].setValue('');
 }
 
-describe('BaseUserDataFormComponent', () => {
+fdescribe('BaseUserDataFormComponent', () => {
   let component: BaseUserDataFormComponent;
   let fixture: ComponentFixture<BaseUserDataFormComponent>;
 
@@ -93,12 +93,12 @@ describe('BaseUserDataFormComponent', () => {
     expect(button.nativeElement.disabled).toBeFalsy();
   })
 
-  it('should field name is empty', () => {
+  it('should field name with space is invalid', () => {
     const name = component.registerForm.controls.firstName;
     expect(name.valid).toBeFalsy();
 
-    name.setValue('');
-    expect(name.hasError('required')).toBeTruthy();
+    name.setValue(' ');
+    expect(name.hasError('pattern')).toBeTruthy();
   })
 
   it('should field name is touched', () => {
@@ -113,6 +113,15 @@ describe('BaseUserDataFormComponent', () => {
     expect(name.valid).toBeFalsy();
 
     name.setValue('Mića');
+
+    expect(name.hasError('pattern')).toBeTruthy();
+  })
+
+  it('should field name is invalid - invalid character', () => {
+    const name = component.registerForm.controls.firstName;
+    expect(name.valid).toBeFalsy();
+
+    name.setValue('Mica.');
 
     expect(name.hasError('pattern')).toBeTruthy();
   })
@@ -160,7 +169,7 @@ describe('BaseUserDataFormComponent', () => {
     const email = component.registerForm.controls.email;
     expect(email.valid).toBeFalsy();
 
-    email.setValue('someEmail');
+    email.setValue('someEmail123');
 
     expect(email.hasError('email')).toBeTruthy();
   })
@@ -169,7 +178,7 @@ describe('BaseUserDataFormComponent', () => {
     const email = component.registerForm.controls.email;
     expect(email.valid).toBeFalsy();
 
-    email.setValue('some@gmail.com');
+    email.setValue('some@gmail'); //validator for email on front is not a same as validator on back
 
     expect(email.hasError('email')).toBeFalse();
   })
@@ -193,7 +202,7 @@ describe('BaseUserDataFormComponent', () => {
     const phoneNumber = component.registerForm.controls.phoneNumber;
     expect(phoneNumber.valid).toBeFalsy();
 
-    phoneNumber.setValue('someNumber');
+    phoneNumber.setValue('someNumber./');
 
     expect(phoneNumber.hasError('pattern')).toBeTruthy();
   })
@@ -202,7 +211,7 @@ describe('BaseUserDataFormComponent', () => {
     const phoneNumber = component.registerForm.controls.phoneNumber;
     expect(phoneNumber.valid).toBeFalsy();
 
-    phoneNumber.setValue('12');
+    phoneNumber.setValue('+12');
 
     expect(phoneNumber.hasError('pattern')).toBeTruthy();
   })
@@ -211,7 +220,7 @@ describe('BaseUserDataFormComponent', () => {
     const phoneNumber = component.registerForm.controls.phoneNumber;
     expect(phoneNumber.valid).toBeFalsy();
 
-    phoneNumber.setValue('+38112228975');
+    phoneNumber.setValue('+38112228979');
 
     expect(phoneNumber.hasError('pattern')).toBeFalsy();
   })

@@ -26,3 +26,12 @@ export class User{
         this.role = getRole[role];
     }
 }
+
+export class NewUser {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  password: string;
+  repeatedPassword: string;
+}
