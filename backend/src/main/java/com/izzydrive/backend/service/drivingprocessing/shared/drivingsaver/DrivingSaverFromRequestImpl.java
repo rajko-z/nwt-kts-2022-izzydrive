@@ -1,16 +1,22 @@
 package com.izzydrive.backend.service.drivingprocessing.shared.drivingsaver;
 
+import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
 import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.Location;
 import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.driving.DrivingService;
+import com.izzydrive.backend.service.drivingfinder.helper.DrivingFinderHelper;
 import com.izzydrive.backend.service.drivingprocessing.shared.helper.ProcessingDrivingHelper;
 import com.izzydrive.backend.service.users.driver.DriverService;
+import com.izzydrive.backend.service.users.driver.car.CarService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +38,10 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
     private final PassengerService passengerService;
 
     private final DriverService driverService;
+
+    private final DrivingFinderHelper drivingFinderHelper;
+
+    private final CarService carService;
 
     @Override
     @Transactional
@@ -78,18 +88,20 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
                                       Driver driver,
                                       Set<Passenger> passengers)
     {
-        DrivingOptionDTO option = request.getDrivingOption();
+        CalculatedRouteDTO fromStartToEnd = getRecalculatedFromStartToEndRoute(request);
+        double price = carService.calculatePrice(driver.getCar(), fromStartToEnd.getDistance());
+
         List<Location> fromStartToEndLocations =
-                option.getStartToEndPath().getCoordinates()
+                fromStartToEnd.getCoordinates()
                 .stream()
                 .map(l -> new Location(l.getLat(), l.getLon(), true))
                 .collect(Collectors.toList());
 
         Driving driving = new Driving();
         driving.setCreationDate(LocalDateTime.now());
-        driving.setDistance(option.getStartToEndPath().getDistance());
-        driving.setDuration(option.getStartToEndPath().getDuration());
-        driving.setPrice(option.getPrice());
+        driving.setDistance(fromStartToEnd.getDistance());
+        driving.setDuration(fromStartToEnd.getDuration());
+        driving.setPrice(price);
         driving.setRoute(processingDrivingHelper.getRouteFromRequest(request.getDrivingFinderRequest()));
         driving.setPassengers(passengers);
         driving.setLocations(fromStartToEndLocations);
@@ -105,5 +117,33 @@ public class DrivingSaverFromRequestImpl implements DrivingSaverFromRequest {
             p.setCurrentDriving(driving);
             passengerService.save(p);
         }
+    }
+
+    private CalculatedRouteDTO getRecalculatedFromStartToEndRoute(DrivingRequestDTO request) {
+        DrivingFinderRequestDTO dfRequest = request.getDrivingFinderRequest();
+        DrivingOptionDTO chosenOption = request.getDrivingOption();
+
+        List<CalculatedRouteDTO> routes = drivingFinderHelper.getCalculatedRoutesFromStartToEnd(
+                drivingFinderHelper.getAllPointsFromDrivingFinderRequest(dfRequest),
+                dfRequest.getOptimalDrivingType(),
+                dfRequest.getIntermediateStationsOrderType()
+        );
+
+        for (CalculatedRouteDTO route : routes) {
+            if (routesMatch(route, chosenOption.getStartToEndPath())) {
+                return route;
+            }
+        }
+        throw new BadRequestException(ExceptionMessageConstants.INVALID_ROUTE_PROVIDED);
+    }
+
+    private boolean routesMatch(CalculatedRouteDTO route1, CalculatedRouteDTO route2) {
+        if (route1.getDuration() != route2.getDuration()) {
+            return false;
+        }
+        if (route1.getDistance() != route2.getDistance()) {
+            return false;
+        }
+        return route1.getCoordinates().size() == route2.getCoordinates().size();
     }
 }

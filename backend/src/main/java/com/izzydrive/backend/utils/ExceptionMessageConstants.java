@@ -3,9 +3,9 @@ package com.izzydrive.backend.utils;
 public final class ExceptionMessageConstants {
 
 
-
     private ExceptionMessageConstants() {
     }
+
 
     public static final String INVALID_REPEATED_PASSWORD_MESSAGE = "Password and repeated password does not match";
     public static final String INVALID_PASSWORD_FORMAT_MESSAGE = "Password length must be minimum 8 characters";
@@ -58,6 +58,7 @@ public final class ExceptionMessageConstants {
     public static final String CANT_FINISH_DRIVING_THAT_NOT_ACTIVE = "You don't have active drivings to finish";
     public static final String CANT_FIND_DRIVING_TO_CANCEL = "Can't find driving to cancel";
     public static final String CANT_FIND_RESERVATION_TO_CANCEL = "Can't find reservation to cancel";
+    public static final String INVALID_ROUTE_PROVIDED = "Invalid route provided. Chosen route can't be recalculated from request";
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);
