@@ -308,11 +308,19 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDTO> findAll() {
+    public List<NotificationDTO> findAllForLoggedUser() {
         User user = userService.getCurrentlyLoggedUser();
         return notificationRepository.findAllByUserEmail(user.getEmail())
                 .stream().map(NotificationDTO::new)
                 .sorted((n1, n2) -> n2.getCreationDate().compareTo(n1.getCreationDate())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NotificationDTO> findAllForUserByEmail(String email) {
+        return notificationRepository.findAllByUserEmail(email)
+                .stream().map(NotificationDTO::new)
+                .sorted((n1, n2) -> n2.getCreationDate().compareTo(n1.getCreationDate()))
+                .collect(Collectors.toList());
     }
 
     @Override

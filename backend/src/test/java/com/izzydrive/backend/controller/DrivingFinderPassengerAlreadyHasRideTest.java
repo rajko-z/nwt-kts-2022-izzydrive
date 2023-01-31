@@ -5,7 +5,7 @@ import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.exception.ErrorMessage;
 import com.izzydrive.backend.model.car.CarAccommodation;
-import com.izzydrive.backend.utils.DrivingFinderRequestUtil;
+import com.izzydrive.backend.utils.DrivingFinderUtil;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.LoginDTOUtil;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:application.properties", "classpath:application-one-driver-free.properties" })
 public class DrivingFinderPassengerAlreadyHasRideTest {
 
@@ -45,7 +45,7 @@ public class DrivingFinderPassengerAlreadyHasRideTest {
         HttpHeaders headers = getLoginHeaderForUser(PassengerConst.P_JOHN_EMAIL);
 
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         Set<String> linkedPassengers = new HashSet<>(List.of(PassengerConst.P_BOB_EMAIL));
@@ -64,7 +64,7 @@ public class DrivingFinderPassengerAlreadyHasRideTest {
         HttpHeaders headers = getLoginHeaderForUser(PassengerConst.P_BOB_EMAIL);
 
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);

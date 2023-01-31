@@ -1,6 +1,7 @@
 package com.izzydrive.backend.utils;
 
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
+import com.izzydrive.backend.dto.map.LocationDTO;
 
 public class AddressesUtil {
 
@@ -30,5 +31,17 @@ public class AddressesUtil {
 
     public static AddressOnMapDTO getLocationOutsideOfNoviSad() {
         return new AddressOnMapDTO(19.9569769, 45.2980289, "Јована Јовановића Змаја, МЗ Каћ, Каћ, Град Нови Сад, Јужнобачки управни округ, Војводина, 21241, Србија");
+    }
+
+    public static LocationDTO getBanijskaLocation() {
+        return new LocationDTO(19.8000267,45.2421319);
+    }
+
+    public static AddressOnMapDTO getBulevarPatrijarhaPavla11Adress() {
+        return new AddressOnMapDTO(19.8197137,45.2396127, "11, Булевар патријарха Павла, Телеп, МЗ Јужни телеп, Нови Сад, Град Нови Сад, Јужнобачки управни округ, Војводина, 21102, Србија");
+    }
+
+    public static AddressOnMapDTO getBulevarPatrijarhaPavla5Address() {
+        return new AddressOnMapDTO(19.8204828,45.2394661, "5, Булевар патријарха Павла, Телеп, МЗ Јужни телеп, Нови Сад, Град Нови Сад, Јужнобачки управни округ, Војводина, 21102, Србија");
     }
 }

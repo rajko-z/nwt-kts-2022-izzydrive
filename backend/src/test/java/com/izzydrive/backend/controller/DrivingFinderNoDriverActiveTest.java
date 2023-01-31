@@ -3,7 +3,7 @@ package com.izzydrive.backend.controller;
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
-import com.izzydrive.backend.utils.DrivingFinderRequestUtil;
+import com.izzydrive.backend.utils.DrivingFinderUtil;
 import com.izzydrive.backend.utils.LoginDTOUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:application.properties", "classpath:application-no-driver-active.properties" })
 public class DrivingFinderNoDriverActiveTest {
 
@@ -41,7 +41,7 @@ public class DrivingFinderNoDriverActiveTest {
 
     @Test
     void should_return_zero_options_for_no_active_driver() {
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<DrivingOptionDTO[]> response = testRestTemplate

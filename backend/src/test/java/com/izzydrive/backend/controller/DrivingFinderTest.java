@@ -11,7 +11,7 @@ import com.izzydrive.backend.enumerations.OptimalDrivingType;
 import com.izzydrive.backend.exception.ErrorMessage;
 import com.izzydrive.backend.model.car.CarAccommodation;
 import com.izzydrive.backend.utils.AddressesUtil;
-import com.izzydrive.backend.utils.DrivingFinderRequestUtil;
+import com.izzydrive.backend.utils.DrivingFinderUtil;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.LoginDTOUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:application.properties"})
 public class DrivingFinderTest {
 
@@ -51,7 +51,7 @@ public class DrivingFinderTest {
 
     @Test
     void should_return_options_for_all_available_users() {
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<DrivingOptionDTO[]> response = testRestTemplate
@@ -68,7 +68,7 @@ public class DrivingFinderTest {
     void should_return_options_for_all_available_users_with_marko_as_first_option() {
         // driver marko@gmail.com only has food and baggage as option so it should be returned first
         CarAccommodation carAccommodation = new CarAccommodation(true, false, true, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
@@ -86,7 +86,7 @@ public class DrivingFinderTest {
         AddressOnMapDTO cvecara = AddressesUtil.getCvecaraDraganaBulevarCaraLazaraAddress();
         AddressOnMapDTO bulevarPatrijarha = AddressesUtil.getBulevarPatrijarhaPavla11Address();
 
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setIntermediateStationsOrderType(IntermediateStationsOrderType.SYSTEM_CALCULATE);
         request.setIntermediateLocations(Arrays.asList(promenada, bulevarPatrijarha, cvecara));
 
@@ -111,7 +111,7 @@ public class DrivingFinderTest {
     @Test
     void should_return_options_sorted_by_driver_arrival_time() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
@@ -129,7 +129,7 @@ public class DrivingFinderTest {
     @Test
     void should_return_options_sorted_by_price() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
         request.setOptimalDrivingType(OptimalDrivingType.CHEAPEST_RIDE);
 
@@ -148,7 +148,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_exp_max_number_of_linked_passengers() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         Set<String> linkedPassengers = new HashSet<>(Arrays.asList(PassengerConst.P_KATE_EMAIL, PassengerConst.P_NATASHA_EMAIL, PassengerConst.P_SARA_EMAIL, PassengerConst.P_BOB_EMAIL));
@@ -165,7 +165,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_exp_cant_link_yourself_to_ride() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         Set<String> linkedPassengers = new HashSet<>(List.of(PassengerConst.P_JOHN_EMAIL));
@@ -182,7 +182,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_error_size_of_intermediate_locations() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         AddressOnMapDTO i1 = AddressesUtil.getBulevarPatrijarhaPavla11Address();
@@ -202,7 +202,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_error_start_location_outside_of_novi_sad() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
         request.setStartLocation(AddressesUtil.getLocationOutsideOfNoviSad());
 
@@ -218,7 +218,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_error_end_location_outside_of_novi_sad() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
         request.setEndLocation(AddressesUtil.getLocationOutsideOfNoviSad());
 
@@ -233,7 +233,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_intermediate_location_outside_of_novi_sad() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
         request.setIntermediateLocations(List.of(AddressesUtil.getLocationOutsideOfNoviSad()));
 
@@ -248,7 +248,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_invalid_locations_uniqueness_for_names() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         AddressOnMapDTO promenada = AddressesUtil.getPromenadaAddress();
@@ -266,7 +266,7 @@ public class DrivingFinderTest {
     @Test
     void should_throw_invalid_locations_uniqueness_for_coordinates() {
         CarAccommodation carAccommodation = new CarAccommodation(false, false, false, false);
-        DrivingFinderRequestDTO request = DrivingFinderRequestUtil.getSimpleRequest();
+        DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
         request.setCarAccommodation(carAccommodation);
 
         AddressOnMapDTO i1 = new AddressOnMapDTO(19.8000299,45.2421329, "a1" );
