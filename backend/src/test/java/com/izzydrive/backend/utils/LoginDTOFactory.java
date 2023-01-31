@@ -12,8 +12,36 @@ public class LoginDTOFactory {
         return new LoginDTO(DriverConst.D_MIKA_EMAIL, UserConst.PASSWORD);
     }
 
+    public static LoginDTO getDriverMilan() {
+        return new LoginDTO(DriverConst.D_MILAN_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getDriverMarko() {
+        return new LoginDTO(DriverConst.D_MARKO_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getDriverPetar() {
+        return new LoginDTO(DriverConst.D_PETAR_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getDriverPredrag() {
+        return new LoginDTO(DriverConst.D_PREDRAG_EMAIL, UserConst.PASSWORD);
+    }
+
     public static LoginDTO getPassengerJohn() {
         return new LoginDTO(PassengerConst.P_JOHN_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getPassengerBob() {
+        return new LoginDTO(PassengerConst.P_BOB_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getPassengerSara() {
+        return new LoginDTO(PassengerConst.P_SARA_EMAIL, UserConst.PASSWORD);
+    }
+
+    public static LoginDTO getPassengerKate() {
+        return new LoginDTO(PassengerConst.P_KATE_EMAIL, UserConst.PASSWORD);
     }
 
     public static LoginDTO getAdmin() {
