@@ -7,12 +7,12 @@
   </div>
   <div *ngIf="!isUserLoggedIn()" style="flex-grow: 2;">
     <a routerLink="/anon/login"
-       class="sign_button"
+       class="sign_in_button"
        (click)="this.sign_up_clicked = true; this.sign_in_clicked = false "
        [ngStyle]="{color: this.sign_up_clicked ? '#B4BCDF' : 'white'}">
       Sign in
     </a>
-    <a routerLink="/anon/register" class="sign_button"
+    <a routerLink="/anon/register" class="sign_up_button"
        (click)="this.sign_up_clicked = false; this.sign_in_clicked = true "
        [ngStyle]="{color: this.sign_in_clicked ? '#B4BCDF' : 'white'}">
       Sign up
