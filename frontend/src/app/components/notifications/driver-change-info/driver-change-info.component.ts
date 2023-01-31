@@ -18,7 +18,7 @@ export class DriverChangeInfoComponent implements OnInit {
   private notificationService: NotificationService) { }
 
   ngOnInit(): void {
-    console.log(this.data)
+    console.log("aa", this.data)
   }
 
   onYesClick(){

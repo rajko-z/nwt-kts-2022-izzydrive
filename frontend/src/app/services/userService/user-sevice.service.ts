@@ -100,6 +100,7 @@ export class UserService {
   }
 
   changeUserData(user: User):Observable<TextResponse>{
+    console.log(user)
     let saveChanges : boolean = true;
     if (this.getRoleCurrentUserRole()=== Role.ROLE_DRIVER){
       saveChanges = false;
@@ -142,8 +143,6 @@ export class UserService {
   }
 
   adminRespondOnChanges(response: AdminRespondOnChanges){
-    console.log(response)
-    console.log(environment.apiUrl + 'users/response-changes');
     this.http.post(environment.apiUrl + 'users/response-changes', response).subscribe({
       next: (response) =>{
         console.log(response)

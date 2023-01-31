@@ -190,6 +190,7 @@ export class NotificationService {
 
   sendNotificationToAdimForDriverChangeData(stompClient) {
     stompClient.subscribe('/notification/driverChangeData', (message: { body: string }) => {
+      console.log(message)
         this.showNotificationComponent(message.body, DriverChangeInfoComponent);
       }
     );

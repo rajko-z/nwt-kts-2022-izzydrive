@@ -8,7 +8,9 @@ import com.izzydrive.backend.dto.UserDTO;
 import com.izzydrive.backend.email.EmailSender;
 import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.exception.NotFoundException;
+import com.izzydrive.backend.model.Image;
 import com.izzydrive.backend.model.users.User;
+import com.izzydrive.backend.repository.ImageRepository;
 import com.izzydrive.backend.repository.RoleRepository;
 import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.ImageService;
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     private final ConfirmationTokenService confirmationTokenService;
 
-    private final RoleRepository roleRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     @Transactional
@@ -121,22 +123,23 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessageConstants.userWithEmailDoesNotExist(userDTO.getEmail())));
 
         validateNewUserData(userDTO);
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-
         if (userDTO.getImageName() != null) {
-            imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
+            String imageName = imageService.convertImageFromBase64(userDTO.getImageName(), userDTO.getEmail());
+            Optional<Image> image = imageRepository.findByName(imageName);
+            if(image.isEmpty()){
+                Image newImage = imageRepository.save(new Image(imageName));
+                user.setImage(newImage);
+            }
         }
         if(saveChanges){
-            userRepository.save(user);
-            return true;
+            user.setEmail(userDTO.getEmail());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
         }
-        else{
-            return false;
-        }
+        userRepository.save(user);
 
+        return saveChanges;
     }
 
     @Override
