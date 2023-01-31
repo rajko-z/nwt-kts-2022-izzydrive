@@ -17,6 +17,7 @@ import {CarService} from 'src/app/services/carService/car.service';
 export class NotificationReviewComponent implements OnInit {
 
   notifications: NotificationM[];
+  carString: string = '';
 
   constructor (
     private notificationService: NotificationService,
@@ -96,7 +97,7 @@ export class NotificationReviewComponent implements OnInit {
     car.accommodations = tokens[9];
     car.driverEmail = tokens[11];
     car.id = Number(tokens[13]);
-    console.log(car);
     return car;
+
   }
 }

@@ -13,7 +13,6 @@
                                 
                         </mat-form-field>
 
-
                         <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
                             <mat-label>Last name</mat-label>
                             <input matInput
@@ -24,15 +23,6 @@
                                 
                         </mat-form-field>
                 </div>
-                <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
-                    <mat-label>Email</mat-label>
-                    <input matInput
-                        ngModel
-                        formControlName="email">
-                    <mat-error *ngIf="this.editForm.controls['email'].hasError('required')">Email is required</mat-error>
-                    <mat-error *ngIf="this.editForm.controls['email'].hasError('email')">Required format: you@email.com</mat-error>
-                
-                </mat-form-field>
 
                 <mat-form-field appearance="outline" style="flex: 1 1 auto;" >
                     <mat-label>Phone number</mat-label>

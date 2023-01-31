@@ -70,9 +70,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void convertImageFromBase64(String image, String email) {
+    public String convertImageFromBase64(String image, String email) {
         byte[] bytes = DatatypeConverter.parseBase64Binary(image);
-        savePhotoInFileSystem(bytes, email);
+        return savePhotoInFileSystem(bytes, email);
     }
 
     public String convertImageToBase64(Image img) {
