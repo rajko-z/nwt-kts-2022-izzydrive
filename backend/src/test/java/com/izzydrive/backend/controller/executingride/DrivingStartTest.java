@@ -1,4 +1,4 @@
-package com.izzydrive.backend.controller;
+package com.izzydrive.backend.controller.executingride;
 
 import com.izzydrive.backend.dto.LoginDTO;
 import com.izzydrive.backend.dto.TextResponse;
@@ -8,17 +8,12 @@ import com.izzydrive.backend.exception.ErrorMessage;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.users.driver.DriverService;
-import com.izzydrive.backend.utils.LoginDTOFactory;
+import com.izzydrive.backend.utils.LoginDTOUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Objects;
@@ -26,7 +21,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = {"classpath:application.properties", "classpath:application-start-driving.properties"})
 public class DrivingStartTest {
 
@@ -38,7 +33,7 @@ public class DrivingStartTest {
 
     @Test
     void should_start_driving_is_success() {
-        HttpHeaders headers = logInUsers(LoginDTOFactory.getDriverMika());
+        HttpHeaders headers = logInUsers(LoginDTOUtil.getDriverMika());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<TextResponse> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, TextResponse.class);
@@ -54,7 +49,7 @@ public class DrivingStartTest {
 
     @Test
     void should_throw_epx_driver_do_not_have_current_waiting_driving_to_start_when_driver_do_not_has_driving() {
-        HttpHeaders headers = logInUsers(LoginDTOFactory.getDriverPredrag());
+        HttpHeaders headers = logInUsers(LoginDTOUtil.getDriverPredrag());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, ErrorMessage.class);
@@ -65,7 +60,7 @@ public class DrivingStartTest {
 
     @Test
     void should_throw_epx_driver_do_not_have_current_waiting_driving_to_start_when_driver_has_current_driving_status_other_then_waiting() {
-        HttpHeaders headers = logInUsers(LoginDTOFactory.getDriverMilan()); //has current driving in state - PAYMENT
+        HttpHeaders headers = logInUsers(LoginDTOUtil.getDriverMilan()); //has current driving in state - PAYMENT
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, ErrorMessage.class);
@@ -76,7 +71,7 @@ public class DrivingStartTest {
 
     @Test
     void should_throw_epx_cant_start_driving_not_at_location_when_driver_do_not_arrived_at_start_location() {
-        HttpHeaders headers = logInUsers(LoginDTOFactory.getDriverPetar());
+        HttpHeaders headers = logInUsers(LoginDTOUtil.getDriverPetar());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, ErrorMessage.class);
@@ -87,7 +82,7 @@ public class DrivingStartTest {
 
     @Test
     void should_throw_epx_user_does_not_has_role_driver() {
-        HttpHeaders headers = logInUsers(LoginDTOFactory.getPassengerJohn());
+        HttpHeaders headers = logInUsers(LoginDTOUtil.getPassengerJohn());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, ErrorMessage.class);

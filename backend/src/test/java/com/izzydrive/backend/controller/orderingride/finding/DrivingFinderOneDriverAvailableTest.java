@@ -1,5 +1,6 @@
-package com.izzydrive.backend.controller;
+package com.izzydrive.backend.controller.orderingride.finding;
 
+import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
@@ -19,8 +20,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = { "classpath:application.properties", "classpath:application-no-driver-active.properties" })
-public class DrivingFinderNoDriverActiveTest {
+@TestPropertySource(locations = { "classpath:application.properties", "classpath:application-one-driver-free.properties" })
+public class DrivingFinderOneDriverAvailableTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -40,15 +41,17 @@ public class DrivingFinderNoDriverActiveTest {
     }
 
     @Test
-    void should_return_zero_options_for_no_active_driver() {
+    void should_return_one_option_for_one_free_driver() {
         DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<DrivingOptionDTO[]> response = testRestTemplate
                 .exchange("/drivings/finder/advanced",  HttpMethod.POST, httpEntity, DrivingOptionDTO[].class);
 
-
         List<DrivingOptionDTO> options = Arrays.asList(response.getBody());
-        assertEquals(0, options.size());
+
+        for (DrivingOptionDTO o : options) {
+            assertEquals(DriverConst.D_MARKO_EMAIL, o.getDriver().getEmail());
+        }
     }
 }

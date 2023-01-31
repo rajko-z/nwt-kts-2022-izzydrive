@@ -1,4 +1,4 @@
-package com.izzydrive.backend.controller;
+package com.izzydrive.backend.controller.orderingride.finding;
 
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
@@ -19,8 +19,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = { "classpath:application.properties", "classpath:application-no-driver-available.properties" })
-public class DrivingFinderNoAvailableDriverTest {
+@TestPropertySource(locations = { "classpath:application.properties", "classpath:application-no-driver-active.properties" })
+public class DrivingFinderNoDriverActiveTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -40,7 +40,7 @@ public class DrivingFinderNoAvailableDriverTest {
     }
 
     @Test
-    void should_return_zero_options_for_no_available_driver() {
+    void should_return_zero_options_for_no_active_driver() {
         DrivingFinderRequestDTO request = DrivingFinderUtil.getSimpleRequest();
 
         HttpEntity<DrivingFinderRequestDTO> httpEntity = new HttpEntity<>(request, headers);
@@ -51,6 +51,4 @@ public class DrivingFinderNoAvailableDriverTest {
         List<DrivingOptionDTO> options = Arrays.asList(response.getBody());
         assertEquals(0, options.size());
     }
-
 }
-
