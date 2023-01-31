@@ -72,7 +72,7 @@ public class PassengerServiceImpl implements PassengerService {
             passenger.setBlocked(false);
             passenger.setActivated(false);
             passenger.setRole(roleRepository.findByName("ROLE_PASSENGER").get(0));
-
+            passengerRepository.save(passenger);
 
             String token = UUID.randomUUID().toString();
             confirmationTokenService.createVerificationToken(passenger, token);

@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
     this.userService.registration(registerForm.value).subscribe(
       ({
         next: _ => {
+          this.messageTooltip.open("We sent you an email to verify your account")
         },
         error: (error) => {
           this.handleError(error.error, registerForm);
