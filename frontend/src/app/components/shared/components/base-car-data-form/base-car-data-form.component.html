@@ -57,9 +57,9 @@
           </section>
 
       <div class="button-container">
-        <button mat-button [disabled]="isDisabled"
+        <button mat-button [disabled]="this.carForm.invalid"
             matTooltip="Info about the action"
-            [ngClass] = "{'disabled_large_btn': isDisabled,  'large_button': !isDisabled}"
+            [ngClass] = "{'disabled_large_btn': this.carForm.invalid,  'large_button': !this.carForm.invalid}"
             type="submit">Save
         </button>
     </div>
