@@ -26,7 +26,9 @@ export class RegisterComponent implements OnInit {
     this.userService.registration(registerForm.value).subscribe(
       ({
         next: _ => {
-          this.messageTooltip.open("We sent you an email to verify your account")
+          console.log("tuu")
+          this.messageTooltip.open("We sent you an email to verify your account", "OK")
+          this.router.navigateByUrl("/anon/login")
         },
         error: (error) => {
           this.handleError(error.error, registerForm);
@@ -37,11 +39,8 @@ export class RegisterComponent implements OnInit {
 
   handleError(errorData: { statusCode: number, message: string, timestamp: Date, errorField: number }, registerForm: FormGroup): void {
     const errorLabel = this.errorHandler.customErrorCode[errorData.errorField]
-    if (errorLabel !== "other") {
-      registerForm.controls[errorLabel].setErrors({'incorrect': true})
-    } else {
-      this.openErrorMessage(errorData.message);
-    }
+    this.openErrorMessage(errorData.message);
+
   }
 
   openErrorMessage(message: string): void {

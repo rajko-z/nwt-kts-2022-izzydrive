@@ -34,9 +34,11 @@ export class AddDriverComponent implements OnInit {
     stepper.selected.completed = true;
     this.isValidDriverForm = true;
     stepper.next();
+    console.log(stepper)
   }
 
   onSecondStepNext(carData: FormGroup, stepper: MatStepper){
+    this.addingFinished = false;
     this.carForm = carData;
     this.isValidCarForm = true;
     stepper.next();

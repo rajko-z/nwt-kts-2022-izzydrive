@@ -28,7 +28,7 @@ public class PassengerController {
     @PostMapping("/registration")
     public ResponseEntity<Object> registerPassenger(@RequestBody NewPassengerDTO newPassengerData)  {
         passengerService.registerPassenger(newPassengerData);
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok(new TextResponse("Success"));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

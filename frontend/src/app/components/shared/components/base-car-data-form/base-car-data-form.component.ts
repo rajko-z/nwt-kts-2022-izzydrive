@@ -54,8 +54,6 @@ export class BaseCarDataFormComponent implements OnInit {
         this.carAccommodation.controls.pet.setValue(this.existingCarData.carAccommodation.pet)
       }
     }
-
-    console.log(this.carForm.invalid)
-    this.isDisabled = this.driverForm? this.carForm.invalid || this.driverForm.invalid : this.carForm.invalid;
+    this.isDisabled = this.carForm.invalid;
   }
 }
