@@ -64,10 +64,10 @@ public class DriverAvailabilityRegularValidatorImpl implements DriverAvailabilit
         if (currStat.equals(DriverStatus.RESERVED)) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
-        if (currStat.equals(DriverStatus.FREE) && driverCurrentLocationNotInLocations(driver, previousLocations)) {
+        if (prevStat.equals(DriverStatus.FREE) && !currStat.equals(DriverStatus.FREE)) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
-        if (prevStat.equals(DriverStatus.FREE) && !currStat.equals(DriverStatus.FREE)) {
+        if (currStat.equals(DriverStatus.FREE) && driverCurrentLocationNotInLocations(driver, previousLocations)) {
             throw new BadRequestException(ExceptionMessageConstants.DRIVER_NO_LONGER_AVAILABLE);
         }
         if (prevStat.equals(DriverStatus.ACTIVE)) {
