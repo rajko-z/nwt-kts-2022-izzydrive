@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/logged')
     },
       error: (error )=> {
-          this.responseMessage.openErrorMessage(error.error.message);
+          this.responseMessage.openErrorMessage("Login failed. You are not register");
     }
   })
   }
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('')
         },
         error: (error) => {
-          this.responseMessage.openErrorMessage(error.error.message);
+          this.responseMessage.openErrorMessage("Login failed. You are not register");
         }
       })
   }
