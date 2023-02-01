@@ -24,7 +24,7 @@ public class NotificationController {
     @GetMapping(value = "")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PASSENGER', 'ROLE_DRIVER')")
     public ResponseEntity<List<NotificationDTO>> findAllNotifications() {
-        List<NotificationDTO> notifications = notificationService.findAll();
+        List<NotificationDTO> notifications = notificationService.findAllForLoggedUser();
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 

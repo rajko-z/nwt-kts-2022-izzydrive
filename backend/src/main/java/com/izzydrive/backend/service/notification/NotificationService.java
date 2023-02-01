@@ -36,7 +36,9 @@ public interface NotificationService {
 
     void sendNotificationCancelDrivingFromDriverToPassengers(List<String> passengersToSendNotifications);
 
-    List<NotificationDTO> findAll();
+    List<NotificationDTO> findAllForLoggedUser();
+
+    List<NotificationDTO> findAllForUserByEmail(String email);
 
     void deleteNotification(Long id);
 
