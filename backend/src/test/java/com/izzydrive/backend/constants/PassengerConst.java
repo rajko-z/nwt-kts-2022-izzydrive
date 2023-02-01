@@ -6,6 +6,6 @@ public class PassengerConst {
     public static final String P_BOB_EMAIL = "bob@gmail.com";
     public static final String P_SARA_EMAIL = "sara@gmail.com";
     public static final String P_KATE_EMAIL = "kate@gmail.com";
-
+    public static final String P_NOT_EXISTING_EMAIL = "anon@gmail.com";
     public static final int PASSENGERS_COUNT = 5;
 }
