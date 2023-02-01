@@ -12,8 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -39,7 +38,7 @@ public class DriverNotificationServiceTest {
         payload.setDriver(driverDTO);
 
         driverNotificationService.deleteCurrentDrivingSignal(DRIVER_EMAIL);
-        verify(simpMessagingTemplate, times(1)).convertAndSend((String) any(), (Object) any());
+        verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/driving/loadCurrentDriving"), (Object) any());
 
     }
     @Test
@@ -49,8 +48,13 @@ public class DriverNotificationServiceTest {
         driverDTO.setEmail(DRIVER_EMAIL);
         payload.setDriver(driverDTO);
         driverNotificationService.deleteNextDrivingSignal(DRIVER_EMAIL);
-        verify(simpMessagingTemplate, times(1)).convertAndSend((String) any(), (Object) any());
+        verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/driving/loadNextDriving"), (Object) any());
 
+    }
+    @Test
+    public void should_delete_reservation_signal() {
+        driverNotificationService.deleteReservationSignal(DRIVER_EMAIL);
+        verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/driving/loadReservation"), (Object) any());
     }
 
 }
