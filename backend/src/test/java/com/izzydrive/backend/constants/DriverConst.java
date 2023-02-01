@@ -8,4 +8,6 @@ public class DriverConst {
     public static final String D_MARKO_EMAIL = "marko@gmail.com";
 
     public static final int DRIVERS_COUNT = 5;
+
+    public static final Long D_MIKA_ID = 2L;
 }

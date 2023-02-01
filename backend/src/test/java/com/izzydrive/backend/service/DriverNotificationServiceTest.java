@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -30,23 +32,25 @@ public class DriverNotificationServiceTest {
 
     @Test
     public void should_call_delete_current_driving_signal(){
-//        driverNotificationService.deleteCurrentDrivingSignal(DRIVER_EMAIL);
-//        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
-//        DriverDTO driverDTO = new DriverDTO();
-//        driverDTO.setEmail(DRIVER_EMAIL);
-//        payload.setDriver(driverDTO);
-//        verify(simpMessagingTemplate, times(1)).convertAndSend("/driving/loadCurrentDriving", payload);
-//        verify(driverNotificationService, times(1)).sendNextDrivingToDriver(payload);
+
+        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(DRIVER_EMAIL);
+        payload.setDriver(driverDTO);
+
+        driverNotificationService.deleteCurrentDrivingSignal(DRIVER_EMAIL);
+        verify(simpMessagingTemplate, times(1)).convertAndSend((String) any(), (Object) any());
+
     }
     @Test
     public void should_call_delete_next_driving_signal(){
-//        driverNotificationService.deleteNextDrivingSignal(DRIVER_EMAIL);
-//        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
-//        DriverDTO driverDTO = new DriverDTO();
-//        driverDTO.setEmail(DRIVER_EMAIL);
-//        payload.setDriver(driverDTO);
-//        verify(simpMessagingTemplate, times(1)).convertAndSend("/driving/loadCurrentDriving", payload);
-//        verify(driverNotificationService, times(1)).sendNextDrivingToDriver(payload);
+        DrivingDTOWithLocations payload = new DrivingDTOWithLocations();
+        DriverDTO driverDTO = new DriverDTO();
+        driverDTO.setEmail(DRIVER_EMAIL);
+        payload.setDriver(driverDTO);
+        driverNotificationService.deleteNextDrivingSignal(DRIVER_EMAIL);
+        verify(simpMessagingTemplate, times(1)).convertAndSend((String) any(), (Object) any());
+
     }
 
 }

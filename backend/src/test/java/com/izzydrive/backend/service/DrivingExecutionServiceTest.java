@@ -1,5 +1,7 @@
 package com.izzydrive.backend.service;
 
+import com.izzydrive.backend.constants.DriverConst;
+import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.dto.RouteDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
@@ -12,19 +14,15 @@ import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.model.users.driver.DriverStatus;
 import com.izzydrive.backend.service.driving.DrivingService;
-import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionServiceImpl;
 import com.izzydrive.backend.service.navigation.NavigationService;
 import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
 import com.izzydrive.backend.service.notification.passenger.PassengerNotificationServiceImpl;
-import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,15 +30,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
+import static com.izzydrive.backend.utils.HelperMapper.mockLocationsDTO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import org.slf4j.Logger;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class StopCurrentDrivingTest {
+public class DrivingExecutionServiceTest {
 
     @Autowired
     @InjectMocks
@@ -73,15 +71,11 @@ public class StopCurrentDrivingTest {
     private static Long INVALID_DRIVING_ID = Long.valueOf(3);
     private static Long NO_MATCHING_DRIVING_ID = Long.valueOf(3);
 
-    private static String PASSENGER_EMAIL1 = "natasha.lakovic@gmail.com";
-    private static String PASSENGER_EMAIL2 = "john@gmail.com";
-    private static String DRIVER_EMAIL = "mika@gmail.com";
-
 
     @Test
     public void should_be_driver_status_free_when_next_driving_is_null(){
         Driving driving = this.mockDriving(CURRENT_DRIVING_ID, DrivingState.WAITING);
-        Driver driver = this.mockDriver(DRIVER_EMAIL, driving, true, null);  //next driving is null
+        Driver driver = this.mockDriver(DriverConst.D_MIKA_EMAIL, driving, true, null);  //next driving is null
         Mockito.when(drivingService.findById(CURRENT_DRIVING_ID)).thenReturn(Optional.of(driving));
 
         this.drivingExecutionService.stopCurrentDrivingAndMoveToNextIfExist(driver);
@@ -95,7 +89,7 @@ public class StopCurrentDrivingTest {
     public void should_be_driver_status_taken_when_next_driving_is_not_null(){
         Driving currentDriving = this.mockDriving(CURRENT_DRIVING_ID, DrivingState.ACTIVE);
         Driving nextDriving = this.mockDriving(NEXT_DRIVING_ID, DrivingState.WAITING);
-        Driver driver = this.mockDriver(DRIVER_EMAIL, currentDriving, true, nextDriving);  //next driving is not null
+        Driver driver = this.mockDriver(DriverConst.D_MIKA_EMAIL, currentDriving, true, nextDriving);  //next driving is not null
         Mockito.when(drivingService.findById(CURRENT_DRIVING_ID)).thenReturn(Optional.of(currentDriving));
         Mockito.when(drivingService.findById(NEXT_DRIVING_ID)).thenReturn(Optional.of(nextDriving));
         Mockito.when(drivingService.getDrivingWithLocations(nextDriving.getId())).thenReturn(nextDriving);
@@ -109,12 +103,8 @@ public class StopCurrentDrivingTest {
         CalculatedRouteDTO calculatedRouteDTO = new CalculatedRouteDTO();
         calculatedRouteDTO.setDuration(10);
         calculatedRouteDTO.setDistance(1200);
-        List<LocationDTO> cordinates = new ArrayList<>();
-        cordinates.add(new LocationDTO(19.812617, 45.231324));
-        cordinates.add(new LocationDTO(19.812177, 45.23104));
-        cordinates.add(new LocationDTO(19.809474, 45.231311));
-        cordinates.add(new LocationDTO(19.809645, 45.23218));
-        calculatedRouteDTO.setCoordinates(cordinates);
+        List<LocationDTO> coordinates = mockLocationsDTO();
+        calculatedRouteDTO.setCoordinates(coordinates);
         Mockito.when(driverRoutesService.getCurrentRouteFromDriverLocationToStart(driver, drivingDTOWithLocations.getRoute().getStart())).thenReturn(calculatedRouteDTO);
 
         this.drivingExecutionService.stopCurrentDrivingAndMoveToNextIfExist(driver);
@@ -128,17 +118,14 @@ public class StopCurrentDrivingTest {
         verify(navigationService, times(1)).startNavigationForDriver(drivingDTOWithLocations, true);
     }
 
-
-
-
     private Driving mockDriving(Long id, DrivingState drivingState){
         Driving driving = new Driving();
         driving.setId(id);
         driving.setDrivingState(drivingState);
         driving.setReservation(false);
         Set<Passenger> passengers = new HashSet<>();
-        passengers.add(this.mockPassenger(PASSENGER_EMAIL1));
-        passengers.add(this.mockPassenger(PASSENGER_EMAIL2));
+        passengers.add(this.mockPassenger(PassengerConst.P_BOB_EMAIL));
+        passengers.add(this.mockPassenger(PassengerConst.P_JOHN_EMAIL));
         driving.setPassengers(passengers);
         return driving;
     }
