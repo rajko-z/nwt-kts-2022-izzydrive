@@ -7,15 +7,10 @@ import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.Admin;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.driver.Driver;
-import com.izzydrive.backend.repository.DrivingRepository;
-import com.izzydrive.backend.repository.users.driver.DriverRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.cancelation.regular.RegularDrivingCancellationServiceImpl;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
-import com.izzydrive.backend.service.navigation.NavigationService;
 import com.izzydrive.backend.service.notification.NotificationService;
-import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
-import com.izzydrive.backend.service.notification.passenger.PassengerNotificationService;
 import com.izzydrive.backend.service.users.admin.AdminService;
 import com.izzydrive.backend.service.users.driver.DriverServiceImpl;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
@@ -41,23 +36,9 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(SpringExtension.class)
 public class CancelRegularDrivingTest {
 
-    @Mock
-    private DriverRepository driverRepository;
-
-    @Mock
-    private DrivingRepository drivingRepository;
-
     @MockBean
     private DrivingExecutionService drivingExecutionService;
 
-    @MockBean
-    private NavigationService navigationService;
-
-    @MockBean
-    private DriverNotificationService driverNotificationService;
-
-    @MockBean
-    private PassengerNotificationService passengerNotificationService;
 
     @MockBean
     private PassengerService passengerService;
@@ -77,10 +58,6 @@ public class CancelRegularDrivingTest {
     @Autowired
     @InjectMocks
     private RegularDrivingCancellationServiceImpl regularDrivingCancellationService;
-
-    @Captor
-    private ArgumentCaptor<String> captor;
-
 
     private static String REASON = "I want to cancel driving";
     private static Long CURRENT_DRIVING_ID = Long.valueOf(1);
