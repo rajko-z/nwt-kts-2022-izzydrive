@@ -139,7 +139,7 @@
   height: 5vh;
   margin: 1% 0 0 0;
 
-  .submit-button {
+  .submit-button, .submit-button-next {
     @include buttonStyle();
     width: 20%;
   }
@@ -170,4 +170,9 @@
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.message-no-available{
+  font-size: 18px;
+  font-weight: bold;
 }

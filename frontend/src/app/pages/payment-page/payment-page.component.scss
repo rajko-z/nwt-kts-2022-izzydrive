@@ -12,14 +12,14 @@
   font-size: 20px;
 }
 
-.submit-items{
+.submit-items {
   @include size(auto, 5vh);
   display: flex;
   justify-content: center;
   flex-direction: row;
   margin: 2%;
 
-  .submit-button{
+  .submit-button-approve-payment, .submit-button-cancel-payment {
     @include buttonStyle();
     @include size(15%, auto);
     margin-right: 1%;
@@ -48,12 +48,12 @@
 }
 
 ::ng-deep .mat-tooltip {
-  font-size: 15px!important;
+  font-size: 15px !important;
 }
 
 .blur {
   color: transparent;
-  text-shadow: 0 0 8px rgba(0,0,0,0.5);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
 
 .mat-form-field {

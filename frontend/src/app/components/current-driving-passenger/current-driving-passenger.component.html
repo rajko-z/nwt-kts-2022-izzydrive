@@ -1,5 +1,6 @@
 <div *ngIf="currentDriving !== undefined && currentDriving !== undefined">
   <div class="ride-summary">
+    <h1>Current driving</h1>
     <div class="first-line">
       <div class="destination-info">
         <div class="location">
@@ -30,7 +31,7 @@
       </div>
       <div class="time-info" *ngIf="!drivingActive && !waitingForRideToStart">
         <p class="time-title">Driver comes for:</p>
-        <p class="minutes">{{minLeft}}min</p>
+        <p class="minutes"><span class="minute">{{minLeft}}</span>min</p>
       </div>
     </div>
     <div class="second-line">
