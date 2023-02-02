@@ -25,6 +25,7 @@ public class HelperMapper {
         passengers.add(mockPassenger(PassengerConst.P_BOB_EMAIL));
         passengers.add(mockPassenger(PassengerConst.P_JOHN_EMAIL));
         driving.setPassengers(passengers);
+        driving.setAllPassengers(new ArrayList<>(passengers));
         return driving;
     }
 
