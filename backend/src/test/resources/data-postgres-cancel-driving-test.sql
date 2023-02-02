@@ -40,7 +40,7 @@ VALUES
 insert into routes(start_id, end_id)
 values
     (1,2),
-    (3,4),
+    (5,8),
     (5,8),
     (1,2),
     (3,4),
@@ -62,8 +62,8 @@ values
 --Drivers
 insert into drivers (id, activated, blocked, email, first_name, last_name, password, phone_number, address_id, image_id, role_id, active, driver_status, car_id, current_driving_id, next_driving_id, reserved_from_client_driving_id)
 values
-    (nextval('users_id_gen'), true, false, 'mika@gmail.com', 'Mika', 'Mikic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511888', 1, null, 2, true, 'ACTIVE', 1, null, null, null), --ne moze da otkaze jer je ACTIVE status
-    (nextval('users_id_gen'), true, false, 'predrag@gmail.com', 'Predrag', 'Macogovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511877', 1, null, 2, true, 'TAKEN', 8, null,null,null),--moze da otkaze
+    (nextval('users_id_gen'), true, false, 'mika@gmail.com', 'Mika', 'Mikic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511888', 1, null, 2, true, 'TAKEN', 1, null, null, null), --ne moze da otkaze jer je ACTIVE status
+    (nextval('users_id_gen'), true, false, 'predrag@gmail.com', 'Predrag', 'Macogovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511877', 1, null, 2, true, 'FREE', 8, null,null,null),--moze da otkaze
     (nextval('users_id_gen'), true, false, 'milan@gmail.com', 'Milan', 'Maric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511811', 1, null, 2, true, 'FREE', 2, null ,null,null),
     (nextval('users_id_gen'), true, false, 'petar@gmail.com', 'Petar', 'Ilic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511822', 1, null, 2, true, 'FREE', 3, null,null,null),
     (nextval('users_id_gen'), true, false, 'marko@gmail.com', 'Marko', 'Lekovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511337', 1, null, 2, true, 'FREE', 4,null,null,null),
@@ -115,8 +115,8 @@ UPDATE passengers SET current_driving_id=1 WHERE id=11;
 
 -- 3.  heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (3164.2, 'WAITING', 317.5, null, false, null, 550, '2023-01-08 14:30:00', 3, 2, null, false, 1, 0, 0);
+    creation_date, distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
+VALUES ('2023-02-03 00:38:00', 3164.2, 'PAYMENT', 317.5, null, false, null, 550, '2023-02-03 00:40:00', 3, 2, null, false, 1, 0, 0);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 UPDATE passengers SET current_driving_id=3 WHERE id=13;
@@ -139,13 +139,19 @@ INSERT INTO public.driving(
 VALUES (2900.9, 'WAITING', 313.7, '2023-01-15 18:15:00', false, null, 550, '2023-01-15 18:00:00', 3, 6, null, false, 1, 0, 0);
 
 UPDATE drivers SET next_driving_id=6 WHERE id=3;
-UPDATE passengers SET current_driving_id=6 WHERE id=13;
+UPDATE passengers SET current_driving_id=6 WHERE id=14;
 
 -- 7.
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
 VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, 550, '2023-01-13 22:00:00', 4, 7, null, false, 1, 0, 0);
 
+insert into driver_locations(email, lat, lon)
+values ('mika@gmail.com', 45.260008, 19.808357),
+       ('predrag@gmail.com', 45.2405031,19.8255683),
+       ('milan@gmail.com', 45.254365, 19.848213),
+       ('petar@gmail.com', 45.237430, 19.731582),
+       ('marko@gmail.com', 45.238356, 19.808732);
 
 -- INSERT INTO passengers_drivings (passenger_id, driving_id)
 -- VALUES
@@ -161,8 +167,8 @@ VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, 550, '202
 -- 1. banijska - zeleznicka
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.242176, 19.800172, 1, true, 0),
-    (45.24259, 19.79992, 1, true, 1),
+    (45.242176, 19.800172, 1, false, 0),
+    (45.24259, 19.79992, 1, false, 1),
     (45.242367, 19.799138, 1, true, 2),
     (45.242314, 19.798952, 1, true, 3),
     (45.242293, 19.798878, 1, true, 4),
@@ -371,8 +377,8 @@ VALUES
 -- 2. cara dusana - safarikova
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.240498, 19.825371, 2, true, 0),
-    (45.241385, 19.825323, 2, true, 1),
+    (45.240498, 19.825371, 2, false, 0),
+    (45.241385, 19.825323, 2, false, 1),
     (45.24143, 19.825321, 2, true, 2),
     (45.242185, 19.82529, 2, true, 3),
     (45.243039, 19.82526, 2, true, 4),
@@ -494,8 +500,8 @@ VALUES
 -- 3. heroja pinkija - stojana novakovica
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.231324, 19.812617, 3, true, 0),
-    (45.23104, 19.812177, 3, true, 1),
+    (45.231324, 19.812617, 3, false, 0),
+    (45.23104, 19.812177, 3, false, 1),
     (45.231061, 19.811863, 3, true, 2),
     (45.231167, 19.810876, 3, true, 3),
     (45.231205, 19.810517, 3, true, 4),
@@ -603,8 +609,8 @@ VALUES
 -- 4. heroja pinkija - stojana novakovica
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.231324, 19.812617, 3, true, 0),
-    (45.23104, 19.812177, 3, true, 1),
+    (45.231324, 19.812617, 3, false, 0),
+    (45.23104, 19.812177, 3, false, 1),
     (45.231061, 19.811863, 3, true, 2),
     (45.231167, 19.810876, 3, true, 3),
     (45.231205, 19.810517, 3, true, 4),
@@ -712,8 +718,8 @@ VALUES
 -- 5. heroja pinkija - stojana novakovica
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.231324, 19.812617, 3, true, 0),
-    (45.23104, 19.812177, 3, true, 1),
+    (45.231324, 19.812617, 3, false, 0),
+    (45.23104, 19.812177, 3, false, 1),
     (45.231061, 19.811863, 3, true, 2),
     (45.231167, 19.810876, 3, true, 3),
     (45.231205, 19.810517, 3, true, 4),
@@ -821,8 +827,8 @@ VALUES
 -- 6. heroja pinkija - stojana novakovica
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.231324, 19.812617, 3, true, 0),
-    (45.23104, 19.812177, 3, true, 1),
+    (45.231324, 19.812617, 3, false, 0),
+    (45.23104, 19.812177, 3, false, 1),
     (45.231061, 19.811863, 3, true, 2),
     (45.231167, 19.810876, 3, true, 3),
     (45.231205, 19.810517, 3, true, 4),
@@ -930,8 +936,8 @@ VALUES
 -- 7 heroja pinkija - stojana novakovica
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)
 VALUES
-    (45.231324, 19.812617, 3, true, 0),
-    (45.23104, 19.812177, 3, true, 1),
+    (45.231324, 19.812617, 3, false, 0),
+    (45.23104, 19.812177, 3, false, 1),
     (45.231061, 19.811863, 3, true, 2),
     (45.231167, 19.810876, 3, true, 3),
     (45.231205, 19.810517, 3, true, 4),
