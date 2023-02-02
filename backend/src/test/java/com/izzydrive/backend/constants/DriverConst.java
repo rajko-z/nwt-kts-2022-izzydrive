@@ -12,6 +12,10 @@ public class DriverConst {
 
     public static final int DRIVERS_COUNT = 5;
 
+    public static final Long D_MIKA_ID = 2L;
+
+    public static final List<String> DRIVERS_EMAILS = Arrays.asList(D_MIKA_EMAIL, D_MARKO_EMAIL, D_PETAR_EMAIL, D_PREDRAG_EMAIL, D_MILAN_EMAIL);
+
     public static final List<String> DRIVERS_EMAILS = Arrays.asList(D_MIKA_EMAIL, D_MARKO_EMAIL, D_PETAR_EMAIL, D_PREDRAG_EMAIL, D_MILAN_EMAIL);
     public static final Long D_MIKA_ID = 2L;
 
