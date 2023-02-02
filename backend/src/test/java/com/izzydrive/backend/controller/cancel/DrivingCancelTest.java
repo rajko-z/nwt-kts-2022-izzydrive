@@ -15,6 +15,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -89,9 +91,9 @@ public class DrivingCancelTest {
     }
 
     @Test
-    void should_throw_cant_not_found_driving_exception_when_next_drivingID_is_invalid(){ //current je active, nex postoji ali nije dobar id prosledjen
+    void should_throw_cant_not_found_driving_exception_when_next_drivingID_is_invalid(){ //current je active, next postoji ali nije dobar id prosledjen
         setUpHeaders(LoginDTOUtil.getDriverMika());
-        Long drivingId = 6L;
+        Long drivingId = 5L;
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO("Reason", drivingId);
         HttpEntity<CancellationReasonDTO> httpEntity = new HttpEntity<>(cancellationReasonDTO, headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
@@ -114,17 +116,16 @@ public class DrivingCancelTest {
         assertEquals(ExceptionMessageConstants.CANT_FIND_DRIVING_TO_CANCEL, response.getBody().getMessage());
     }
 
-//    @Test
-//    void should_throw_cant_not_found_driving_exception_when_current_and_next_drivingIDs_invalid(){ //next je waiting i taj ID je prosledjen
-//        setUpHeaders(LoginDTOUtil.getDriverPredrag());
-//        Long drivingId = 6L;
-//        CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO("Reason", drivingId);
-//        HttpEntity<CancellationReasonDTO> httpEntity = new HttpEntity<>(cancellationReasonDTO, headers);
-//        ResponseEntity<ErrorMessage> response = testRestTemplate
-//                .exchange("/drivings/reject-regular-driver",  HttpMethod.POST, httpEntity, ErrorMessage.class);
-//
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(response.getBody(), new TextResponse("Successfully denied driving"));
-//    }
+    @Test
+    void should_throw_cant_not_found_driving_exception_when_current_and_next_drivingIDs_invalid(){ //next je waiting i taj ID je prosledjen
+        setUpHeaders(LoginDTOUtil.getDriverPredrag());
+        Long drivingId = 6L;
+        CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO("Reason", drivingId);
+        HttpEntity<CancellationReasonDTO> httpEntity = new HttpEntity<>(cancellationReasonDTO, headers);
+        ResponseEntity<TextResponse> response = testRestTemplate
+                .exchange("/drivings/reject-regular-driver",  HttpMethod.POST, httpEntity, TextResponse.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(new TextResponse("Successfully denied driving"), response.getBody());
+    }
 
 }
