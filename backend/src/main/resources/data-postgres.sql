@@ -58,11 +58,11 @@ values
 --Drivers
 insert into drivers (id, activated, blocked, email, first_name, last_name, password, phone_number, address_id, image_id, role_id, active, driver_status, car_id, current_driving_id, next_driving_id, reserved_from_client_driving_id)
 values
-    (nextval('users_id_gen'), true, false, 'mika@gmail.com', 'Mika', 'Mikic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511888', 1, null, 2, true, 'FREE', 1, null, null, null),
-    (nextval('users_id_gen'), true, false, 'predrag@gmail.com', 'Predrag', 'Macogovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511877', 1, null, 2, true, 'FREE', 8, null,null,null),
-    (nextval('users_id_gen'), true, false, 'milan@gmail.com', 'Milan', 'Maric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511811', 1, null, 2, true, 'FREE', 2, null,null,null),
-    (nextval('users_id_gen'), true, false, 'petar@gmail.com', 'Petar', 'Ilic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511822', 1, null, 2, true, 'FREE', 3, null,null,null),
-    (nextval('users_id_gen'), true, false, 'marko@gmail.com', 'Marko', 'Lekovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511337', 1, null, 2, true, 'FREE', 4,null,null,null),
+    (nextval('users_id_gen'), true, false, 'mika@gmail.com', 'Mika', 'Mikic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511888', 1, null, 2, false, 'FREE', 1, null, null, null),
+    (nextval('users_id_gen'), true, false, 'predrag@gmail.com', 'Predrag', 'Macogovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511877', 1, null, 2, false, 'FREE', 8, null,null,null),
+    (nextval('users_id_gen'), true, false, 'milan@gmail.com', 'Milan', 'Maric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511811', 1, null, 2, false, 'FREE', 2, null,null,null),
+    (nextval('users_id_gen'), true, false, 'petar@gmail.com', 'Petar', 'Ilic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511822', 1, null, 2, false, 'FREE', 3, null,null,null),
+    (nextval('users_id_gen'), true, false, 'marko@gmail.com', 'Marko', 'Lekovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511337', 1, null, 2, false, 'FREE', 4,null,null,null),
     (nextval('users_id_gen'), true, false, 'ljubisa@gmail.com', 'Ljubisa', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511823', 1, null, 2, false, 'FREE', 5,null,null,null),
     (nextval('users_id_gen'), true, false, 'sava@gmail.com', 'Sava', 'Peric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511855', 1, null, 2, false, 'FREE', 6, null,null,null),
     (nextval('users_id_gen'), true, false, 'milojko@gmail.com', 'Milojko', 'Dragic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+381634511111', 1, null, 2, false, 'FREE', 7,null,null,null);
@@ -96,7 +96,7 @@ values
     (nextval('users_id_gen'), true, false, 'natasha.lakovic@gmail.com', 'Natasa', 'Lakovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, null, null, null, false, null, null, false),
     (nextval('users_id_gen'), true, false, 'bob@gmail.com', 'Bob', 'Bobic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3,false, null, '0x0739eb5cb09cB2acCf324eE434cFF7805d90A168', '54b1aaea6ae9f74b3c280f391ca7e179322e178d472240b44ce7ab9444ef9799', true, null, null, false),
     (nextval('users_id_gen'), true, false, 'sara@gmail.com', 'Sara', 'Saric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false,null, '0xBD25D223968485Bba38Ede0Aca128967BE127a72', 'd7e0d8e79a824146d65e15909ff3023e9c1f329e9a63f0ebb1ecf4531ba23595', true, null, null, false),
-    (nextval('users_id_gen'), true, false, 'kate@gmail.com', 'Kate', 'Katen', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, null, null, null, false, null, null, false);
+    (nextval('users_id_gen'), true, false, 'kate@gmail.com', 'Kate', 'Katen', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456', 1, null, 3, false, null, '0xd92E11030327cE455D12116c0328134AA32DBE8e', 'cb152afdf9004fc8d60a3cbcc96dbcd53bd31425479655624f943e97150c7123', false, null, null, false);
 
 insert into working_intervals(start_time, end_time, driver_id)
 values
