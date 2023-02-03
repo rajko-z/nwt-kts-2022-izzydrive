@@ -162,7 +162,7 @@ VALUES
     (45.24259, 19.79992, 1, true, 1),
     (45.242367, 19.799138, 1, true, 2),
     (45.242314, 19.798952, 1, true, 3),
-    (45.242293, 19.798878, 1, true, 4)
+    (45.242293, 19.798878, 1, true, 4),
     (45.242058, 19.799019, 1, true, 5),
     (45.242035, 19.799033, 1, true, 6),
     (45.241932, 19.7991, 1, true, 7),
@@ -364,6 +364,7 @@ VALUES
     (45.264919, 19.829508, 1, true, 203),
     (45.264773, 19.829591, 1, true, 204),
     (45.264761, 19.829598, 1, true, 205);
+
 
 -- cara dusana - safarikova
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)

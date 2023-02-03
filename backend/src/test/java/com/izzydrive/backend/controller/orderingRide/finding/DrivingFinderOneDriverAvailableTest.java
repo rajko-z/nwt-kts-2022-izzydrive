@@ -1,4 +1,4 @@
-package com.izzydrive.backend.controller.orderingride.finding;
+package com.izzydrive.backend.controller.orderingRide.finding;
 
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.dto.UserWithTokenDTO;

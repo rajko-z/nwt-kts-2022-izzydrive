@@ -65,11 +65,11 @@ public class DrivingExecutionServiceTest {
     @MockBean
     private ReservationNotificationTask reservationNotificationTask;
 
-    private static String REASON = "I want to cancel driving";
-    private static Long CURRENT_DRIVING_ID = Long.valueOf(1);
-    private static Long NEXT_DRIVING_ID = Long.valueOf(2);
-    private static Long INVALID_DRIVING_ID = Long.valueOf(3);
-    private static Long NO_MATCHING_DRIVING_ID = Long.valueOf(3);
+    private static final String REASON = "I want to cancel driving";
+    private static final Long CURRENT_DRIVING_ID = 1L;
+    private static final Long NEXT_DRIVING_ID = 2L;
+    private static final Long INVALID_DRIVING_ID = 3L;
+    private static final Long NO_MATCHING_DRIVING_ID = 3L;
 
 
     @Test
