@@ -4,7 +4,7 @@ import { ReservationsListComponent } from "src/app/components/reservations-list/
 import {HomePageLoggedComponent} from "../../pages/home-page-logged/home-page-logged.component";
 import {PaymentPageComponent} from "../../pages/payment-page/payment-page.component";
 import {CurrentDrivingPageComponent} from "../../pages/current-driving-page/current-driving-page.component";
-import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/favorite-routs.component";
+import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/view/favorite-routs.component";
 
 const routes: Routes = [
   {

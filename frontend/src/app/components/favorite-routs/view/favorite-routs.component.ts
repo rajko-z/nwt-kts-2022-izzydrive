@@ -18,12 +18,14 @@ export class FavouriteRoutsComponent implements OnInit {
               private router : Router,
               private snackbar: MatSnackBar) { }
 
-  favoriteRides : RouteDTO[];
+  favoriteRoutes : RouteDTO[];
+  isDataLoaded: boolean = false;
 
   ngOnInit(): void {
     this.routeService.getPassengerFavouriteRides(this.userService.getCurrentUserId()).subscribe({
       next: (response) => {
-        this.favoriteRides = response;
+        this.favoriteRoutes = response;
+        this.isDataLoaded = true;
       },
       error: (error) => {
         this.snackbar.open(error.error.message, "OK");
@@ -50,7 +52,7 @@ export class FavouriteRoutsComponent implements OnInit {
     this.routeService.removeFromFavoriteRoutes(route.id,  this.userService.getCurrentUserId()).subscribe({
       next : (response) => {
         this.snackbar.open(response.text, "OK")
-        this.favoriteRides = this.favoriteRides.filter((r) => r.id !== route.id)
+        this.favoriteRoutes = this.favoriteRoutes.filter((r) => r.id !== route.id)
       },
       error : (error) => {
         this.snackbar.open(error.error.message, "OK")

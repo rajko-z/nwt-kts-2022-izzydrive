@@ -7,7 +7,7 @@ import {
 } from "../../components/notifications/notification-review/notification-review.component";
 import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
 import { ProfilePageUserComponent } from "src/app/components/profile/profile-page-user/profile-page-user.component";
-import { DrivingNumberReportComponent } from "src/app/components/reports/components/driving-number-report/driving-number-report.component";
+import { DrivingReportComponent } from "src/app/components/reports/components/driving-report/driving-report.component";
 import { ReportsViewComponent } from "src/app/components/reports/view/reports-view/reports-view.component";
 
 const routes: Routes = [
