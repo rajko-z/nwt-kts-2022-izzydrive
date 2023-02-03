@@ -4,5 +4,5 @@ import com.izzydrive.backend.dto.payment.CurrentPayingDTO;
 
 public interface PaymentProcessService {
 
-    void approvePayment(CurrentPayingDTO currentPayingData);
+    boolean approvePayment(CurrentPayingDTO currentPayingData);
 }

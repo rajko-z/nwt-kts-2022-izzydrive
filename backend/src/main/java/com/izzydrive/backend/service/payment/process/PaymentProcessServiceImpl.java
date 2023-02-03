@@ -36,7 +36,7 @@ public class PaymentProcessServiceImpl implements PaymentProcessService {
 
     @Override
     @Transactional
-    public void approvePayment(CurrentPayingDTO currentPayingData) {
+    public boolean approvePayment(CurrentPayingDTO currentPayingData) {
         Passenger passenger = passengerService.getCurrentlyLoggedPassenger();
         Driving driving = passenger.getCurrentDriving();
         if (driving == null || !driving.getDrivingState().equals(DrivingState.PAYMENT)) {
@@ -44,20 +44,20 @@ public class PaymentProcessServiceImpl implements PaymentProcessService {
         }
 
         if (!paymentValidationService.validateForPaymentSessionExpiration(driving)) {
-            return;
+            throw new BadRequestException(ExceptionMessageConstants.PAYMENT_SESSION_EXPIRED);
         }
 
         if (paymentValidationService.validateForPassengerPaymentApproval(passenger, currentPayingData)) {
             saveCurrentPayingAndApprovalForPassenger(passenger, currentPayingData);
         }
 
-        if (drivingService.allPassengersApprovedDriving(driving.getId())
-                && !driving.isLocked()) {
-            startPaymentProcess(driving);
+        if (drivingService.allPassengersApprovedDriving(driving.getId()) && !driving.isLocked()) {
+            return startPaymentProcess(driving);
         }
+        return true;
     }
 
-    private void startPaymentProcess(Driving driving) {
+    private boolean startPaymentProcess(Driving driving) {
         try {
             LOG.info("Starting payment process");
             driving.setLocked(true);
@@ -65,8 +65,10 @@ public class PaymentProcessServiceImpl implements PaymentProcessService {
             boolean result = paymentTransferService.payForAllPassengers(driving);
             if (result) {
                 afterPaymentService.onSuccess(driving);
+                return true;
             } else {
                 afterPaymentService.onFailure(driving);
+                return false;
             }
         } catch (OptimisticLockingFailureException ex) {
             LOG.info(String.format("concurrent read for driving service: %s", ex.getMessage()));

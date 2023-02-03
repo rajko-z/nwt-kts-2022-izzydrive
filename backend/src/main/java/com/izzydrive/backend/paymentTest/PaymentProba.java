@@ -20,7 +20,7 @@ public class PaymentProba {
     private static final BigInteger GAS_LIMIT = BigInteger.valueOf(21000L);
     private static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
 
-    private static final String RECIPIENT = "0x66CEEb689fdC7837b4351C73406fB435904169c2";
+    private static final String RECIPIENT = "0x9EBD578e9ecAf0EEf82fAa07c3983C820704fe17";
     private static final String SK = "856fa3e9eb2e0189d499c08b94d716b43760e73494eae45de273e756cb5194b5";
 
     public static void main(String[] args) {
@@ -37,7 +37,7 @@ public class PaymentProba {
         try {
             transactionReceipt = transfer.sendFunds(
                 RECIPIENT,
-                BigDecimal.valueOf(0.005),
+                BigDecimal.valueOf(0.4),
                 Convert.Unit.ETHER,
                 GAS_PRICE,
                 GAS_LIMIT

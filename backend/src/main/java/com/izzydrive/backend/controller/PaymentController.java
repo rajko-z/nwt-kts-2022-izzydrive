@@ -4,8 +4,10 @@ import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.payment.CurrentPayingDTO;
 import com.izzydrive.backend.dto.payment.KeyPairDTO;
 import com.izzydrive.backend.dto.payment.PaymentStatusDTO;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.service.payment.data.PaymentDataService;
 import com.izzydrive.backend.service.payment.process.PaymentProcessService;
+import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +53,9 @@ public class PaymentController {
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PutMapping("/pay")
     public ResponseEntity<TextResponse> pay(@RequestBody @Valid CurrentPayingDTO currentPaying) {
-        paymentProcessService.approvePayment(currentPaying);
-        return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
+        if (paymentProcessService.approvePayment(currentPaying)) {
+            return new ResponseEntity<>(new TextResponse("Success"), HttpStatus.OK);
+        }
+        throw new BadRequestException(ExceptionMessageConstants.PAYMENT_FAILURE);
     }
 }

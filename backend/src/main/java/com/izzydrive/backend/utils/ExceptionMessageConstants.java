@@ -59,6 +59,9 @@ public final class ExceptionMessageConstants {
     public static final String CANT_FIND_DRIVING_TO_CANCEL = "Can't find driving to cancel";
     public static final String CANT_FIND_RESERVATION_TO_CANCEL = "Can't find reservation to cancel";
     public static final String INVALID_ROUTE_PROVIDED = "Invalid route provided. Chosen route can't be recalculated from request";
+    public static final String PAYMENT_SESSION_EXPIRED = "Payment session expired";
+    public static final String PAYMENT_FAILURE = "Payment failure, canceling current driving. Make sure every passenger input correct paying info and have enough funds.";
+
 
     public static String passengerAlreadyHasReservation(String email) {
         return String.format("The passenger %s already has a reservation in the selected period", email);

@@ -128,7 +128,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotificationForPaymentFailure(List<String> passengersToSendNotifications) {
         for (String passenger : passengersToSendNotifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setMessage("Payment failure, canceling current driving. Make sure every passenger input correct paying info and have enough funds.");
+            notificationDTO.setMessage(ExceptionMessageConstants.PAYMENT_FAILURE);
             notificationDTO.setUserEmail(passenger);
             notificationDTO.setNotificationStatus(NotificationStatus.PAYMENT_FAILURE);
             this.simpMessagingTemplate.convertAndSend("/notification/paymentFailure", notificationDTO);
