@@ -91,7 +91,6 @@ export class DrivingService {
   }
 
   cancelReservation(drivingId: number): Observable<TextResponse> {
-    console.log(drivingId);
     return this.httpClientService.deleteT<TextResponse>(environment.apiUrl + `drivings/passenger/cancel-reservation/${drivingId}`)
   }
 

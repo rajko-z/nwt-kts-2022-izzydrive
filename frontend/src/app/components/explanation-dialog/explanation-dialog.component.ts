@@ -7,6 +7,7 @@ import {CancellationReason} from "../../model/driving/cancelationReason";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable} from "rxjs";
 import {TextResponse} from "../../model/response/textresponse";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-explanation-dialog',
@@ -23,7 +24,8 @@ export class ExplanationDialogComponent {
               private userService: UserService,
               @Inject(MAT_DIALOG_DATA) public data,
               private snackBar: MatSnackBar,
-              private dialogRef: MatDialogRef<ExplanationDialogComponent>,) {
+              private dialogRef: MatDialogRef<ExplanationDialogComponent>,
+              private messageresponse: ResponseMessageService) {
   }
 
   onSubmit() {
@@ -32,11 +34,7 @@ export class ExplanationDialogComponent {
     this.cancellationReason.text = this.explanationForm.value.explanation;
 
     if (this.cancellationReason.text == null || this.cancellationReason?.text.trim() == '') {
-      this.snackBar.open("Please input explanation text", "Error", {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'right',
-      });
+      this.messageresponse.openErrorMessage("Please input explanation text");
       return;
     }
 
@@ -50,18 +48,10 @@ export class ExplanationDialogComponent {
 
     response.subscribe({
         next: (_) => {
-          this.snackBar.open("You have successfully declined the ride", "Ok", {
-            duration: 5000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'right',
-          })
+          this.messageresponse.openErrorMessage("You have successfully declined the ride")
         },
         error: (error) => {
-          this.snackBar.open(error.error.message, "ERROR", {
-            duration: 5000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'right',
-          })
+          this.messageresponse.openErrorMessage(error.error.message)
         }
       }
     );

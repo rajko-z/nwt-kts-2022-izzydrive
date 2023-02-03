@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PaymentService} from "../../services/payment/payment.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {PaymentData} from "../../model/payment/payment";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-paying-info',
@@ -19,13 +20,13 @@ export class PayingInfoComponent implements OnInit {
   });
   constructor(
     private paymentService: PaymentService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private responseMessage: ResponseMessageService) { }
 
   ngOnInit(): void {
     this.paymentService.getPaymentData()
       .subscribe({
           next: (response) => {
-            console.log(response)
             if (response !== undefined && response !== null) {
               this.form.patchValue({
                 address: response.ethAddress,
@@ -34,9 +35,7 @@ export class PayingInfoComponent implements OnInit {
             }
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -50,14 +49,10 @@ export class PayingInfoComponent implements OnInit {
     this.paymentService.savePaymentData(payload)
       .subscribe({
           next: (response) => {
-            this.snackBar.open(response.text, "OK", {
-              duration: 5000,
-            })
+            this.responseMessage.openSuccessMessage(response.text)
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );

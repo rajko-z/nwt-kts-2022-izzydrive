@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DriverService} from "../../services/driverService/driver.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-worktime',
@@ -14,7 +15,7 @@ export class WorkTimeComponent implements OnInit {
 
   constructor(
     private driverService: DriverService,
-    private snackBar: MatSnackBar) { }
+    private responseMessage: ResponseMessageService) { }
 
   ngOnInit(): void {
     this.driverService.getWorkingTimeForDriver()
@@ -25,9 +26,7 @@ export class WorkTimeComponent implements OnInit {
             this.minutes = totalNumOfMinutes % 60;
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );

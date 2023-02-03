@@ -3,6 +3,7 @@ import { MAT_SNACK_BAR_DATA, MatSnackBar } from '@angular/material/snack-bar';
 import { AdminRespondOnChanges } from 'src/app/model/message/AdminResponseOnChanges';
 import { CarService } from 'src/app/services/carService/car.service';
 import { NotificationService } from 'src/app/services/notificationService/notification.service';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
@@ -16,10 +17,10 @@ export class CarChangeInfoComponent implements OnInit {
   private userService: UserService,
   private snackbar: MatSnackBar,
   private notificationService: NotificationService,
-  private carService: CarService) { }
+  private carService: CarService,
+  private responseMessage:ResponseMessageService) { }
 
   ngOnInit(): void {
-    console.log(this.data)
   }
 
   onYesClick(){
@@ -27,14 +28,13 @@ export class CarChangeInfoComponent implements OnInit {
       next: (response) => {
         let adminResponse : AdminRespondOnChanges = new AdminRespondOnChanges(this.data.message.carData.driverEmail, "accept");
         this.userService.adminRespondOnChanges(adminResponse)
-        this.snackbar.open(response.text, "OK")
+        this.responseMessage.openSuccessMessage(response.text)
       },
       error: (error) => {
-        this.snackbar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
     this.notificationService.deleteNotification(this.data.message.id).subscribe((res) => {
-      console.log(res);
     })
   }
 
@@ -43,7 +43,6 @@ export class CarChangeInfoComponent implements OnInit {
     let adminResponse : AdminRespondOnChanges = new AdminRespondOnChanges(this.data.message.carData.driverEmail, "reject");
     this.userService.adminRespondOnChanges(adminResponse);
     this.notificationService.deleteNotification(this.data.message.id).subscribe((res) => {
-      console.log(res);
     })
   }
 }

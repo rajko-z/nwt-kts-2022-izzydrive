@@ -1,0 +1,64 @@
+@import "src/style/styles";
+
+.example-form-field {
+    margin: 0 8px 16px 0;
+}
+
+.date-form{
+    display: flex;
+    flex-direction: column;
+    column-gap: 20px;
+    justify-content: center;
+    height: 90px;
+    margin-top: 5%;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.date-picker-container{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-top: 4%;
+}
+
+.reports-contaienr{
+    display: flex;
+    width: 100%; 
+    height: 100%;
+}
+
+.stepper{
+    width: 100%; 
+    margin-left: 5%; 
+    height: fit-content;
+}
+
+.title{
+    @include setTitleStyle(25vw);
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-content: baseline;
+    height: fit-content;
+}
+
+
+::ng-deep .md-icon-button + .md-datepicker-input-container {
+    float: left !important;
+    margin-top:7px !important;
+  }
+
+::ng-deep .mat-form-field-infix{
+    display: flex !important;
+    flex-direction: row !important;
+    vertical-align: middle !important;
+}
+
+::ng-deep .mat-datepicker-toggle{
+    margin-top: -15px;
+}
+
+::ng-deep .mat-horizontal-stepper-content[aria-expanded="false"] {
+    width: 800px !important;
+  }

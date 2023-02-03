@@ -10,6 +10,7 @@ import {
 } from "../../../../services/searchPlaceComponentService/search-place-component.service";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-ride-data-basic-form',
@@ -32,7 +33,7 @@ export class RideDataBasicFormComponent implements OnInit {
     private mapService: MapService,
     private drivingService: DrivingService,
     private snackBar: MatSnackBar,
-
+    private responsemessage: ResponseMessageService,
     private searchPlaceComponentService: SearchPlaceComponentService) {
   }
 
@@ -52,14 +53,11 @@ export class RideDataBasicFormComponent implements OnInit {
       .subscribe({
           next: (options) => {
             this.apiLoading = false;
-            console.log(options);
             this.fetchedDrivingOptionsEvent.emit(options);
           },
           error: (error) => {
             this.apiLoading = false;
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-          })
+            this.responsemessage.openErrorMessage(error.error.message)
          }
         }
       );

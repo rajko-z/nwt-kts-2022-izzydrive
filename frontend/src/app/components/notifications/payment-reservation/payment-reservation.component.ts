@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import {DrivingService} from "../../../services/drivingService/driving.service";
 
 @Component({
@@ -14,7 +15,7 @@ export class PaymentReservationComponent implements OnInit {
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data,
               private router: Router,
               private drivingService: DrivingService,
-              private snackbar: MatSnackBar) {
+              private responseMessage: ResponseMessageService) {
     this.minute = new Date(data.message.duration * 1000).toISOString().slice(14, 19);
   }
 
@@ -27,14 +28,12 @@ export class PaymentReservationComponent implements OnInit {
   }
 
   cancelRideClick() {
-    //delete reservation
     this.drivingService.cancelReservation(this.data.message.drivingId).subscribe({
       next: (response) => {
         this.router.navigateByUrl('/passenger');
-        // this.snackbar.open(response.text, "OK")
       },
       error: (error) => {
-        this.snackbar.open(error.error.message, "OK")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
     this.data.preClose();

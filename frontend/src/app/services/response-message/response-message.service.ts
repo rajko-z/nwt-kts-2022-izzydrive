@@ -12,16 +12,16 @@ export class ResponseMessageService {
 
   public openSuccessMessage(message: string): void{
     this.messageTooltip.open(message, 'OK', {
-    horizontalPosition: "right",
-    verticalPosition: "bottom",
+    horizontalPosition: "center",
+    verticalPosition: "top",
     duration: 3000,
     });
 }
 
 public openErrorMessage(message: string): void{
   this.messageTooltip.open(message, 'ERROR', {
-  horizontalPosition: "right",
-  verticalPosition: "bottom",
+  horizontalPosition: "center",
+  verticalPosition: "top",
   duration: 3000,
   panelClass: ['red-snackbar']
   });

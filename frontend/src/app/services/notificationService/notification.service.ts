@@ -39,7 +39,6 @@ export class NotificationService {
 
   showNotificationComponent(message: string, component) {
     const notification: NotificationM = JSON.parse(message);
-    console.log(notification)
     if (notification.userEmail === this.userService.getCurrentUserEmail()) {
       this.snackBar.openFromComponent(component, {
         data: {
@@ -190,7 +189,6 @@ export class NotificationService {
 
   sendNotificationToAdimForDriverChangeData(stompClient) {
     stompClient.subscribe('/notification/driverChangeData', (message: { body: string }) => {
-      console.log(message)
         this.showNotificationComponent(message.body, DriverChangeInfoComponent);
       }
     );

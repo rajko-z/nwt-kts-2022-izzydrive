@@ -22,11 +22,11 @@ title: ApexTitleSubtitle;
 colors: string[]
 };
 @Component({
-  selector: 'app-driving-number-report',
-  templateUrl: './driving-number-report.component.html',
-  styleUrls: ['./driving-number-report.component.scss']
+  selector: 'app-driving-report',
+  templateUrl: './driving-report.component.html',
+  styleUrls: ['./driving-report.component.scss']
 })
-export class DrivingNumberReportComponent implements OnInit {
+export class DrivingReportComponent implements OnInit {
 
   @Input() XAxisValues : string[];
   @Input() SourceValue: number[];

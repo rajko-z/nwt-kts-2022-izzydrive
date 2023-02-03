@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ro } from 'date-fns/locale';
 import { RouteDTO } from 'src/app/model/route/route';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { RouteService } from 'src/app/services/routeService/route.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
@@ -16,17 +17,20 @@ export class FavouriteRoutsComponent implements OnInit {
   constructor(private routeService : RouteService,
               private userService : UserService,
               private router : Router,
-              private snackbar: MatSnackBar) { }
+              private snackbar: MatSnackBar,
+              private responseMessage: ResponseMessageService) { }
 
-  favoriteRides : RouteDTO[];
+  favoriteRoutes : RouteDTO[];
+  isDataLoaded: boolean = false;
 
   ngOnInit(): void {
     this.routeService.getPassengerFavouriteRides(this.userService.getCurrentUserId()).subscribe({
       next: (response) => {
-        this.favoriteRides = response;
+        this.favoriteRoutes = response;
+        this.isDataLoaded = true;
       },
       error: (error) => {
-        this.snackbar.open(error.error.message, "OK");
+        this.responseMessage.openErrorMessage(error.error.message);
       }
     })
   }
@@ -49,11 +53,11 @@ export class FavouriteRoutsComponent implements OnInit {
   removeFromFavorites(route : RouteDTO){
     this.routeService.removeFromFavoriteRoutes(route.id,  this.userService.getCurrentUserId()).subscribe({
       next : (response) => {
-        this.snackbar.open(response.text, "OK")
-        this.favoriteRides = this.favoriteRides.filter((r) => r.id !== route.id)
+        this.responseMessage.openSuccessMessage(response.text)
+        this.favoriteRoutes = this.favoriteRoutes.filter((r) => r.id !== route.id)
       },
       error : (error) => {
-        this.snackbar.open(error.error.message, "OK")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

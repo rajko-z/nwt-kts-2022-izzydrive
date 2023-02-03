@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProfilePageData } from 'src/app/model/user/profileData';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 })
 export class ProfilePageUserComponent implements OnInit {
 
-  constructor(private userService: UserService, private snackbar : MatSnackBar) { }
+  constructor(private userService: UserService, private responseMessage : ResponseMessageService) { }
   profilePagedata : ProfilePageData;
   isUserLoaded: boolean = false;
 
@@ -23,7 +24,7 @@ export class ProfilePageUserComponent implements OnInit {
         ;
       },
       error : (error) => {
-        this.snackbar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       } 
     })
   }

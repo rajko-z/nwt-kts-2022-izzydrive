@@ -26,10 +26,11 @@ import {
 import { ReservationsListComponent } from "src/app/components/reservations-list/reservations-list.component";
 import { ConfirmCancelReservationComponent } from "src/app/components/notifications/confirm-cancel-reservation/confirm-cancel-reservation.component";
 import {ReportDriverCheckComponent} from "../../components/report-driver-check/report-driver-check.component";
-import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/favorite-routs.component";
 import {
   PaymentReservationComponent
 } from "../../components/notifications/payment-reservation/payment-reservation.component";
+import { FavoriteRouteCardComponent } from "src/app/components/favorite-routs/components/favorite-route-card/favorite-route-card.component";
+import { FavouriteRoutsComponent } from "src/app/components/favorite-routs/view/favorite-routs.component";
 
 
 const declaredModules = [
@@ -49,7 +50,8 @@ const declaredModules = [
   ConfirmCancelReservationComponent,
   ReportDriverCheckComponent,
   FavouriteRoutsComponent,
-  PaymentReservationComponent
+  PaymentReservationComponent,
+  FavoriteRouteCardComponent
 ];
 
 @NgModule({

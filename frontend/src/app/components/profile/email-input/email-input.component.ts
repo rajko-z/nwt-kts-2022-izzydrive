@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 
@@ -16,8 +17,7 @@ export class EmailInputComponent implements OnInit {
     email: new FormControl('', [Validators.email]),
   });
   constructor(private userService : UserService, 
-              private snackbar : MatSnackBar,
-              private matDialog: MatDialog) { }
+              private responseMessage : ResponseMessageService,) { }
 
   ngOnInit(): void {
   }
@@ -25,10 +25,10 @@ export class EmailInputComponent implements OnInit {
   onSubmit(){
     this.userService.sendResetPasswordEmail(this.emailForm.value.email).subscribe({
       next : (response) => {
-        this.snackbar.open("We send you link in email", "OK")
+        this.responseMessage.openSuccessMessage("We send you link in email")
       },
       error : (error) => {
-        this.snackbar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

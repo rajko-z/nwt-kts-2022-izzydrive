@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {UserService} from 'src/app/services/userService/user-sevice.service';
 import {ErrorHandlerService} from 'src/app/services/errorHandler/error-handler.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
               private userService: UserService,
               private errorHandler: ErrorHandlerService,
-              private messageTooltip: MatSnackBar) {
+              private responskeMessage: ResponseMessageService) {
 
   }
 
@@ -26,8 +27,7 @@ export class RegisterComponent implements OnInit {
     this.userService.registration(registerForm.value).subscribe(
       ({
         next: _ => {
-          console.log("tuu")
-          this.messageTooltip.open("We sent you an email to verify your account", "OK")
+          this.responskeMessage.openSuccessMessage("We sent you an email to verify your account")
           this.router.navigateByUrl("/anon/login")
         },
         error: (error) => {
@@ -44,10 +44,6 @@ export class RegisterComponent implements OnInit {
   }
 
   openErrorMessage(message: string): void {
-    this.messageTooltip.open(message, 'Close', {
-      horizontalPosition: "center",
-      verticalPosition: "top",
-      panelClass: ['messageTooltip']
-    });
+    this.responskeMessage.openErrorMessage(message)
   }
 }

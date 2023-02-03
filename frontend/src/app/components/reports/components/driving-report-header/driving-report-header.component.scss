@@ -1,0 +1,7 @@
+@import "src/style/styles";
+
+.header{
+    @include setFont(14px);
+    color: $dark3;
+    font-weight: 500;
+}    

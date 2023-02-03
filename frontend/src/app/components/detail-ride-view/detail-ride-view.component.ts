@@ -54,9 +54,7 @@ export class DetailRideViewComponent implements OnInit {
             this.setProfilePhotos();
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -100,7 +98,6 @@ export class DetailRideViewComponent implements OnInit {
     this.userService.getUserDataWithImage(this.driving.driver.email).subscribe(
       {
         next: (response) => {
-          console.log(response)
           this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;
         },
         error: (error) => {

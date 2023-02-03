@@ -15,6 +15,17 @@
     margin-left: 5%;
 }
 
+.user-form{
+    display: flex;
+    flex-direction: column;
+    column-gap: 20px;
+    justify-content: center;
+    height: 90px;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+}
+
 .date-picker-container{
     display: flex;
     flex-direction: column;
@@ -43,11 +54,6 @@
     height: fit-content;
 }
 
-.header{
-    @include setFont(14px);
-    color: $dark3;
-    font-weight: 500;
-}
 
 ::ng-deep .md-icon-button + .md-datepicker-input-container {
     float: left !important;

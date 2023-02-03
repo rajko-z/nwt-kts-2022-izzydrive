@@ -6,6 +6,7 @@ import {PaymentService} from "../../services/payment/payment.service";
 import {CurrentPayingData, KeyPairDTO, PaymentData, PaymentStatus} from "../../model/payment/payment";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DrivingService} from "../../services/drivingService/driving.service";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-payment-page',
@@ -32,7 +33,7 @@ export class PaymentPageComponent implements OnInit {
   });
 
   constructor(
-    private snackBar: MatSnackBar,
+    private responseMessage: ResponseMessageService,
     private passengerService: PassengerService,
     private paymentService: PaymentService,
     private drivingService: DrivingService,
@@ -44,7 +45,6 @@ export class PaymentPageComponent implements OnInit {
     this.passengerService.findCurrentDrivingWithLocations()
       .subscribe({
           next: (driving) => {
-            console.log(driving);
             if (driving) {
               if (driving.drivingState !== 'PAYMENT') {
                 this.router.navigateByUrl('passenger/current-driving');
@@ -68,9 +68,7 @@ export class PaymentPageComponent implements OnInit {
             this.paymentStatus = paymentStatus;
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -97,9 +95,7 @@ export class PaymentPageComponent implements OnInit {
             this.router.navigateByUrl('/passenger/order-now');
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -126,9 +122,7 @@ export class PaymentPageComponent implements OnInit {
             this.router.navigateByUrl('passenger/current-driving');
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            });
+            this.responseMessage.openErrorMessage(error.error.message);
             this.apiLoading = false;
           }
         }

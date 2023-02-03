@@ -49,7 +49,6 @@ export class EditProfileComponent implements OnInit {
 
   setPlaceholders(userData) : void{
     this.profileImage = userData.imageName?  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${userData.imageName}`) : null; //proveriti??
-    console.log(this.profileImage)
     this.editForm.controls.firstName.setValue(userData.firstName);
     this.editForm.controls.lastName.setValue(userData.lastName);
     this.editForm.controls.email.setValue(userData.email);
@@ -107,7 +106,6 @@ export class EditProfileComponent implements OnInit {
   onSubmit() : void{
     let user : User = this.editForm.value;
     user.imageName = this.isImageChanged? this.imageBase64.substring(22, ) : null;
-    console.log(user);
     this.userService.changeUserData(user).subscribe({
       next : (response) => {
         this.responseMessage.openSuccessMessage(response.text);

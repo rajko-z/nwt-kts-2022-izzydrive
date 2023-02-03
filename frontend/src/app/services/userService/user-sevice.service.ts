@@ -10,6 +10,7 @@ import {TextResponse} from 'src/app/model/response/textresponse';
 import {ResetPassword} from 'src/app/model/user/resetPassword';
 import {ProfilePageData} from 'src/app/model/user/profileData';
 import {AdminRespondOnChanges} from 'src/app/model/message/AdminResponseOnChanges';
+import { ResponseMessageService } from '../response-message/response-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private _sanitizer: DomSanitizer)
+    private _sanitizer: DomSanitizer,
+    private responseMessage: ResponseMessageService)
   { }
 
   createHeader(){
@@ -100,12 +102,10 @@ export class UserService {
   }
 
   changeUserData(user: User):Observable<TextResponse>{
-    console.log(user)
     let saveChanges : boolean = true;
     if (this.getRoleCurrentUserRole()=== Role.ROLE_DRIVER){
       saveChanges = false;
     }
-    console.log(saveChanges)
     return this.http.put<TextResponse>(
       environment.apiUrl + "users/change-info?saveChanges=" + saveChanges, user, {
         headers: this.createHeader()
@@ -144,11 +144,8 @@ export class UserService {
 
   adminRespondOnChanges(response: AdminRespondOnChanges){
     this.http.post(environment.apiUrl + 'users/response-changes', response).subscribe({
-      next: (response) =>{
-        console.log(response)
-      },
       error: (error) => {
-        console.log(error.error.message);
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

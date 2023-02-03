@@ -1,0 +1,35 @@
+<div class="route-container">
+    <div class="img-container">
+        <img src="/assets/favorite-route.png" style="width: 220px;"/>
+    </div>
+        <p class="label">
+            <img src="/assets/placeholder.png" style="width: 20px"/>
+            FROM:</p>
+        <P class="text">{{favoriteRoute.start.name}}</P>
+        <p class="label">
+            <img src="/assets/placeholder.png" style="width: 20px"/>
+            TO:</p>
+        <P class="text">{{favoriteRoute.end.name}}</P>
+    <div class="separator"></div>
+    <div style="display: flex; flex-direction:column" >
+        <p class="intermediate-label">Intermediate locations:</p>
+        <p class="intermediate-text" *ngFor="let inter of favoriteRoute.intermediateStations">
+            - {{inter.name}}</p>
+
+    </div>
+    <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+        <button class="remove-btn"
+                #tooltip="matTooltip"
+                matTooltip="Remove from favorites"
+                (click)="onRemoveFromFavorites(favoriteRoute)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button class="get-ride-button" (click)="onGetRide(favoriteRoute, true)">
+            Get a ride now
+        </button>
+        <button class="get-ride-button" (click)="onGetRide(favoriteRoute, false)">
+          Get a ride later
+        </button>
+    </div>
+
+</div>

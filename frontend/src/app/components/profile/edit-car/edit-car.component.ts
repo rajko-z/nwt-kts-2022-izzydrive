@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Car } from 'src/app/model/car/car';
 import { CarService } from 'src/app/services/carService/car.service';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class EditCarComponent implements OnInit {
 
   constructor(private carService : CarService, 
     private userService: UserService,
-    private snackbar : MatSnackBar) { }
+    private snackbar : MatSnackBar,
+    private responseMessage: ResponseMessageService) { }
 
   ngOnInit(): void {
     this.carService.getCarByDriverId(this.userService.getCurrentUserId()).subscribe({
@@ -26,7 +28,7 @@ export class EditCarComponent implements OnInit {
         this.isDataLoaded = true;
       },
       error : (error) => {
-        this.snackbar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }
@@ -37,10 +39,10 @@ export class EditCarComponent implements OnInit {
     car.driverEmail = this.userService.getCurrentUserEmail();
     this.carService.editCarData(car).subscribe({
       next: (response) => {
-        this.snackbar.open(response.text, "Ok")
+        this.responseMessage.openSuccessMessage(response.text)
       },
       error : (error) => {
-        this.snackbar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

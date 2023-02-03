@@ -6,6 +6,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {DrivingRequest} from "../../../../model/driving/driving";
 import {Router} from "@angular/router";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-overview-ordering-ride',
@@ -23,7 +24,8 @@ export class OverviewOrderingRideComponent implements OnInit {
     private http: HttpClientService,
     private snackBar: MatSnackBar,
     private drivingService: DrivingService,
-    private router: Router
+    private router: Router,
+    private responseMessage: ResponseMessageService
   ) {
   }
 
@@ -45,9 +47,7 @@ export class OverviewOrderingRideComponent implements OnInit {
           },
           error: (error) => {
             this.apiLoading = false;
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -67,9 +67,7 @@ export class OverviewOrderingRideComponent implements OnInit {
           },
           error: (error) => {
             this.apiLoading = false;
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );

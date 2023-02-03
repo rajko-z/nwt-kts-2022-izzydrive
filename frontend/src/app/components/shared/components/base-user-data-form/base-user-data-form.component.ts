@@ -40,7 +40,6 @@ export class BaseUserDataFormComponent implements OnInit {
 
 
   onSubmit(): void {
-    console.log("akla")
     this.register.emit(this.registerForm);
   }
 }

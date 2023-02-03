@@ -4,6 +4,7 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {MatStepper} from '@angular/material/stepper';
 import {DriverService} from 'src/app/services/driverService/driver.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 
 @Component({
@@ -34,7 +35,6 @@ export class AddDriverComponent implements OnInit {
     stepper.selected.completed = true;
     this.isValidDriverForm = true;
     stepper.next();
-    console.log(stepper)
   }
 
   onSecondStepNext(carData: FormGroup, stepper: MatStepper){
@@ -61,16 +61,12 @@ export class AddDriverComponent implements OnInit {
   }
 
 
-  constructor(private driverService: DriverService , private messageTooltip: MatSnackBar  ) { }
+  constructor(private driverService: DriverService , private responseMessage: ResponseMessageService  ) { }
 
   ngOnInit(): void {
   }
 
   openErrorMessage(message: string): void{
-    this.messageTooltip.open(message, 'Close', {
-      horizontalPosition: "center",
-      verticalPosition: "top",
-      panelClass: ['messageTooltip']
-    });
+    this.responseMessage.openErrorMessage(message);
   }
 }

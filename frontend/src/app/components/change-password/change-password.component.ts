@@ -4,6 +4,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
 import {NewPassword} from "../../model/user/newPassword";
 import {UserService} from "../../services/userService/user-sevice.service";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-change-password',
@@ -25,7 +26,8 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private loggedUserService: LoggedUserService,
-    private userService: UserService
+    private userService: UserService,
+    private messageresponse: ResponseMessageService
   ) { }
 
   ngOnInit(): void {
@@ -60,14 +62,10 @@ export class ChangePasswordComponent implements OnInit {
     this.loggedUserService.changePassword(payload)
       .subscribe({
           next: (response) => {
-            this.snackBar.open(response.text, "OK", {
-              duration: 5000,
-            })
+            this.messageresponse.openSuccessMessage(response.text)
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.messageresponse.openSuccessMessage(error.error.message)
           }
         }
       );

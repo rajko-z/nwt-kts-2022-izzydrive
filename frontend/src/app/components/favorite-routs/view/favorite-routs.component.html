@@ -1,0 +1,7 @@
+<div class="title">Review your favorite routes</div>
+<div *ngIf="!this.favoriteRoutes && isDataLoaded">
+    You don't have favorite routes
+</div>
+<div class="container" *ngIf="favoriteRoutes && isDataLoaded">
+    <app-favorite-route-card *ngFor="let route of this.favoriteRoutes" [favoriteRoute]="route" [onRemoveFromFavorites]="removeFromFavorites" [onGetRide]="getRide"></app-favorite-route-card>
+</div>

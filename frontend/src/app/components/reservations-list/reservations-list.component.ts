@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ConfirmCancelReservationComponent } from '../notifications/confirm-cancel-reservation/confirm-cancel-reservation.component';
 import {DetailRideViewComponent} from "../detail-ride-view/detail-ride-view.component";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-reservations-list',
@@ -38,6 +39,7 @@ export class ReservationsListComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data,
               public dialog: MatDialog,
               public snackbar : MatSnackBar,
+              private responseMessage: ResponseMessageService,
               private router : Router) {
       this.userService.getCurrentUserData().subscribe({
         next : (user) => {
@@ -46,7 +48,7 @@ export class ReservationsListComponent implements OnInit {
           this.gettingDataFinished = true;
         },
         error: (error) => {
-          console.log(error);
+          this.responseMessage.openErrorMessage(error.error.message)
         }
       })
   }
@@ -68,13 +70,6 @@ export class ReservationsListComponent implements OnInit {
   setDataSource(drivingSource : Driving[]){
     this.dataSource = new MatTableDataSource<Driving>(drivingSource);
     this.dataSource.paginator = this.paginator;
-  }
-
-  onPaginateChange(event){
-    console.log(event)
-     let pageIndex = event.pageIndex;
-     let pageSize = event.pageSize;
-     //ovde se nadovezati na bec ako ce se raditi paginacija na beku
   }
 
   onCancel(driving : Driving){
@@ -102,7 +97,7 @@ export class ReservationsListComponent implements OnInit {
          this.setDrivings();
       },
       error: (error) => {
-       this.snackbar.open(error.error.message, "OK")
+       this.responseMessage.openErrorMessage(error.error.message)
       }
    })
   }

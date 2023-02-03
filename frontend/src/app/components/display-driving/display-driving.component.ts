@@ -66,9 +66,7 @@ export class DisplayDrivingComponent {
             this.currDrivingStatus = 'active';
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
