@@ -42,9 +42,7 @@ public class DrivingCancelTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
-
-    @Autowired
-    private MapService mapService;
+    private HttpHeaders headers;
 
     public void setUpHeaders(LoginDTO loginDTO) {
         ResponseEntity<UserWithTokenDTO> response = testRestTemplate
@@ -56,8 +54,6 @@ public class DrivingCancelTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Content-Type", "application/json");
     }
-
-    private HttpHeaders headers;
 
     @Test
     void should_throw_driving_doesnt_exist_when_drivingID_not_exits(){ //not exiting driving id

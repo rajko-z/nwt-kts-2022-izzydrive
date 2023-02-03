@@ -101,7 +101,9 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDTO.setEndLocation(driving.getRoute().getEnd().getName());
         List<String> intermediateStationDTO = new ArrayList<>();
         for (Address intermediateStation : driving.getRoute().getIntermediateStations()) {
-            intermediateStationDTO.add(intermediateStation.getName());
+            if (intermediateStation != null){
+                intermediateStationDTO.add(intermediateStation.getName());
+            }
         }
         notificationDTO.setIntermediateLocations(intermediateStationDTO);
         notificationDTO.setUserEmail(adminEmail);
