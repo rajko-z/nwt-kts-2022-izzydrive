@@ -1,12 +1,18 @@
-package com.izzydrive.backend.controller.executingride;
+package com.izzydrive.backend.controller.executingRide;
 
+import com.izzydrive.backend.constants.DriverConst;
+import com.izzydrive.backend.constants.PassengerConst;
+import com.izzydrive.backend.constants.UserConst;
 import com.izzydrive.backend.dto.LoginDTO;
 import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.exception.ErrorMessage;
 import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.NotificationStatus;
 import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
+import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.utils.LoginDTOUtil;
 import org.junit.jupiter.api.Test;
@@ -14,12 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = {"classpath:application.properties", "classpath:application-start-driving.properties"})
@@ -31,20 +40,32 @@ public class DrivingStartTest {
     @Autowired
     private DriverService driverService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private NotificationService notificationService;
+
     @Test
     void should_start_driving_is_success() {
         HttpHeaders headers = logInUsers(LoginDTOUtil.getDriverMika());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+
+        setContextForUser(DriverConst.D_MIKA_EMAIL);
+        Driver driverBefore = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
+
         ResponseEntity<TextResponse> response = testRestTemplate
                 .exchange("/drivings/start", HttpMethod.GET, httpEntity, TextResponse.class);
 
-        Driver driver = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
+        Driver driverAfter = driverService.getCurrentlyLoggedDriverWithCurrentDriving();
         DrivingDTOWithLocations driving = driverService.getCurrentDriving();
 
+        if (driverBefore.getDriverStatus() == DriverStatus.TAKEN) {
+            assertEquals(DriverStatus.ACTIVE, driverAfter.getDriverStatus());
+        }
         assertEquals(new TextResponse("Driving successfully started"), response.getBody());
-
         assertEquals(DrivingState.ACTIVE, driving.getDrivingState());
-        assertNotEquals(null, driving.getStartDate());
+        assertNotNull(driving.getStartDate());
     }
 
     @Test
@@ -100,5 +121,18 @@ public class DrivingStartTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Content-Type", "application/json");
         return headers;
+    }
+
+    private int getNumberOfNewDrivingNotificationsForDriver(String email) {
+        return (int) notificationService.findAllForUserByEmail(email)
+                .stream()
+                .filter(n -> n.getNotificationStatus().equals(NotificationStatus.DRIVER_ARRIVED_AT_START))
+                .count();
+    }
+
+    private void setContextForUser(String userEmail) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userEmail, UserConst.PASSWORD));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

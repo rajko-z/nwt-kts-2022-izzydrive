@@ -8,11 +8,9 @@ import com.izzydrive.backend.model.car.Car;
 import com.izzydrive.backend.model.car.CarType;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.driver.Driver;
+import com.izzydrive.backend.model.users.driver.DriverStatus;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class HelperMapper {
 
@@ -42,6 +40,20 @@ public class HelperMapper {
         Passenger p = new Passenger();
         p.setEmail(email);
         return p;
+    }
+
+    public static Passenger mockPassengerWithCurrentDriving(String email){
+        Passenger p = new Passenger();
+        p.setEmail(email);
+        p.setCurrentDriving(mockDriving(1L, DrivingState.ACTIVE));
+        return p;
+    }
+
+    public static Driving mockDriving(Long id, DrivingState drivingState){
+        Driving driving = new Driving();
+        driving.setId(id);
+        driving.setDrivingState(drivingState);
+        return driving;
     }
 
     public static Driving mockDrivingWithRoute(Long id, Driver driver){

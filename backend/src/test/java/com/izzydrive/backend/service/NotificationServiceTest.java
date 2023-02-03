@@ -2,6 +2,7 @@ package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.constants.AdminConst;
 import com.izzydrive.backend.constants.DriverConst;
+import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
@@ -23,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.izzydrive.backend.utils.HelperMapper.mockDriverWithCar;
-import static com.izzydrive.backend.utils.HelperMapper.mockDrivingWithRoute;
+import static com.izzydrive.backend.utils.HelperMapper.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -59,5 +59,14 @@ public class NotificationServiceTest {
         Driving driving = mockDrivingWithRoute(1L, driver);
         this.notificationService.sendNotificationCancelDrivingFromDriverToPassengers(driving.getPassengers().stream().map(Passenger::getEmail).collect(Collectors.toList()));
         verify(simpMessagingTemplate, times(driving.getPassengers().size())).convertAndSend(eq("/notification/regularDrivingCanceledPassenger"), (Object) any());
+    }
+
+    //reportDriverNotification
+    @Test
+    void should_send_notification_to_admin_for_report_driver_by_passenger(){
+        Passenger passenger = mockPassengerWithCurrentDriving(PassengerConst.P_JOHN_EMAIL);
+        this.notificationService.reportDriverNotification(passenger);
+        verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/notification/reportDriver"), (Object) any());
+
     }
 }

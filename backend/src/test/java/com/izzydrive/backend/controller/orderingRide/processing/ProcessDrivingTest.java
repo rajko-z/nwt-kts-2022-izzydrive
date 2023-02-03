@@ -1,4 +1,4 @@
-package com.izzydrive.backend.controller.orderingride.processing;
+package com.izzydrive.backend.controller.orderingRide.processing;
 
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.constants.PassengerConst;
