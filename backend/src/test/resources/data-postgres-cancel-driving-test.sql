@@ -143,8 +143,10 @@ UPDATE passengers SET current_driving_id=6 WHERE id=14;
 
 -- 7.
 INSERT INTO public.driving(
-    distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-01-13 22:10:00', false, null, 550, '2023-01-13 22:00:00', 4, 7, null, false, 1, 0, 0);
+    creation_date, distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
+VALUES ('2023-01-20 18:00:00', 2900.9, 'WAITING', 313.7, null, true, null, 500, '2023-01-20 18:00:00', 3, 7, '2023-01-16 22:00:00', false, 1, 0, 0);
+
+UPDATE drivers SET reserved_from_client_driving_id=7 WHERE id=3;
 
 insert into driver_locations(email, lat, lon)
 values ('mika@gmail.com', 45.260008, 19.808357),
