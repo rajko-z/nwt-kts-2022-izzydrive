@@ -1,6 +1,6 @@
 <div class="ride-info" [ngClass]="{ 'selected-ride-info': option === selectedOption }">
   <div class="other-info">
-    <app-driver-overview [option]="option"></app-driver-overview>
+    <app-driver-overview [driver]="option.driver"></app-driver-overview>
     <div class="price-info">
       <p class="price-title">Price:
         <span [class]="'price'+i" [ngClass]="{ 'selected': option === selectedOption }">{{option.price}}</span> RSD

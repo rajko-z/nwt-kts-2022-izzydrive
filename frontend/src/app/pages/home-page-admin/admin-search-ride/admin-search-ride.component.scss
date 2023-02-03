@@ -1,0 +1,28 @@
+@import "src/style/styles";
+
+
+.mat-form-field {
+  @include size(25vw, auto);
+}
+
+.searchBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.search-button {
+  @include buttonStyle();
+  height: 5vh;
+  width: 15%;
+  margin: 1% 0 0 2%;
+}
+
+.search-input{
+  margin-left: 2%;
+}
+
+.submit-button {
+  @include buttonStyle();
+  height: 5vh;
+  width: 15%;
+}

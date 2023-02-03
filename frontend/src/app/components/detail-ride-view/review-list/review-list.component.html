@@ -1,0 +1,13 @@
+<div>
+  <div>
+    <p><strong>Reviews</strong></p>
+    <p *ngIf="evaluations.length == 0">
+      There are no reviews for this ride
+    </p>
+  </div>
+  <div class="reviewBox" *ngFor="let e of evaluations">
+    <p *ngIf="e.driverRate">Driver rate: {{e.driverRate}}</p>
+    <p *ngIf="e.driverRate">Vehicle rate: {{e.vehicleGrade}}</p>
+    <p>Comment: {{e.text}}</p>
+  </div>
+</div>

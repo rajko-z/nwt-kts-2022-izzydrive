@@ -25,9 +25,9 @@ export class ChatBoxComponent implements OnInit {
   messageText: string;
   messages : Message[] = [];
   channelId: string;
-  isCollapsed: boolean =   true;                                                                               ;
+  isCollapsed: boolean =   true;
   unreaMessages : boolean = false;
-  tooltipText : string = "Support chat"
+  tooltipText : string = "Support chat";
 
 
   ngAfterViewInit() {

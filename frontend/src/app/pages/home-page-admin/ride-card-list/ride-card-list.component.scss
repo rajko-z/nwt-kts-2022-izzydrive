@@ -1,0 +1,89 @@
+@import "src/style/styles";
+
+
+.results-found-text {
+  margin-bottom: 2%;
+  margin-left: 3%;
+}
+
+.ride-area {
+  @include size(100%, 70vh);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.selected-ride-info {
+  background-color: $light2;
+}
+
+
+.ride-summary {
+  @include size(100%, auto);
+  @include setFont(16px);
+  overflow-y: auto;
+  margin: 1% 2% 4% 1%;
+  padding: 2%;
+  font-weight: initial;
+  color: $dark3;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease-in-out;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.ride-summary:hover {
+  top: -5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+
+.first-line {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $dark3;
+}
+
+.time-info {
+  margin: 10% 5%;
+  padding: 0 2%;
+
+  .minutes {
+    @include setFont(12px);
+    display: inline-block;
+    color: $dark3;
+    background-color: $light2;
+    padding: 10% 20%;
+    border-radius: 50px;
+  }
+}
+
+.second-line {
+
+  .driver-info {
+    display: flex;
+
+    .driver-title {
+      margin: 1% 2%;
+    }
+  }
+
+  .additional-options-info {
+    display: flex;
+    justify-content: flex-start;
+
+    .additional-option {
+      margin: 0 2% 4% 0;
+    }
+  }
+}
+
+

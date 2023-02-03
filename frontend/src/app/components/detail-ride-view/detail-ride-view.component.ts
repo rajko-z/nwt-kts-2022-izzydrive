@@ -5,11 +5,6 @@ import {DrivingService} from "../../services/drivingService/driving.service";
 import {UserService} from "../../services/userService/user-sevice.service";
 import {DrivingDetails} from "../../model/driving/driving";
 import {MapService} from "../../services/mapService/map.service";
-import {RouteDTO} from "../../model/route/route";
-import {RouteService} from "../../services/routeService/route.service";
-import {Router} from "@angular/router";
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-detail-ride-view',
@@ -24,19 +19,12 @@ export class DetailRideViewComponent implements OnInit {
 
   isPassengerView?: boolean;
 
-  userProfilePhotos: SafeResourceUrl[] = [];
-  driverProfilePhoto: SafeResourceUrl;
-
   constructor(
-    private dialogRef: MatDialogRef<DrivingDetails>,
     @Inject(MAT_DIALOG_DATA) public drivingId : number,
     private snackBar: MatSnackBar,
     private drivingService: DrivingService,
     private userService: UserService,
     private mapService: MapService,
-    private router: Router,
-    private _sanitizer: DomSanitizer,
-    private responseMessage: ResponseMessageService
   ) { }
 
   ngOnInit(): void {
@@ -51,10 +39,6 @@ export class DetailRideViewComponent implements OnInit {
           next: (response) => {
             this.driving = response;
             this.showOnMap();
-            this.setProfilePhotos();
-          },
-          error: (error) => {
-            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -68,42 +52,4 @@ export class DetailRideViewComponent implements OnInit {
     this.mapService.drawRoute(this.driving.fromStartToEnd.coordinates, "#d3081f");
   }
 
-  getRide(route : RouteDTO, forNow: boolean){
-    if (RouteService.selectedFavouriteRides){
-      RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()] = route;
-    }
-    else {
-      let id : number = this.userService.getCurrentUserId();
-      RouteService.selectedFavouriteRides = { [id]: route }
-    }
-    if (forNow) {
-      this.router.navigateByUrl("/passenger/order-now");
-    } else {
-      this.router.navigateByUrl("/passenger/order-for-later");
-    }
-    this.dialogRef.close();
-  }
-
-  setProfilePhotos(){
-    this.driving.passengers.forEach((passenger) => {
-      this.userService.getUserDataWithImage(passenger).subscribe({
-        next: (response) => {
-          this.userProfilePhotos.push(response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null);
-        },
-        error: (error) => {
-          this.responseMessage.openErrorMessage(error.error.message)
-        }
-      })
-    })
-    this.userService.getUserDataWithImage(this.driving.driver.email).subscribe(
-      {
-        next: (response) => {
-          this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;
-        },
-        error: (error) => {
-          this.responseMessage.openErrorMessage(error.error.message)
-        }
-      }
-    )
-  }
 }

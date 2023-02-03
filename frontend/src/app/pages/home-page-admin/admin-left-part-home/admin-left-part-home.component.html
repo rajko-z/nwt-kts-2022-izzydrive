@@ -1,0 +1,7 @@
+<div>
+  <app-admin-search-ride ($drivings)="onSearchResult($event)"></app-admin-search-ride>
+  <app-ride-card-list
+    [drivings]="drivings"
+    ($drivingId)="showDrivingOnMap($event)">
+  </app-ride-card-list>
+</div>

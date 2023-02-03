@@ -1,18 +1,18 @@
 <div class="driver-info">
   <div class="tooltip">
-    <img *ngIf="option.driver.carData.carType === 'REGULAR'" src="assets/car.png" alt="car"
+    <img *ngIf="driver.carData.carType === 'REGULAR'" src="assets/car.png" alt="car"
          class="driver-img">
-    <img *ngIf="option.driver.carData.carType === 'AVERAGE'" src="assets/avarageCar.png"
+    <img *ngIf="driver.carData.carType === 'AVERAGE'" src="assets/avarageCar.png"
          alt="car" class="driver-img">
-    <img *ngIf="option.driver.carData.carType === 'PREMIUM'" src="assets/premiumCar.png"
+    <img *ngIf="driver.carData.carType === 'PREMIUM'" src="assets/premiumCar.png"
          alt="car" class="driver-img">
-    <span class="tooltiptext">{{option.driver.carData.carType}}</span>
+    <span class="tooltiptext">{{driver.carData.carType}}</span>
   </div>
   <div class="driver-title">
-    <p>Driver: <span class="driver-name">{{option.driver.firstName}} {{option.driver.lastName}}</span>
+    <p>Driver: <span class="driver-name">{{driver.firstName}} {{driver.lastName}}</span>
     </p>
     <p class="registration">Registration: <span
-      class="number">{{option.driver.carData.registration}}</span>
+      class="number">{{driver.carData.registration}}</span>
     </p>
   </div>
   <div class="driver-image">
@@ -21,19 +21,19 @@
   </div>
 </div>
 <div class="additional-options-info">
-  <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baggage">
+  <div class="tooltip" *ngIf="driver.carData.carAccommodation.baggage">
     <img src="assets/koferi.png" alt="baggage" class="additional-option">
     <span class="tooltiptext">Baggage</span>
   </div>
-  <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.pet">
+  <div class="tooltip" *ngIf="driver.carData.carAccommodation.pet">
     <img src="assets/zivotinje.png" alt="pet" class="additional-option">
     <span class="tooltiptext">Pet</span>
   </div>
-  <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.food">
+  <div class="tooltip" *ngIf="driver.carData.carAccommodation.food">
     <img src="assets/hrana.png" alt="food" class="additional-option">
     <span class="tooltiptext">Food</span>
   </div>
-  <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baby">
+  <div class="tooltip" *ngIf="driver.carData.carAccommodation.baby">
     <img src="assets/beba.png" alt="baby" class="additional-option">
     <span class="tooltiptext">Baby</span>
   </div>

@@ -1,9 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {UserService} from "../../../../services/userService/user-sevice.service";
 import {ResponseMessageService} from "../../../../services/response-message/response-message.service";
-import {DrivingState, DrivingWithLocations} from "../../../../model/driving/driving";
+import {Driver} from "../../../../model/driver/driver";
 
 @Component({
   selector: 'app-driver-overview',
@@ -11,7 +10,7 @@ import {DrivingState, DrivingWithLocations} from "../../../../model/driving/driv
   styleUrls: ['./driver-overview.component.scss']
 })
 export class DriverOverviewComponent implements OnInit {
-  @Input() option: DrivingOption | DrivingWithLocations;
+  @Input() driver: Driver;
 
   driverProfilePhoto: SafeResourceUrl;
 
@@ -22,7 +21,7 @@ export class DriverOverviewComponent implements OnInit {
   }
 
   setDriverProfilePhoto(){
-    this.userService.getUserDataWithImage(this.option.driver.email).subscribe(
+    this.userService.getUserDataWithImage(this.driver.email).subscribe(
       {
         next: (response) => {
           this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;

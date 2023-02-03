@@ -34,8 +34,6 @@ firebase.initializeApp(environment.firebaseConfig);
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireMessagingModule,
   ],
-  exports: []
-  ,
   providers: [{provide: MAT_DIALOG_DATA, useValue: {}},
     {
       provide: RxStompService,

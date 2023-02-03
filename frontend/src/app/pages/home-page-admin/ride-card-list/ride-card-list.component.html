@@ -1,0 +1,14 @@
+<div>
+  <p class="results-found-text"><strong>{{drivings?.length}}</strong> drivings found</p>
+  <div *ngIf="drivings?.length === 0">
+    <h2>No current drivings</h2>
+  </div>
+  <div class="ride-area" *ngIf="drivings?.length > 0">
+    <div class="ride-summary" *ngFor="let driving of drivings"
+         (click)="emitDrivingId(driving.id)"
+         [ngClass]="{'selected-ride-info': selectedDrivingId === driving.id}"
+    >
+      <app-ride-card [driving]="driving"></app-ride-card>
+    </div>
+  </div>
+</div>

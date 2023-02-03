@@ -1,0 +1,47 @@
+@import "src/style/styles";
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+
+.first-line {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $dark3;
+}
+
+.time-info {
+  margin: 10% 5%;
+  padding: 0 2%;
+
+  .minutes {
+    @include setFont(12px);
+    display: inline-block;
+    color: $dark3;
+    background-color: $light2;
+    padding: 10% 20%;
+    border-radius: 50px;
+  }
+}
+
+.second-line {
+
+  .driver-info {
+    display: flex;
+
+    .driver-title {
+      margin: 1% 2%;
+    }
+  }
+
+  .additional-options-info {
+    display: flex;
+    justify-content: flex-start;
+
+    .additional-option {
+      margin: 0 2% 4% 0;
+    }
+  }
+}
+
+

@@ -35,6 +35,8 @@ import {
 import {
   PassengerOverviewComponent
 } from "../../components/shared/overivew-ride-components/passenger-overview/passenger-overview.component";
+import {DetailRideInfoComponent} from "../../components/detail-ride-view/detail-ride-info/detail-ride-info.component";
+import {ReviewListComponent} from "../../components/detail-ride-view/review-list/review-list.component";
 
 const declaredModules = [
   BaseUserDataFormComponent,
@@ -51,7 +53,9 @@ const declaredModules = [
   NotificationImageComponent,
   DriverOverviewComponent,
   RideOverviewComponent,
-  PassengerOverviewComponent
+  PassengerOverviewComponent,
+  DetailRideInfoComponent,
+  ReviewListComponent
 ];
 
 @NgModule({

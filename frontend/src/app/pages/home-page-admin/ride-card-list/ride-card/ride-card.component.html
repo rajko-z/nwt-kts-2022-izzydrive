@@ -1,0 +1,19 @@
+<div>
+  <div class="first-line">
+    <div>
+      <app-ride-overview
+        [start]="driving.route.start.name"
+        [end]="driving.route.end.name"
+        [intermediateStation]="driving.route.intermediateStations">
+      </app-ride-overview>
+      <app-passenger-overview [passengers]="driving.passengers">
+      </app-passenger-overview>
+    </div>
+    <div class="time-info">
+      <p class="minutes">{{driving.drivingState}}</p>
+    </div>
+  </div>
+  <div class="second-line">
+    <app-driver-overview [driver]="driving.driver"></app-driver-overview>
+  </div>
+</div>

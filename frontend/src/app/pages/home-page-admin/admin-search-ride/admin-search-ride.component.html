@@ -1,0 +1,13 @@
+<div class="searchBox">
+  <div class="search-input">
+    <mat-form-field appearance="outline">
+      <mat-label>Search term</mat-label>
+      <input matInput
+             placeholder="Search by user name or email..."
+             type="text"
+             [formControl]="searchTerm"
+      >
+    </mat-form-field>
+  </div>
+  <button class="search-button" mat-button (click)="onSearch()">Search</button>
+</div>

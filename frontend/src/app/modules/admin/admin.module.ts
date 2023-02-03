@@ -23,6 +23,12 @@ import {
 } from "src/app/components/notifications/driver-change-info/driver-change-info.component";
 import {CarChangeInfoComponent} from "src/app/components/notifications/car-change-info/car-change-info.component";
 import {ReportedDriverComponent} from "../../components/notifications/reported-driver/reported-driver.component";
+import {
+  AdminLeftPartHomeComponent
+} from "../../pages/home-page-admin/admin-left-part-home/admin-left-part-home.component";
+import {AdminSearchRideComponent} from "../../pages/home-page-admin/admin-search-ride/admin-search-ride.component";
+import {RideCardListComponent} from "../../pages/home-page-admin/ride-card-list/ride-card-list.component";
+import {RideCardComponent} from "../../pages/home-page-admin/ride-card-list/ride-card/ride-card.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
@@ -34,7 +40,11 @@ const declaredModules = [
   ReviewAndWriteAdminNotesComponent,
   DriverChangeInfoComponent,
   CarChangeInfoComponent,
-  ReportedDriverComponent
+  ReportedDriverComponent,
+  AdminLeftPartHomeComponent,
+  AdminSearchRideComponent,
+  RideCardListComponent,
+  RideCardComponent
 ];
 
 @NgModule({
