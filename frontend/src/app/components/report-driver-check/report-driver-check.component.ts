@@ -8,16 +8,12 @@ import {PassengerService} from "../../services/passengerService/passenger.servic
   templateUrl: './report-driver-check.component.html',
   styleUrls: ['./report-driver-check.component.scss']
 })
-export class ReportDriverCheckComponent implements OnInit {
+export class ReportDriverCheckComponent {
 
   constructor(
     @Inject(MAT_SNACK_BAR_DATA) public data,
     private passengerService: PassengerService,
     private responseMessage: ResponseMessageService) { }
-
-  ngOnInit(): void {
-  }
-
   yesClick() {
     this.passengerService.reportDriver()
       .subscribe({

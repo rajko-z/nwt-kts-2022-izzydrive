@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 
 @Component({
@@ -6,16 +6,13 @@ import {DrivingOption} from "../../../../model/driving/drivingOption";
   templateUrl: './card-option.component.html',
   styleUrls: ['./card-option.component.scss']
 })
-export class CardOptionComponent implements OnInit {
+export class CardOptionComponent {
   @Input() option: DrivingOption;
   @Input() selectedOption: DrivingOption;
   @Input() i: number;
 
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
 }

@@ -5,10 +5,8 @@ import {Component, OnInit} from '@angular/core';
   templateUrl: './home-page-admin.component.html',
   styleUrls: ['./home-page-admin.component.scss']
 })
-export class HomePageAdminComponent implements OnInit {
+export class HomePageAdminComponent {
 
   constructor() {}
 
-  ngOnInit(): void {
-  }
 }

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {DrivingService} from "../../../services/drivingService/driving.service";
@@ -8,7 +8,7 @@ import {DrivingService} from "../../../services/drivingService/driving.service";
   templateUrl: './new-ride-linked-user.component.html',
   styleUrls: ['./new-ride-linked-user.component.scss']
 })
-export class NewRideLinkedUserComponent implements OnInit {
+export class NewRideLinkedUserComponent {
 
   minute: string;
 
@@ -16,9 +16,6 @@ export class NewRideLinkedUserComponent implements OnInit {
               private router: Router,
               private drivingService: DrivingService) {
     this.minute = new Date(data.message.duration * 1000).toISOString().slice(14, 19);
-  }
-
-  ngOnInit(): void {
   }
 
   openPaymentPageClick() {

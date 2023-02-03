@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './home-page-un-logged.component.html',
   styleUrls: ['./home-page-un-logged.component.scss']
 })
-export class HomePageUnLoggedComponent implements OnInit {
+export class HomePageUnLoggedComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

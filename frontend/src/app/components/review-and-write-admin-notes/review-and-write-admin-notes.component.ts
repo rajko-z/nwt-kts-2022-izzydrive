@@ -9,7 +9,7 @@ import {FormControl, FormGroup} from "@angular/forms";
   templateUrl: './review-and-write-admin-notes.component.html',
   styleUrls: ['./review-and-write-admin-notes.component.scss']
 })
-export class ReviewAndWriteAdminNotesComponent implements OnInit {
+export class ReviewAndWriteAdminNotesComponent {
 
   noteForm = new FormGroup({
     note: new FormControl('')
@@ -19,10 +19,6 @@ export class ReviewAndWriteAdminNotesComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data, private adminNoteService: AdminNoteService) {
     this.loadData();
   }
-
-  ngOnInit(): void {
-  }
-
   private loadData() {
     this.adminNoteService.getAdminNotesByUser(this.data.id).subscribe((res) => {
       this.notes = res as Note[];

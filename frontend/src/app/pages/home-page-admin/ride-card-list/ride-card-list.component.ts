@@ -6,7 +6,7 @@ import {DrivingWithLocations} from "../../../model/driving/driving";
   templateUrl: './ride-card-list.component.html',
   styleUrls: ['./ride-card-list.component.scss']
 })
-export class RideCardListComponent implements OnInit {
+export class RideCardListComponent {
 
   @Input()
   drivings?: DrivingWithLocations[]
@@ -18,9 +18,6 @@ export class RideCardListComponent implements OnInit {
   selectedDrivingId: number;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   emitDrivingId(id: number): void {
     if (this.selectedDrivingId === id) {

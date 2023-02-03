@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DrivingFinderRequest} from "../../../../model/driving/drivingFinderRequest.";
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {HttpClientService} from "../../../../services/custom-http/http-client.service";
@@ -13,7 +13,7 @@ import {ResponseMessageService} from 'src/app/services/response-message/response
   templateUrl: './overview-ordering-ride.component.html',
   styleUrls: ['./overview-ordering-ride.component.scss']
 })
-export class OverviewOrderingRideComponent implements OnInit {
+export class OverviewOrderingRideComponent {
 
   @Input() drivingFinderRequest?: DrivingFinderRequest;
   @Input() selectedOption: DrivingOption;
@@ -27,9 +27,6 @@ export class OverviewOrderingRideComponent implements OnInit {
     private router: Router,
     private responseMessage: ResponseMessageService
   ) {
-  }
-
-  ngOnInit(): void {
   }
 
   onSubmit() {

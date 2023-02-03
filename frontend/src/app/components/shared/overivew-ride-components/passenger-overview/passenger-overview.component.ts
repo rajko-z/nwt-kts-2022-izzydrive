@@ -5,11 +5,8 @@ import {Component, Input, OnInit} from '@angular/core';
   templateUrl: './passenger-overview.component.html',
   styleUrls: ['./passenger-overview.component.scss']
 })
-export class PassengerOverviewComponent implements OnInit {
+export class PassengerOverviewComponent {
   @Input() passengers: string[];
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

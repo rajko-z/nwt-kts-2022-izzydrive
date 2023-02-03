@@ -7,7 +7,7 @@
     <form class="evaluation-form" [formGroup]="this.evaluationForm">
       <mat-form-field class="text-field">
         <mat-label>Leave a comment</mat-label>
-        <textarea matInput 
+        <textarea matInput
                   placeholder="Leave comment here..."
                   formControlName="comment"></textarea>
       </mat-form-field>
@@ -16,26 +16,28 @@
       Rate the driver
     </div>
     <div class="rate-container">
-        <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedDriverGrade(grade)">
-          <mat-icon *ngIf="!(grade > selectedDriverGrade) || grade == selectedDriverGrade" class="icon-star">star</mat-icon>
-          <mat-icon *ngIf="grade > selectedDriverGrade" class="icon-star">star_border</mat-icon>
-        </button>
+      <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedDriverGrade(grade)">
+        <mat-icon *ngIf="!(grade > selectedDriverGrade) || grade === selectedDriverGrade" class="icon-star">star
+        </mat-icon>
+        <mat-icon *ngIf="grade > selectedDriverGrade" class="icon-star">star_border</mat-icon>
+      </button>
     </div>
     <div class="form-field-title">
       Rate the vehicle
     </div>
     <div class="rate-container">
-        <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedVehicleGrade(grade)">
-          <mat-icon *ngIf="!(grade > selectedVehicleGrade) || grade == selectedVehicleGrade" class="icon-star">star</mat-icon>
-          <mat-icon *ngIf="grade > selectedVehicleGrade" class="icon-star">star_border</mat-icon>
-        </button>
+      <button *ngFor="let grade of grades" mat-icon-button (click)="onSelectedVehicleGrade(grade)">
+        <mat-icon *ngIf="!(grade > selectedVehicleGrade) || grade === selectedVehicleGrade" class="icon-star">star
+        </mat-icon>
+        <mat-icon *ngIf="grade > selectedVehicleGrade" class="icon-star">star_border</mat-icon>
+      </button>
     </div>
     <div class="subbmit-btn-container">
       <button mat-raised-button class="large_button" (click)="onSubmit()">
         Subbmit
       </button>
     </div>
-   
+
   </div>
-    
+
 </div>

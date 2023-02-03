@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {PlaceOnMap} from "../../../../model/map/placeOnMap";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 import {HttpClient} from "@angular/common/http";
@@ -10,14 +10,14 @@ import {
 } from "../../../../services/searchPlaceComponentService/search-place-component.service";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-ride-data-basic-form',
   templateUrl: './ride-data-basic-form.component.html',
   styleUrls: ['./ride-data-basic-form.component.scss']
 })
-export class RideDataBasicFormComponent implements OnInit {
+export class RideDataBasicFormComponent {
 
   apiLoading: boolean = false;
 
@@ -35,9 +35,6 @@ export class RideDataBasicFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private responsemessage: ResponseMessageService,
     private searchPlaceComponentService: SearchPlaceComponentService) {
-  }
-
-  ngOnInit() {
   }
 
   onSubmit(event) {

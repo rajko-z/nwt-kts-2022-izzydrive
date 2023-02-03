@@ -1,17 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_SNACK_BAR_DATA, MatSnackBar } from '@angular/material/snack-bar';
-import { AdminRespondOnChanges } from 'src/app/model/message/AdminResponseOnChanges';
-import { CarService } from 'src/app/services/carService/car.service';
-import { NotificationService } from 'src/app/services/notificationService/notification.service';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
-import { UserService } from 'src/app/services/userService/user-sevice.service';
+import {Component, Inject} from '@angular/core';
+import {MAT_SNACK_BAR_DATA, MatSnackBar} from '@angular/material/snack-bar';
+import {AdminRespondOnChanges} from 'src/app/model/message/AdminResponseOnChanges';
+import {CarService} from 'src/app/services/carService/car.service';
+import {NotificationService} from 'src/app/services/notificationService/notification.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
 
 @Component({
   selector: 'app-car-change-info',
   templateUrl: './car-change-info.component.html',
   styleUrls: ['./car-change-info.component.scss']
 })
-export class CarChangeInfoComponent implements OnInit {
+export class CarChangeInfoComponent {
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data,
   private userService: UserService,
@@ -19,9 +19,6 @@ export class CarChangeInfoComponent implements OnInit {
   private notificationService: NotificationService,
   private carService: CarService,
   private responseMessage:ResponseMessageService) { }
-
-  ngOnInit(): void {
-  }
 
   onYesClick(){
     this.carService.editCarData(this.data.message.carData).subscribe({

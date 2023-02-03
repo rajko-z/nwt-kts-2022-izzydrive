@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {UserService} from '../../services/userService/user-sevice.service';
 import {Router} from '@angular/router';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   sign_up_clicked: boolean = false;
   sign_in_clicked: boolean = true;
@@ -16,10 +16,6 @@ export class HeaderComponent implements OnInit {
   constructor(private userService: UserService, private router: Router, private _sanitizer: DomSanitizer) {
 
   }
-
-  ngOnInit(): void {
-  }
-
 
   isUserLoggedIn(): boolean {
     return this.userService.getCurrentUserToken() ? true : false;

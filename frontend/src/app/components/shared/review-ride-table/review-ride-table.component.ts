@@ -69,11 +69,6 @@ export class ReviewRideTableComponent implements AfterViewInit {
       this.gettingDataFinished = true;
     }
   }
-
-  ngOnInit(): void {
-
-  }
-
   setDrivings() {
     if (this.data?.role === Role.ROLE_DRIVER) {
       this.drivingService.findAllByDriverId(this.data.id).subscribe((res) => {

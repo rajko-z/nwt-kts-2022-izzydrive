@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Message } from 'src/app/model/message/message';
-import { UserService } from 'src/app/services/userService/user-sevice.service';
-import { ChatService } from 'src/app/services/chat/chat.service';
-import { Channel } from 'src/app/model/channel/channel';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
-import { enIE } from 'date-fns/locale';
+import {Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {Message} from 'src/app/model/message/message';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
+import {ChatService} from 'src/app/services/chat/chat.service';
+import {Channel} from 'src/app/model/channel/channel';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
+import {enIE} from 'date-fns/locale';
 
 @Component({
   selector: 'app-chat-box',
@@ -13,51 +13,45 @@ import { enIE } from 'date-fns/locale';
 })
 export class ChatBoxComponent implements OnInit {
 
-
   @ViewChildren('chatcontent') chatcontent: QueryList<any>;
   @ViewChild('chat_container') chat_container: ElementRef;
 
-  constructor( private userService: UserService,
-    private chatService : ChatService, private responseMessage: ResponseMessageService) {
+  constructor(private userService: UserService,
+              private chatService: ChatService, private responseMessage: ResponseMessageService) {
 
-    }
+  }
 
   messageText: string;
-  messages : Message[] = [];
+  messages: Message[] = [];
   channelId: string;
-  isCollapsed: boolean =   true;
-  unreaMessages : boolean = false;
-  tooltipText : string = "Support chat";
-
-
-  ngAfterViewInit() {
-    this.scrollToBottom();
-    this.chatcontent.changes.subscribe(this.scrollToBottom);
-  }
+  isCollapsed: boolean = true;
+  unreaMessages: boolean = false;
+  tooltipText: string = "Support chat";
 
   scrollToBottom = () => {
     try {
       this.chat_container.nativeElement.scrollTop = this.chat_container.nativeElement.scrollHeight;
-    } catch (err) {}
+    } catch (err) {
+    }
   }
 
-  setMessage(message: Message){
+  setMessage(message: Message) {
     //this.messages.push(message);
   }
 
-  initChat(){
+  initChat() {
     this.userService.getCurrentUserData().subscribe({
-      next : (response) => {
+      next: (response) => {
 
         let key = this.userService.getCurrentUserId().toString();
-        let newChannel : Channel = new Channel(this.channelId, response.firstName + " " + response.lastName, false, false, false, false, key);
+        let newChannel: Channel = new Channel(this.channelId, response.firstName + " " + response.lastName, false, false, false, false, key);
 
         this.chatService.firebaseChannels.child(key).set(newChannel);
 
-        this.chatService.updateChatOpenningForUserByChatKey(key,{open_by_user:true, unread_messages_by_user: false} )
-         //firebase.database().ref('channels/' + key).update({open_by_user:true, unread_messages_by_user: false})
+        this.chatService.updateChatOpenningForUserByChatKey(key, {open_by_user: true, unread_messages_by_user: false})
+        //firebase.database().ref('channels/' + key).update({open_by_user:true, unread_messages_by_user: false})
 
-        this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channelId).on('value', (response : any) => {
+        this.chatService.firebaseMessages.orderByChild('channel').equalTo(this.channelId).on('value', (response: any) => {
           this.messages = this.chatService.snapshotToArray(response);
         })
 
@@ -65,28 +59,28 @@ export class ChatBoxComponent implements OnInit {
       }, error: (error) => {
         this.responseMessage.openErrorMessage(error.error.message)
       }
-      })
+    })
   }
 
   ngOnInit(): void {
     this.channelId = this.userService.getCurrentUserEmail();
-    this.chatService.firebaseChannels.orderByChild('id').equalTo(this.channelId).on('value', (response : any) => {
+    this.chatService.firebaseChannels.orderByChild('id').equalTo(this.channelId).on('value', (response: any) => {
       let channel = this.chatService.snapshotToArray(response);
       this.unreaMessages = channel[0]?.unread_messages_by_user;
       this.tooltipText = this.unreaMessages ? "New message from support" : "Support chat";
     })
   }
 
-  onCLose(){
+  onCLose() {
     this.isCollapsed = true;
-    this.chatService.firebaseChannels.child(this.userService.getCurrentUserId().toString()).update({open_by_user:false})
+    this.chatService.firebaseChannels.child(this.userService.getCurrentUserId().toString()).update({open_by_user: false})
   }
 
-  isUnread(){
+  isUnread() {
     return this.unreaMessages;
   }
 
-  openChat(){
+  openChat() {
     this.isCollapsed = false;
     this.initChat();
   }

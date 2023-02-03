@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatStepper} from "@angular/material/stepper";
 import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
 import {DrivingOption} from "../../../model/driving/drivingOption";
@@ -15,7 +15,7 @@ import {DrivingFinderRequest} from "../../../model/driving/drivingFinderRequest.
     },
   ],
 })
-export class OrderingRideAdvancedComponent implements OnInit {
+export class OrderingRideAdvancedComponent {
 
   drivingFinderRequest: DrivingFinderRequest;
   drivingOptions: DrivingOption[];
@@ -24,9 +24,6 @@ export class OrderingRideAdvancedComponent implements OnInit {
   @Input() scheduleRide: boolean;
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   onFirstStepNext(drivingOptions: DrivingOption[], stepper: MatStepper) {

@@ -8,15 +8,12 @@ import {DrivingOption} from "../../../model/driving/drivingOption";
   templateUrl: './ordering-ride-basic.component.html',
   styleUrls: ['./ordering-ride-basic.component.scss']
 })
-export class OrderingRideBasicComponent implements OnInit {
+export class OrderingRideBasicComponent {
 
   drivingOptions: DrivingOption[];
   selectedOption: DrivingOption;
 
   constructor() {
-  }
-  ngOnInit(): void {
-
   }
 
   onFirstStepNext(drivingOptions: DrivingOption[], stepper: MatStepper) {

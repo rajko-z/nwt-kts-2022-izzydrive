@@ -6,12 +6,9 @@ import {Note} from "../../../model/adminNote/note";
   templateUrl: './note-list.component.html',
   styleUrls: ['./note-list.component.scss']
 })
-export class NoteListComponent implements OnInit {
+export class NoteListComponent {
   @Input() notes:  Note[];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

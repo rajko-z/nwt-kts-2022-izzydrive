@@ -18,7 +18,7 @@ import { ResponseMessageService } from 'src/app/services/response-message/respon
     },
   ],
 })
-export class AddDriverComponent implements OnInit {
+export class AddDriverComponent {
 
   name_regexp = "^[a-zA-Z]+$";
   driverForm = new FormGroup({});
@@ -62,10 +62,6 @@ export class AddDriverComponent implements OnInit {
 
 
   constructor(private driverService: DriverService , private responseMessage: ResponseMessageService  ) { }
-
-  ngOnInit(): void {
-  }
-
   openErrorMessage(message: string): void{
     this.responseMessage.openErrorMessage(message);
   }

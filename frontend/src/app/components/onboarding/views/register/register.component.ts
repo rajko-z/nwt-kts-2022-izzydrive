@@ -1,21 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserService} from 'src/app/services/userService/user-sevice.service';
 import {ErrorHandlerService} from 'src/app/services/errorHandler/error-handler.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['../../components/onboarding-header/onboarding-header.component.scss', './register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
-
-  ngOnInit(): void {
-  }
-
+export class RegisterComponent {
   constructor(private router: Router,
               private userService: UserService,
               private errorHandler: ErrorHandlerService,

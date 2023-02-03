@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NotificationStatus} from "../../../../model/notifications/notificationStatus";
 
 @Component({
@@ -6,13 +6,10 @@ import {NotificationStatus} from "../../../../model/notifications/notificationSt
   templateUrl: './notification-image.component.html',
   styleUrls: ['./notification-image.component.scss']
 })
-export class NotificationImageComponent implements OnInit {
+export class NotificationImageComponent {
   @Input() notificationStatus: NotificationStatus;
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
 }

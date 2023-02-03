@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-passenger-menu',
   templateUrl: './passenger-menu.component.html',
   styleUrls: ['./passenger-menu.component.scss', '../menu.component.scss']
 })
-export class PassengerMenuComponent implements OnInit {
+export class PassengerMenuComponent {
 
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
+  constructor(private router: Router) {
   }
 
   orderDrivingNowClicked() {
@@ -24,14 +22,16 @@ export class PassengerMenuComponent implements OnInit {
   onDrivingHistory() {
     this.router.navigateByUrl("/user/driving-history");
   }
-  onOpenReservations(){
+
+  onOpenReservations() {
     this.router.navigateByUrl("/passenger/reservations");
   }
 
   currentDrivingClicked() {
     this.router.navigateByUrl('/passenger/current-driving')
   }
-  onFavoriteRouts(){
+
+  onFavoriteRouts() {
     this.router.navigateByUrl('/passenger/favorites')
   }
 }

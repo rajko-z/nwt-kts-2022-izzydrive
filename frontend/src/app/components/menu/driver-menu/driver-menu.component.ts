@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {MatDialog} from "@angular/material/dialog";
 import {WorkTimeComponent} from "../../worktime/work-time.component";
 
@@ -8,12 +8,9 @@ import {WorkTimeComponent} from "../../worktime/work-time.component";
   templateUrl: './driver-menu.component.html',
   styleUrls: ['./driver-menu.component.scss', '../menu.component.scss']
 })
-export class DriverMenuComponent implements OnInit {
+export class DriverMenuComponent {
 
   constructor(private router: Router, private matDialog: MatDialog) { }
-
-  ngOnInit(): void {
-  }
 
   onDrivingHistory() {
     this.router.navigateByUrl("/user/driving-history");

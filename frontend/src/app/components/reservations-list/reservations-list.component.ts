@@ -1,26 +1,27 @@
-import { DatePipe } from '@angular/common';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { Driving, DrivingState } from 'src/app/model/driving/driving';
-import { User } from 'src/app/model/user/user';
-import { DrivingService } from 'src/app/services/drivingService/driving.service';
-import { NotificationService } from 'src/app/services/notificationService/notification.service';
-import { UserService } from 'src/app/services/userService/user-sevice.service';
-import { ConfirmCancelReservationComponent } from '../notifications/confirm-cancel-reservation/confirm-cancel-reservation.component';
+import {DatePipe} from '@angular/common';
+import {Component, Inject, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {Driving, DrivingState} from 'src/app/model/driving/driving';
+import {User} from 'src/app/model/user/user';
+import {DrivingService} from 'src/app/services/drivingService/driving.service';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
+import {
+  ConfirmCancelReservationComponent
+} from '../notifications/confirm-cancel-reservation/confirm-cancel-reservation.component';
 import {DetailRideViewComponent} from "../detail-ride-view/detail-ride-view.component";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-reservations-list',
   templateUrl: './reservations-list.component.html',
   styleUrls: ['./reservations-list.component.scss']
 })
-export class ReservationsListComponent implements OnInit {
+export class ReservationsListComponent {
 
   displayedColumns: string[] = ['startAddress', 'endAddress', 'startTime','price', 'state', 'details', 'cancel'];
   gettingDataFinished : boolean =  false;
@@ -28,10 +29,6 @@ export class ReservationsListComponent implements OnInit {
   curretnUser : User;
 
   @ViewChild('paginator') paginator: MatPaginator;
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
 
   constructor(private drivingService:DrivingService,
               private userService: UserService,
@@ -51,10 +48,6 @@ export class ReservationsListComponent implements OnInit {
           this.responseMessage.openErrorMessage(error.error.message)
         }
       })
-  }
-
-  ngOnInit(): void {
-
   }
 
   setDrivings(){

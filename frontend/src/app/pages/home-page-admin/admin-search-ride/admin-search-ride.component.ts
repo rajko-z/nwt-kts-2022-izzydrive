@@ -9,7 +9,7 @@ import {DrivingWithLocations} from "../../../model/driving/driving";
   templateUrl: './admin-search-ride.component.html',
   styleUrls: ['./admin-search-ride.component.scss']
 })
-export class AdminSearchRideComponent implements OnInit {
+export class AdminSearchRideComponent {
 
   @Output()
   private $drivings = new EventEmitter<DrivingWithLocations[]>();
@@ -19,9 +19,6 @@ export class AdminSearchRideComponent implements OnInit {
   constructor(
     private drivingService: DrivingService,
     private responseMessage: ResponseMessageService) { }
-
-  ngOnInit(): void {
-  }
 
   onSearch() {
     if (this.searchTerm.value) {

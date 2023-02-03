@@ -11,7 +11,7 @@ import {PlaceOnMap} from "../../../../model/map/placeOnMap";
   templateUrl: './ride-data-table.component.html',
   styleUrls: ['./ride-data-table.component.scss']
 })
-export class RideDataTableComponent implements OnInit, OnChanges {
+export class RideDataTableComponent implements OnChanges {
 
   @Input() drivingOptions: DrivingOption[]
   @Input() drivingFinderRequest?: DrivingFinderRequest;
@@ -21,10 +21,6 @@ export class RideDataTableComponent implements OnInit, OnChanges {
   selectedOption: DrivingOption;
 
   constructor(private mapService: MapService) {}
-
-  ngOnInit(): void {
-
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.drivingOptions !== undefined && this.drivingOptions.length > 0) {

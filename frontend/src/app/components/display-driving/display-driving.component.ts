@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DrivingWithLocations} from "../../model/driving/driving";
 import {MatDialog} from "@angular/material/dialog";
 import {ExplanationDialogComponent} from "../explanation-dialog/explanation-dialog.component";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FinishDrivingCheckComponent} from "../finish-driving-check/finish-driving-check.component";
-import { UserService } from 'src/app/services/userService/user-sevice.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {UserService} from 'src/app/services/userService/user-sevice.service';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-display-driving',
@@ -30,12 +30,6 @@ export class DisplayDrivingComponent {
     private userService: UserService,
     private _sanitizer: DomSanitizer,
     private responseMessage: ResponseMessageService) {
-  }
-
-  ngOnChanges(): void {
-    if(this.driving){
-      this.setProfilePhotos();
-    }
   }
 
   cancelDriving(reservation: boolean) {

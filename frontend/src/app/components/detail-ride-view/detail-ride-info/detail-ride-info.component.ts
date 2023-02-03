@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DrivingDetails} from "../../../model/driving/driving";
 import {MatDialogRef} from "@angular/material/dialog";
 import {UserService} from "../../../services/userService/user-sevice.service";
@@ -11,7 +11,7 @@ import {RouteService} from "../../../services/routeService/route.service";
   templateUrl: './detail-ride-info.component.html',
   styleUrls: ['./detail-ride-info.component.scss']
 })
-export class DetailRideInfoComponent implements OnInit {
+export class DetailRideInfoComponent {
 
   @Input()
   driving?: DrivingDetails;
@@ -27,9 +27,6 @@ export class DetailRideInfoComponent implements OnInit {
     private userService: UserService,
     private router: Router,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   getRide(route : RouteDTO, forNow: boolean){
     if (RouteService.selectedFavouriteRides){

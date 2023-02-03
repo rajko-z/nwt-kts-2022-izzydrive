@@ -10,14 +10,11 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.scss']
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent {
 
   constructor(private router : Router) { }
 
   @Input() profileData : ProfilePageData;
-
-  ngOnInit(): void {
-  }
 
   onChangeData(){
     if (Object.keys(this.profileData.otherAttributes).includes("phone number")){

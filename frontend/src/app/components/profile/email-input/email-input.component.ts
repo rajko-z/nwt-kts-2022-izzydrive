@@ -11,17 +11,13 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
   templateUrl: './email-input.component.html',
   styleUrls: ['./email-input.component.scss']
 })
-export class EmailInputComponent implements OnInit {
+export class EmailInputComponent {
 
   emailForm = new FormGroup({
     email: new FormControl('', [Validators.email]),
   });
-  constructor(private userService : UserService, 
+  constructor(private userService : UserService,
               private responseMessage : ResponseMessageService,) { }
-
-  ngOnInit(): void {
-  }
-
   onSubmit(){
     this.userService.sendResetPasswordEmail(this.emailForm.value.email).subscribe({
       next : (response) => {

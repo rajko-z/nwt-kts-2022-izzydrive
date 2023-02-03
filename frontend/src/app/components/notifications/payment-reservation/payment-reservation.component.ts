@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
+import {Component, Inject} from '@angular/core';
+import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 import {DrivingService} from "../../../services/drivingService/driving.service";
 
 @Component({
@@ -9,7 +9,7 @@ import {DrivingService} from "../../../services/drivingService/driving.service";
   templateUrl: './payment-reservation.component.html',
   styleUrls: ['./payment-reservation.component.scss']
 })
-export class PaymentReservationComponent implements OnInit {
+export class PaymentReservationComponent {
   minute: string;
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data,
@@ -17,9 +17,6 @@ export class PaymentReservationComponent implements OnInit {
               private drivingService: DrivingService,
               private responseMessage: ResponseMessageService) {
     this.minute = new Date(data.message.duration * 1000).toISOString().slice(14, 19);
-  }
-
-  ngOnInit(): void {
   }
 
   openPaymentPageClick() {

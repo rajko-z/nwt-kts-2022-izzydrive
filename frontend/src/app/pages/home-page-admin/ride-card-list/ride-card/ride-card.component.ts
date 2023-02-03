@@ -6,14 +6,11 @@ import {DrivingWithLocations} from "../../../../model/driving/driving";
   templateUrl: './ride-card.component.html',
   styleUrls: ['./ride-card.component.scss']
 })
-export class RideCardComponent implements OnInit {
+export class RideCardComponent {
 
   @Input()
   driving: DrivingWithLocations
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
 import {NewPassword} from "../../model/user/newPassword";
 import {UserService} from "../../services/userService/user-sevice.service";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
 
   hideCurrPassword: boolean = true;
   hideNewPassword: boolean = true;
@@ -20,7 +20,7 @@ export class ChangePasswordComponent implements OnInit {
   passwordForm = new FormGroup({
     currPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    repeatedPassword: new FormControl('',[Validators.required,Validators.minLength(8)]),
+    repeatedPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
   constructor(
@@ -28,9 +28,7 @@ export class ChangePasswordComponent implements OnInit {
     private loggedUserService: LoggedUserService,
     private userService: UserService,
     private messageresponse: ResponseMessageService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
   }
 
   validate(): boolean {

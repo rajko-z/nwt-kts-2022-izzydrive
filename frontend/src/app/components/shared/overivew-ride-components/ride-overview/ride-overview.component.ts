@@ -6,14 +6,11 @@ import {PlaceOnMap} from "../../../../model/map/placeOnMap";
   templateUrl: './ride-overview.component.html',
   styleUrls: ['./ride-overview.component.scss']
 })
-export class RideOverviewComponent implements OnInit {
+export class RideOverviewComponent {
   @Input() start: string;
   @Input() end:string;
   @Input() intermediateStation: PlaceOnMap[];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

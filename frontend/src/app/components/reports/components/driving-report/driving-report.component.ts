@@ -32,11 +32,6 @@ export class DrivingReportComponent implements OnInit {
   @Input() SourceValue: number[];
    @Input() title: string;
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.ngOnInit()
-
-}
-
   ngOnInit(): void {
     this.chartOptions = {
       colors: ["#6B2167"],
@@ -76,7 +71,7 @@ export class DrivingReportComponent implements OnInit {
       xaxis: {
         categories: [...this.XAxisValues]
       },
-      
+
     };
   }
 
@@ -84,5 +79,5 @@ export class DrivingReportComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
 
   constructor() {}
-   
+
 }

@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 import {DrivingService} from "../../../services/drivingService/driving.service";
 import {UserService} from "../../../services/userService/user-sevice.service";
 
@@ -10,7 +10,7 @@ import {UserService} from "../../../services/userService/user-sevice.service";
   templateUrl: './new-reservation.component.html',
   styleUrls: ['./new-reservation.component.scss']
 })
-export class NewReservationComponent implements OnInit {
+export class NewReservationComponent {
 
   time: string;
   user: string;
@@ -24,10 +24,6 @@ export class NewReservationComponent implements OnInit {
     this.user = userService.getRoleCurrentUserRole();
     this.time = data.message.reservationTime;
   }
-
-  ngOnInit(): void {
-  }
-
   okClick() {
     if (this.user === 'ROLE_DRIVER') {
       this.router.navigateByUrl('/driver');
