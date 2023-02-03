@@ -21,9 +21,10 @@
 
 .button-evaluate{
   @include buttonStyle();
-  @include size(90%, 100%);
+  @include size(100%, 100%);
   font-size: 12px;
   padding: 5px;
+  border: none;
 }
 
 .table-users {

@@ -8,6 +8,8 @@ import {MapService} from "../../services/mapService/map.service";
 import {RouteDTO} from "../../model/route/route";
 import {RouteService} from "../../services/routeService/route.service";
 import {Router} from "@angular/router";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-detail-ride-view',
@@ -22,6 +24,9 @@ export class DetailRideViewComponent implements OnInit {
 
   isPassengerView?: boolean;
 
+  userProfilePhotos: SafeResourceUrl[] = [];
+  driverProfilePhoto: SafeResourceUrl;
+
   constructor(
     private dialogRef: MatDialogRef<DrivingDetails>,
     @Inject(MAT_DIALOG_DATA) public drivingId : number,
@@ -29,7 +34,9 @@ export class DetailRideViewComponent implements OnInit {
     private drivingService: DrivingService,
     private userService: UserService,
     private mapService: MapService,
-    private router: Router
+    private router: Router,
+    private _sanitizer: DomSanitizer,
+    private responseMessage: ResponseMessageService
   ) { }
 
   ngOnInit(): void {
@@ -43,8 +50,8 @@ export class DetailRideViewComponent implements OnInit {
       .subscribe({
           next: (response) => {
             this.driving = response;
-            console.log(response);
             this.showOnMap();
+            this.setProfilePhotos();
           },
           error: (error) => {
             this.snackBar.open(error.error.message, "ERROR", {
@@ -79,4 +86,27 @@ export class DetailRideViewComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  setProfilePhotos(){
+    this.driving.passengers.forEach((passenger) => {
+      this.userService.getUserDataWithImage(passenger).subscribe({
+        next: (response) => {
+          this.userProfilePhotos.push(response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null);
+        },
+        error: (error) => {
+          this.responseMessage.openErrorMessage(error.error.message)
+        }
+      })
+    })
+    this.userService.getUserDataWithImage(this.driving.driver.email).subscribe(
+      {
+        next: (response) => {
+          console.log(response)
+          this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;
+        },
+        error: (error) => {
+          this.responseMessage.openErrorMessage(error.error.message)
+        }
+      }
+    )
+  }
 }

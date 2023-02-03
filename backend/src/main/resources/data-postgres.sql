@@ -3,6 +3,8 @@ insert into role (name) values ('ROLE_DRIVER');
 insert into role (name) values ('ROLE_PASSENGER');
 
 insert into images (name) values ('john@gmail.com.jpg');
+insert into images (name) values ('marko@gmail.com.jpg');
+insert into images (name) values ('natasa.lakovic@gmail.com.jpg');
 
 insert into cars (car_accommodations, car_type, max_num_of_passengers, model, registration)
 values

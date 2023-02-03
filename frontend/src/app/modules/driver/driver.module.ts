@@ -5,7 +5,6 @@ import {SharedComponentsModule} from "../shared/shared-components.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DriverRoutingModule} from "./driver-routing.module";
 import {HomePageDriverComponent} from "../../pages/home-page-driver/home-page-driver.component";
-import {DisplayDrivingComponent} from "../../components/display-driving/display-driving.component";
 import {ExplanationDialogComponent} from "../../components/explanation-dialog/explanation-dialog.component";
 import {ReservationPageDriverComponent} from "../../pages/reservation-page-driver/reservation-page-driver.component";
 import {ProfilePageCarComponent} from "src/app/components/profile/profile-page-car/profile-page-car.component";
@@ -16,6 +15,7 @@ import {WorkTimeComponent} from "../../components/worktime/work-time.component";
 import {
   ChangeDriverStatusCheckComponent
 } from "../../components/change-driver-status-check/change-driver-status-check.component";
+import { DisplayDrivingComponent } from "src/app/components/display-driving/display-driving.component";
 
 const declaredModules = [
   HomePageDriverComponent,

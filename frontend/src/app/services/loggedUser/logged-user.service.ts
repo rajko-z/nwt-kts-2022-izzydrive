@@ -8,6 +8,8 @@ import {UserService} from "../userService/user-sevice.service";
 import {DriverService} from "../driverService/driver.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { ChatService } from '../chat/chat.service';
+import { Role } from 'src/app/model/user/role';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,8 @@ export class LoggedUserService {
               private userService: UserService,
               private driverService: DriverService,
               private router: Router,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private chatService: ChatService) {
   }
 
   blockUser(id) {
@@ -42,6 +45,7 @@ export class LoggedUserService {
       this.driverService.setDriverStatusToInactive()
         .subscribe({
             next: (_) => {
+              this.chatService.closeUserChats(this.userService.getCurrentUserId(), Role.ROLE_DRIVER)
               this.router.navigate(['anon/login']);
               sessionStorage.removeItem('currentUser');
             },
@@ -54,6 +58,7 @@ export class LoggedUserService {
         );
     }
     else {
+      this.chatService.closeUserChats(this.userService.getCurrentUserId(), this.userService.getRoleCurrentUserRole())
       this.router.navigate(['anon/login']);
       sessionStorage.removeItem('currentUser');
     }

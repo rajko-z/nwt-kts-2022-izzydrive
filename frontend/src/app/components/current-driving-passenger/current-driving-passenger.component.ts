@@ -12,6 +12,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {FavoriteRouteDialogComponent} from "../favorite-route-dialog/favorite-route-dialog.component";
 import {FavoriteRoute} from "../../model/route/favoriteRoute";
 import {Router} from "@angular/router";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-current-driving-passenger',
@@ -31,6 +33,8 @@ export class CurrentDrivingPassengerComponent implements OnInit, OnDestroy {
 
   waitingForRideToStart: boolean = false;
 
+  driverProfilePhoto: SafeResourceUrl;
+  
   private stompClient: any;
 
   constructor(
@@ -38,7 +42,9 @@ export class CurrentDrivingPassengerComponent implements OnInit, OnDestroy {
     private passengerService: PassengerService,
     private dialog: MatDialog,
     private userService: UserService,
-    private router: Router) {
+    private router: Router,
+    private _sanitizer: DomSanitizer,
+    private responseMessage: ResponseMessageService) {
   }
 
   ngOnInit(): void {
@@ -59,6 +65,21 @@ export class CurrentDrivingPassengerComponent implements OnInit, OnDestroy {
         this.fetchNewTimePeriodically();
       }
     }
+    this.setDriverProfilePhoto();
+  }
+
+  setDriverProfilePhoto(){
+    this.userService.getUserDataWithImage(this.currentDriving.driver.email).subscribe(
+      {
+        next: (response) => {
+          console.log(response)
+          this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;
+        },
+        error: (error) => {
+          this.responseMessage.openErrorMessage(error.error.message)
+        }
+      }
+    )
   }
 
   initializeWebSocketConnection() {
