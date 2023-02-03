@@ -29,6 +29,7 @@ import {
 import {AdminSearchRideComponent} from "../../pages/home-page-admin/admin-search-ride/admin-search-ride.component";
 import {RideCardListComponent} from "../../pages/home-page-admin/ride-card-list/ride-card-list.component";
 import {RideCardComponent} from "../../pages/home-page-admin/ride-card-list/ride-card/ride-card.component";
+import {NoteListComponent} from "../../components/review-and-write-admin-notes/note-list/note-list.component";
 
 const declaredModules = [
   AllDriversPageAdminComponent,
@@ -44,7 +45,8 @@ const declaredModules = [
   AdminLeftPartHomeComponent,
   AdminSearchRideComponent,
   RideCardListComponent,
-  RideCardComponent
+  RideCardComponent,
+  NoteListComponent
 ];
 
 @NgModule({

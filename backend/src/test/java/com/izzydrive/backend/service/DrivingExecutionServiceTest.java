@@ -2,11 +2,13 @@ package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.constants.PassengerConst;
+import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.RouteDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
+import com.izzydrive.backend.exception.BadRequestException;
 import com.izzydrive.backend.jobs.ReservationNotificationTask;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
@@ -18,6 +20,7 @@ import com.izzydrive.backend.service.driving.execution.DrivingExecutionServiceIm
 import com.izzydrive.backend.service.navigation.NavigationService;
 import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
 import com.izzydrive.backend.service.notification.passenger.PassengerNotificationServiceImpl;
+import com.izzydrive.backend.service.users.driver.DriverService;
 import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +33,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
-import static com.izzydrive.backend.utils.HelperMapper.mockLocationsDTO;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static com.izzydrive.backend.utils.HelperMapper.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -59,8 +61,8 @@ public class DrivingExecutionServiceTest {
     @MockBean
     private PassengerNotificationServiceImpl passengerNotificationService;
 
-//    @MockBean
-//    private Logger LOG = LoggerFactory.getLogger(ReservationNotificationTask.class);
+    @MockBean
+    private DriverService driverService;
 
     @MockBean
     private ReservationNotificationTask reservationNotificationTask;
@@ -73,7 +75,7 @@ public class DrivingExecutionServiceTest {
 
 
     @Test
-    public void should_be_driver_status_free_when_next_driving_is_null(){
+    public void should_be_driver_status_free_when_next_driving_is_null() {
         Driving driving = this.mockDriving(CURRENT_DRIVING_ID, DrivingState.WAITING);
         Driver driver = this.mockDriver(DriverConst.D_MIKA_EMAIL, driving, true, null);  //next driving is null
         Mockito.when(drivingService.findById(CURRENT_DRIVING_ID)).thenReturn(Optional.of(driving));
@@ -86,7 +88,7 @@ public class DrivingExecutionServiceTest {
     }
 
     @Test
-    public void should_be_driver_status_taken_when_next_driving_is_not_null(){
+    public void should_be_driver_status_taken_when_next_driving_is_not_null() {
         Driving currentDriving = this.mockDriving(CURRENT_DRIVING_ID, DrivingState.ACTIVE);
         Driving nextDriving = this.mockDriving(NEXT_DRIVING_ID, DrivingState.WAITING);
         Driver driver = this.mockDriver(DriverConst.D_MIKA_EMAIL, currentDriving, true, nextDriving);  //next driving is not null
@@ -118,7 +120,53 @@ public class DrivingExecutionServiceTest {
         verify(navigationService, times(1)).startNavigationForDriver(drivingDTOWithLocations, true);
     }
 
-    private Driving mockDriving(Long id, DrivingState drivingState){
+    @Test
+    void should_throw_bad_exp_when_driving_is_null() {
+        Driver driver = mockDriver(DriverConst.D_MILAN_EMAIL, null, true, null);
+        Mockito.when(driverService.getCurrentlyLoggedDriverWithCurrentDriving()).thenReturn(driver);
+        Mockito.when(driverService.getCurrentDriving()).thenReturn(null);
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.drivingExecutionService.startDriving());
+        assertEquals("You don't have current waiting driving to start", exception.getMessage());
+    }
+
+    @Test
+    void should_throw_bad_exp_when_driving_has_not_state_waiting() {
+        Driver driver = mockDriver(DriverConst.D_MILAN_EMAIL, null, true, null);
+        DriverDTO driverDTO = mockDriverWithLocation(DriverConst.D_MILAN_EMAIL);
+        DrivingDTOWithLocations driving = mockDrivingWithNoLocations(1L, DrivingState.PAYMENT, driverDTO);
+        Mockito.when(driverService.getCurrentlyLoggedDriverWithCurrentDriving()).thenReturn(driver);
+        Mockito.when(driverService.getCurrentDriving()).thenReturn(driving);
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.drivingExecutionService.startDriving());
+        assertEquals("You don't have current waiting driving to start", exception.getMessage());
+    }
+
+    @Test
+    void should_throw_bad_exp_when_driver_is_not_on_start() {
+        Driver driver = mockDriver(DriverConst.D_MILAN_EMAIL, null, true, null);
+        DriverDTO driverDTO = mockDriverWithLocation(DriverConst.D_MILAN_EMAIL);
+        DrivingDTOWithLocations driving = mockDrivingWithLocations(1L, DrivingState.WAITING, driverDTO);
+        Mockito.when(driverService.getCurrentlyLoggedDriverWithCurrentDriving()).thenReturn(driver);
+        Mockito.when(driverService.getCurrentDriving()).thenReturn(driving);
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.drivingExecutionService.startDriving());
+        assertEquals("You can't start driving because you didn't arrived at start location", exception.getMessage());
+    }
+
+    @Test
+    void should_throw_bad_exp_when_driver_is_on_start() { //passenger John
+        Driver driver = mockDriverWithCurrentDriving(DriverConst.D_MILAN_EMAIL);
+        DriverDTO driverDTO = mockDriverWithLocation(DriverConst.D_MILAN_EMAIL);
+        DrivingDTOWithLocations driving = mockDrivingWithNoLocations(1L, DrivingState.WAITING, driverDTO);
+        Mockito.when(driverService.getCurrentlyLoggedDriverWithCurrentDriving()).thenReturn(driver);
+        Mockito.when(driverService.getCurrentDriving()).thenReturn(driving);
+        this.drivingExecutionService.startDriving();
+        assertEquals(DriverStatus.ACTIVE, driver.getDriverStatus());
+        assertEquals(DrivingState.ACTIVE, driver.getCurrentDriving().getDrivingState());
+        assertNotNull(driver.getCurrentDriving().getStartDate());
+        verify(passengerNotificationService, times(1)).sendSignalThatRideHasStart(driving.getPassengers());
+        verify(navigationService, times(1)).startNavigationForDriver(driving, false);
+    }
+
+    private Driving mockDriving(Long id, DrivingState drivingState) {
         Driving driving = new Driving();
         driving.setId(id);
         driving.setDrivingState(drivingState);
@@ -130,16 +178,16 @@ public class DrivingExecutionServiceTest {
         return driving;
     }
 
-    private Driver mockDriver(String email, Driving driving, boolean isActive, Driving nextDriving){
+    private Driver mockDriver(String email, Driving driving, boolean isActive, Driving nextDriving) {
         Driver driver = new Driver();
         driver.setEmail(email);
         driver.setCurrentDriving(driving);
         driver.setActive(isActive);
         driver.setNextDriving(nextDriving);
-        return  driver;
+        return driver;
     }
 
-    private Passenger mockPassenger(String email){
+    private Passenger mockPassenger(String email) {
         Passenger p = new Passenger();
         p.setEmail(email);
         return p;

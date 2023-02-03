@@ -1,0 +1,14 @@
+<div class="list-note">
+  <div *ngIf="notes?.length === 0">
+    <p class="no-note">You currently do not have any notes.</p>
+  </div>
+  <div class="note-area" *ngIf="notes?.length > 0">
+    <div class="note-info" *ngFor="let option of notes">
+      <div class="note">
+        <p class="message">{{option.text}}</p>
+        <p
+          class="time">{{option.timestamp}}</p>
+      </div>
+    </div>
+  </div>
+</div>

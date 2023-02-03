@@ -30,7 +30,10 @@ export class ReviewAndWriteAdminNotesComponent implements OnInit {
   }
 
   onSubmit() {
-    const note: Note = {text: this.noteForm.value.note, timestamp: new Date(), userId: this.data.id};
+    if (!this.noteForm.value.note && this.noteForm.value.note.trim() === '') {
+      return;
+    }
+    const note: Note = {text: this.noteForm.value.note, userId: this.data.id};
     this.noteForm.setValue({note: ''});
     this.adminNoteService.writeNewAdminNote(note).subscribe((res) => {
       this.loadData();

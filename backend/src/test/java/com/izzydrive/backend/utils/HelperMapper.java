@@ -2,6 +2,9 @@ package com.izzydrive.backend.utils;
 
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.constants.PassengerConst;
+import com.izzydrive.backend.dto.DriverDTO;
+import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.*;
 import com.izzydrive.backend.model.car.Car;
@@ -42,18 +45,89 @@ public class HelperMapper {
         return p;
     }
 
-    public static Passenger mockPassengerWithCurrentDriving(String email){
+    public static Passenger mockPassengerWithCurrentDriving(String email, DrivingState state){
         Passenger p = new Passenger();
         p.setEmail(email);
-        p.setCurrentDriving(mockDriving(1L, DrivingState.ACTIVE));
+        p.setCurrentDriving(mockDriving(1L, state));
         return p;
     }
 
     public static Driving mockDriving(Long id, DrivingState drivingState){
+        Driver driver = mockDriverForDriving(DriverConst.D_MILAN_EMAIL);
         Driving driving = new Driving();
         driving.setId(id);
         driving.setDrivingState(drivingState);
+        driving.setDuration(441.2);
+        driving.setPrice(250);
+        List<Location> coordinates = mockLocations();
+        driving.setLocations(coordinates);
+        Address start = new Address(19.812617, 45.231324, "Ulica Petra Petrovica Novi Sad");
+        Address end = new Address(19.809645, 45.23218, "Ulica Marka Markovica Novi Sad");
+        Route route = new Route(start, end);
+        route.setIntermediateStations(new ArrayList<>());
+        driving.setRoute(route);
+        driving.setDriver(driver);
+        driver.setCurrentDriving(driving);
         return driving;
+    }
+
+    public static DrivingDTOWithLocations mockDrivingWithNoLocations(Long id, DrivingState drivingState, DriverDTO driver){
+        DrivingDTOWithLocations driving = new DrivingDTOWithLocations();
+        driving.setId(id);
+        driving.setDrivingState(drivingState);
+        driving.setPrice(250);
+        Address start = new Address(19.812617, 45.231324, "Ulica Petra Petrovica Novi Sad");
+        Address end = new Address(19.809645, 45.23218, "Ulica Marka Markovica Novi Sad");
+        Route route = new Route(start, end);
+        route.setIntermediateStations(new ArrayList<>());
+        CalculatedRouteDTO calculatedRouteDTO = new CalculatedRouteDTO();
+        List<LocationDTO> locationDTOS = mockLocationsDTOStart();
+        calculatedRouteDTO.setCoordinates(locationDTOS);
+        driving.setFromDriverToStart(calculatedRouteDTO);
+        driving.setDriver(driver);
+        driving.setPassengers(new ArrayList<>(Collections.singleton(PassengerConst.P_JOHN_EMAIL)));
+        return driving;
+    }
+
+    public static DrivingDTOWithLocations mockDrivingWithLocations(Long id, DrivingState drivingState, DriverDTO driver){
+        DrivingDTOWithLocations driving = new DrivingDTOWithLocations();
+        driving.setId(id);
+        driving.setDrivingState(drivingState);
+        driving.setPrice(250);
+        Address start = new Address(19.812617, 45.231324, "Ulica Petra Petrovica Novi Sad");
+        Address end = new Address(19.809645, 45.23218, "Ulica Marka Markovica Novi Sad");
+        Route route = new Route(start, end);
+        route.setIntermediateStations(new ArrayList<>());
+        List<LocationDTO> locationDTOS = mockLocationsDTO();
+        CalculatedRouteDTO calculatedRouteDTO = new CalculatedRouteDTO();
+        calculatedRouteDTO.setCoordinates(locationDTOS);
+        driving.setFromDriverToStart(calculatedRouteDTO);
+        driving.setDriver(driver);
+        return driving;
+    }
+
+    public static Driver mockDriverWithCurrentDriving(String email){
+        Driver driver = new Driver();
+        driver.setEmail(email);
+        driver.setDriverStatus(DriverStatus.TAKEN);
+        Driving driving = new Driving();
+        driving.setDrivingState(DrivingState.WAITING);
+        driver.setCurrentDriving(driving);
+        return driver;
+    }
+
+    public static DriverDTO mockDriverWithLocation(String email){
+        DriverDTO driver = new DriverDTO();
+        driver.setEmail(email);
+        driver.setLocation(new LocationDTO(45.23218,19.809645));
+        return driver;
+    }
+
+    public static Driver mockDriverForDriving(String email){
+        Driver driver = new Driver();
+        driver.setEmail(email);
+        driver.setActive(true);
+        return  driver;
     }
 
     public static Driving mockDrivingWithRoute(Long id, Driver driver){
@@ -86,11 +160,17 @@ public class HelperMapper {
 
     public static List<LocationDTO> mockLocationsDTO(){
         List<LocationDTO> coordinates = new ArrayList<>();
-        List<LocationDTO> cordinates = new ArrayList<>();
-        cordinates.add(new LocationDTO(19.812617, 45.231324));
-        cordinates.add(new LocationDTO(19.812177, 45.23104));
-        cordinates.add(new LocationDTO(19.809474, 45.231311));
-        cordinates.add(new LocationDTO(19.809645, 45.23218));
+        coordinates.add(new LocationDTO(19.812617, 45.231324));
+        coordinates.add(new LocationDTO(19.812177, 45.23104));
+        coordinates.add(new LocationDTO(19.809474, 45.231311));
+        coordinates.add(new LocationDTO(19.809645, 45.23218));
+        return  coordinates;
+    }
+
+    public static List<LocationDTO> mockLocationsDTOStart(){
+        List<LocationDTO> coordinates = new ArrayList<>();
+        coordinates.add(new LocationDTO(19.812617, 45.231324));
+        coordinates.add(new LocationDTO(19.812177, 45.23104));
         return  coordinates;
     }
 

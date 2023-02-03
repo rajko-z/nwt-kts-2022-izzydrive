@@ -19,6 +19,7 @@ import com.izzydrive.backend.repository.users.UserRepository;
 import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.routes.DrivingRoutesService;
 import com.izzydrive.backend.service.notification.NotificationService;
+import com.izzydrive.backend.service.users.LoggedUserService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
 import com.izzydrive.backend.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,8 @@ public class PassengerServiceImpl implements PassengerService {
     private final DrivingRoutesService drivingRoutesService;
 
     private final NotificationService notificationService;
+
+    private final LoggedUserService loggedUserService;
 
     public void registerPassenger(NewPassengerDTO newPassengerData) {
         validateNewPassengerData(newPassengerData);
@@ -108,8 +111,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public Passenger getCurrentlyLoggedPassenger() {
-        String passengerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.findByEmailWithCurrentDriving(passengerEmail);
+        return loggedUserService.getCurrentlyLoggedPassenger();
     }
 
     @Override

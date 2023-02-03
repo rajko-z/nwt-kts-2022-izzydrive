@@ -6,6 +6,7 @@ import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.dto.NotificationDTO;
 import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
+import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.NotificationStatus;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.driver.Driver;
@@ -64,7 +65,7 @@ public class NotificationServiceTest {
     //reportDriverNotification
     @Test
     void should_send_notification_to_admin_for_report_driver_by_passenger(){
-        Passenger passenger = mockPassengerWithCurrentDriving(PassengerConst.P_JOHN_EMAIL);
+        Passenger passenger = mockPassengerWithCurrentDriving(PassengerConst.P_JOHN_EMAIL, DrivingState.ACTIVE);
         this.notificationService.reportDriverNotification(passenger);
         verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/notification/reportDriver"), (Object) any());
 

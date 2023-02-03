@@ -3,6 +3,8 @@ package com.izzydrive.backend.service;
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
+import com.izzydrive.backend.model.DrivingState;
+import com.izzydrive.backend.model.users.driver.Driver;
 import com.izzydrive.backend.service.navigation.NavigationService;
 import com.izzydrive.backend.service.navigation.NavigationServiceImpl;
 import com.izzydrive.backend.service.navigation.NavigationTask;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static com.izzydrive.backend.utils.HelperMapper.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,5 +51,12 @@ public class NavigationServiceTest {
         verify(threadPoolExecutor, times(1)).execute(any());
     }
 
+    @Test
+    void should_start_navigation_for_driver_start(){
+        DriverDTO driverDTO = mockDriverWithLocation(DriverConst.D_MILAN_EMAIL);
+        DrivingDTOWithLocations driving = mockDrivingWithNoLocations(1L, DrivingState.WAITING, driverDTO);
+        navigationService.startNavigationForDriver(driving, false);
+        verify(threadPoolExecutor, times(1)).execute(any());
+    }
 
 }

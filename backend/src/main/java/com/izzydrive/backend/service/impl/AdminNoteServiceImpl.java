@@ -9,6 +9,7 @@ import com.izzydrive.backend.service.users.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class AdminNoteServiceImpl implements AdminNoteService {
         AdminNote note = new AdminNote();
         note.setAdmin(admin);
         note.setText(adminNotesDTO.getText());
-        note.setTimestamp(adminNotesDTO.getTimestamp());
+        note.setTimestamp(LocalDateTime.now());
         note.setUserId(adminNotesDTO.getUserId());
         adminNoteRepository.save(note);
     }

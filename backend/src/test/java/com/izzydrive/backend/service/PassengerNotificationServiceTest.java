@@ -1,6 +1,7 @@
 package com.izzydrive.backend.service;
 
 import com.izzydrive.backend.constants.DriverConst;
+import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.Driving;
@@ -14,6 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,4 +47,10 @@ public class PassengerNotificationServiceTest {
         verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/driving/refreshedDrivingForPassengers"), (Object) any());
     }
 
+    @Test
+    void should_send_signal_that_ride_has_start(){
+        List<String> passengers = new ArrayList<>(Collections.singleton(PassengerConst.P_JOHN_EMAIL));
+        passengerNotificationService.sendSignalThatRideHasStart(passengers);
+        verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/driving/rideStarted"), (Object) any());
+    }
 }

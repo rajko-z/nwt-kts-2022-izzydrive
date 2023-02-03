@@ -1,5 +1,5 @@
 export class Note {
   text: string;
-  timestamp: Date;
+  timestamp?: Date;
   userId: number;
 }
