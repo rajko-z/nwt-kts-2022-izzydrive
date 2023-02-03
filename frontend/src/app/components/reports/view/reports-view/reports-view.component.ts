@@ -9,6 +9,7 @@ import {ReportsService} from 'src/app/services/report/reports.service';
 import {UserService} from 'src/app/services/userService/user-sevice.service';
 import {LoggedUserService} from "../../../../services/loggedUser/logged-user.service";
 import {User} from "../../../../model/user/user";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-reports-view',
@@ -17,12 +18,11 @@ import {User} from "../../../../model/user/user";
 })
 export class ReportsViewComponent implements OnInit {
 
-  maxDate: Date = new Date();
   dateForm = new FormGroup({
     startDate: new FormControl<Date | null>(null),
     endDate: new FormControl<Date | null>(null),
   });
-
+   
   reportX: string[] = [];
   drivingNumbersY: number[] = [];
   priceReportY: number[] = [];
@@ -42,7 +42,10 @@ export class ReportsViewComponent implements OnInit {
   drivingPriceReportTitle: string = "Prices of drivings per day for selected period";
   drivingDistanceReportTitle: string = "Distance of drivings per day for selected period";
 
-  constructor(private reportService: ReportsService, private userService: UserService, private loggedUserService: LoggedUserService) {
+  constructor(private reportService: ReportsService, 
+    private userService: UserService, 
+    private loggedUserService: LoggedUserService,
+    private responseMessage: ResponseMessageService) {
   }
 
   ngOnInit(): void {
@@ -57,12 +60,15 @@ export class ReportsViewComponent implements OnInit {
         this.users = response.filter((user: User) => user.role !== Role.ROLE_ADMIN) as User[];
       },
       error: (error) => {
-        console.log(error)
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }
 
-  onSubmit() {
+  onDateSelected(selectedDates: FormGroup) {
+    this.dateForm.controls.startDate.setValue(selectedDates.value.startDate);
+    this.dateForm.controls.endDate.setValue(selectedDates.value.endDate);
+
     if (this.userService.getRoleCurrentUserRole() === Role.ROLE_PASSENGER) {
       this.getPassengerReport(this.userService.getCurrentUserId());
     } else if (this.userService.getRoleCurrentUserRole() === Role.ROLE_DRIVER) {
@@ -80,7 +86,7 @@ export class ReportsViewComponent implements OnInit {
         this.reportDataLoaded = true;
       },
       error: (error) => {
-        console.log(error)
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     });
   }
@@ -93,7 +99,7 @@ export class ReportsViewComponent implements OnInit {
         this.reportDataLoaded = true;
       },
       error: (error) => {
-        console.log(error)
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     });
   }
@@ -117,7 +123,6 @@ export class ReportsViewComponent implements OnInit {
   }
 
   private chooseAdminReport() {
-    console.log(this.value);
     if (this.value) {
       if (this.value.role === Role.ROLE_DRIVER) {
         this.getDriverReport(this.value?.id);
@@ -138,7 +143,7 @@ export class ReportsViewComponent implements OnInit {
         this.reportDataLoaded = true;
       },
       error: (error) => {
-        console.log(error)
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     });
   }

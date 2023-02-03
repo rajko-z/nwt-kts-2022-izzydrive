@@ -7,6 +7,7 @@ import {LoggedUserService} from "../../../services/loggedUser/logged-user.servic
 import {
   ReviewAndWriteAdminNotesComponent
 } from "../../review-and-write-admin-notes/review-and-write-admin-notes.component";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-review-users-table',
@@ -22,7 +23,10 @@ export class ReviewUsersTableComponent {
 
   @Output() dataEvent = new EventEmitter<void>();
 
-  constructor(private loggedUserService: LoggedUserService, public dialog: MatDialog, public snackBar: MatSnackBar) {
+  constructor(private loggedUserService: LoggedUserService, 
+              public dialog: MatDialog, 
+              public snackBar: MatSnackBar,
+              private reponseMessage: ResponseMessageService) {
   }
 
   openRideDialog(user: User): void {
@@ -48,27 +52,21 @@ export class ReviewUsersTableComponent {
   blockUser(id: string): void {
     this.loggedUserService.blockUser(id).subscribe({
       next: res => this.emitResponse(res),
-      error: error => this.snackBar.open(error.text, "ERROR", {
-        duration: 2000,
-      })
+      error: error => this.reponseMessage.openErrorMessage(error.text)
     });
   }
 
   unblockUser(id: string): void {
     this.loggedUserService.unblockUser(id).subscribe({
         next: res => this.emitResponse(res),
-        error: error => this.snackBar.open(error.text, "ERROR", {
-          duration: 2000,
-        })
+        error: error => this.reponseMessage.openErrorMessage(error.text)
       }
     );
   }
 
   emitResponse(response: string): void {
     this.dataEvent.emit();
-    this.snackBar.open(response, "OK", {
-      duration: 2000,
-    });
+    this.reponseMessage.openSuccessMessage(response)
   }
 
   openNoteDialog(user: User): void {

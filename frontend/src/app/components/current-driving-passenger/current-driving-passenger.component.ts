@@ -72,7 +72,6 @@ export class CurrentDrivingPassengerComponent implements OnInit, OnDestroy {
     this.userService.getUserDataWithImage(this.currentDriving.driver.email).subscribe(
       {
         next: (response) => {
-          console.log(response)
           this.driverProfilePhoto =  response.imageName?  this._sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${response.imageName}`) : null;
         },
         error: (error) => {

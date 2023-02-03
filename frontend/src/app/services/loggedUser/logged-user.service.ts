@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { ChatService } from '../chat/chat.service';
 import { Role } from 'src/app/model/user/role';
+import { ResponseMessageService } from '../response-message/response-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class LoggedUserService {
               private userService: UserService,
               private driverService: DriverService,
               private router: Router,
-              private snackBar: MatSnackBar,
+              private responseMessage: ResponseMessageService,
               private chatService: ChatService) {
   }
 
@@ -50,9 +51,7 @@ export class LoggedUserService {
               sessionStorage.removeItem('currentUser');
             },
             error: (error) => {
-              this.snackBar.open(error.error.message, "ERROR", {
-                duration: 5000,
-              })
+              this.responseMessage.openErrorMessage(error.error.message)
             }
           }
         );

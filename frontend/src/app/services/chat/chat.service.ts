@@ -4,6 +4,7 @@ import firebase from 'firebase/compat/app'
 import {Channel} from 'src/app/model/channel/channel';
 import {Message} from 'src/app/model/message/message';
 import {Role} from 'src/app/model/user/role';
+import { ResponseMessageService } from '../response-message/response-message.service';
 import {UserService} from '../userService/user-sevice.service';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class ChatService {
 
   firebaseChannels = firebase.database().ref('channels/');
   firebaseMessages = firebase.database().ref('messages/');
-  constructor(private userService : UserService, public snackBar: MatSnackBar) { }
+  constructor(private userService : UserService, public responseMessage: ResponseMessageService) { }
 
   snapshotToArray(snapshot: firebase.database.DataSnapshot){ //ovo izdvojiti
     const returnArr = [];
@@ -75,7 +76,7 @@ export class ChatService {
       this.firebaseChannels.orderByChild('id').equalTo(message.channel).once('value', (response) => {
         let channel : Channel = this.snapshotToArray(response)[0];
         if(channel.unread_messages_by_admin && this.userService.getRoleCurrentUserRole() === Role.ROLE_ADMIN.toString()){
-          this.snackBar.open("You have new message", "OK");
+          this.responseMessage.openSuccessMessage("You have new message");
         }
       })
     })
@@ -86,14 +87,13 @@ export class ChatService {
       let channels : Channel [] = this.snapshotToArray(response);
       channels.forEach((channel) => {
         if(channel.unread_messages_by_admin && this.userService.getRoleCurrentUserRole() === Role.ROLE_ADMIN.toString()){
-          this.snackBar.open("You have new message", "OK");
+          this.responseMessage.openSuccessMessage("You have new message");
         }
       })
     })
   }
   closeUserChats(userId : number, role: string) : void{
     if(role === Role.ROLE_ADMIN){
-      console.log("tuu")
       this.closeAllAdminChat()
     }
     else{

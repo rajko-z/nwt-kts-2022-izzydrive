@@ -21,6 +21,7 @@ import {User} from "../../../../model/user/user";
 import {addHours, addMinutes} from 'date-fns'
 import {RouteService} from 'src/app/services/routeService/route.service';
 import {RouteDTO} from 'src/app/model/route/route';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 
 @Component({
@@ -72,15 +73,14 @@ export class RideDataFormComponent {
 
   constructor(
     public dialog: MatDialog,
-    private msg: AngularFireMessaging,
-    private http: HttpClient,
     private mapService: MapService,
     private drivingService: DrivingService,
     private messageTooltip: MatSnackBar,
     private searchPlaceComponentService: SearchPlaceComponentService,
     private userService: UserService,
     private loggedUserService: LoggedUserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private responseMessage: ResponseMessageService
   ) {
     this.loggedUserService.getAllUsers().subscribe((res) => {
       this.users = res;
@@ -99,7 +99,6 @@ export class RideDataFormComponent {
           if (i === 2) this.thirdIntermediatePlaceSelected(route.intermediateStations[i])
       }
       delete RouteService.selectedFavouriteRides[this.userService.getCurrentUserId()];
-      console.log(RouteService.selectedFavouriteRides)
     }
   }
 
@@ -116,8 +115,6 @@ export class RideDataFormComponent {
 
     let drivingFinderRequest: DrivingFinderRequest = this.createDrivingFinderRequest();
 
-    console.log(drivingFinderRequest);
-
     if (this.scheduleRide) {
       this.getScheduleDrivingOptions(drivingFinderRequest);
     } else {
@@ -131,7 +128,6 @@ export class RideDataFormComponent {
       .subscribe({
           next: (options) => {
             this.apiLoading = false;
-            console.log(options);
             this.fetchedDrivingOptionsEvent.emit(options);
             this.drivingFinderRequestEvent.emit(drivingFinderRequest);
           },
@@ -149,7 +145,6 @@ export class RideDataFormComponent {
       .subscribe({
           next: (options) => {
             this.apiLoading = false;
-            console.log(options);
             this.fetchedDrivingOptionsEvent.emit(options);
             this.drivingFinderRequestEvent.emit(drivingFinderRequest);
           },
@@ -162,11 +157,7 @@ export class RideDataFormComponent {
   }
 
   openErrorMessage(message: string): void {
-    this.messageTooltip.open(message, 'Close', {
-      horizontalPosition: "center",
-      verticalPosition: "top",
-      panelClass: ['messageTooltip']
-    });
+    this.responseMessage.openErrorMessage(message)
   }
 
   private createDrivingFinderRequest(): DrivingFinderRequest {
@@ -235,11 +226,7 @@ export class RideDataFormComponent {
       const dateMin = addMinutes(new Date(), 30);
       const dateMax = addHours(new Date(), 5);
       if (dateTime < dateMin || dateTime > dateMax) {
-        this.snackBar.open("The ride is scheduled at least 30 minutes before and at most 5 hours before", "ERROR", {
-          duration: 5000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-        })
+        this.responseMessage.openErrorMessage("The ride is scheduled at least 30 minutes before and at most 5 hours before")
         return false;
       }
     }
@@ -300,19 +287,11 @@ export class RideDataFormComponent {
     }
 
     if (this.secondIntermediatePlace !== null && this.firstIntermediatePlace == null) {
-      this.snackBar.open("First intermediate stations should be selected before second", "ERROR", {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'left',
-      });
+      this.responseMessage.openErrorMessage("First intermediate stations should be selected before second");
       return false;
     }
     if (this.thirdIntermediatePlace !== null && (this.firstIntermediatePlace == null || this.secondIntermediatePlace == null)) {
-      this.snackBar.open("First and second intermediate stations should be selected before third", "ERROR", {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'left',
-      });
+      this.responseMessage.openErrorMessage("First and second intermediate stations should be selected before third");
       return false;
     }
 

@@ -12,18 +12,14 @@ import { UserService } from 'src/app/services/userService/user-sevice.service';
 })
 export class ProfilePageComponent implements OnInit {
 
-  constructor(private router : Router, 
-              private userService: UserService,
-              private snackbar: MatSnackBar) { }
+  constructor(private router : Router) { }
 
   @Input() profileData : ProfilePageData;
 
   ngOnInit(): void {
-    console.log(this.profileData)
   }
 
   onChangeData(){
-    console.log(Object.keys(this.profileData.otherAttributes))
     if (Object.keys(this.profileData.otherAttributes).includes("phone number")){
       this.router.navigateByUrl("/user/edit-profile")
     }

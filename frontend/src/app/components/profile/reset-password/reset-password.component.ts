@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NewPassword } from 'src/app/model/user/newPassword';
 import { ResetPassword } from 'src/app/model/user/resetPassword';
 import { LoggedUserService } from 'src/app/services/loggedUser/logged-user.service';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private responseMessage: ResponseMessageService
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +39,7 @@ export class ResetPasswordComponent implements OnInit {
         this.isValidToken = true;
       },
       error : (error) => {
-        console.log(error)
-        this.snackBar.open(error.error.message, "ERROR");
+        this.responseMessage.openErrorMessage(error.error.message);
       }
     })
   }
@@ -64,11 +65,11 @@ export class ResetPasswordComponent implements OnInit {
     resetPassword.token = this.resetpasswordToke;
     this.userService.resetPassword(resetPassword).subscribe({
       next : (response) => {
-        this.snackBar.open(response.text, "OK")
+        this.responseMessage.openSuccessMessage(response.text)
         this.router.navigateByUrl('/anon/login')
       },
       error : (error) => {
-        this.snackBar.open(error.error.message, "ERROR")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

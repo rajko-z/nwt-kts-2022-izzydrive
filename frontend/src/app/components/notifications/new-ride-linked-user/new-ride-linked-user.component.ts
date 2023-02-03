@@ -28,7 +28,6 @@ export class NewRideLinkedUserComponent implements OnInit {
 
   cancelRideClick() {
     this.drivingService.rejectDrivingLinkedPassenger().subscribe((res) => {
-      console.log(res);
     });
     this.data.preClose();
   }

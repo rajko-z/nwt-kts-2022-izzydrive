@@ -4,6 +4,7 @@ import {DrivingWithLocations} from "../../model/driving/driving";
 import {DrivingService} from "../../services/drivingService/driving.service";
 import {FormControl} from "@angular/forms";
 import {MapService} from "../../services/mapService/map.service";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-home-page-admin',
@@ -20,7 +21,7 @@ export class HomePageAdminComponent implements OnInit {
 
   constructor(
     private drivingService: DrivingService,
-    private snackBar: MatSnackBar,
+    private responseMessage: ResponseMessageService,
     private mapService: MapService) { }
 
   ngOnInit(): void {
@@ -34,9 +35,7 @@ export class HomePageAdminComponent implements OnInit {
             this.drivings = drivings;
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );
@@ -51,9 +50,7 @@ export class HomePageAdminComponent implements OnInit {
               this.drivings = drivings;
             },
             error: (error) => {
-              this.snackBar.open(error.error.message, "ERROR", {
-                duration: 5000,
-              })
+              this.responseMessage.openErrorMessage(error.error.message)
             }
           }
         );
@@ -75,9 +72,7 @@ export class HomePageAdminComponent implements OnInit {
             this.mapService.addAllFromDriving(driving);
           },
           error: (_) => {
-            this.snackBar.open("Can't find this driving. It is possible that this driving is canceled, please refresh page to load new current drivings", "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage("Can't find this driving. It is possible that this driving is canceled, please refresh page to load new current drivings")
           }
         }
       );

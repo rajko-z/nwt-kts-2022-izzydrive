@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import {DriverService} from "../../services/driverService/driver.service";
 
 @Component({
@@ -16,7 +17,8 @@ export class ChangeDriverStatusCheckComponent implements OnInit {
     private driverService: DriverService,
     @Inject(MAT_DIALOG_DATA) public data: boolean,
     private dialogRef: MatDialogRef<ChangeDriverStatusCheckComponent>,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private messageresponse: ResponseMessageService
   ) {}
 
   ngOnInit() {
@@ -31,9 +33,7 @@ export class ChangeDriverStatusCheckComponent implements OnInit {
               this.closeDialog(true);
             },
             error: (error) => {
-              this.snackBar.open(error.error.message, "ERROR", {
-                duration: 5000,
-              });
+              this.messageresponse.openErrorMessage(error.error.message);
               this.closeDialog(false);
             }
           }
@@ -45,9 +45,7 @@ export class ChangeDriverStatusCheckComponent implements OnInit {
               this.closeDialog(true);
             },
             error: (error) => {
-              this.snackBar.open(error.error.message, "ERROR", {
-                duration: 5000,
-              });
+              this.messageresponse.openErrorMessage(error.error.message);
               this.closeDialog(false);
             }
           }

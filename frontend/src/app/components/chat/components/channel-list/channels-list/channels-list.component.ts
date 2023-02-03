@@ -6,6 +6,7 @@ import 'firebase/compat/database'
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { Channel } from 'src/app/model/channel/channel';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-channels-list',
@@ -23,7 +24,8 @@ export class ChannelsListComponent implements OnInit {
 
   constructor(public datepipe: DatePipe, 
               private userService: UserService, 
-              private chatService : ChatService) {
+              private chatService : ChatService,
+              private responseMessage: ResponseMessageService) {
     }
 
   initChannels(): void {
@@ -47,7 +49,7 @@ export class ChannelsListComponent implements OnInit {
 
       },
       error: (response) =>{
-        console.log(response.error.error);
+        this.responseMessage.openErrorMessage(response.error.message)
       }
     })
     

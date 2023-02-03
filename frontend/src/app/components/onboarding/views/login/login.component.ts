@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit {
      .subscribe({
 
       next : (responce) => {
-        console.log(responce);
         this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
         if (responce["user"].role === Role.ROLE_ADMIN.toString()){
           this.chatService.checkNewMessagesForAdmin();
@@ -117,7 +116,6 @@ export class LoginComponent implements OnInit {
       .subscribe({
 
           next : (responce) => {
-            console.log(responce);
           this.userService.setCurrentUser({email : responce["user"].email, token: responce["token"], role: responce["user"].role, id: responce["user"].id})
           if (responce["user"].role === Role.ROLE_ADMIN.toString()){
             this.chatService.checkNewMessagesForAdmin();

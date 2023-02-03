@@ -16,6 +16,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { ReportsViewComponent } from "src/app/components/reports/view/reports-view/reports-view.component";
 import { DrivingReportComponent } from "src/app/components/reports/components/driving-report/driving-report.component";
 import { DrivingReportHeaderComponent } from "src/app/components/reports/components/driving-report-header/driving-report-header.component";
+import { DrivingReportDatePickerComponent } from "src/app/components/reports/components/driving-report-date-picker/driving-report-date-picker.component";
 
 const declaredModules = [
   ChangePasswordComponent,
@@ -26,7 +27,8 @@ const declaredModules = [
   ProfilePageUserComponent,
   DrivingReportComponent,
   ReportsViewComponent,
-  DrivingReportHeaderComponent
+  DrivingReportHeaderComponent,
+  DrivingReportDatePickerComponent
 ];
 
 @NgModule({

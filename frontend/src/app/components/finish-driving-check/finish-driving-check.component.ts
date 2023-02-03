@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import {DrivingService} from "../../services/drivingService/driving.service";
 
 @Component({
@@ -12,7 +13,7 @@ export class FinishDrivingCheckComponent implements OnInit {
   constructor(
     @Inject(MAT_SNACK_BAR_DATA) public data,
     private drivingService: DrivingService,
-    private snackBar: MatSnackBar) { }
+    private responseMessage: ResponseMessageService) { }
 
   ngOnInit(): void {
   }
@@ -21,14 +22,10 @@ export class FinishDrivingCheckComponent implements OnInit {
     this.drivingService.endDriving()
       .subscribe({
           next: (response) => {
-            this.snackBar.open(response.text, "OK", {
-              duration: 5000,
-            })
+            this.responseMessage.openSuccessMessage(response.text)
           },
           error: (error) => {
-            this.snackBar.open(error.error.message, "ERROR", {
-              duration: 5000,
-            })
+            this.responseMessage.openErrorMessage(error.error.message)
           }
         }
       );

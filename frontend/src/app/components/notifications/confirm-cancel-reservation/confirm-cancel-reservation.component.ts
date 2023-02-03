@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MatSnackBar, MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {DrivingService} from 'src/app/services/drivingService/driving.service';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-confirm-cancel-reservation',
@@ -10,8 +11,11 @@ import {DrivingService} from 'src/app/services/drivingService/driving.service';
 })
 export class ConfirmCancelReservationComponent implements OnInit {
 
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data, private router: Router, private snackbar: MatSnackBar, private drivingService: DrivingService) {
-  }
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data, 
+              private router: Router, 
+              private drivingService: DrivingService,
+              private responseMessage: ResponseMessageService) {
+              }
 
   ngOnInit(): void {
   }
@@ -25,10 +29,10 @@ export class ConfirmCancelReservationComponent implements OnInit {
     this.drivingService.cancelReservation(this.data.drivingId).subscribe({
       next: (response) => {
         this.router.navigateByUrl('/passenger');
-        this.snackbar.open(response.text, "OK")
+        this.responseMessage.openSuccessMessage(response.text)
       },
       error: (error) => {
-        this.snackbar.open(error.error.message, "OK")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

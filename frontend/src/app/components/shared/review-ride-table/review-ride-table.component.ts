@@ -13,6 +13,7 @@ import {FavoriteRoute} from 'src/app/model/route/favoriteRoute';
 import {RouteService} from 'src/app/services/routeService/route.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DetailRideViewComponent} from "../../detail-ride-view/detail-ride-view.component";
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class ReviewRideTableComponent implements AfterViewInit {
               public dialog: MatDialog,
               public datepipe: DatePipe,
               private routeService: RouteService,
-              private snackbar: MatSnackBar) {
+              private responseMessage: ResponseMessageService) {
 
     if (Object.keys(this.data).length == 0) {
       this.userService.getCurrentUserData().subscribe({
@@ -59,7 +60,7 @@ export class ReviewRideTableComponent implements AfterViewInit {
           }
         },
         error: (error) => {
-          this.snackbar.open(error.error.message, "OK")
+          this.responseMessage.openErrorMessage(error.error.message)
         }
       })
     } else {
@@ -102,37 +103,28 @@ export class ReviewRideTableComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  onPaginateChange(event) {
-    console.log(event)
-    let pageIndex = event.pageIndex;
-    let pageSize = event.pageSize;
-    //ovde se nadovezati na bec ako ce se raditi paginacija na beku
-  }
-
   removeFromFavourite(driving: Driving) {
     this.routeService.removeFromFavoriteRoutes(driving.routeId, this.userService.getCurrentUserId()).subscribe({
       next: (response) => {
         driving.favoriteRoute = false;
-        this.snackbar.open(response.text, "OK")
+        this.responseMessage.openSuccessMessage(response.text)
       },
       error: (error) => {
-        this.snackbar.open(error.error.message, "OK")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }
 
   addToFavourite(driving: Driving) {
-    console.log(driving.routeId)
     let newFavoriteRide = new FavoriteRoute(driving.routeId);
     this.routeService.addNewFavoriteRoute(newFavoriteRide).subscribe({
       next: (response) => {
         driving.favoriteRoute = true
         this.matTable.renderRows();
-        this.snackbar.open(response.text, "OK")
+        this.responseMessage.openSuccessMessage(response.text)
       },
       error: (error) => {
-        console.log(error)
-        this.snackbar.open(error.error.message, "OK")
+        this.responseMessage.openErrorMessage(error.error.message)
       }
     })
   }

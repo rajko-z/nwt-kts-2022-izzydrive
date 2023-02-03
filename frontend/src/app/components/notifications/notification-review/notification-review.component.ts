@@ -33,7 +33,6 @@ export class NotificationReviewComponent implements OnInit {
   loadData() {
     this.notificationService.findAll().subscribe((res) => {
       this.notifications = res as NotificationM[];
-      console.log(this.notifications);
     });
   }
 
@@ -60,7 +59,6 @@ export class NotificationReviewComponent implements OnInit {
     driver.lastName = tokens[3];
     driver.email = tokens[5];
     driver.phoneNumber = tokens[7];
-    console.log(driver);
     return driver;
   }
 

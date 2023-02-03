@@ -3,6 +3,8 @@ import { Message } from 'src/app/model/message/message';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { Channel } from 'src/app/model/channel/channel';
+import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import { enIE } from 'date-fns/locale';
 
 @Component({
   selector: 'app-chat-box',
@@ -16,7 +18,7 @@ export class ChatBoxComponent implements OnInit {
   @ViewChild('chat_container') chat_container: ElementRef;
 
   constructor( private userService: UserService,
-    private chatService : ChatService,) {
+    private chatService : ChatService, private responseMessage: ResponseMessageService) {
 
     }
 
@@ -26,6 +28,7 @@ export class ChatBoxComponent implements OnInit {
   isCollapsed: boolean =   true;                                                                               ;
   unreaMessages : boolean = false;
   tooltipText : string = "Support chat"
+
 
   ngAfterViewInit() {
     this.scrollToBottom();
@@ -43,7 +46,6 @@ export class ChatBoxComponent implements OnInit {
   }
 
   initChat(){
-
     this.userService.getCurrentUserData().subscribe({
       next : (response) => {
 
@@ -61,7 +63,7 @@ export class ChatBoxComponent implements OnInit {
 
 
       }, error: (error) => {
-        console.log(error.error.message);
+        this.responseMessage.openErrorMessage(error.error.message)
       }
       })
   }
@@ -71,7 +73,6 @@ export class ChatBoxComponent implements OnInit {
     this.chatService.firebaseChannels.orderByChild('id').equalTo(this.channelId).on('value', (response : any) => {
       let channel = this.chatService.snapshotToArray(response);
       this.unreaMessages = channel[0]?.unread_messages_by_user;
-      console.log(this.unreaMessages)
       this.tooltipText = this.unreaMessages ? "New message from support" : "Support chat";
     })
   }
