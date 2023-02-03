@@ -28,12 +28,13 @@ export class AppComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) {
-    firebase.initializeApp(environment.firebaseConfig);
+    
   }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
     this.listenForMessages();
+    firebase.initializeApp(environment.firebaseConfig);
   }
 
   listenForMessages() {

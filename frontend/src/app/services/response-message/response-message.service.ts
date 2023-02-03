@@ -14,7 +14,6 @@ export class ResponseMessageService {
     this.messageTooltip.open(message, 'OK', {
     horizontalPosition: "center",
     verticalPosition: "top",
-    duration: 3000,
     });
 }
 
@@ -22,7 +21,6 @@ public openErrorMessage(message: string): void{
   this.messageTooltip.open(message, 'ERROR', {
   horizontalPosition: "center",
   verticalPosition: "top",
-  duration: 3000,
   panelClass: ['red-snackbar']
   });
 }

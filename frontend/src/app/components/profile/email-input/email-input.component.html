@@ -14,7 +14,9 @@
       </mat-form-field>
     </div>
     <div class="submit-item">
-      <button class="submit-button" (click)="onSubmit()" mat-dialog-close>
+      <button [disabled]="this.emailForm.invalid"
+                [ngClass] = "{'submit-button-disable': this.emailForm.invalid,  'submit-button': !this.emailForm.invalid}" 
+                 (click)="onSubmit()" mat-dialog-close>
         Send
       </button>
     </div>
