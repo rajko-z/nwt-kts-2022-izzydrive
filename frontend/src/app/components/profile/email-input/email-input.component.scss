@@ -23,6 +23,18 @@
     @include setFont(16px);
     min-height: 30px;
   }
+
+  .submit-button-disable{
+    @include buttonStyle();
+    @include size(45%, 80%);
+    @include setFont(16px);
+    min-height: 30px;
+    background-color: $light1;
+    color: grey;
+    border: solid thin gray;
+  }
+
+  
 }
 
 .header{

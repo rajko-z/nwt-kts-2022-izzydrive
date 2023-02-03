@@ -48,21 +48,25 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if(window["google"]){
+
+        // @ts-ignore
+      google.accounts.id.initialize({
+        client_id: this.clientId,
+        callback: this.loginWithGoogle.bind(this),
+        auto_select: false,
+        cancel_on_tap_outside: true
+      });
       // @ts-ignore
-    google.accounts.id.initialize({
-      client_id: this.clientId,
-      callback: this.loginWithGoogle.bind(this),
-      auto_select: false,
-      cancel_on_tap_outside: true
-    });
-    // @ts-ignore
-    google.accounts.id.renderButton(
-    // @ts-ignore
-    document.getElementById("google_button_div"),
-      { theme: "outline", size: "large"}
-    );
-    // @ts-ignore
-    google.accounts.id.prompt((notification: PromptMomentNotification) => {});
+      google.accounts.id.renderButton(
+      // @ts-ignore
+      document.getElementById("google_button_div"),
+        { theme: "outline", size: "large"}
+      );
+      // @ts-ignore
+      google.accounts.id.prompt((notification: PromptMomentNotification) => {});
+    }
 
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;
@@ -105,7 +109,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('')
         },
         error: (error) => {
-          this.responseMessage.openErrorMessage("Login failed. You are not register");
+          this.responseMessage.openErrorMessage("Login failed. You are not registered");
         }
       })
   }
