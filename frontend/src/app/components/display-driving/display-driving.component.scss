@@ -64,3 +64,20 @@ p {
   }
 }
 
+.profile-image{
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%;
+}
+
+.passengers-container{
+  display: flex; 
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.users-image{
+  display: flex;
+  align-self: center;
+}
+

@@ -18,7 +18,6 @@ export class ProfilePageUserComponent implements OnInit {
     
     this.userService.getCurrrentUserDataWithImg().subscribe({
       next : (response) => {
-       console.log(response)
        this.profilePagedata = this.userService.getProfilePageDataFromUser(response);
        this.isUserLoaded = true;
         ;

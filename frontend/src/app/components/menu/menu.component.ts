@@ -6,6 +6,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
 import {PayingInfoComponent} from "../paying-info/paying-info.component";
 import {LoggedUserService} from "../../services/loggedUser/logged-user.service";
+import { ChatService } from 'src/app/services/chat/chat.service';
 
 @Component({
   selector: 'app-menu',
@@ -25,7 +26,8 @@ export class MenuComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private matDialog: MatDialog,
-    private userLoggedService: LoggedUserService
+    private userLoggedService: LoggedUserService,
+    private chatService: ChatService
   ) { }
 
   ngOnInit(): void {
@@ -52,14 +54,17 @@ export class MenuComponent implements OnInit {
   }
 
   onChangeProfile(){
+    this.chatService.closeAllAdminChat()
     this.router.navigateByUrl("/user/edit-profile")
   }
 
   openChangePasswordDialog() {
+    this.chatService.closeAllAdminChat()
     this.matDialog.open(ChangePasswordComponent);
   }
 
   openPayingInfoDialog() {
+    this.chatService.closeAllAdminChat()
     this.matDialog.open(PayingInfoComponent);
   }
 
@@ -68,14 +73,17 @@ export class MenuComponent implements OnInit {
   }
 
   openNotificationReview() {
+    this.chatService.closeAllAdminChat()
     this.router.navigateByUrl("/user/notifications");
   }
 
   openProfilePage(){
+    this.chatService.closeAllAdminChat()
     this.router.navigateByUrl("/user/profile-page")
   }
 
   onReports(){
+    this.chatService.closeAllAdminChat()
     this.router.navigateByUrl("/user/reports")
   }
 }

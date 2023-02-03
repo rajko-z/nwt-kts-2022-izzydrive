@@ -152,4 +152,9 @@ export class UserService {
       }
     })
   }
+
+  getUserDataWithImage(email : string): Observable<User>{
+    return this.http.get<User>(
+      environment.apiUrl + "users/" + email + "?image=true")
+  }
 }

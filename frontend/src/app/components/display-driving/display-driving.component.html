@@ -1,4 +1,4 @@
-<div *ngIf="driving !== undefined && driving !== null">
+<div *ngIf="driving">
   <div class="driving-detail">
     <div class="location-info">
       <div>
@@ -19,12 +19,15 @@
         {{driving.route.end.name}}
       </div>
     </div>
-    <div class="passenger-info">
-      <em class='fas fa-users'></em>
-      <span class="bold-style">Passengers: </span>
-      <p *ngFor="let passenger of driving.passengers;">
-        <span class="passenger">- {{passenger}}</span>
-      </p>
+    <div class="passengers-container">
+      <div class="other-users" *ngFor="let pass of driving.passengers">
+        <em class='fas fa-users'></em>
+        <p class="users-title">Passenger: <span style="display: flex;">{{pass}}</span></p>
+      </div>
+      <div class="users-image" *ngFor="let image of userProfilePhotos">
+        <img *ngIf="image" [src]="image" class="profile-image" />
+        <img *ngIf="!image" src="/assets/people.png" class="profile-image"/>
+      </div>
     </div>
     <div class="price">
       <em class="fa-solid fa-tags"></em>

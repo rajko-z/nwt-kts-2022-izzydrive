@@ -91,4 +91,13 @@ export class ChatService {
       })
     })
   }
+  closeUserChats(userId : number, role: string) : void{
+    if(role === Role.ROLE_ADMIN){
+      console.log("tuu")
+      this.closeAllAdminChat()
+    }
+    else{
+      this.firebaseChannels.child(userId.toString()).update({open_by_user:false})
+    }
+  }
 }
