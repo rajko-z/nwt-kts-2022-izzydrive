@@ -37,12 +37,14 @@ export class PaymentPageComponent implements OnInit {
     private paymentService: PaymentService,
     private drivingService: DrivingService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.passengerService.findCurrentDrivingWithLocations()
       .subscribe({
           next: (driving) => {
+            console.log(driving);
             if (driving) {
               if (driving.drivingState !== 'PAYMENT') {
                 this.router.navigateByUrl('passenger/current-driving');
@@ -87,6 +89,7 @@ export class PaymentPageComponent implements OnInit {
         }
       );
   }
+
   onCancelClicked() {
     this.drivingService.rejectDrivingLinkedPassenger()
       .subscribe({
@@ -118,8 +121,9 @@ export class PaymentPageComponent implements OnInit {
     this.paymentService.pay(payload)
       .subscribe({
           next: (_) => {
-            this.apiLoading = false;
             this.paymentStatus.passengerApproved = true;
+            this.apiLoading = false;
+            this.router.navigateByUrl('passenger/current-driving');
           },
           error: (error) => {
             this.snackBar.open(error.error.message, "ERROR", {

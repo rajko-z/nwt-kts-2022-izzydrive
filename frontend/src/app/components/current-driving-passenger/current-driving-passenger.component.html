@@ -52,7 +52,8 @@
           </p>
         </div>
         <div class="driver-image">
-          <img src="assets/portraits.png" alt="driver image" class="profile-image">
+          <img *ngIf="driverProfilePhoto" [src]="driverProfilePhoto" class="profile-image" />
+            <img *ngIf="!driverProfilePhoto" src="/assets/people.png" class="profile-image"/>
         </div>
       </div>
       <div class="additional-options-info">

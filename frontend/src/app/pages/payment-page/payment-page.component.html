@@ -1,7 +1,7 @@
 <div>
   <div class="container" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === false">
     <div>
-      <span class="text">To pay: &nbsp;&nbsp;</span>
+      <span class="text title">To pay:</span> &nbsp;&nbsp;
       <span class="text"><strong>{{paymentStatus?.priceInRSD}} RSD -> {{paymentStatus?.priceInETH}} ETH</strong></span>
     </div>
 
@@ -64,10 +64,10 @@
   </div>
 
   <div class="submit-items" *ngIf="paymentStatus?.passengerApproved === false && apiLoading === false">
-    <button class="submit-button" type="submit" (click)="onCancelClicked()">
+    <button class="submit-button-cancel-payment" type="submit" (click)="onCancelClicked()">
       <span class="button-text">Cancel</span>
     </button>
-    <button class="submit-button" type="submit" (click)="onPayClicked()">
+    <button class="submit-button-approve-payment" type="submit" (click)="onPayClicked()">
       <span class="button-text">Pay</span>
     </button>
   </div>

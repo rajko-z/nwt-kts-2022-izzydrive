@@ -11,20 +11,19 @@ export class ResponseMessageService {
   }
 
   public openSuccessMessage(message: string): void{
-      this.messageTooltip.open(message, 'Close', {
-      horizontalPosition: "center",
-      verticalPosition: "top",
-      duration: 3000,
-      panelClass: ['green-snackbar']
-      });
-  }
-
-  public openErrorMessage(message: string): void{
-    this.messageTooltip.open(message, 'Close', {
-    horizontalPosition: "center",
-    verticalPosition: "top",
+    this.messageTooltip.open(message, 'OK', {
+    horizontalPosition: "right",
+    verticalPosition: "bottom",
     duration: 3000,
-    panelClass: ['red-snackbar']
     });
+}
+
+public openErrorMessage(message: string): void{
+  this.messageTooltip.open(message, 'ERROR', {
+  horizontalPosition: "right",
+  verticalPosition: "bottom",
+  duration: 3000,
+  panelClass: ['red-snackbar']
+  });
 }
 }

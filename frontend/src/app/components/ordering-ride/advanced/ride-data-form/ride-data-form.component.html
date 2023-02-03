@@ -29,7 +29,7 @@
             </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <p class="explanation">*you can add up to 3 intermediate locations</p>
+        <p class="explanation" name="explanation-locations">*you can add up to 3 intermediate locations</p>
         <ol>
           <li>
             <app-search-place
@@ -88,7 +88,7 @@
           </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <p class="explanation">*you can include other users by their email in this ride,</p>
+      <p class="explanation" name="explanation-users">*you can include other users by their email in this ride,</p>
       <p class="explanation">all users start from first location and user must has account</p>
       <ol>
         <li>
@@ -97,7 +97,7 @@
             <input matInput
                    placeholder="pat@example.com"
                    formControlName="userEmailFriendsFirst">
-            <mat-error>Invalid email</mat-error>
+            <mat-error [id]="'email-error'">Invalid email</mat-error>
           </mat-form-field>
           <button class="plus-button" (click)="deleteFirstUserClick()">
             <em class='fas fa-minus'></em>

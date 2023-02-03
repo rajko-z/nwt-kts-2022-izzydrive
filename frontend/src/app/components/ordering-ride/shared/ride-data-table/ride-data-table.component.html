@@ -1,25 +1,33 @@
-<div *ngIf="drivingOptions?.length === 0">
+<div *ngIf="drivingOptions?.length === 0" class="message-no-available">
   There are currently no available drivers, please try again soon.
 </div>
 <div class="ride-area" *ngIf="drivingOptions?.length > 0">
-  <div class="ride-info" *ngFor="let option of drivingOptions"
+  <div class="ride-info" *ngFor="let option of drivingOptions;let i = index" [attr.data-index]="i"
        (click)="showOptionOnMap(option)"
-        [ngClass]="{ 'selected-ride-info': option === selectedOption }">
+       [ngClass]="{ 'selected-ride-info': option === selectedOption }">
     <div class="other-info">
       <div class="driver-info">
         <div class="tooltip">
-          <img *ngIf="option.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car" class="driver-img">
-          <img *ngIf="option.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png" alt="car" class="driver-img">
-          <img *ngIf="option.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png" alt="car" class="driver-img">
+          <img *ngIf="option.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car"
+               class="driver-img">
+          <img *ngIf="option.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png" alt="car"
+               class="driver-img">
+          <img *ngIf="option.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png" alt="car"
+               class="driver-img">
           <span class="tooltiptext">{{option.driver.carData.carType}}</span>
         </div>
         <div class="driver-title">
-          <p>Driver: <span class="driver">{{option.driver.firstName}} {{option.driver.lastName}}</span></p>
+          <p>Driver:
+            <span class="driver"
+                  [ngClass]="{ 'selected': option === selectedOption }">{{option.driver.firstName}} {{option.driver.lastName}}</span>
+          </p>
           <p class="registration">Registration: <span class="number">{{option.driver.carData.registration}}</span></p>
         </div>
       </div>
       <div class="price-info">
-        <p class="price-title">Price: <span class="price">{{option.price}} RSD</span></p>
+        <p class="price-title">Price:
+          <span [class]="'price'+i" [ngClass]="{ 'selected': option === selectedOption }">{{option.price}}</span>RSD
+        </p>
       </div>
       <div class="additional-options-info">
         <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baggage">
@@ -42,13 +50,16 @@
     </div>
     <div class="time-info">
       <p class="time-title" *ngIf="!option.reservation">Driver comes for:</p>
-      <p class="minutes"  *ngIf="!option.reservation">{{option.timeForWaiting}}min</p>
-      <p class="time">Driving time: <span class="driving-time">{{option.startToEndPath.duration * 1000 | date:'m'}}min</span></p>
+      <p class="minutes" *ngIf="!option.reservation">
+        <span [class]="'minute'+i"
+              [ngClass]="{ 'selected': option === selectedOption }">{{option.timeForWaiting}}</span>min</p>
+      <p class="time">Driving time: <span
+        [class]="'driving-time'+i">{{option.startToEndPath.duration * 1000 | date:'m'}}</span>min</p>
     </div>
   </div>
 </div>
-<div class="submit-item">
-  <button class="submit-button" type="submit" (click)="onSubmit()">Next</button>
+<div class="submit-item" *ngIf="drivingOptions?.length > 0">
+  <button class="submit-button-next" type="submit" (click)="onSubmit()">Next</button>
 </div>
 
 

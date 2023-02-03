@@ -38,10 +38,17 @@
               <em class='fas fa-map-location-dot'></em>
               <p class="intermediate-title">Intermediate station: <span>{{station.name}}</span></p>
             </div>
-            <div class="other-users" *ngFor="let pass of driving.passengers">
-              <em class='fas fa-users'></em>
-              <p class="users-title">Passenger: <span>{{pass}}</span></p>
+            <div class="passengers-container">
+              <div class="other-users" *ngFor="let pass of driving.passengers">
+                <em class='fas fa-users'></em>
+                <p class="users-title">Passenger: <span style="display: flex;">{{pass}}</span></p>
+              </div>
+              <div class="other-users" *ngFor="let image of userProfilePhotos">
+                <img *ngIf="image" [src]="image" class="profile-image" />
+                <img *ngIf="!image" src="/assets/people" class="profile-image"/>
+              </div>
             </div>
+            
             <div class="location">
               <em class="fa-solid fa-long-arrow-right"></em>
               <p class="location-title">Distance: {{driving.fromStartToEnd.distance}} m</p>
@@ -61,6 +68,8 @@
             </div>
             <div class="driver-title">
               <p>Driver: <span class="driver">{{driving.driver.firstName}} {{driving.driver.lastName}}</span>
+                <img *ngIf="driverProfilePhoto" [src]="driverProfilePhoto" class="profile-image" />
+                <img *ngIf="!driverProfilePhoto" src="/assets/people.png" class="profile-image"/>
               </p>
               <p class="registration">Registration: <span
                 class="number">{{driving.driver.carData.registration}}</span>

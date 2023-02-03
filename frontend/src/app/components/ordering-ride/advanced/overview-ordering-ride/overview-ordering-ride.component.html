@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="time-info" *ngIf="!selectedOption.reservation">
-        <p class="minutes">{{selectedOption.timeForWaiting}}min</p>
+        <p class="minutes"><span class="minute">{{selectedOption.timeForWaiting}}</span>min</p>
       </div>
     </div>
     <div class="second-line">
@@ -35,7 +35,7 @@
           <span class="tooltiptext">{{selectedOption.driver.carData.carType}}</span>
         </div>
         <div class="driver-title">
-          <p>Driver: <span class="driver">{{selectedOption.driver.firstName}} {{selectedOption.driver.lastName}}</span>
+          <p>Driver: <span class="driver-name">{{selectedOption.driver.firstName}} {{selectedOption.driver.lastName}}</span>
           </p>
           <p class="registration">Registration: <span
             class="number">{{selectedOption.driver.carData.registration}}</span>
@@ -62,11 +62,11 @@
       </div>
     </div>
     <div class="third-line">
-      <p class="price-title">= <span class="price">{{selectedOption.price}} RSD</span></p>
+      <p class="price-title">= <span class="price">{{selectedOption.price}}</span>RSD</p>
     </div>
   </div>
   <div class="submit-item" *ngIf="!selectedOption.reservation">
-    <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onSubmit()">
+    <button class="submit-button-payment" type="submit" [hidden]="apiLoading" (click)="onSubmit()">
       Payment
     </button>
     <span [hidden]="apiLoading===false">
@@ -77,7 +77,7 @@
     </span>
   </div>
   <div class="submit-item" *ngIf="selectedOption.reservation">
-    <button class="submit-button" type="submit" [hidden]="apiLoading" (click)="onBookRide()">
+    <button class="submit-button-payment" type="submit" [hidden]="apiLoading" (click)="onBookRide()">
       Book a ride
     </button>
     <span [hidden]="apiLoading===false">
