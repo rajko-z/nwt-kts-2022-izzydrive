@@ -42,17 +42,6 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-
-    .body-message {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: row;
-
-      .icon {
-        @include size(50px, 50px);
-        margin: 10px;
-      }
-    }
   }
 }
 
@@ -79,23 +68,6 @@
     margin-top: 5px;
     margin-left: 40%;
     text-align: center;
-  }
-}
-
-.message-area {
-  margin-left: 5px;
-
-  .message {
-    @include setFont(16px);
-    font-weight: bold;
-    color: $dark3;
-  }
-
-  .text {
-    @include setFont(14px);
-    color: $dark3;
-    margin: 0;
-    padding: 0;
   }
 }
 

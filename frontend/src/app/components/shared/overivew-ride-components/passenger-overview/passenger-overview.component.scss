@@ -1,0 +1,15 @@
+@import "src/style/styles";
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+
+.other-users {
+  display: flex;
+  justify-content: flex-start;
+  margin: 2%;
+
+  .users-title {
+    margin-left: 2%;
+  }
+}

@@ -1,0 +1,24 @@
+@import "src/style/styles";
+
+.body-message {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+.message-area {
+  margin-left: 5px;
+
+  .message {
+    @include setFont(16px);
+    font-weight: bold;
+    color: $dark3;
+  }
+
+  .text {
+    @include setFont(14px);
+    color: $dark3;
+    margin: 0;
+    padding: 0;
+  }
+}

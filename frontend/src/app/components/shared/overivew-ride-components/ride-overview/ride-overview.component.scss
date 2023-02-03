@@ -1,0 +1,15 @@
+@import "src/style/styles";
+
+.fas, .fa-solid {
+  color: $dark3;
+}
+
+.location, .intermediate-station {
+  display: flex;
+  justify-content: flex-start;
+  margin: 2%;
+
+  .location-title, .intermediate-title {
+    margin-left: 2%;
+  }
+}

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {NotificationM} from "../../../model/notifications/notification";
-import {NotificationService} from "../../../services/notificationService/notification.service";
-import {DrivingService} from "../../../services/drivingService/driving.service";
+import {NotificationM} from "../../../../model/notifications/notification";
+import {NotificationService} from "../../../../services/notificationService/notification.service";
+import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {UserService} from 'src/app/services/userService/user-sevice.service';
 import {AdminRespondOnChanges} from 'src/app/model/message/AdminResponseOnChanges';
 import {Driver} from 'src/app/model/driver/driver';

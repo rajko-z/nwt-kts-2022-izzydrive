@@ -1,0 +1,6 @@
+@import "src/style/styles";
+
+.icon {
+  @include size(50px, 50px);
+  margin: 20px;
+}

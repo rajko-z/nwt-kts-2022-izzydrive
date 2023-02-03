@@ -17,8 +17,24 @@ import {
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import {HomePageComponent} from "../../pages/home-page/home-page.component";
 import {RouterLinkWithHref} from "@angular/router";
-import { ReviewRideTableComponent } from 'src/app/components/shared/review-ride-table/review-ride-table.component';
+import {ReviewRideTableComponent} from 'src/app/components/shared/review-ride-table/review-ride-table.component';
 import {DetailRideViewComponent} from "../../components/detail-ride-view/detail-ride-view.component";
+import {CardOptionComponent} from "../../components/ordering-ride/shared/card-option/card-option.component";
+import {
+  NotificationComponent
+} from "../../components/notifications/notification-review/notification/notification.component";
+import {
+  NotificationImageComponent
+} from "../../components/notifications/notification-review/notification-image/notification-image.component";
+import {
+  DriverOverviewComponent
+} from "../../components/shared/overivew-ride-components/driver-overview/driver-overview.component";
+import {
+  RideOverviewComponent
+} from "../../components/shared/overivew-ride-components/ride-overview/ride-overview.component";
+import {
+  PassengerOverviewComponent
+} from "../../components/shared/overivew-ride-components/passenger-overview/passenger-overview.component";
 
 const declaredModules = [
   BaseUserDataFormComponent,
@@ -29,7 +45,13 @@ const declaredModules = [
   OverviewOrderingRideComponent,
   ReviewRideTableComponent,
   HomePageComponent,
-  DetailRideViewComponent
+  DetailRideViewComponent,
+  CardOptionComponent,
+  NotificationComponent,
+  NotificationImageComponent,
+  DriverOverviewComponent,
+  RideOverviewComponent,
+  PassengerOverviewComponent
 ];
 
 @NgModule({
@@ -41,8 +63,9 @@ const declaredModules = [
     ReactiveFormsModule,
     FormsModule,
     LeafletModule,
-    RouterLinkWithHref,
+    RouterLinkWithHref
   ],
   exports: declaredModules,
 })
-export class SharedComponentsModule{}
+export class SharedComponentsModule {
+}

@@ -7,9 +7,9 @@
     overflow: auto;
     height: fit-content;
     min-height: fit-content;
-    background-color: $lightpink;
+    background-color: $light2;
   }
-  
+
   .example-header-image {
     background-size: cover;
   }
@@ -25,14 +25,14 @@
     @include setFont(15px)
 }
 .text{
-    color: $pink;
+    color: $dark3;
     font-weight: 400;
     padding-left: 10px;
     @include setFont(15px)
 }
 
 .change-btn{
-    background-color: $pink;
+    background-color: $dark3;
     color: white;
 }
 
@@ -51,14 +51,14 @@
 }
 
 .no-img{
-    max-height: 40vh; 
-    padding: 10%; 
-    padding-left: 30%; 
+    max-height: 40vh;
+    padding: 10%;
+    padding-left: 30%;
     padding-right: 30%;
 }
 
 .img{
-    max-height: 40vh; 
-    padding-left: 15%; 
+    max-height: 40vh;
+    padding-left: 15%;
     padding-right: 15%;
 }

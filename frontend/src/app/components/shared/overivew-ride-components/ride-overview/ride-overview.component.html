@@ -1,0 +1,14 @@
+<div class="destination-info">
+  <div class="location">
+    <em class="fa-solid fa-location-dot"></em>
+    <p class="location-title">{{start}}</p>
+  </div>
+  <div class="location">
+    <em class="fa-solid fa-location-dot"></em>
+    <p class="location-title">{{end}}</p>
+  </div>
+  <div class="intermediate-station" *ngFor="let station of intermediateStation">
+    <em class='fas fa-map-location-dot'></em>
+    <p class="intermediate-title">Intermediate station: <span>{{station.name}}</span></p>
+  </div>
+</div>

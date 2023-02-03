@@ -1,0 +1,34 @@
+<div class="body-message">
+  <app-notification-image [notificationStatus]="option.notificationStatus"></app-notification-image>
+  <div class="message-area">
+    <p class="message">{{option.message}}</p>
+    <div
+      *ngIf="option.notificationStatus !== 'PAYMENT_SUCCESS' &&
+                       option.notificationStatus !== 'PAYMENT_FAILURE' &&
+                       option.notificationStatus !== 'PAYMENT_EXPIRED' &&
+                       option.notificationStatus !== 'NEW_DRIVING_DRIVER' &&
+                       option.notificationStatus !== 'RESERVATION_REMINDER' &&
+                       option.notificationStatus !== 'RESERVATION_DELETE' &&
+                       option.notificationStatus !== 'DRIVER_CHANGE_DATA' &&
+                       option.notificationStatus !== 'DRIVER_ARRIVED_AT_START' &&
+                       option.notificationStatus !== 'REGULAR_DRIVING_CANCELED_TO_PASSENGER' &&
+                       option.notificationStatus !== 'CAR_CHANGE_DATA' &&
+                       option.notificationStatus !== 'ADMIN_RESPONSE'"
+    >
+      <p class="text">{{option.startLocation + " - " + option.endLocation}}</p>
+      <p class="text">Price: {{option.price}} $</p>
+      <p class="text">Time: {{option.duration * 1000 | date:'m'}}min</p>
+      <p class="text"
+         *ngIf="option.notificationStatus === 'NEW_RESERVATION' || option.notificationStatus === 'REJECTED_RESERVATION'">
+        Reservation
+        time: {{option.reservationTime}}
+      </p>
+    </div>
+    <div *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'">
+      <p class="text">{{option.driverStr}}</p>
+    </div>
+    <div *ngIf="option.notificationStatus === 'CAR_CHANGE_DATA'">
+      <p class="text">{{option.carStr}}</p>
+    </div>
+  </div>
+</div>

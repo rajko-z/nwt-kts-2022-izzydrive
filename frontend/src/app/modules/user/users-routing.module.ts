@@ -4,7 +4,7 @@ import {DrivingHistoryComponent} from "src/app/components/driving-history/drivin
 import {EditProfileComponent} from "../../components/profile/edit-profile/edit-profile.component";
 import {
   NotificationReviewComponent
-} from "../../components/notifications/notification-review/notification-review.component";
+} from "../../components/notifications/notification-review/notification-list/notification-review.component";
 import { ProfilePageComponent } from "src/app/components/shared/components/profile-page/profile-page.component";
 import { ProfilePageUserComponent } from "src/app/components/profile/profile-page-user/profile-page-user.component";
 import { DrivingReportComponent } from "src/app/components/reports/components/driving-report/driving-report.component";
@@ -35,7 +35,7 @@ const routes: Routes = [
     path: 'reports',
     component: ReportsViewComponent,
   }
-  
+
 ];
 
 @NgModule({

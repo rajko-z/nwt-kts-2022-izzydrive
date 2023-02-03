@@ -1,0 +1,18 @@
+<div class="ride-info" [ngClass]="{ 'selected-ride-info': option === selectedOption }">
+  <div class="other-info">
+    <app-driver-overview [option]="option"></app-driver-overview>
+    <div class="price-info">
+      <p class="price-title">Price:
+        <span [class]="'price'+i" [ngClass]="{ 'selected': option === selectedOption }">{{option.price}}</span> RSD
+      </p>
+    </div>
+  </div>
+  <div class="time-info">
+    <p class="time-title" *ngIf="!option.reservation">Driver comes for:</p>
+    <p class="minutes" *ngIf="!option.reservation">
+        <span [class]="'minute'+i"
+              [ngClass]="{ 'selected': option === selectedOption }">{{option.timeForWaiting}}</span>min</p>
+    <p class="time">Driving time: <span
+      [class]="'driving-time'+i">{{option.startToEndPath.duration * 1000 | date:'m'}}</span>min</p>
+  </div>
+</div>

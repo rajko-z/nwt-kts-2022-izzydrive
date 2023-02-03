@@ -5,7 +5,6 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {MenuModule} from './components/menu/menu.module';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {ChatModule} from './components/chat/chat.module';
 import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from '@stomp/ng2-stompjs';
 import firebase from "firebase/compat/app";
 import {AngularFireModule} from "@angular/fire/compat";
@@ -13,9 +12,10 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {environment} from "../environments/environment";
 import {HeaderComponent} from "./components/header/header.component";
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ChatModule} from "./components/chat/chat.module";
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -34,7 +34,8 @@ firebase.initializeApp(environment.firebaseConfig);
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireMessagingModule,
   ],
-  exports: [],
+  exports: []
+  ,
   providers: [{provide: MAT_DIALOG_DATA, useValue: {}},
     {
       provide: RxStompService,

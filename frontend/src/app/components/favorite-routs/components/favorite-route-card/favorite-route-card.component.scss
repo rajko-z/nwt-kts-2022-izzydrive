@@ -7,7 +7,7 @@
     min-width: 150px;
     min-height: 150px;;
     padding: 15px;
-    background-color: $lightpink;
+    background-color: $light2;
     border-radius: 15px;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
     height: fit-content;
@@ -19,15 +19,15 @@
     display: flex;
 }
 .text{
-    color: $pink;
+    color: $dark3;
     font-weight: 400;
     padding-left: 10px;
 }
 
 .get-ride-button{
     font-size: 15px;
-    background-color: $pink;
-    color: #E9EAEF;
+    background-color: $dark3;
+    color: $light2;
     border-radius: 8px;
     cursor: pointer;
     display: flex;

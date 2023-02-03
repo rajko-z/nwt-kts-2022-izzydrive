@@ -1,23 +1,11 @@
 <div *ngIf="currentDriving !== undefined && currentDriving !== undefined">
   <div class="ride-summary">
     <div class="first-line">
-      <div class="destination-info">
-        <div class="location">
-          <em class="fa-solid fa-location-dot"></em>
-          <p class="location-title">{{currentDriving.route.start.name}}</p>
-        </div>
-        <div class="location">
-          <em class="fa-solid fa-location-dot"></em>
-          <p class="location-title">{{currentDriving.route.end.name}}</p>
-        </div>
-        <div class="intermediate-station" *ngFor="let station of currentDriving.route.intermediateStations">
-          <em class='fas fa-map-location-dot'></em>
-          <p class="intermediate-title">Intermediate station: <span>{{station.name}}</span></p>
-        </div>
-        <div class="other-users" *ngFor="let pass of currentDriving.passengers">
-          <em class='fas fa-users'></em>
-          <p class="users-title">Passengers: <span>{{pass}}</span></p>
-        </div>
+      <div>
+        <app-ride-overview [start]="currentDriving.route.start.name"
+                           [end]="currentDriving.route.end.name"
+                           [intermediateStation]="currentDriving.route.intermediateStations"></app-ride-overview>
+        <app-passenger-overview [passengers]="currentDriving.passengers"></app-passenger-overview>
       </div>
       <div class="report-info" *ngIf="drivingActive && !finished">
         <button type="button" class="report-button" (click)="reportDriver()">Report</button>
@@ -34,47 +22,7 @@
       </div>
     </div>
     <div class="second-line">
-      <div class="driver-info">
-        <div class="tooltip">
-          <img *ngIf="currentDriving.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car"
-               class="driver-img">
-          <img *ngIf="currentDriving.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png"
-               alt="car" class="driver-img">
-          <img *ngIf="currentDriving.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png"
-               alt="car" class="driver-img">
-          <span class="tooltiptext">{{currentDriving.driver.carData.carType}}</span>
-        </div>
-        <div class="driver-title">
-          <p>Driver: <span class="driver">{{currentDriving.driver.firstName}} {{currentDriving.driver.lastName}}</span>
-          </p>
-          <p class="registration">Registration: <span
-            class="number">{{currentDriving.driver.carData.registration}}</span>
-          </p>
-        </div>
-        <div class="driver-image">
-          <img *ngIf="driverProfilePhoto" [src]="driverProfilePhoto" class="profile-image" />
-            <img *ngIf="!driverProfilePhoto" src="/assets/people.png" class="profile-image"/>
-        </div>
-      </div>
-      <div class="additional-options-info">
-        <div class="tooltip" *ngIf="currentDriving.driver.carData.carAccommodation.baggage">
-          <img src="../../../../../assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">Baggage</span>
-        </div>
-        <div class="tooltip" *ngIf="currentDriving.driver.carData.carAccommodation.pet">
-          <img src="../../../../../assets/zivotinje.png" alt="pet" class="additional-option">
-          <span class="tooltiptext">Pet</span>
-        </div>
-        <div class="tooltip" *ngIf="currentDriving.driver.carData.carAccommodation.food">
-          <img src="../../../../../assets/hrana.png" alt="food" class="additional-option">
-          <span class="tooltiptext">Food</span>
-        </div>
-        <div class="tooltip" *ngIf="currentDriving.driver.carData.carAccommodation.baby">
-          <img src="../../../../../assets/beba.png" alt="baby" class="additional-option">
-          <span class="tooltiptext">Baby</span>
-        </div>
-      </div>
+      <app-driver-overview [option]="currentDriving"></app-driver-overview>
     </div>
-
   </div>
 </div>

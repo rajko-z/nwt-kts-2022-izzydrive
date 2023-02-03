@@ -35,64 +35,21 @@
     padding: 10% 20%;
     border-radius: 50px;
   }
-  .title {
-
-  }
 }
 
-.report-info{
+.report-info {
   margin: 7% 4%;
   padding: 4%;
 
-  .report-button{
+  .report-button {
     @include buttonStyle();
     width: 140%;
     padding: 5%;
   }
 }
 
-.location, .intermediate-station, .other-users {
-  display: flex;
-  justify-content: flex-start;
-  margin: 2%;
-
-  .location-title, .intermediate-title, .users-title {
-    margin-left: 2%;
-  }
-}
-
 .second-line {
   border-bottom: 1px solid $dark3;
-
-  .driver-info {
-    display: flex;
-
-    .driver-img {
-      @include size(50px, 50px);
-      margin-top: 2%;
-    }
-
-    .driver-title {
-      margin: 1% 2%;
-    }
-  }
-
-  .driver-image{
-    margin-top: 1%;
-    margin-left: 33%;
-    .profile-image{
-      @include size(65px, 65px);
-    }
-  }
-
-  .additional-options-info {
-    display: flex;
-    justify-content: flex-start;
-
-    .additional-option {
-      margin: 0 2% 4% 0;
-    }
-  }
 }
 
 .third-line {
@@ -100,13 +57,12 @@
   justify-content: flex-end;
   margin: 2% 3% 0 0;
 
-  .price-title{
+  .price-title {
     @include setFont(24px);
     color: $dark3;
     font-weight: bold;
   }
 }
-
 
 .submit-item {
   display: flex;
@@ -118,31 +74,4 @@
     @include buttonStyle();
     width: 20%;
   }
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-  margin: 1% 2% 2% 0;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 70px;
-  font-size: 10px;
-  background-color: $dark3;
-  color: $light1;
-  opacity: 0.95;
-  text-align: center;
-  border-radius: 6px;
-  padding: 2px 0;
-  position: absolute;
-  z-index: 1;
-  top: 100%;
-  left: 20%;
-  margin-left: -5px;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }

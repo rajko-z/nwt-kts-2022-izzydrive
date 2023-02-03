@@ -1,0 +1,35 @@
+<div class="review-notifications">
+  <div class="title">Notifications</div>
+  <div class="list-notification">
+    <div *ngIf="notifications?.length === 0">
+      <p class="no-notification">You currently do not have any notifications.</p>
+    </div>
+    <div class="notification-area" *ngIf="notifications?.length > 0">
+      <div class="notification-info" *ngFor="let option of notifications">
+        <div class="notification">
+          <app-notification [option]="option"></app-notification>
+          <div class="submit-item">
+            <button class="submit-button" type="button" (click)="deleteNotification(option.id)">X</button>
+            <p class="time">{{option.creationDate}}</p>
+            <div *ngIf="option.notificationStatus === 'DRIVER_CHANGE_DATA'">
+              <button class="submit-button" type="button" (click)="onYesClickChangeData(option.driverStr, option.id)">
+                Accept
+              </button>
+              <button class="submit-button" type="button" (click)="onNoClickChangeData(option.driverStr, option.id)">
+                Deny
+              </button>
+            </div>
+            <div *ngIf="option.notificationStatus === 'CAR_CHANGE_DATA'">
+              <button class="submit-button" type="button" (click)="onYesClickChangeCarData(option.carStr, option.id)">
+                Accept
+              </button>
+              <button class="submit-button" type="button" (click)="onNoClickChangeCarData(option.carStr, option.id)">
+                Deny
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

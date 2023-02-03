@@ -6,7 +6,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DrivingService} from "../../../../services/drivingService/driving.service";
 import {DrivingRequest} from "../../../../model/driving/driving";
 import {Router} from "@angular/router";
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 @Component({
   selector: 'app-overview-ordering-ride',

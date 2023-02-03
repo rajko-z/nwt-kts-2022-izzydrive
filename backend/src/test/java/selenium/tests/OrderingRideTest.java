@@ -21,7 +21,7 @@ public class OrderingRideTest extends TestBase {
     private static final String USER_WITH_INVALID_PAYMENT_DATA = "kate@gmail.com";
     private static final String USER_NAME_DRIVER_MILAN = "milan@gmail.com";
     private static final String USER_NAME_DRIVER_MIKA = "mika@gmail.com";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "12345678";
     private static final String LOCATION1 = "banijska";
     private static final String LOCATION2 = "zeleznicka stanica";
 

@@ -2,60 +2,9 @@
   There are currently no available drivers, please try again soon.
 </div>
 <div class="ride-area" *ngIf="drivingOptions?.length > 0">
-  <div class="ride-info" *ngFor="let option of drivingOptions;let i = index" [attr.data-index]="i"
-       (click)="showOptionOnMap(option)"
-       [ngClass]="{ 'selected-ride-info': option === selectedOption }">
-    <div class="other-info">
-      <div class="driver-info">
-        <div class="tooltip">
-          <img *ngIf="option.driver.carData.carType === 'REGULAR'" src="../../../../../assets/car.png" alt="car"
-               class="driver-img">
-          <img *ngIf="option.driver.carData.carType === 'AVERAGE'" src="../../../../../assets/avarageCar.png" alt="car"
-               class="driver-img">
-          <img *ngIf="option.driver.carData.carType === 'PREMIUM'" src="../../../../../assets/premiumCar.png" alt="car"
-               class="driver-img">
-          <span class="tooltiptext">{{option.driver.carData.carType}}</span>
-        </div>
-        <div class="driver-title">
-          <p>Driver:
-            <span class="driver"
-                  [ngClass]="{ 'selected': option === selectedOption }">{{option.driver.firstName}} {{option.driver.lastName}}</span>
-          </p>
-          <p class="registration">Registration: <span class="number">{{option.driver.carData.registration}}</span></p>
-        </div>
-      </div>
-      <div class="price-info">
-        <p class="price-title">Price:
-          <span [class]="'price'+i" [ngClass]="{ 'selected': option === selectedOption }">{{option.price}}</span>RSD
-        </p>
-      </div>
-      <div class="additional-options-info">
-        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baggage">
-          <img src="../../../../../assets/koferi.png" alt="baggage" class="additional-option">
-          <span class="tooltiptext">baggage</span>
-        </div>
-        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.pet">
-          <img src="../../../../../assets/zivotinje.png" alt="pet" class="additional-option">
-          <span class="tooltiptext">pets</span>
-        </div>
-        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.food">
-          <img src="../../../../../assets/hrana.png" alt="food" class="additional-option">
-          <span class="tooltiptext">food</span>
-        </div>
-        <div class="tooltip" *ngIf="option.driver.carData.carAccommodation.baby">
-          <img src="../../../../../assets/beba.png" alt="baby" class="additional-option">
-          <span class="tooltiptext">baby</span>
-        </div>
-      </div>
-    </div>
-    <div class="time-info">
-      <p class="time-title" *ngIf="!option.reservation">Driver comes for:</p>
-      <p class="minutes" *ngIf="!option.reservation">
-        <span [class]="'minute'+i"
-              [ngClass]="{ 'selected': option === selectedOption }">{{option.timeForWaiting}}</span>min</p>
-      <p class="time">Driving time: <span
-        [class]="'driving-time'+i">{{option.startToEndPath.duration * 1000 | date:'m'}}</span>min</p>
-    </div>
+  <div *ngFor="let option of drivingOptions;let i = index" [attr.data-index]="i"
+       (click)="showOptionOnMap(option)">
+    <app-card-option [option]="option" [selectedOption]="selectedOption" [i]="i"></app-card-option>
   </div>
 </div>
 <div class="submit-item" *ngIf="drivingOptions?.length > 0">
