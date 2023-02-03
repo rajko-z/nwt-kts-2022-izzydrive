@@ -1,9 +1,11 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
-import {debounceTime, distinctUntilChanged, map, Observable, switchMap} from "rxjs";
+import {debounceTime, distinctUntilChanged, map, Observable, of, switchMap} from "rxjs";
 import {PlaceOnMap} from "../../../../model/map/placeOnMap";
 import {FormControl} from "@angular/forms";
 import {MapService} from "../../../../services/mapService/map.service";
-import {SearchPlaceComponentService} from "../../../../services/searchPlaceComponentService/search-place-component.service";
+import {
+  SearchPlaceComponentService
+} from "../../../../services/searchPlaceComponentService/search-place-component.service";
 
 @Component({
   selector: 'app-search-place',
@@ -64,7 +66,21 @@ export class SearchPlaceComponent implements OnInit {
       );
   }
 
+  private invalidPlaceText(text: string): boolean {
+    let specialChars = "[!@#$%^&*()_+-=/\\{};:|'\".<>?]";
+
+    for (let i = 0; i < specialChars.length; i++) {
+      if (text.includes(specialChars[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private getPlacesFromText(text: string): Observable<PlaceOnMap[]> {
+    if (this.invalidPlaceText(text)) {
+      return of([]);
+    }
     return this.mapService.getPlacesFromText(text)
       .pipe(
         map(places =>

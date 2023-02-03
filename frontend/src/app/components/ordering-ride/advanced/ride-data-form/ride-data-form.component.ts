@@ -4,8 +4,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {PlaceOnMap} from "../../../../model/map/placeOnMap";
 import {DrivingOption} from "../../../../model/driving/drivingOption";
 import {MarkerType} from "../../../../model/map/markerType";
-import {AngularFireMessaging} from "@angular/fire/compat/messaging";
-import {HttpClient} from "@angular/common/http";
 import {MapService} from "../../../../services/mapService/map.service";
 import {
   SearchPlaceComponentService
@@ -21,7 +19,7 @@ import {User} from "../../../../model/user/user";
 import {addHours, addMinutes} from 'date-fns'
 import {RouteService} from 'src/app/services/routeService/route.service';
 import {RouteDTO} from 'src/app/model/route/route';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
+import {ResponseMessageService} from 'src/app/services/response-message/response-message.service';
 
 
 @Component({
