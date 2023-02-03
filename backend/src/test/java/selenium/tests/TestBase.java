@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 
 public class TestBase {
     public static WebDriver driver;
@@ -15,8 +13,8 @@ public class TestBase {
 
     @BeforeEach
     public void initializeWebDriver() {
-//        System.setProperty("webdriver.chrome.driver", "chromedriver");
-        System.setProperty("webdriver.chrome.driver", "chromedriver2.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
+//        System.setProperty("webdriver.chrome.driver", "chromedriver2.exe");
 
         ChromeOptions handlingSSL = new ChromeOptions();
         handlingSSL.setAcceptInsecureCerts(true);

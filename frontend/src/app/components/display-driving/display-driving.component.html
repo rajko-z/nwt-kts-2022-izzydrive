@@ -20,13 +20,16 @@
       </div>
     </div>
     <div class="passengers-container">
-      <div class="other-users" *ngFor="let pass of driving.passengers">
+      <div class="pass">
         <em class='fas fa-users'></em>
-        <p class="users-title">Passenger: <span style="display: flex;">{{pass}}</span></p>
+        <p class="users-title">Passenger: </p>
+      </div>
+      <div class="other-users" *ngFor="let pass of driving.passengers">
+        <span>{{pass}}, </span>
       </div>
       <div class="users-image" *ngFor="let image of userProfilePhotos">
-        <img *ngIf="image" [src]="image" class="profile-image" />
-        <img *ngIf="!image" src="/assets/people.png" class="profile-image"/>
+        <img *ngIf="image" [src]="image" class="profile-image" alt="passenger-image"/>
+        <img *ngIf="!image" src="/assets/people.png" class="profile-image" alt="passenger-image"/>
       </div>
     </div>
     <div class="price">
