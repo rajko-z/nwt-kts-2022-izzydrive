@@ -2,6 +2,7 @@ package com.izzydrive.backend.utils;
 
 import com.izzydrive.backend.dto.driving.DrivingFinderRequestDTO;
 import com.izzydrive.backend.dto.driving.DrivingOptionDTO;
+import com.izzydrive.backend.dto.driving.DrivingRequestDTO;
 import com.izzydrive.backend.enumerations.IntermediateStationsOrderType;
 import com.izzydrive.backend.enumerations.OptimalDrivingType;
 import com.izzydrive.backend.model.car.CarAccommodation;
@@ -33,5 +34,12 @@ public class DrivingFinderUtil {
         dt.setDriverCurrentLocation(AddressesUtil.getBanijskaLocation());
         dt.setDriverToStartPath(CalculatedRouteUtil.getExampleOfCalculatedRoute());
         return dt;
+    }
+
+    public static DrivingRequestDTO getSimpleDrivingRequest(String driverEmail, DriverStatus driverStatus) {
+        DrivingRequestDTO d = new DrivingRequestDTO();
+        d.setDrivingFinderRequest(getSimpleRequest());
+        d.setDrivingOption(getSimpleDrivingOption(driverEmail, driverStatus));
+        return d;
     }
 }

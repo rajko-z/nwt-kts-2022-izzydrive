@@ -25,6 +25,14 @@ VALUES
 insert into routes(start_id, end_id)
 values
     (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
+    (1,2),
     (3,4),
     (5,8);
 
@@ -142,7 +150,7 @@ values
 -- 1
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, creation_date)
-VALUES (5614.2, 'PAYMENT', 441.2, '2023-01-16 18:10:00', false, null, 250, null, 6, null, null, false, 1, 0, 0, '2023-01-10 18:10:00');
+VALUES (5614.2, 'PAYMENT', 441.2, null, false, null, 250, null, 6, null, null, false, 1, 0, 0, '2023-01-10 18:10:00');
 -- driver id je test6
 update passengers set current_driving_id=1 where id=16; --test2
 
@@ -191,7 +199,7 @@ update drivers set current_driving_id=6 where id=5;
 --7 sara i john
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, creation_date)
-VALUES (5614.2, 'PAYMENT', 441.2, '2023-01-16 18:10:00', false, null, 3, null, 5, 1, null, false, 1,50, 100, current_timestamp);
+VALUES (5614.2, 'PAYMENT', 441.2, '2023-01-16 18:10:00', false, null, 3, null, 5, 2, null, false, 1,50, 100, current_timestamp);
 -- driver id je 3 milan
 update passengers set current_driving_id=7 where id=11; --john
 update passengers set current_driving_id=7 where id=12; --sara
@@ -203,9 +211,7 @@ update drivers set current_driving_id=7 where id=3;
 --8
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start, creation_date)
-VALUES (5614.2, 'PAYMENT', 441.2, '2023-01-16 18:10:00', false, null, 3, null, 2, 1, null, false, 1,50, 100, current_timestamp);
+VALUES (5614.2, 'PAYMENT', 441.2, '2023-01-16 18:10:00', false, null, 3, null, 2, 3, null, false, 1,50, 100, current_timestamp);
 -- driver id je 2
 update passengers set current_driving_id=8 where id=21; -- test7
-update passengers set current_driving_id=8 where id=22; --test8
-
-update drivers set current_driving_id=8 where id=2;
+update passengers set current_driving_id=8 where id=22; -- test8
