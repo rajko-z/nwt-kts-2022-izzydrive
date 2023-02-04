@@ -126,23 +126,23 @@ VALUES (1200, '2023-01-16 22:00:00', 'Rejected reservation', 441.2, 5614.2, '32,
 -- 1. banijska - zeleznicka
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (5614.2, 'FINISHED', 441.2, '2023-02-02 18:10:00', false, null, 250, '2023-01-16 18:00:00', 2, 1, null, false, 1, 0, 0);
+VALUES (5614.2, 'FINISHED', 441.2, '2023-02-02 18:10:00', false, null, 250, '2023-02-02 18:00:00', 2, 1, null, false, 1, 0, 0);
 
 INSERT INTO evaluations(driver_rate, text, timestamp, vehicle_grade, driving_id)
 values
-(4.5, 'It was a good ride', '2023-01-16 18:10:00', '2.3', 1),
-(4.1, 'Vozac je vozio vrlo prijatno i oslobodjeno, u sustini, zurio samm je rekao, ali nisam bezao ako na to mislite, ja sam zurio kad sam izasao', '2023-01-20 18:10:00', '2.0', 1),
-(4.0, 'Mozda su stakla bila zamagljena....Visee', '2023-01-20 18:10:00', '4.8', 1);
+(4.5, 'It was a good ride', '2023-02-02 18:12:00', '2.3', 1),
+(4.1, 'Vozac je vozio vrlo prijatno i oslobodjeno, u sustini, zurio samm je rekao, ali nisam bezao ako na to mislite, ja sam zurio kad sam izasao', '2023-02-02 18:20:00', '2.0', 1),
+(4.0, 'Mozda su stakla bila zamagljena....Visee', '2023-02-02 18:15:00', '4.8', 1);
 
 -- 2 cara dusana - safarikova multistanice
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (2900.9, 'FINISHED', 313.7, '2023-02-02 18:15:00', false, null, 500, '2023-01-15 18:00:00', 3, 3, null, false, 1, 0, 0);
+VALUES (2900.9, 'FINISHED', 313.7, '2023-02-01 18:15:00', false, null, 500, '2023-02-01 18:00:00', 3, 3, null, false, 1, 0, 0);
 
 -- 3. heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (3164.2, 'FINISHED', 317.5, '2023-02-02 22:10:00', false, null, 500, '2023-01-13 22:00:00', 4, 2, null, false, 1, 0, 0);
+VALUES (3164.2, 'FINISHED', 317.5, '2023-01-26 22:10:00', false, null, 500, '2023-01-26 22:00:00', 4, 2, null, false, 1, 0, 0);
 
 -- 4
 INSERT INTO public.driving(
@@ -151,7 +151,7 @@ VALUES (3164.2, 'FINISHED', 313.7, '2023-01-13 12:10:00', false, null, 1200, '20
 --5
 INSERT INTO public.driving(
     distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES (3164.2, 'FINISHED', 313.7, '2023-01-13 15:10:00', false, null, 5000, '2023-01-13 15:00:00', 4, 2, null, false, 1, 0, 0);
+VALUES (3164.2, 'FINISHED', 313.7, '2023-01-10 15:10:00', false, null, 5000, '2023-01-10 15:00:00', 4, 2, null, false, 1, 0, 0);
 
 
 INSERT INTO passengers_drivings (passenger_id, driving_id)
