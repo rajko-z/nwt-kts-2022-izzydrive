@@ -11,7 +11,7 @@ public class CalculatedRouteUtil {
     public static CalculatedRouteDTO getExampleOfCalculatedRoute() {
         CalculatedRouteDTO c = new CalculatedRouteDTO();
         c.setDuration(10.0);
-        c.setDuration(100);
+        c.setDistance(100);
 
         List<LocationDTO> coordinates = new ArrayList<>();
         coordinates.add(AddressesUtil.getBanijskaLocation());
