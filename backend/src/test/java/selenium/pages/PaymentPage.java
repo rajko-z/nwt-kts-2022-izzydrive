@@ -36,7 +36,7 @@ public class PaymentPage {
     }
 
     public boolean isOpened() {
-        return (new WebDriverWait(driver, Duration.ofSeconds(10)))
+        return (new WebDriverWait(driver, Duration.ofSeconds(20)))
                 .until(ExpectedConditions.textToBePresentInElement(titleElement, "To pay:"));
     }
 

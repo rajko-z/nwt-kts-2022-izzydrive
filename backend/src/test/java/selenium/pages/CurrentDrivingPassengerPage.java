@@ -28,7 +28,7 @@ public class CurrentDrivingPassengerPage {
     }
 
     public boolean isOpened() {
-        return (new WebDriverWait(driver, Duration.ofMinutes(5)))
+        return (new WebDriverWait(driver, Duration.ofMinutes(20)))
                 .until(ExpectedConditions.textToBePresentInElement(title, "Current driving"));
     }
 

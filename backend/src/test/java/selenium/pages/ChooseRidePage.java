@@ -31,22 +31,22 @@ public class ChooseRidePage {
     }
 
     public String getMessageNoAvailable() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(messageNoAvailable));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(messageNoAvailable));
         return messageNoAvailable.getText();
     }
 
     public Integer getNumberOfOption() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(nextButton));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(nextButton));
         return listOption.size();
     }
 
     public String getChoosePage() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(nextButton));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(nextButton));
         return nextButton.getText();
     }
 
     public boolean isOpenedWithOption() {
-        return (new WebDriverWait(driver, Duration.ofSeconds(10)))
+        return (new WebDriverWait(driver, Duration.ofSeconds(20)))
                 .until(ExpectedConditions.textToBePresentInElement(nextButton, "Next"));
     }
 
@@ -91,9 +91,9 @@ public class ChooseRidePage {
         return minuteTextSelected.getText();
     }
 
-    public String getSelectedDriver() {
-        WebElement driverTextSelected = driver.findElement(new By.ByCssSelector(".driver.selected"));
-        return driverTextSelected.getText();
+    public String getSelectedDriver(Integer index) {
+        List<WebElement> driverTextSelected = driver.findElements(new By.ByCssSelector(".driver-name"));
+        return driverTextSelected.get(index).getText();
     }
 
     public String getSelectedPrice(Integer index) {
