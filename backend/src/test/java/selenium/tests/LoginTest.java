@@ -12,11 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoginTest extends TestBase{
 
     private static final String USERNAME_DRIVER_MIKA = "mika@gmail.com";
-    private static final String USERNAME_DRIVER_NATASA = "natasha.lakovic@gmail.com";
+    private static final String USERNAME_PASSENGER_NATASA = "natasha.lakovic@gmail.com";
     private static final String PASSWORD = "12345678";
     private static final String NOT_EXISTING_PASSWORD = "123";
     private static final String INVALID_USERNAME = "mika";
     private static final String NOT_EXISTING_USERNAME = "mika123@gmail.com";
+    private static final String SHORT_PASSWORD = "12345";
 
     @Test
     public void should_appear_error_label_when_email_not_valid_for_pattern(){
@@ -82,38 +83,60 @@ public class LoginTest extends TestBase{
     }
 
     @Test
-    public void should_login_with_forgot_password() throws InterruptedException {
+    public void should_display_error_message_when_email_not_existing(){
         LogInPage logInPage = new LogInPage(driver);
         logInPage.clickOnSignInButton();
         logInPage.clickForgotPassword();
         assertNotNull(logInPage.checkOpenEmailDialog());
-        logInPage.fillEmailForForgotPassword(USERNAME_DRIVER_NATASA);
+        logInPage.fillEmailForForgotPassword(NOT_EXISTING_USERNAME);
+        logInPage.clickButtonForResetPasswordRequest();
+        assertNotNull(logInPage.isMessagePopupOpened());
+        assertTrue(logInPage.messagePopupContainsText("User with email: "+ NOT_EXISTING_USERNAME +" does not exists"));
+        assertTrue(logInPage.messagePopupButtonContainsText("ERROR"));
+    }
+
+    @Test
+    public void should_display_error_label_when_password_is_too_short_and_login_when_password_valid(){
+        LogInPage logInPage = new LogInPage(driver);
+        logInPage.clickOnSignInButton();
+        logInPage.clickForgotPassword();
+        assertNotNull(logInPage.checkOpenEmailDialog());
+        logInPage.fillEmailForForgotPassword(USERNAME_DRIVER_MIKA);
         logInPage.clickButtonForResetPasswordRequest();
         assertNotNull(logInPage.isMessagePopupOpened());
         assertTrue(logInPage.messagePopupContainsText("We send you link in email"));
         assertTrue(logInPage.messagePopupButtonContainsText("OK"));
+
         ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);
         assertTrue(resetPasswordPage.isOpened());
-        resetPasswordPage.fillNewPassword(USERNAME_DRIVER_NATASA);
-        resetPasswordPage.fillRepeatedPassword(USERNAME_DRIVER_NATASA);
+        resetPasswordPage.clickResetPassword(); //klik bez da popuni polja
+
+        assertNotNull(logInPage.isMessagePopupOpened()); //greska
+        assertTrue(logInPage.messagePopupContainsText("Password length must be minimum 8 characters"));
+        assertTrue(logInPage.messagePopupButtonContainsText("ERROR"));
+
+        resetPasswordPage.fillNewPassword(USERNAME_PASSENGER_NATASA); //ispravno popuni
+        resetPasswordPage.fillRepeatedPassword(USERNAME_PASSENGER_NATASA);
         resetPasswordPage.clickResetPassword();
-        logInPage.isOpened();
+
+        assertTrue(logInPage.isOpened()); //login
         assertNotNull(logInPage.isMessagePopupOpened());
         assertTrue(logInPage.messagePopupContainsText("Successfully reset password"));
         assertTrue(logInPage.messagePopupButtonContainsText("OK"));
-        logInPage.fillEmail(USERNAME_DRIVER_NATASA);
-        logInPage.fillPassword(USERNAME_DRIVER_NATASA);
+        logInPage.fillEmail(USERNAME_PASSENGER_NATASA);
+        logInPage.fillPassword(USERNAME_PASSENGER_NATASA);
         logInPage.clickOnHidePassword();
         assertNotNull(logInPage.isLoginButtonValid());
         logInPage.clickLogInButton();
         assertNotNull(logInPage.isOpenedNextPassengerPage());
     }
 
+
+
     @AfterEach
     public void quitDriver() {
         if (driver != null) {
             driver.quit();
-            //driver.close();
         }
     }
 }

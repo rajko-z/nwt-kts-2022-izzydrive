@@ -11,7 +11,7 @@ import java.time.Duration;
 
 public class ResetPasswordPage {
 
-    private static String PAGE_URL="https://localhost:4200/anon/reset-password/e1ab839e-eec3-4d90-b12c-8f929bcd3617";
+    private static String PAGE_URL="https://localhost:4200/anon/reset-password/5a6a3492-13f2-4a0d-adc2-647175a9cb13";
 
     private WebDriver driver;
 
@@ -47,6 +47,5 @@ public class ResetPasswordPage {
     public void clickResetPassword(){
         saveButton.click();
     }
-
 
 }
