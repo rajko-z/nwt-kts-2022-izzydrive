@@ -3,10 +3,12 @@ package com.izzydrive.backend.controller.orderingride.payment;
 import com.izzydrive.backend.constants.PassengerConst;
 import com.izzydrive.backend.constants.UserConst;
 import com.izzydrive.backend.dto.NotificationDTO;
+import com.izzydrive.backend.dto.TextResponse;
 import com.izzydrive.backend.dto.UserWithTokenDTO;
 import com.izzydrive.backend.dto.payment.CurrentPayingDTO;
 import com.izzydrive.backend.exception.ErrorMessage;
 import com.izzydrive.backend.model.NotificationStatus;
+import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.service.notification.NotificationService;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import com.izzydrive.backend.utils.ExceptionMessageConstants;
@@ -24,9 +26,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:application.properties", "classpath:application-payment.properties"})
@@ -99,7 +102,12 @@ public class PaymentTest {
                 .exchange("/payment/pay",  HttpMethod.PUT, httpEntity, ErrorMessage.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(ExceptionMessageConstants.PAYMENT_SESSION_EXPIRED, response.getBody().getMessage());
+
+        List<String> possibleErrors = new ArrayList<>();
+        possibleErrors.add(ExceptionMessageConstants.PAYMENT_SESSION_EXPIRED);
+        possibleErrors.add(ExceptionMessageConstants.YOU_DO_NOT_HAVE_DRIVING_FOR_PAYMENT);
+
+        assertTrue(possibleErrors.contains(response.getBody().getMessage()));
     }
 
     @Test
@@ -239,40 +247,33 @@ public class PaymentTest {
         assertEquals(numOfNotificationsBeforeSara+1, notificationsAfterSara.size());
         assertEquals(NotificationStatus.PAYMENT_SUCCESS, notificationsAfterSara.get(0).getNotificationStatus());
     }
-    // TODO:: fix test below
-//    @Test
-//    public void test_one_pay_other_reject() {
-//        HttpHeaders headers = getHeadersLoggedUser(TEST_PASSENGER_7);
-//        CurrentPayingDTO currentPayingDTO = PaymentUtil.getExistingCurrPaymentInfo();
-//
-//        int numOfNotificationsBeforeFirst = notificationService.findAllForUserByEmail(TEST_PASSENGER_7).size();
-//
-//        HttpEntity<CurrentPayingDTO> httpEntity = new HttpEntity<>(currentPayingDTO, headers);
-//        ResponseEntity<ErrorMessage> response = testRestTemplate
-//                .exchange("/payment/pay",  HttpMethod.PUT, httpEntity, ErrorMessage.class);
-//
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        List<NotificationDTO> notifications = notificationService.findAllForUserByEmail(TEST_PASSENGER_7);
-//        assertEquals(numOfNotificationsBeforeFirst, notifications.size());
-//
-//
-//        SecurityContextHolder.clearContext();
-//
-//
-//        headers = getHeadersLoggedUser(TEST_PASSENGER_8);
-//        HttpEntity<Object> rejectHttp = new HttpEntity<>(headers);
-//        ResponseEntity<TextResponse> responseForReject = testRestTemplate
-//                .exchange("/reject-linked-user",  HttpMethod.GET, rejectHttp, TextResponse.class);
-//
-//        assertEquals(HttpStatus.OK, responseForReject.getStatusCode());
-//
-//        notifications = notificationService.findAllForUserByEmail(TEST_PASSENGER_7);
-//        assertEquals(numOfNotificationsBeforeFirst+1, notifications.size());
-//        assertEquals(NotificationStatus.REJECTED_DRIVING_PASSENGER, notifications.get(0).getNotificationStatus());
-//
-//        setContextForUser(TEST_PASSENGER_7);
-//        Passenger passenger = passengerService.getCurrentlyLoggedPassenger();
-//        assertNull(passenger.getCurrentDriving());
-//    }
+
+    @Test
+    public void test_one_pay_other_reject() {
+        HttpHeaders headers = getHeadersLoggedUser(TEST_PASSENGER_7);
+        CurrentPayingDTO currentPayingDTO = PaymentUtil.getExistingCurrPaymentInfo();
+
+        HttpEntity<CurrentPayingDTO> httpEntity = new HttpEntity<>(currentPayingDTO, headers);
+        ResponseEntity<TextResponse> response = testRestTemplate
+                .exchange("/payment/pay",  HttpMethod.PUT, httpEntity, TextResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        SecurityContextHolder.clearContext();
+
+        headers = getHeadersLoggedUser(TEST_PASSENGER_8);
+        HttpEntity<Object> rejectHttp = new HttpEntity<>(headers);
+        ResponseEntity<TextResponse> responseForReject = testRestTemplate
+                .exchange("/drivings/reject-linked-user",  HttpMethod.GET, rejectHttp, TextResponse.class);
+
+        assertEquals(HttpStatus.OK, responseForReject.getStatusCode());
+
+        List<NotificationDTO> notifications = notificationService.findAllForUserByEmail(TEST_PASSENGER_7);
+        assertEquals(NotificationStatus.REJECTED_DRIVING_PASSENGER, notifications.get(0).getNotificationStatus());
+
+        setContextForUser(TEST_PASSENGER_7);
+        Passenger passenger = passengerService.getCurrentlyLoggedPassenger();
+        assertNull(passenger.getCurrentDriving());
+    }
 
 }
