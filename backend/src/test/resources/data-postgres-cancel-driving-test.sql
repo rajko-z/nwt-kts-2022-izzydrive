@@ -45,7 +45,7 @@ values
     (1,2),
     (3,4),
     (5,8),
-    (1,2);
+    (5,8);
 
 insert into intermediate_stations(route_id, address_id, station_order)
 values
@@ -116,7 +116,7 @@ UPDATE passengers SET current_driving_id=1 WHERE id=11;
 -- 3.  heroja pinkija - stojana novakovica
 INSERT INTO public.driving(
     creation_date, distance, driving_state, duration, end_date, is_reservation, note, price, start_date, driver_id, route_id, reservation_date, locked, version, duration_from_driver_to_start, distance_from_driver_to_start)
-VALUES ('2023-02-03 00:38:00', 3164.2, 'PAYMENT', 317.5, null, false, null, 550, '2023-02-03 00:40:00', 3, 2, null, false, 1, 0, 0);
+VALUES (current_timestamp, 3164.2, 'PAYMENT', 317.5, null, false, null, 550, current_timestamp, 3, 2, null, false, 1, 0, 0);
 
 UPDATE drivers SET current_driving_id=3 WHERE id=3;
 UPDATE passengers SET current_driving_id=3 WHERE id=13;
@@ -155,16 +155,9 @@ values ('mika@gmail.com', 45.260008, 19.808357),
        ('petar@gmail.com', 45.237430, 19.731582),
        ('marko@gmail.com', 45.238356, 19.808732);
 
--- INSERT INTO passengers_drivings (passenger_id, driving_id)
--- VALUES
---     (10, 3),
---     (11, 3),
---     (10, 4),
---     (10, 5),
---     (10,6),
---     (12,2),
---     (10,1),
---     (11,1);
+INSERT INTO passengers_drivings (passenger_id, driving_id)
+VALUES
+    (13, 7);
 
 -- 1. banijska - zeleznicka
 INSERT INTO public.locations(latitude, longitude, driving_id, for_drive, locations_order)

@@ -122,7 +122,7 @@ public class DrivingCancelTest {
     @Test
     void should_throw_cant_not_found_driving_exception_when_current_and_next_drivingID_is_invalid(){ //current je waiting, next je waiting ali nije dobar id prosledjen
         setUpHeaders(LoginDTOUtil.getDriverPredrag());
-        Long drivingId = 7L;
+        Long drivingId = 5L;
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO("Reason", drivingId);
         HttpEntity<CancellationReasonDTO> httpEntity = new HttpEntity<>(cancellationReasonDTO, headers);
         ResponseEntity<ErrorMessage> response = testRestTemplate
@@ -147,10 +147,9 @@ public class DrivingCancelTest {
     void should_cancel_driving_when_current_drivingID_is_valid(){ //current driving je waiting i taj ID je prosledjen
         KeyPairDTO keyPairDTO = new KeyPairDTO(P_SARA_SECRET_KEY, P_SARA_E_ADDRESS);
         pay(keyPairDTO);
-
         setUpHeaders(LoginDTOUtil.getDriverPredrag());
-
         Long drivingId = 3L;
+
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO("Reason", drivingId);
         HttpEntity<CancellationReasonDTO> httpEntity = new HttpEntity<>(cancellationReasonDTO, headers);
         ResponseEntity<TextResponse> response = testRestTemplate
