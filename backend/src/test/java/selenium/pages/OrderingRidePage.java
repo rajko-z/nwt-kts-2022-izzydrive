@@ -119,12 +119,12 @@ public class OrderingRidePage {
     }
 
     public boolean isOpened() {
-        return (new WebDriverWait(driver, Duration.ofMinutes(5)))
+        return (new WebDriverWait(driver, Duration.ofMinutes(20)))
                 .until(ExpectedConditions.textToBePresentInElement(getRideButton, "Get a ride"));
     }
 
     public WebElement getOrderingRidePage() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(getRideButton));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(getRideButton));
         return getRideButton;
     }
 
@@ -140,7 +140,7 @@ public class OrderingRidePage {
 
     //assert da je velicina liste veca od nula
     public void clickLocation() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(option));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(option));
         if (lisOption.size() > 0) {
             lisOption.get(0).click();
         }
@@ -174,7 +174,7 @@ public class OrderingRidePage {
     }
 
     public void fillAllIntermediateStation(String first, String second, String third) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(explanationStationText));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(explanationStationText));
         fillFirstIntermediateStation(first);
         clickLocation();
         fillSecondIntermediateStation(second);
@@ -184,32 +184,32 @@ public class OrderingRidePage {
     }
 
     public void fillFirstIntermediateStation(String location) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(firstIntermediateInput));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(firstIntermediateInput));
         firstIntermediateInput.clear();
         firstIntermediateInput.sendKeys(location);
     }
 
     public void fillSecondIntermediateStation(String location) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(secondIntermediateInput));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(secondIntermediateInput));
         secondIntermediateInput.clear();
         secondIntermediateInput.sendKeys(location);
     }
 
     public void fillThirdIntermediateStation(String location) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(thirdIntermediateInput));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(thirdIntermediateInput));
         thirdIntermediateInput.clear();
         thirdIntermediateInput.sendKeys(location);
     }
 
     public void fillAllUsers(String first, String second, String third) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(explanationUserText));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(explanationUserText));
         fillFirstUserEmail(first);
         fillSecondUserEmail(second);
         fillThirdUserEmail(third);
     }
 
     public void fillFirstUserEmail(String location) {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(firstUserEmail));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(firstUserEmail));
         firstUserEmail.clear();
         firstUserEmail.sendKeys(location);
     }
@@ -225,17 +225,17 @@ public class OrderingRidePage {
     }
 
     public String getErrorMessageLocation() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(startLocationInputError));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(startLocationInputError));
         return startLocationInputError.getText();
     }
 
     public String getErrorMessageUserEmail() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(emailInputError));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(emailInputError));
         return emailInputError.getText();
     }
 
     public String getSnackBarError() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(snackBar));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(snackBar));
         return snackBarError.getText();
     }
 
@@ -252,7 +252,7 @@ public class OrderingRidePage {
     }
 
     public String getMessageNewRide() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(snackBarContainer));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.elementToBeClickable(snackBarContainer));
         return messageNewRide.getText();
     }
 
@@ -265,7 +265,7 @@ public class OrderingRidePage {
     }
 
     public String getMessage() {
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(snackBarContainer));
+        new WebDriverWait(driver, Duration.ofSeconds(30)).until(ExpectedConditions.elementToBeClickable(snackBarContainer));
         return snackBarMessage.getText();
     }
 

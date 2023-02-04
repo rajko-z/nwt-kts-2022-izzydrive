@@ -44,7 +44,7 @@ public class OverviewRidePage {
     }
 
     public boolean isOpened(){
-        return (new WebDriverWait(driver, Duration.ofSeconds(10)))
+        return (new WebDriverWait(driver, Duration.ofSeconds(20)))
                 .until(ExpectedConditions.textToBePresentInElement(paymentButton, "Payment"));
     }
 

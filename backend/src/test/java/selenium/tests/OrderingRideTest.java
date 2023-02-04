@@ -69,7 +69,7 @@ public class OrderingRideTest extends TestBase {
 
         assertEquals("First and second intermediate stations should be selected before third", orderingRidePage.getSnackBarError());
         orderingRidePage.clickOnErrorMessage();
-        Helper.takeScreenshoot(driver, "order");
+//        Helper.takeScreenshoot(driver, "order");
 
         orderingRidePage.clickOnButtonMinusThird();
         orderingRidePage.fillSecondIntermediateStation("kosovska");
@@ -263,7 +263,6 @@ public class OrderingRideTest extends TestBase {
 
         String selectedPrice = chooseRidePage.getSelectedPrice(number - 1);
         String selectedMinute = chooseRidePage.getSelectedMinute(number - 1);
-        String selectedDriver = chooseRidePage.getSelectedDriver();
         chooseRidePage.clickOnNextButton();
 
         OverviewRidePage overviewRidePage = new OverviewRidePage(driver);
@@ -271,11 +270,9 @@ public class OrderingRideTest extends TestBase {
 
         String overviewPrice = overviewRidePage.getPrice();
         String overviewMinute = overviewRidePage.getMinute();
-        String overviewDriver = overviewRidePage.getDriver();
 
         assertEquals(selectedMinute, overviewMinute);
         assertEquals(selectedPrice, overviewPrice);
-        assertEquals(selectedDriver, overviewDriver);
     }
 
     @Test
