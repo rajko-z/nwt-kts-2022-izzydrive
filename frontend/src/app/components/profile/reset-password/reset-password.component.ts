@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NewPassword } from 'src/app/model/user/newPassword';
 import { ResetPassword } from 'src/app/model/user/resetPassword';
 import { LoggedUserService } from 'src/app/services/loggedUser/logged-user.service';
-import { ResponseMessageService } from 'src/app/services/response-message/response-message.service';
 import { UserService } from 'src/app/services/userService/user-sevice.service';
 
 @Component({
@@ -27,19 +26,19 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private userService: UserService,
-    private router: Router,
-    private responseMessage: ResponseMessageService
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     let urlTokens : string[] = window.location.href.split("/")
     this.resetpasswordToke = urlTokens[urlTokens.length - 1];
+    this.isValidToken = true;
     this.userService.verifyResetPasswordToken(this.resetpasswordToke).subscribe({
       next: () => {
-        this.isValidToken = true;
       },
       error : (error) => {
-        this.responseMessage.openErrorMessage(error.error.message);
+        console.log(error)
+        this.snackBar.open(error.error.message, "ERROR");
       }
     })
   }
@@ -47,7 +46,6 @@ export class ResetPasswordComponent implements OnInit {
   validate(): boolean {
     let newPass = this.passwordForm.controls.newPassword.value;
     let repPass = this.passwordForm.controls.repeatedPassword.value;
-
     if (newPass !== repPass) {
       this.passwordForm.controls['repeatedPassword'].setErrors({'noMatch': true})
       return false;
@@ -65,11 +63,11 @@ export class ResetPasswordComponent implements OnInit {
     resetPassword.token = this.resetpasswordToke;
     this.userService.resetPassword(resetPassword).subscribe({
       next : (response) => {
-        this.responseMessage.openSuccessMessage(response.text)
+        this.snackBar.open(response.text, "OK")
         this.router.navigateByUrl('/anon/login')
       },
       error : (error) => {
-        this.responseMessage.openErrorMessage(error.error.message)
+        this.snackBar.open(error.error.message, "ERROR")
       }
     })
   }

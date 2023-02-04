@@ -2,8 +2,6 @@
   <div class="user_form_container">
     <p class="form_tittle">Welcome back</p>
 
-    <p *ngIf="errorMessage" class="error_label">{{errorMessageText}}</p>
-
     <form class="input-fields-container" [formGroup]="this.loginForm"
       (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline">
@@ -12,7 +10,7 @@
           placeholder="pat@example.com"
           required
           formControlName="email">
-        <mat-error>Email is required in form 'pat@example.com</mat-error>
+        <mat-error id="email_error">Email is required in form 'pat@example.com</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" style="margin-top: 2%">
@@ -21,18 +19,19 @@
           [type]="hide ? 'password' : 'text'"
           required
           ngModel
-          formControlName="password">
-        <button [disabled]="this.loginForm.controls.password.value.length === 0" class="icon" mat-icon-button matSuffix (click)="hide= !hide"
-          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+          formControlName="password"
+          id="password_input">
+        <button [disabled]="this.loginForm.controls.password.value.length === 0" class="icon" mat-icon-button matSuffix (click)="switchHide()"
+          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button"  id="reveal_password_button">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-error>Password is required</mat-error>
+        <mat-error id="password_error">Password is required</mat-error>
       </mat-form-field>
 
       <div class="button-container">
         <button mat-button [disabled]="this.loginForm.invalid"
                 [ngClass] = "{'disabled_large_btn': this.loginForm.invalid,  'large_button': !this.loginForm.invalid}"
-                type="submit">Log in</button>
+                type="submit" id="submit_form">Log in</button>
       </div>
 
 

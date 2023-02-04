@@ -13,11 +13,10 @@ public class LoginTest extends TestBase{
 
     private static final String USERNAME_DRIVER_MIKA = "mika@gmail.com";
     private static final String USERNAME_PASSENGER_NATASA = "natasha.lakovic@gmail.com";
-    private static final String PASSWORD = "12345678";
-    private static final String NOT_EXISTING_PASSWORD = "123";
+    private static final String PASSWORD = "123";
+    private static final String NOT_EXISTING_PASSWORD = "1";
     private static final String INVALID_USERNAME = "mika";
     private static final String NOT_EXISTING_USERNAME = "mika123@gmail.com";
-    private static final String SHORT_PASSWORD = "12345";
 
     @Test
     public void should_appear_error_label_when_email_not_valid_for_pattern(){

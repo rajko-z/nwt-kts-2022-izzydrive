@@ -5,6 +5,7 @@ import {UserService} from "../../../../services/userService/user-sevice.service"
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {By} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 function fillFormValid(component: BaseUserDataFormComponent) {
   component.registerForm.controls['firstName'].setValue('Mila');
@@ -35,7 +36,7 @@ fdescribe('BaseUserDataFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BaseUserDataFormComponent],
-      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule],
+      imports: [HttpClientTestingModule, ReactiveFormsModule, FormsModule, MatSnackBarModule],
     })
       .compileComponents();
 
