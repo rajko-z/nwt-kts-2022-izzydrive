@@ -3,6 +3,7 @@ import {UserService} from './user-sevice.service';
 import {NewUser} from "../../model/user/user";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {environment} from "../../../environments/environment";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const dummyUser: NewUser = {
   firstName: "Mile",
@@ -20,7 +21,7 @@ fdescribe('UserSeviceService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatSnackBarModule],
       providers: [UserService],
     });
 

@@ -26,8 +26,6 @@ export class LoginComponent implements OnInit {
   private clientId = environment.clientId
 
   hide : boolean = true;
-  errorMessage : boolean = false;
-  errorMessageText: string;
   socialUser!: SocialUser;
   isLoggedin?: boolean = undefined;
 
@@ -48,9 +46,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.loginForm.controls.email.markAsTouched()
+    // @ts-ignore
     if(window["google"]){
-
         // @ts-ignore
       google.accounts.id.initialize({
         client_id: this.clientId,
@@ -74,6 +72,10 @@ export class LoginComponent implements OnInit {
     });
 
 
+  }
+
+  switchHide(){
+    this.hide = !this.hide
   }
 
   async loginWithGoogle(response: CredentialResponse) {
