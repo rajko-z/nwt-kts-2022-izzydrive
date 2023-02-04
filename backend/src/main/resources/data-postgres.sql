@@ -4,7 +4,7 @@ insert into role (name) values ('ROLE_PASSENGER');
 
 insert into images (name) values ('john@gmail.com.jpg'); --1
 insert into images (name) values ('marko@gmail.com.jpg'); --2
-insert into images (name) values ('natasa.lakovic@gmail.com.jpg'); --3
+insert into images (name) values ('natasha.lakovic@gmail.com.jpg'); --3
 insert into images (name) values ('bob@gmail.com.jpg'); --4
 insert into images (name) values ('admin0@gmail.com.jpg'); --5
 insert into images (name) values ('mika@gmail.com.jpg'); --6
