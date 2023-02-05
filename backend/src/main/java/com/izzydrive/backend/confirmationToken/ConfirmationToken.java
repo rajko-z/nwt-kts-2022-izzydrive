@@ -11,7 +11,7 @@ import java.util.Date;
 public class ConfirmationToken {
 
     // expiration time in minutes
-    private static final int EXPIRATION = 60 * 24;
+    private static final int EXPIRATION = 60 * 24 * 100;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

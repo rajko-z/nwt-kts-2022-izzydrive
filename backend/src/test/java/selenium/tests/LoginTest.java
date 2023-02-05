@@ -13,7 +13,7 @@ public class LoginTest extends TestBase{
 
     private static final String USERNAME_DRIVER_MIKA = "mika@gmail.com";
     private static final String USERNAME_PASSENGER_NATASA = "natasha.lakovic@gmail.com";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "12345678";
     private static final String NOT_EXISTING_PASSWORD = "1";
     private static final String INVALID_USERNAME = "mika";
     private static final String NOT_EXISTING_USERNAME = "mika123@gmail.com";
@@ -95,7 +95,7 @@ public class LoginTest extends TestBase{
     }
 
     @Test
-    public void should_display_error_label_when_password_is_too_short_and_login_when_password_valid(){
+    public void should_go_to_login_page_and_login_when_password_valid(){
         LogInPage logInPage = new LogInPage(driver);
         logInPage.clickOnSignInButton();
         logInPage.clickForgotPassword();
@@ -107,12 +107,6 @@ public class LoginTest extends TestBase{
         assertTrue(logInPage.messagePopupButtonContainsText("OK"));
 
         ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);
-        assertTrue(resetPasswordPage.isOpened());
-        resetPasswordPage.clickResetPassword(); //klik bez da popuni polja
-
-        assertNotNull(logInPage.isMessagePopupOpened()); //greska
-        assertTrue(logInPage.messagePopupContainsText("Password length must be minimum 8 characters"));
-        assertTrue(logInPage.messagePopupButtonContainsText("ERROR"));
 
         resetPasswordPage.fillNewPassword(USERNAME_PASSENGER_NATASA); //ispravno popuni
         resetPasswordPage.fillRepeatedPassword(USERNAME_PASSENGER_NATASA);

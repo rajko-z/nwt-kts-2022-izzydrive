@@ -11,16 +11,16 @@ import java.time.Duration;
 
 public class ResetPasswordPage {
 
-    private static String PAGE_URL="https://localhost:4200/anon/reset-password/5a6a3492-13f2-4a0d-adc2-647175a9cb13";
+    private static String PAGE_URL="https://localhost:4200/anon/reset-password/1cac80a2-ed55-4623-a1a0-1cebdc9881f5";
 
     private WebDriver driver;
 
     @FindBy(xpath = "//button[contains(@class, 'submit-button')]")
     WebElement saveButton;
 
-    @FindBy(xpath = "//mat-form-field//input[contains(@formcontrolname, 'newPassword')]")
+    @FindBy(id = "new_password_input")
     WebElement newPasswordInput;
-    @FindBy(xpath = "//mat-form-field//input[contains(@formcontrolname, 'repeatedPassword')]")
+    @FindBy(id = "repeat_password_input")
     WebElement repeatedNewPasswordInput;
 
     public ResetPasswordPage(WebDriver driver) {
