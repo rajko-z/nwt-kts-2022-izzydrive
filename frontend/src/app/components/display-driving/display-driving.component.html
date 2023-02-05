@@ -44,12 +44,12 @@
   </div>
 
   <div *ngIf="currDrivingStatus === 'start'" class="options">
-    <button class="active-button" (click)="startDriving()">Start</button>
+    <button id="startButtonDriverPage" class="active-button" (click)="startDriving()">Start</button>
     <button class="active-button" (click)="cancelDriving(false)">Cancel</button>
   </div>
 
   <div *ngIf="currDrivingStatus === 'active' || currDrivingStatus === 'finish'" class="options">
-    <button class="active-button" (click)="endDriving()">Finish</button>
+    <button id="endButtonDriverPage" class="active-button" (click)="endDriving()">Finish</button>
   </div>
 
   <div *ngIf="currDrivingStatus === 'next'" class="options">

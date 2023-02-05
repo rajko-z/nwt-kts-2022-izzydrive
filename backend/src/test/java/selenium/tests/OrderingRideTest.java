@@ -8,7 +8,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import selenium.helper.Helper;
 import selenium.pages.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -345,43 +344,6 @@ public class OrderingRideTest extends TestBase {
 
         assertEquals("Payment failure, canceling current driving. Make sure every passenger input correct paying info and have enough funds.", orderingRidePage.getMessage());
     }
-
-//    @Test
-//    void should_payment_is_success() {
-//        openPageForDriver(USER_NAME_DRIVER_MIKA, driverDriver1);
-//
-//        logInUser(USER_NAME_LIKED_USER, driver);
-//
-//        OrderingRidePage orderingRidePage = new OrderingRidePage(driver);
-//        assertTrue(orderingRidePage.isOpened());
-//        orderingRidePage.fillStartPlace(LOCATION1);
-//        orderingRidePage.clickLocation();
-//        orderingRidePage.fillEndPlace(LOCATION2);
-//        orderingRidePage.clickLocation();
-//        orderingRidePage.clickOnGetARide();
-//
-//        ChooseRidePage chooseRidePage = new ChooseRidePage(driver);
-//        assertTrue(chooseRidePage.isOpenedWithOption());
-//        chooseRidePage.clickOnNextButton();
-//
-//        OverviewRidePage overviewRidePage = new OverviewRidePage(driver);
-//        assertTrue(overviewRidePage.isOpened());
-//        String overviewPrice = overviewRidePage.getPrice();
-//        overviewRidePage.clickOnPaymentButton();
-//
-//        PaymentPage paymentPage = new PaymentPage(driver);
-//        assertTrue(paymentPage.isOpened());
-//        paymentPage.clickOnPayButton();
-//
-//        CurrentDrivingPassengerPage currentDrivingPassengerPage = new CurrentDrivingPassengerPage(driver);
-//        assertTrue(currentDrivingPassengerPage.isOpened());
-//
-//        //check data and time
-//        //nakon uspesnog placanja slanje notifikacije vozacu da ima novu voznju - mika
-//        //provera podataka sa onim sto je narucio - nakon placanja
-//        //provera azuriranje vremena kako se vozac krece
-//        //ako je vozilo stiglo - da li je stigla notifikacija
-//    }
 
     private void openPageForDriver(String emailDriver, WebDriver driverDriver) {
         ChromeOptions handlingSSL = new ChromeOptions();
