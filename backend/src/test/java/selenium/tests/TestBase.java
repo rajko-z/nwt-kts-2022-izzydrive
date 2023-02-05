@@ -13,8 +13,8 @@ public class TestBase {
 
     @BeforeEach
     public void initializeWebDriver() {
-//        System.setProperty("webdriver.chrome.driver", "chromedriver");
-        System.setProperty("webdriver.chrome.driver", "chromedriver2.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
+//        System.setProperty("webdriver.chrome.driver", "chromedriver2.exe");
 
         ChromeOptions handlingSSL = new ChromeOptions();
         handlingSSL.setAcceptInsecureCerts(true);

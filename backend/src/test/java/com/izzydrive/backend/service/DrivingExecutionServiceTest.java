@@ -9,7 +9,6 @@ import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.exception.BadRequestException;
-import com.izzydrive.backend.jobs.ReservationNotificationTask;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
 import com.izzydrive.backend.model.users.Passenger;
@@ -25,54 +24,48 @@ import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.izzydrive.backend.utils.HelperMapper.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class DrivingExecutionServiceTest {
 
-    @Autowired
     @InjectMocks
     private DrivingExecutionServiceImpl drivingExecutionService;
 
-    @MockBean
+    @Mock
     private NavigationService navigationService;
 
-    @MockBean
+    @Mock
     private DriverNotificationService driverNotificationService;
 
-    @MockBean
+    @Mock
     private DrivingService drivingService;
 
-    @MockBean
+    @Mock
     private DriverRoutesService driverRoutesService;
 
-    @MockBean
+    @Mock
     private PassengerNotificationServiceImpl passengerNotificationService;
 
-    @MockBean
+    @Mock
     private DriverService driverService;
-
-    @MockBean
-    private ReservationNotificationTask reservationNotificationTask;
-
-    private static final String REASON = "I want to cancel driving";
     private static final Long CURRENT_DRIVING_ID = 1L;
     private static final Long NEXT_DRIVING_ID = 2L;
-    private static final Long INVALID_DRIVING_ID = 3L;
-    private static final Long NO_MATCHING_DRIVING_ID = 3L;
-
 
     @Test
     public void should_be_driver_status_free_when_next_driving_is_null() {

@@ -9,11 +9,10 @@ import com.izzydrive.backend.service.users.LoggedUserService;
 import com.izzydrive.backend.service.users.passenger.PassengerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,17 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class PassengerServiceTest {
 
-    @Autowired
+    @InjectMocks
     private PassengerServiceImpl passengerService;
 
-    @MockBean
+    @Mock
     private NotificationService notificationService;
 
-    @MockBean
+    @Mock
     private LoggedUserService loggedUserService;
 
 

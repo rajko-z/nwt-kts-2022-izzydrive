@@ -3,26 +3,23 @@ package com.izzydrive.backend.service;
 import com.izzydrive.backend.constants.AdminConst;
 import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.constants.PassengerConst;
-import com.izzydrive.backend.dto.NotificationDTO;
-import com.izzydrive.backend.model.Address;
 import com.izzydrive.backend.model.Driving;
 import com.izzydrive.backend.model.DrivingState;
-import com.izzydrive.backend.model.NotificationStatus;
+import com.izzydrive.backend.model.users.Admin;
 import com.izzydrive.backend.model.users.Passenger;
 import com.izzydrive.backend.model.users.driver.Driver;
-import com.izzydrive.backend.service.notification.NotificationService;
+import com.izzydrive.backend.repository.NotificationRepository;
 import com.izzydrive.backend.service.notification.NotificationServiceImpl;
+import com.izzydrive.backend.service.users.admin.AdminService;
+import com.izzydrive.backend.service.users.admin.AdminServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.izzydrive.backend.utils.HelperMapper.*;
@@ -31,15 +28,19 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class NotificationServiceTest {
-    @Autowired
     @InjectMocks
     private NotificationServiceImpl notificationService;
 
-    @MockBean
+    @Mock
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Mock
+    private AdminService adminService;
+
+    @Mock
+    private NotificationRepository notificationRepository;
 
     private static String REASON = "I want to cancel driving";
 
@@ -66,6 +67,7 @@ public class NotificationServiceTest {
     @Test
     void should_send_notification_to_admin_for_report_driver_by_passenger(){
         Passenger passenger = mockPassengerWithCurrentDriving(PassengerConst.P_JOHN_EMAIL, DrivingState.ACTIVE);
+        Mockito.when(adminService.findAdmin()).thenReturn(new Admin("admin0@gmail.com", "123", "admin", "adminic", "+38122187393"));
         this.notificationService.reportDriverNotification(passenger);
         verify(simpMessagingTemplate, times(1)).convertAndSend(eq("/notification/reportDriver"), (Object) any());
 

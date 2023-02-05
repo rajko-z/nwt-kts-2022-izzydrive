@@ -20,56 +20,53 @@ import com.izzydrive.backend.service.users.passenger.PassengerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.izzydrive.backend.constants.PassengerConst.P_NOT_EXISTING_EMAIL;
-import static com.izzydrive.backend.utils.HelperMapper.*;
+import static com.izzydrive.backend.utils.HelperMapper.mockDriver;
+import static com.izzydrive.backend.utils.HelperMapper.mockDrivingWithRoute;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class ReservationCancellationServiceTest {
 
-    @Autowired
     @InjectMocks
     private ReservationCancellationServiceImpl reservationCancellationService;
-    @MockBean
-    private  DrivingRepository drivingRepository;
-    @MockBean
-    private  PassengerService passengerService;
-    @MockBean
-    private  NotificationService notificationService;
-    @MockBean
-    private  DriverNotificationService driverNotificationService;
-    @MockBean
-    private  DriverService driverService;
-    @MockBean
-    private  AdminService adminService;
+    @Mock
+    private DrivingRepository drivingRepository;
+    @Mock
+    private PassengerService passengerService;
+    @Mock
+    private NotificationService notificationService;
+    @Mock
+    private DriverNotificationService driverNotificationService;
+    @Mock
+    private DriverService driverService;
+    @Mock
+    private AdminService adminService;
 
-    private static String REASON = "I want to cancel driving";
-    private static Long RESERVATION_DRIVING_ID = Long.valueOf(1);
-    private static Long INVALID_DRIVING_ID = Long.valueOf(3);
-    private static Long NO_MATCHING_DRIVING_ID = Long.valueOf(3);
+    private static final String REASON = "I want to cancel driving";
+    private static final Long RESERVATION_DRIVING_ID = 1L;
+    private static final Long INVALID_DRIVING_ID = 3L;
+    private static final Long NO_MATCHING_DRIVING_ID = 3L;
 
     @Test
-    public void should_throw_driving_doesnt_exist_when_drivingId_is_invalid(){
+    public void should_throw_driving_doesnt_exist_when_drivingId_is_invalid() {
         Driver driver = mockDriver(DriverConst.D_MIKA_EMAIL, null, true, null);
         Mockito.when(driverService.getCurrentlyLoggedDriverWithReservation()).thenReturn(driver);
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO(REASON, INVALID_DRIVING_ID);
         Mockito.when(drivingRepository.getReservationDrivingByIdWithDriverRouteAndPassengers(INVALID_DRIVING_ID)).thenReturn(null);
 
-        BadRequestException exception = assertThrows(BadRequestException.class, () ->this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
         assertEquals("Driving with that id doesn't exists", exception.getMessage());
 
         verify(drivingRepository, times(0)).delete(any());
@@ -78,7 +75,7 @@ public class ReservationCancellationServiceTest {
     }
 
     @Test
-    public void should_throw_cant_find_reservation_to_cancel_when_driver_doesnt_have_reservation(){
+    public void should_throw_cant_find_reservation_to_cancel_when_driver_doesnt_have_reservation() {
         Driving driving = mockDrivingWithRoute(RESERVATION_DRIVING_ID, DrivingState.WAITING);
         Driver driver = mockDriver(DriverConst.D_MIKA_EMAIL, null, true, null);
         driver.setReservedFromClientDriving(null);
@@ -88,7 +85,7 @@ public class ReservationCancellationServiceTest {
 
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO(REASON, RESERVATION_DRIVING_ID);
 
-        BadRequestException exception = assertThrows(BadRequestException.class, () ->this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
         assertEquals("Can't find reservation to cancel", exception.getMessage());
 
         verify(drivingRepository, times(0)).delete(any());
@@ -97,7 +94,7 @@ public class ReservationCancellationServiceTest {
     }
 
     @Test
-    public void should_throw_cant_find_reservation_to_cancel_when_drivings_IDs_are_different(){
+    public void should_throw_cant_find_reservation_to_cancel_when_drivings_IDs_are_different() {
         Driving driving = mockDrivingWithRoute(RESERVATION_DRIVING_ID, DrivingState.WAITING);
         Driving notMatchingDriving = mockDrivingWithRoute(NO_MATCHING_DRIVING_ID, DrivingState.WAITING);
         Driver driver = mockDriver(DriverConst.D_MIKA_EMAIL, null, true, null);
@@ -108,7 +105,7 @@ public class ReservationCancellationServiceTest {
 
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO(REASON, RESERVATION_DRIVING_ID);
 
-        BadRequestException exception = assertThrows(BadRequestException.class, () ->this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
         assertEquals("Can't find reservation to cancel", exception.getMessage());
 
         verify(drivingRepository, times(0)).delete(any());
@@ -117,12 +114,12 @@ public class ReservationCancellationServiceTest {
     }
 
     @Test
-    public void should_cancel_reserved_driving_when_drivings_IDs_are_correct(){
+    public void should_cancel_reserved_driving_when_drivings_IDs_are_correct() {
         Driving driving = mockDrivingWithRoute(RESERVATION_DRIVING_ID, DrivingState.WAITING);
         Driver driver = mockDriver(DriverConst.D_MIKA_EMAIL, null, true, null);
         driving.setDriver(driver);
         driver.setReservedFromClientDriving(driving);
-        for (Passenger passenger : driving.getPassengers()){
+        for (Passenger passenger : driving.getPassengers()) {
             Mockito.when(passengerService.findByEmailWithDrivings(passenger.getEmail())).thenReturn(Optional.of(passenger));
         }
         Mockito.when(driverService.getCurrentlyLoggedDriverWithReservation()).thenReturn(driver);
@@ -134,7 +131,7 @@ public class ReservationCancellationServiceTest {
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO(REASON, RESERVATION_DRIVING_ID);
 
         this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO);
-        for(Passenger passenger : driving.getAllPassengers()){
+        for (Passenger passenger : driving.getAllPassengers()) {
             assertTrue(passenger.getDrivings().stream().anyMatch(d -> !Objects.equals(d.getId(), driving.getId())));
         }
         assertNull(driving.getDriver().getReservedFromClientDriving());
@@ -146,13 +143,14 @@ public class ReservationCancellationServiceTest {
     }
 
     //User with email: %s does not exists
-    @Test public void should_throw_user_with_email_does_not_exists_reserved_driving_when_drivings_IDs_are_correct(){
+    @Test
+    public void should_throw_user_with_email_does_not_exists_reserved_driving_when_drivings_IDs_are_correct() {
         Driving driving = mockDrivingWithRoute(RESERVATION_DRIVING_ID, DrivingState.WAITING);
 
         Driver driver = mockDriver(DriverConst.D_MIKA_EMAIL, null, true, null);
         driving.setDriver(driver);
         driver.setReservedFromClientDriving(driving);
-        for (Passenger passenger : driving.getPassengers()){
+        for (Passenger passenger : driving.getPassengers()) {
             Mockito.when(passengerService.findByEmailWithDrivings(passenger.getEmail())).thenReturn(Optional.of(passenger));
         }
 
@@ -167,7 +165,7 @@ public class ReservationCancellationServiceTest {
 
         CancellationReasonDTO cancellationReasonDTO = new CancellationReasonDTO(REASON, RESERVATION_DRIVING_ID);
 
-        NotFoundException exception = assertThrows(NotFoundException.class, () ->this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> this.reservationCancellationService.driverCancelReservation(cancellationReasonDTO));
         assertEquals("User with email: " + P_NOT_EXISTING_EMAIL + " does not exists", exception.getMessage());
 
         verify(drivingRepository, times(0)).delete(any());

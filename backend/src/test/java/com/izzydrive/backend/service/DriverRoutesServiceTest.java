@@ -5,21 +5,16 @@ import com.izzydrive.backend.dto.map.AddressOnMapDTO;
 import com.izzydrive.backend.dto.map.CalculatedRouteDTO;
 import com.izzydrive.backend.dto.map.LocationDTO;
 import com.izzydrive.backend.model.users.driver.Driver;
-import com.izzydrive.backend.service.driving.routes.DrivingRoutesServiceImpl;
 import com.izzydrive.backend.service.maps.MapService;
 import com.izzydrive.backend.service.users.driver.location.DriverLocationService;
-import com.izzydrive.backend.service.users.driver.routes.DriverRoutesService;
 import com.izzydrive.backend.service.users.driver.routes.DriverRoutesServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.izzydrive.backend.utils.HelperMapper.mockLocationsDTO;
@@ -27,17 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class DriverRoutesServiceTest {
 
-    @MockBean
+    @Mock
     private DriverLocationService driverLocationService;
 
-    @MockBean
+    @Mock
     private MapService mapService;
 
-    @Autowired
     @InjectMocks
     private DriverRoutesServiceImpl driverRoutesService;
 

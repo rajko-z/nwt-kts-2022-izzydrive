@@ -12,16 +12,18 @@ import com.izzydrive.backend.service.driving.DrivingService;
 import com.izzydrive.backend.service.driving.cancelation.regular.RegularDrivingCancellationServiceImpl;
 import com.izzydrive.backend.service.driving.execution.DrivingExecutionService;
 import com.izzydrive.backend.service.notification.NotificationService;
+import com.izzydrive.backend.service.notification.driver.DriverNotificationService;
 import com.izzydrive.backend.service.users.admin.AdminService;
 import com.izzydrive.backend.service.users.driver.DriverServiceImpl;
 import com.izzydrive.backend.service.users.passenger.PassengerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,32 +35,33 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class RegularDrivingCancellationServiceTest {
 
-    @MockBean
+    @Mock
     private DrivingExecutionService drivingExecutionService;
 
-
-    @MockBean
+    @Mock
     private PassengerService passengerService;
 
-    @MockBean
+    @Mock
     private DrivingService drivingService;
 
-    @MockBean
+    @Mock
     private NotificationService notificationService;
 
-    @MockBean
+    @Mock
     private AdminService adminService;
 
-    @MockBean
+    @Mock
     private DriverServiceImpl driverService;
 
-    @Autowired
     @InjectMocks
     private RegularDrivingCancellationServiceImpl regularDrivingCancellationService;
+
+    @Mock
+    private DriverNotificationService driverNotificationService;
 
     private static String REASON = "I want to cancel driving";
     private static Long CURRENT_DRIVING_ID = Long.valueOf(1);

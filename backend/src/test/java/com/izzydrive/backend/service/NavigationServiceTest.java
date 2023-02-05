@@ -4,34 +4,27 @@ import com.izzydrive.backend.constants.DriverConst;
 import com.izzydrive.backend.dto.DriverDTO;
 import com.izzydrive.backend.dto.driving.DrivingDTOWithLocations;
 import com.izzydrive.backend.model.DrivingState;
-import com.izzydrive.backend.model.users.driver.Driver;
-import com.izzydrive.backend.service.navigation.NavigationService;
 import com.izzydrive.backend.service.navigation.NavigationServiceImpl;
-import com.izzydrive.backend.service.navigation.NavigationTask;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static com.izzydrive.backend.utils.HelperMapper.*;
+import static com.izzydrive.backend.utils.HelperMapper.mockDriverWithLocation;
+import static com.izzydrive.backend.utils.HelperMapper.mockDrivingWithNoLocations;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-
+@ExtendWith(MockitoExtension.class)
 public class NavigationServiceTest {
 
-    @Autowired
     @InjectMocks
     private NavigationServiceImpl navigationService;
 
-    @MockBean
+    @Mock
     private  ThreadPoolTaskExecutor threadPoolExecutor;
 
     //stopNavigationForDriver
