@@ -1,9 +1,10 @@
 import {getTestBed, TestBed} from '@angular/core/testing';
 import {UserService} from './user-sevice.service';
-import {NewUser} from "../../model/user/user";
+import {NewUser, User} from "../../model/user/user";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {environment} from "../../../environments/environment";
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {LoginResponse} from "../../model/response/loginResponse";
 
 const dummyUser: NewUser = {
   firstName: "Mile",
@@ -12,6 +13,23 @@ const dummyUser: NewUser = {
   password: "12345678",
   repeatedPassword: "12345678",
   phoneNumber: "+381654434545"
+}
+
+const mockLoginData = {
+  username: "name",
+  password: "123"
+}
+
+const mockUser: User = {
+  email: "email",
+  firstName: "firstName",
+  lastName: "lastName",
+  phoneNumber: "+381654434545",
+}
+
+const mockLoginResponse: LoginResponse = {
+  user: mockUser,
+  token: "token"
 }
 
 fdescribe('UserSeviceService', () => {
@@ -56,5 +74,29 @@ fdescribe('UserSeviceService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(dummyUser);
     req.flush("User with the same email already exits.");
+  });
+
+  it('regular login() should be success', () => {
+    service.regularLogin(mockLoginData).subscribe((res) => {
+      expect(res).toEqual(mockLoginResponse);
+    });
+    const req = httpMock.expectOne(environment.apiUrl + 'auth/login');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(mockLoginData);
+    req.flush(mockLoginResponse);
+  });
+
+  it('regular login() should not be success', () => {
+    service.regularLogin(mockLoginData).subscribe({
+      next: _ => {
+      },
+      error: (error) => {
+        expect(error).toEqual("Invalid username or password.");
+      }
+    });
+    const req = httpMock.expectOne(environment.apiUrl + 'auth/login');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(mockLoginData);
+    req.flush("Invalid username or password");
   });
 });
